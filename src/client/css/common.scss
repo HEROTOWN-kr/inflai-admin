@@ -1,0 +1,36 @@
+$colorBg: #fefefe;
+$colorBlue: #093c5e;
+$colorAqua: #23c9cf;
+$colorGrey: #dfe2e8;
+
+html, body {
+  margin: 0;
+  background-color: #fefefe;
+  font-family: 'Noto Sans KR', sans-serif !important;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  height:100%;
+  width:100%;
+  -webkit-font-smoothing: antialiased;
+  //box-sizing: border-box;
+}
+
+.label-holder {
+  margin-bottom: 10px;
+  line-height: 1;
+  text-align: left;
+  label {
+    font-size: 15px;
+    line-height: 1.33;
+    color: #3f4653;
+  }
+}
+
+.error-message {
+  color: red;
+  font-size: 0.75rem;
+  &.mb-10 {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,17 @@
+$colorBg: #fefefe;
+$colorBlue: #093c5e;
+$colorAqua: #23c9cf;
+$colorGrey: #dfe2e8;
+
+.login {
+  height: 100vh;
+}
+.login-form {
+  border: 1px solid $colorGrey;
+  padding: 50px;
+  .login-text {
+    text-align: center;
+    font-size: 33px;
+  }
+}
+
