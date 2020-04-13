@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../../css/sub.scss';
 import { Grid, Button } from '@material-ui/core';
 import { Form, Formik } from 'formik';
@@ -6,7 +6,9 @@ import * as Yup from 'yup';
 import MyTextField from '../containers/MyTextField';
 
 function Login({
-  loginUser
+  loginUser,
+  user,
+  history
 }) {
   const SignupSchema = Yup.object().shape({
     email: Yup.string()
@@ -14,6 +16,10 @@ function Login({
     password: Yup.string()
       .required('이메일을 입력해주세요'),
   });
+
+  useEffect(() => {
+    user.token ? history.push('/Main') : history.push('/Login');
+  }, []);
 
   return (
     <Grid container alignItems="center" justify="center" className="login">

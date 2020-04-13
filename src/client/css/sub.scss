@@ -3,7 +3,7 @@ $colorBlue: #093c5e;
 $colorAqua: #23c9cf;
 $colorGrey: #dfe2e8;
 
-.login {
+.login, .main {
   height: 100vh;
 }
 .login-form {
@@ -14,4 +14,6 @@ $colorGrey: #dfe2e8;
     font-size: 33px;
   }
 }
+
+
 
