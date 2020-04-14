@@ -19,7 +19,7 @@ function Main(props) {
               <ListItem
                 button
                 // key={link.text}
-                component={props => <Link to="Advertiser" {...props} />}
+                component={renderProps => <Link to={`${props.match.path}/Advertiser`} {...renderProps} />}
               >
                 <ListItemIcon>
                   <InboxIcon />
@@ -29,7 +29,7 @@ function Main(props) {
               <ListItem
                 button
                   // key={link.text}
-                component={props => <Link to="Influencer" {...props} />}
+                component={renderProps => <Link to={`${props.match.path}/Influencer`} {...renderProps} />}
               >
                 <ListItemIcon>
                   <DraftsIcon />

@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import {
   Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, withStyles, makeStyles, Paper
 } from '@material-ui/core';
 
+
 function Advertiser() {
+  const [advertisers, setAdvertisers] = useState([]);
+
   const StyledTableCell = withStyles(theme => ({
     head: {
       backgroundColor: theme.palette.common.black,
@@ -14,6 +18,34 @@ function Advertiser() {
     },
   }))(TableCell);
 
+  function createAdvertisers(data) {
+    const array = [];
+
+    data.map(item => (
+      array.push({
+        name: item.ADV_NAME,
+        email: item.ADV_EMAIL,
+        phoneNumber: item.ADV_TEL,
+        companyName: item.ADV_COM_NAME,
+        companyType: item.ADV_TYPE,
+        registerDate: item.ADV_DT,
+      })
+    ));
+
+    setAdvertisers(array);
+  }
+
+  function getAdvertisers() {
+    axios.get('/api/TB_ADVERTISER/getAdvertisers')
+      .then((res) => {
+        createAdvertisers(res.data.data);
+      });
+  }
+
+  useEffect(() => {
+    getAdvertisers();
+  }, []);
+
   const StyledTableRow = withStyles(theme => ({
     root: {
       '&:nth-of-type(odd)': {
@@ -22,18 +54,6 @@ function Advertiser() {
     },
   }))(TableRow);
 
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ];
-
   return (
     <Grid container justify="center">
       <Grid item md={10}>
@@ -41,23 +61,25 @@ function Advertiser() {
           <Table aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                <StyledTableCell align="right">Calories</StyledTableCell>
-                <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                <StyledTableCell>이름</StyledTableCell>
+                <StyledTableCell align="right">이메일</StyledTableCell>
+                <StyledTableCell align="right">전화번호</StyledTableCell>
+                <StyledTableCell align="right">회사&nbsp;명</StyledTableCell>
+                <StyledTableCell align="right">기업구분</StyledTableCell>
+                <StyledTableCell align="right">가입일차</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map(row => (
-                <StyledTableRow key={row.name}>
+              {advertisers.map(row => (
+                <StyledTableRow hover key={row.name}>
                   <StyledTableCell component="th" scope="row">
                     {row.name}
                   </StyledTableCell>
-                  <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                  <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                  <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                  <StyledTableCell align="right">{row.protein}</StyledTableCell>
+                  <StyledTableCell align="right">{row.email}</StyledTableCell>
+                  <StyledTableCell align="right">{row.phoneNumber}</StyledTableCell>
+                  <StyledTableCell align="right">{row.companyName}</StyledTableCell>
+                  <StyledTableCell align="right">{row.companyType}</StyledTableCell>
+                  <StyledTableCell align="right">{row.registerDate}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
