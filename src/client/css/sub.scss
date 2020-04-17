@@ -2,6 +2,7 @@ $colorBg: #fefefe;
 $colorBlue: #093c5e;
 $colorAqua: #23c9cf;
 $colorGrey: #dfe2e8;
+$colorDarkBlue: #3f4b5c;
 
 .login, .main {
   height: 100vh;
@@ -12,6 +13,17 @@ $colorGrey: #dfe2e8;
   .login-text {
     text-align: center;
     font-size: 33px;
+  }
+}
+
+.main {
+  .left-panel {
+    background: $colorDarkBlue;
+    height: inherit;
+    color: white;
+    svg {
+      color: #ffffff;
+    }
   }
 }
 

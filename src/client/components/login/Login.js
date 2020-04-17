@@ -1,20 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../css/sub.scss';
 import { Grid, Button } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 import MyTextField from '../containers/MyTextField';
 
 function Login({
-  loginUser,
+  changeUser,
   user,
   history
 }) {
+  const [error, setError] = useState('');
+
   const SignupSchema = Yup.object().shape({
     email: Yup.string()
       .required('이메일을 입력해주세요'),
     password: Yup.string()
-      .required('이메일을 입력해주세요'),
+      .required('비밀번호를 입력해주세요'),
   });
 
   useEffect(() => {
@@ -36,17 +39,27 @@ function Login({
               }}
               validationSchema={SignupSchema}
               onSubmit={(values) => {
-                console.log(values);
-                loginUser();
+                axios.post('/api/TB_ADMIN/login', values)
+                  .then((res) => {
+                    if (res.data.code === 200) {
+                      changeUser({ token: res.data.token });
+                    } else if (res.data.code === 400) {
+                      setError(res.data.message);
+                    } else {
+                      console.log(res);
+                    }
+                  })
+                  .catch(error => (error));
               }}
             >
-              {({
-                values, errors, touched, handleChange, handleBlur, setFieldValue
-              }) => (
+              {() => (
                 <Form>
                   <Grid container spacing={2}>
                     <Grid item md={12}>
-                      <MyTextField name="email" label="이메일" />
+                      <div className="error-message center">{error}</div>
+                    </Grid>
+                    <Grid item md={12}>
+                      <MyTextField name="email" label="아이디" />
                     </Grid>
                     <Grid item md={12}>
                       <MyTextField name="password" label="비밀번호" />

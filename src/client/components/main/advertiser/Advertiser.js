@@ -10,7 +10,8 @@ function Advertiser() {
 
   const StyledTableCell = withStyles(theme => ({
     head: {
-      backgroundColor: theme.palette.common.black,
+      backgroundColor: '#3f4b5c',
+      // backgroundColor: 'theme.palette.common.black',
       color: theme.palette.common.white,
     },
     body: {
@@ -23,6 +24,7 @@ function Advertiser() {
 
     data.map(item => (
       array.push({
+        id: item.ADV_ID,
         name: item.ADV_NAME,
         email: item.ADV_EMAIL,
         phoneNumber: item.ADV_TEL,
@@ -71,7 +73,7 @@ function Advertiser() {
             </TableHead>
             <TableBody>
               {advertisers.map(row => (
-                <StyledTableRow hover key={row.name}>
+                <StyledTableRow hover key={row.id}>
                   <StyledTableCell component="th" scope="row">
                     {row.name}
                   </StyledTableCell>

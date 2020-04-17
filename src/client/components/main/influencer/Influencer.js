@@ -30,6 +30,7 @@ function Influencer() {
 
     data.map(item => (
       array.push({
+        id: item.INF_ID,
         name: item.INF_NAME,
         email: item.INF_EMAIL,
         phoneNumber: item.INF_TEL,
@@ -74,7 +75,7 @@ function Influencer() {
             </TableHead>
             <TableBody>
               {influencers.map(row => (
-                <StyledTableRow hover key={row.name}>
+                <StyledTableRow hover key={row.id}>
                   <StyledTableCell component="th" scope="row">
                     {row.name}
                   </StyledTableCell>
