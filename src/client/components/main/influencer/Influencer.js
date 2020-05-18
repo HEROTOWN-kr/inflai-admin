@@ -35,6 +35,7 @@ function Influencer() {
         email: item.INF_EMAIL,
         phoneNumber: item.INF_TEL,
         registerDate: item.INF_DT,
+        social: item.INF_BLOG_TYPE
       })
     ));
 
@@ -70,6 +71,7 @@ function Influencer() {
                 <StyledTableCell>이름</StyledTableCell>
                 <StyledTableCell align="right">이메일</StyledTableCell>
                 <StyledTableCell align="right">전화번호</StyledTableCell>
+                <StyledTableCell align="right">소셜</StyledTableCell>
                 <StyledTableCell align="right">가입일차</StyledTableCell>
               </TableRow>
             </TableHead>
@@ -81,6 +83,7 @@ function Influencer() {
                   </StyledTableCell>
                   <StyledTableCell align="right">{row.email}</StyledTableCell>
                   <StyledTableCell align="right">{row.phoneNumber}</StyledTableCell>
+                  <StyledTableCell align="right">{row.social}</StyledTableCell>
                   <StyledTableCell align="right">{row.registerDate}</StyledTableCell>
                 </StyledTableRow>
               ))}

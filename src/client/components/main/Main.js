@@ -7,13 +7,15 @@ import {
 import InboxIcon from '@material-ui/icons/Inbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import { Route, Switch, Link } from 'react-router-dom';
-import Advertiser from './advertiser/Advertiser';
-import Influencer from './influencer/Influencer';
-import Payment from './payment/Payment';
 
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import Payment from './payment/Payment';
+import Influencer from './influencer/Influencer';
+import Advertiser from './advertiser/Advertiser';
+import Ranking from "./ranking/Ranking";
 
 function Main(props) {
   const links = [
@@ -31,6 +33,11 @@ function Main(props) {
       name: '판매관리 (결제관리)',
       link: '/Payment',
       icon: MonetizationOnIcon
+    },
+    {
+      name: '랭킹(순위)',
+      link: '/Ranking',
+      icon: EqualizerIcon
     },
   ];
 
@@ -51,7 +58,7 @@ function Main(props) {
                   component={renderProps => <Link to={props.match.path + item.link} {...renderProps} />}
                 >
                   <ListItemIcon>
-                    {/*<InboxIcon />*/}
+                    {/* <InboxIcon /> */}
                     <SvgIcon component={item.icon} />
                   </ListItemIcon>
                   <ListItemText primary={item.name} />
@@ -74,6 +81,10 @@ function Main(props) {
           <Route
             path={`${props.match.path}/Payment`}
             render={renderProps => <Payment {...renderProps} />}
+          />
+          <Route
+            path={`${props.match.path}/Ranking`}
+            render={renderProps => <Ranking {...renderProps} />}
           />
         </Switch>
       </Grid>
