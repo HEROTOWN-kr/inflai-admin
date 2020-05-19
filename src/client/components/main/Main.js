@@ -12,10 +12,12 @@ import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
+import HelpIcon from '@material-ui/icons/Help';
 import Payment from './payment/Payment';
 import Influencer from './influencer/Influencer';
 import Advertiser from './advertiser/Advertiser';
-import Ranking from "./ranking/Ranking";
+import Ranking from './ranking/Ranking';
+import Request from './request/Request';
 
 function Main(props) {
   const links = [
@@ -38,6 +40,11 @@ function Main(props) {
       name: '랭킹(순위)',
       link: '/Ranking',
       icon: EqualizerIcon
+    },
+    {
+      name: '켐페인 요청',
+      link: '/Request',
+      icon: HelpIcon
     },
   ];
 
@@ -85,6 +92,10 @@ function Main(props) {
           <Route
             path={`${props.match.path}/Ranking`}
             render={renderProps => <Ranking {...renderProps} />}
+          />
+          <Route
+            path={`${props.match.path}/Request`}
+            render={renderProps => <Request {...renderProps} />}
           />
         </Switch>
       </Grid>

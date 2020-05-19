@@ -44,13 +44,21 @@ function Ranking() {
   }
 
   function getInfluencers() {
-    if (blogType === 'instagram') {
-      axios.get('/api/TB_INFLUENCER/rankInstagram').then((res) => {
+    if (blogType === '1') {
+      axios.get('/api/TB_INFLUENCER/rankInstagram', {
+        params: {
+          type: blogType
+        }
+      }).then((res) => {
         console.log(res);
         createInfluencers(res.data.data);
       });
     } else {
-      axios.get('/api/TB_INFLUENCER/rankYoutube').then((res) => {
+      axios.get('/api/TB_INFLUENCER/rankYoutube', {
+        params: {
+          type: blogType
+        }
+      }).then((res) => {
         console.log(res);
         createInfluencers(res.data.data);
       });
