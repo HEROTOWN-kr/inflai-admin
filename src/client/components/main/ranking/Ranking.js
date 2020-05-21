@@ -18,6 +18,17 @@ function Ranking() {
   const [influencers, setInfluencers] = useState([]);
   const [blogType, setBlogType] = useState('1');
 
+  const tableRows = {
+    instagram: {
+      title: ['이름', '유저네임', '구독수'],
+      body: ['name', 'username', 'subscribers']
+    },
+    youtube: {
+      title: ['이름', '구독수'],
+      body: ['name', 'subscribers']
+    }
+  };
+
   const StyledTableCell = withStyles(theme => ({
     head: {
       backgroundColor: theme.palette.common.black,
@@ -32,12 +43,19 @@ function Ranking() {
     const array = [];
 
     data.map(item => (
-      array.push({
-        id: item.id,
-        name: item.name,
-        username: item.username,
-        subscribers: item.followers_count,
-      })
+      blogType === '1'
+        ? array.push({
+          id: item.id,
+          name: item.name,
+          username: item.username,
+          subscribers: item.followers_count,
+        })
+        : array.push({
+          // id: item.id,
+          name: item.snippet.title,
+          // username: item.username,
+          subscribers: item.statistics.subscribersCount,
+        })
     ));
 
     setInfluencers(array);
@@ -96,19 +114,40 @@ function Ranking() {
               <Table aria-label="customized table">
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell>이름</StyledTableCell>
+                    {blogType === '1'
+                      ? (
+                        tableRows.instagram.title.map((item, index) => (
+                          <StyledTableCell align={index > 0 ? 'right' : ''}>{item}</StyledTableCell>
+                        ))
+                      ) : (
+                        tableRows.youtube.title.map(item => (
+                          <StyledTableCell>{item}</StyledTableCell>
+                        ))
+                      )
+                    }
+                    {/* <StyledTableCell>이름</StyledTableCell>
                     <StyledTableCell align="right">유저네임</StyledTableCell>
-                    <StyledTableCell align="right">구독수</StyledTableCell>
+                    <StyledTableCell align="right">구독수</StyledTableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {influencers.map(row => (
                     <StyledTableRow hover key={row.id}>
-                      <StyledTableCell component="th" scope="row">
+                      {
+                        blogType === '1'
+                          ? (
+                            tableRows.instagram.body.map((item, index) => (
+                              <StyledTableCell component={index === 0 ? 'th' : ''} scope={index === 0 ? 'row' : ''} align={index > 0 ? 'right' : ''}>{row[item]}</StyledTableCell>))
+                          ) : (
+                            tableRows.youtube.body.map((item, index) => (
+                              <StyledTableCell component={index === 0 ? 'th' : ''} scope={index === 0 ? 'row' : ''} align={index > 0 ? 'right' : ''}>{row[item]}</StyledTableCell>))
+                          )
+                      }
+                      {/* <StyledTableCell component="th" scope="row">
                         {row.name}
                       </StyledTableCell>
                       <StyledTableCell align="right">{row.username}</StyledTableCell>
-                      <StyledTableCell align="right">{row.subscribers}</StyledTableCell>
+                      <StyledTableCell align="right">{row.subscribers}</StyledTableCell> */}
                     </StyledTableRow>
                   ))}
                 </TableBody>

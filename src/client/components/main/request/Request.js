@@ -44,11 +44,10 @@ function Request() {
   }
 
   function getInfluencers() {
-    axios.get('/api/TB_REQ_AD/')
-      .then((res) => {
-        console.log(res);
-        createInfluencers(res.data.data);
-      });
+    axios.get('/api/TB_REQ_AD/').then((res) => {
+      console.log(res);
+      createInfluencers(res.data.data);
+    });
   }
 
   useEffect(() => {
