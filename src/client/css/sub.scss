@@ -25,6 +25,15 @@ $colorDarkBlue: #3f4b5c;
       color: #ffffff;
     }
   }
+  .select-price {
+    border: 1px solid $colorGrey;
+    .influencer-type {
+      font-size: 23px;
+    }
+    .MuiInputBase-input {
+      text-align: right;
+    }
+  }
 }
 
 
