@@ -16,7 +16,7 @@ function App(props) {
   }
 
   useEffect(() => {
-    // user.token ? props.history.push('/Main/Advertiser') : props.history.push('/Login');
+    user.token ? props.history.push('/Main/Advertiser') : props.history.push('/Login');
   }, [user]);
 
 
