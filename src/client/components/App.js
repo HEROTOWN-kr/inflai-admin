@@ -37,7 +37,6 @@ function App(props) {
         render={renderProps => <Main {...renderProps} changeUser={changeUser} />}
       />
     </Switch>
-
   );
 }
 

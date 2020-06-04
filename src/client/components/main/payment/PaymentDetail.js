@@ -15,6 +15,13 @@ import axios from 'axios';
 
 function PaymentDetail(props) {
   const [statistic, setStatistic] = useState({});
+  const [infCount, setInfCount] = useState({
+    nano: [],
+    micro: [],
+    macro: [],
+    mega: [],
+    celebrity: [],
+  });
   const tableHeader = [
     {
       text: '품목',
@@ -70,6 +77,7 @@ function PaymentDetail(props) {
 
   function MyTableRow({
     title,
+    type,
     count,
     paymentOne,
     paymentAll,
@@ -83,7 +91,7 @@ function PaymentDetail(props) {
         <StyledTableCell align="right">{count}</StyledTableCell>
         <StyledTableCell align="right">{`${paymentOne}원`}</StyledTableCell>
         <StyledTableCell align="right">{`${paymentAll}원`}</StyledTableCell>
-        <StyledTableCell align="right">{`${parseInt(count, 10) - 1}/${count}명`}</StyledTableCell>
+        <StyledTableCell align="right">{`${infCount[type].length}/${count}명`}</StyledTableCell>
       </StyledTableRow>
     );
   }
@@ -112,26 +120,44 @@ function PaymentDetail(props) {
     setStatistic({ ...obj });
   }
 
+  const filterInfluencers = (influencersArray) => {
+    const obj = {};
+
+    const range = {
+      nano: { a: 0, b: 10000 },
+      micro: { a: 10000, b: 30000 },
+      macro: { a: 30000, b: 50000 },
+      mega: { a: 50000, b: 100000 },
+      celebrity: { a: 100000, b: 99999999 },
+    };
+
+    Object.keys(range).map((itemKey) => {
+      obj[itemKey] = influencersArray.filter(value => parseInt(value.followers_count, 10) >= range[itemKey].a && parseInt(value.followers_count, 10) < range[itemKey].b);
+    });
+
+    setInfCount(obj);
+  };
+
   function getStatistic() {
     axios.get('/api/TB_AD/detail', {
       params: {
         id: props.match.params.id
       }
-    })
-      .then((res) => {
-        createStatistic(res.data.data);
-      });
+    }).then((res) => {
+      const { data } = res.data;
+      console.log(data);
+
+      if (data.TB_INFLUENCER) {
+        filterInfluencers(data.TB_INFLUENCER);
+      }
+      createStatistic(data);
+    });
   }
 
-  function paymentDetail(event, id) {
-    console.log(id);
-    props.history.push(`${props.match.path}${id}`);
-  }
 
   useEffect(() => {
     getStatistic();
   }, []);
-
 
   return (
     <Grid container justify="center">
@@ -148,11 +174,11 @@ function PaymentDetail(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <MyTableRow title="나노" count={statistic.nano} paymentOne="10000" paymentAll={statistic.nanoSum} />
-                  <MyTableRow title="마이크로" count={statistic.micro} paymentOne="30000" paymentAll={statistic.microSum} />
-                  <MyTableRow title="메크로" count={statistic.macro} paymentOne="50000" paymentAll={statistic.macroSum} />
-                  <MyTableRow title="메가" count={statistic.mega} paymentOne="100000" paymentAll={statistic.megaSum} />
-                  <MyTableRow title="셀럽" count={statistic.celebrity} paymentOne="200000" paymentAll={statistic.celebritySum} />
+                  <MyTableRow title="나노" type="nano" count={statistic.nano} paymentOne="10000" paymentAll={statistic.nanoSum} />
+                  <MyTableRow title="마이크로" type="micro" count={statistic.micro} paymentOne="30000" paymentAll={statistic.microSum} />
+                  <MyTableRow title="메크로" type="macro" count={statistic.macro} paymentOne="50000" paymentAll={statistic.macroSum} />
+                  <MyTableRow title="메가" type="mega" count={statistic.mega} paymentOne="100000" paymentAll={statistic.megaSum} />
+                  <MyTableRow title="셀럽" type="celebrity" count={statistic.celebrity} paymentOne="200000" paymentAll={statistic.celebritySum} />
                 </TableBody>
                 <TableFooter>
                   <StyledTableFooter>
