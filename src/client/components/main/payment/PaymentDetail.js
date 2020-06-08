@@ -202,7 +202,6 @@ function PaymentDetail(props) {
             </Grid>
           </Grid>
         </Grid>
-
       </Grid>
     </Grid>
   );

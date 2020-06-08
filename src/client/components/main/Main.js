@@ -13,14 +13,21 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import HelpIcon from '@material-ui/icons/Help';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import Payment from './payment/Payment';
 import Influencer from './influencer/Influencer';
 import Advertiser from './advertiser/Advertiser';
 import Ranking from './ranking/Ranking';
 import Request from './request/Request';
+import Dashboard from './dashboard/Dashboard';
 
 function Main(props) {
   const links = [
+    {
+      name: '대시보드',
+      link: '/Dashboard',
+      icon: DashboardIcon
+    },
     {
       name: '광고주',
       link: '/Advertiser',
@@ -77,6 +84,10 @@ function Main(props) {
       </Grid>
       <Grid item md={10}>
         <Switch>
+          <Route
+            path={`${props.match.path}/Dashboard`}
+            render={renderProps => <Dashboard {...renderProps} />}
+          />
           <Route
             path={`${props.match.path}/Advertiser`}
             render={renderProps => <Advertiser {...renderProps} />}

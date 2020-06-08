@@ -15,9 +15,9 @@ function App(props) {
     Common.saveUserInfo(newUser);
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     user.token ? props.history.push('/Main/Advertiser') : props.history.push('/Login');
-  }, [user]);
+  }, [user]);*/
 
 
   return (
