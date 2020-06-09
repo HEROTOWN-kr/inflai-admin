@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, withStyles
+  Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button
 } from '@material-ui/core';
 import { setIn } from 'formik';
 import index from 'async';
+import StyledTableCell from '../../containers/StyledTableCell';
+import StyledTableRow from '../../containers/StyledTableRow';
 
-function Dashboard() {
+function Dashboard({
+  history
+}) {
   const tableRows = {
     influencers: {
+      label: '신규가입인플루언서',
       title: ['이름', '이메일', '전화번호', '소셜', '가입일차'],
-      body: ['INF_NAME', 'INF_EMAIL', 'INF_TEL', 'INF_BLOG_TYPE', 'INF_DT']
+      body: ['INF_NAME', 'INF_EMAIL', 'INF_TEL', 'INF_BLOG_TYPE', 'INF_DT'],
+      link: '/Influencer'
     },
     advertisers: {
+      label: '신규가입광고주',
       title: ['이름', '이메일', '전화번호', '회사 명', '기업구분', '가입일차'],
-      body: ['ADV_NAME', 'ADV_EMAIL', 'ADV_TEL', 'ADV_COM_NAME', 'ADV_TYPE', 'ADV_DT']
+      body: ['ADV_NAME', 'ADV_EMAIL', 'ADV_TEL', 'ADV_COM_NAME', 'ADV_TYPE', 'ADV_DT'],
+      link: '/Advertiser'
     },
     advertises: {
+      label: '최근캠페인',
       title: ['회사명', '제품명', '협찬품 가격을', '인플루언서수', '결제상태'],
-      body: ['ADV_COM_NAME', 'AD_PROD_NAME', 'AD_PROD_PRICE', 'INF_SUM', 'AD_PAID']
+      body: ['ADV_COM_NAME', 'AD_PROD_NAME', 'AD_PROD_PRICE', 'INF_SUM', 'AD_PAID'],
+      link: '/Payment'
     }
   };
 
@@ -40,31 +50,14 @@ function Dashboard() {
     getData();
   }, []);
 
-  const StyledTableCell = withStyles(theme => ({
-    head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-  }))(TableCell);
-
-  const StyledTableRow = withStyles(theme => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  }))(TableRow);
-
   return (
-    <Grid container justify="center">
-      <Grid item md={10}>
+    <Grid container justify="center" className="dashboard">
+      <Grid item md={11}>
         <Grid container spacing={2}>
           {
             ['influencers', 'advertisers', 'advertises'].map(category => (
               <Grid key={category} item xs={12}>
+                <div className="category-label">{tableRows[category].label}</div>
                 <TableContainer component={Paper}>
                   <Table aria-label="customized table">
                     <TableHead>
@@ -89,6 +82,15 @@ function Dashboard() {
                     </TableBody>
                   </Table>
                 </TableContainer>
+                <div className="see-all-button">
+                  <Grid container justify="flex-end">
+                    <Grid item>
+                      <Button variant="contained" onClick={() => history.push(`/Main${tableRows[category].link}`)}>
+                        전체보기
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </div>
               </Grid>
             ))
           }

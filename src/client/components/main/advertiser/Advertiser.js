@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, withStyles, makeStyles, Paper
+  Grid,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  Paper
 } from '@material-ui/core';
+import StyledTableCell from '../../containers/StyledTableCell';
+import StyledTableRow from '../../containers/StyledTableRow';
 
 
 function Advertiser() {
   const [advertisers, setAdvertisers] = useState([]);
-
-  const StyledTableCell = withStyles(theme => ({
-    head: {
-      backgroundColor: '#3f4b5c',
-      // backgroundColor: 'theme.palette.common.black',
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-  }))(TableCell);
 
   function createAdvertisers(data) {
     const array = [];
@@ -47,14 +44,6 @@ function Advertiser() {
   useEffect(() => {
     getAdvertisers();
   }, []);
-
-  const StyledTableRow = withStyles(theme => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  }))(TableRow);
 
   return (
     <Grid container justify="center">

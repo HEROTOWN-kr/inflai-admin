@@ -4,13 +4,13 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  withStyles
 } from '@material-ui/core';
 import axios from 'axios';
+import StyledTableCell from "../../containers/StyledTableCell";
+import StyledTableRow from "../../containers/StyledTableRow";
 
 function PaymentList(props) {
   const [payments, setPayments] = useState([]);
@@ -36,16 +36,6 @@ function PaymentList(props) {
       align: 'right'
     }
   ];
-
-  const StyledTableCell = withStyles(theme => ({
-    head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-  }))(TableCell);
 
   function createPayments(data) {
     const array = [];
@@ -79,14 +69,6 @@ function PaymentList(props) {
   useEffect(() => {
     getPayments();
   }, []);
-
-  const StyledTableRow = withStyles(theme => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  }))(TableRow);
 
   return (
     <Grid container justify="center">

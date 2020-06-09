@@ -5,17 +5,15 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  withStyles,
   TextField, Button
 } from '@material-ui/core';
 import axios from 'axios';
-import {
-  Field, Form, Formik, FormikProps, getIn, FieldProps, ErrorMessage, useField
-} from 'formik';
+import { Formik } from 'formik';
+import StyledTableCell from '../../containers/StyledTableCell';
+import StyledTableRow from '../../containers/StyledTableRow';
 
 function Influencer() {
   const [influencers, setInfluencers] = useState([]);
@@ -68,16 +66,6 @@ function Influencer() {
     },
   ];
 
-  const StyledTableCell = withStyles(theme => ({
-    head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-  }))(TableCell);
-
   function createInfluencers(data) {
     const array = [];
 
@@ -104,14 +92,6 @@ function Influencer() {
   useEffect(() => {
     getInfluencers();
   }, []);
-
-  const StyledTableRow = withStyles(theme => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  }))(TableRow);
 
   return (
     <Grid container justify="center">

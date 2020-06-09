@@ -12,6 +12,8 @@ import {
   withStyles, Button
 } from '@material-ui/core';
 import axios from 'axios';
+import StyledTableCell from '../../containers/StyledTableCell';
+import StyledTableRow from '../../containers/StyledTableRow';
 
 function PaymentDetail(props) {
   const [statistic, setStatistic] = useState({});
@@ -45,14 +47,6 @@ function PaymentDetail(props) {
     },
   ];
 
-  const StyledTableRow = withStyles(theme => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  }))(TableRow);
-
   const StyledTableFooter = withStyles(theme => ({
     root: {
       '&:nth-of-type(odd)': {
@@ -60,20 +54,6 @@ function PaymentDetail(props) {
       },
     },
   }))(TableRow);
-
-  const StyledTableCell = withStyles(theme => ({
-    head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-    footer: {
-      fontSize: 16,
-      color: '#ffffff'
-    }
-  }))(TableCell);
 
   function MyTableRow({
     title,

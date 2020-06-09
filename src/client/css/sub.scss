@@ -28,11 +28,31 @@ $colorDarkBlue: #3f4b5c;
   .select-price {
     border: 1px solid $colorGrey;
     .influencer-type {
-      font-size: 23px;
+      font-size: 20px;
     }
     .MuiInputBase-input {
       text-align: right;
     }
+  }
+  .dashboard {
+    .see-all-button {
+      .MuiButton-root {
+        padding: 2px 16px;
+        margin-top: 10px;
+        background: $colorGrey;
+      }
+    }
+  }
+  .category-label {
+    margin: 0 0 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+  .MuiTableCell-root {
+    padding: 10px;
+  }
+  .MuiOutlinedInput-input {
+    padding: 8px 14px;
   }
 }
 
