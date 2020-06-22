@@ -32,6 +32,8 @@ class NameArray {
     const blog = ['유튜브', '인스타', '블로그', '트위치'];
     return blog;
   }
+
+
 }
 
 export default NameArray;

@@ -62,7 +62,7 @@ function PaymentList(props) {
   }
 
   function paymentDetail(event, id) {
-    console.log(id);
+    // console.log(id);
     props.history.push(`${props.match.path}${id}`);
   }
 

@@ -54,6 +54,20 @@ $colorDarkBlue: #3f4b5c;
   .MuiOutlinedInput-input {
     padding: 8px 14px;
   }
+
+  .request-detail {
+    margin: 0 auto;
+    width: 800px;
+    padding: 50px;
+    border: 1px solid #dfe2e8;
+    .label-holder {
+      label {
+        font-size: 15px;
+        line-height: 1.33;
+        color: #3f4653;
+      }
+    }
+  }
 }
 
 
