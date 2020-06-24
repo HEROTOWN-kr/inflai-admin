@@ -21,8 +21,12 @@ function Login({
   });
 
   useEffect(() => {
-    user.token ? history.push('/Main') : history.push('/Login');
-  }, []);
+    if (!user.token) {
+      history.push('/Login');
+    } else {
+      history.push('/Main/Dashboard');
+    }
+  }, [user]);
 
   return (
     <Grid container alignItems="center" justify="center" className="login">

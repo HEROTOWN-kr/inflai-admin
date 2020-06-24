@@ -33,7 +33,57 @@ class NameArray {
     return blog;
   }
 
+  static aim() {
+    const aim = [
+      {
+        value: '1',
+        text: '영향력 있는 소수 인플루언서를 통한 인지도 확산'
+      },
+      {
+        value: '2',
+        text: '다수의 리뷰어를 활용한 리뷰 생성'
+      },
+      {
+        value: '3',
+        text: '인플루언서 믹스를 통한 통합 캠페인'
+      },
+      {
+        value: '4',
+        text: '인플루언서를 활용한 판매'
+      },
+      {
+        value: '5',
+        text: '기타 (직접입력)'
+      },
+    ];
+    return aim;
+  }
 
+  static consult() {
+    const consult = [
+      {
+        value: '1',
+        text: '유튜브 크리에이터 섭외'
+      },
+      {
+        value: '2',
+        text: '네이버 블로거 섭외'
+      },
+      {
+        value: '3',
+        text: '페이스북 파워 페이지 홍보'
+      },
+      {
+        value: '4',
+        text: '소셜미디어 유료 광고 대행 (인스타그램/페이스북 등)'
+      },
+      {
+        value: '5',
+        text: '통합 디지털 마케팅 대행'
+      }
+    ];
+    return consult;
+  }
 }
 
 export default NameArray;
