@@ -3,6 +3,7 @@ $colorBlue: #093c5e;
 $colorAqua: #23c9cf;
 $colorGrey: #dfe2e8;
 $colorDarkBlue: #3f4b5c;
+$colorRed: #fa4616;
 
 .login, .main {
   height: 100vh;
@@ -54,22 +55,62 @@ $colorDarkBlue: #3f4b5c;
   .MuiOutlinedInput-input {
     padding: 8px 14px;
   }
-
-  .request-detail {
-    margin: 0 auto;
-    width: 800px;
-    padding: 50px;
-    border: 1px solid #dfe2e8;
-    .label-holder {
-      label {
-        font-size: 15px;
-        line-height: 1.33;
-        color: #3f4653;
+  .request {
+    .data-form {
+      margin: 50px auto;
+      width: 800px;
+      padding: 50px;
+      border: 1px solid #dfe2e8;
+      .label-holder {
+        label {
+          font-size: 15px;
+          line-height: 1.33;
+          color: #3f4653;
+        }
       }
     }
-    .text-holder {
-      ul {
-        padding-left: 20px;
+    .request-detail {
+      .text-holder {
+        ul {
+          padding-left: 20px;
+        }
+      }
+    }
+    .request-create {
+      .text-right {
+        input {
+          text-align: right;
+        }
+      }
+      .checkbox-label {
+        color: #757575;
+        box-sizing: border-box;
+        border: 1px solid #c3c3c3;
+        border-radius: 4px;
+        display: inline-block;
+        width: 100%;
+        padding: 18px;
+        position: relative;
+        cursor: pointer;
+        input[type=checkbox] {
+          display: none;
+          &:checked + svg {
+            fill: red;
+          }
+        }
+        span {
+          position: relative;
+          bottom: 4px;
+          left: 10px;
+        }
+        svg {
+          position: relative;
+          top: 2px;
+          left: 5px;
+        }
+        &.red {
+          border: 2px solid $colorRed;
+        }
       }
     }
   }

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { withRouter, Switch, Route } from 'react-router-dom';
+import {
+  withRouter, Switch, Route, Redirect
+} from 'react-router-dom';
 
 import Main from './main/Main';
 import Login from './login/Login';
@@ -37,6 +39,15 @@ function App(props) {
       <Route
         path="/Main"
         render={renderProps => <Main {...renderProps} changeUser={changeUser} />}
+      />
+      <Route
+        exact
+        path="/"
+        render={() => (
+          user.token
+            ? <Redirect to="/Main/Dashboard" />
+            : <Redirect to="/Login" />
+        )}
       />
     </Switch>
   );

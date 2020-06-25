@@ -84,6 +84,37 @@ class NameArray {
     ];
     return consult;
   }
+
+  static counter() {
+    const counter = [
+      {
+        name: 'nano',
+        level: '나노',
+        sum: 'nanoSum'
+      },
+      {
+        name: 'micro',
+        level: '마이크로',
+        sum: 'microSum'
+      },
+      {
+        name: 'macro',
+        level: '메크로',
+        sum: 'macroSum'
+      },
+      {
+        name: 'mega',
+        level: '메가',
+        sum: 'megaSum'
+      },
+      {
+        name: 'celebrity',
+        level: '셀럽',
+        sum: 'celebritySum'
+      }
+    ];
+    return counter;
+  }
 }
 
 export default NameArray;

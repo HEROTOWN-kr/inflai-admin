@@ -99,11 +99,11 @@ function Ranking() {
                     {blogType === '1'
                       ? (
                         tableRows.instagram.title.map((item, index) => (
-                          <StyledTableCell align={index > 0 ? 'right' : ''}>{item}</StyledTableCell>
+                          <StyledTableCell key={item} align={index > 0 ? 'right' : ''}>{item}</StyledTableCell>
                         ))
                       ) : (
                         tableRows.youtube.title.map(item => (
-                          <StyledTableCell>{item}</StyledTableCell>
+                          <StyledTableCell key={item}>{item}</StyledTableCell>
                         ))
                       )
                     }

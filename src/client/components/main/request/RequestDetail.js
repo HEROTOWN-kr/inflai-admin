@@ -38,7 +38,7 @@ function RequestDetail(props) {
   }
 
   return (
-    <div className="request-detail">
+    <div className="request-detail data-form">
       {process ? (
         <Grid container justify="center">
           <CircularProgress />
@@ -146,9 +146,16 @@ function RequestDetail(props) {
             </div>
           </Grid>
           <Grid container justify="center" item md={12}>
-              <Grid item md={3}>
-                <Button fullWidth className="button-create" variant="contained">등록</Button>
-              </Grid>
+            <Grid item md={3}>
+              <Button
+                fullWidth
+                className="button-create"
+                variant="contained"
+                onClick={event => props.goToCreate(props.match.params.id)}
+              >
+              등록
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       )}
