@@ -115,6 +115,72 @@ class NameArray {
     ];
     return counter;
   }
+
+  static category() {
+    const category = [
+      {
+        name: '뷰티',
+        count: '18,710'
+      },
+      {
+        name: '여성패션',
+        count: '15,819'
+      },
+      {
+        name: '남성패션',
+        count: '5,370'
+      },
+      {
+        name: '육아',
+        count: '3,739'
+      },
+      {
+        name: '맛집/요리',
+        count: '18,170'
+      },
+      {
+        name: '커피/음료',
+        count: '16,650'
+      },
+      {
+        name: '아트/디자인',
+        count: '6,431'
+      },
+      {
+        name: 'IT/전자기기',
+        count: '6,744'
+      },
+      {
+        name: '게임',
+        count: '3,812'
+      },
+      {
+        name: '스포츠',
+        count: '4,502'
+      },
+      {
+        name: '여행/레저',
+        count: '10,436'
+      },
+      {
+        name: '라이프스타일',
+        count: '9,384'
+      },
+      {
+        name: '반려동물',
+        count: '5,648'
+      },
+      {
+        name: '쥬얼리',
+        count: '10,424'
+      },
+      {
+        name: '자동차',
+        count: '1,979'
+      }
+    ];
+    return category;
+  }
 }
 
 export default NameArray;

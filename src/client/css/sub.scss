@@ -112,6 +112,63 @@ $colorRed: #fa4616;
           border: 2px solid $colorRed;
         }
       }
+      .category-cards {
+        .category-item {
+          input[type=checkbox] {
+            display: none;
+            &:checked + .category-name {
+              border: 2px solid $colorRed;
+            }
+          }
+          .category-name {
+            box-sizing: border-box;
+            font-size: 15px;
+            font-weight: 400;
+            color: #222;
+            padding: 15px;
+            height: 76px;
+            border: 1px solid #d0d0d0;
+            .count {
+              text-align: right;
+              color: $colorRed;
+              font-weight: 500;
+            }
+            &.age {
+              padding: 26px 30px;
+            }
+            &:hover {
+              cursor: pointer;
+            }
+            &.image {
+              text-align: center;
+              padding-top: 28px;
+            }
+            &.red {
+              border: 2px solid $colorRed;
+            }
+          }
+        }
+      }
+      .image-holder {
+        div {
+          position: relative;
+          img {
+            width: 100%;
+            max-height: 200px;
+          }
+          span {
+            width: 26px;
+            height: 26px;
+            position: absolute;
+            display: inline-block;
+            top: 5px;
+            right: 6px;
+            background-image: url("../img/photo_del.png");
+            text-indent: -10000px;
+            cursor: pointer;
+          }
+        }
+      }
     }
   }
 }

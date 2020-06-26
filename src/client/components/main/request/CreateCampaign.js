@@ -3,7 +3,7 @@ import {
   CircularProgress, Divider, Grid, MenuItem, Select, TextField, InputAdornment, Box
 } from '@material-ui/core';
 import {
-  Field, Form, Formik, FormikProps, getIn, FieldProps, ErrorMessage, useField
+  Field, Form, Formik, FormikProps, getIn, FieldProps, ErrorMessage, useField, FieldArray
 } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -21,6 +21,8 @@ function CreateCampaign() {
     mega: '',
     celebrity: '',
   });
+  const category = nameArray.category();
+  const counter = nameArray.counter();
 
   function getPrices() {
     axios.get('/api/TB_PRICE/').then((res) => {
@@ -73,6 +75,21 @@ function CreateCampaign() {
     const yyyy = today.getFullYear();
 
     return `${yyyy}/${mm}/${dd}`;
+  }
+
+  function addPicture(event, photo, setFieldValue) {
+    const newPics = [];
+    const pictures = event.target.files;
+
+    Object.keys(pictures).map((key, i) => {
+      const picUrl = URL.createObjectURL(pictures[key]);
+      newPics.push({ file: pictures[key], picUrl });
+    });
+
+    setFieldValue('photo', photo.concat(newPics));
+
+    // input same pictures multiple times
+    event.target.value = '';
   }
 
   function CalendarComponent(props) {
@@ -137,6 +154,7 @@ function CreateCampaign() {
     return (
       <React.Fragment>
         <TextField
+          error={meta.touched && meta.error}
           name={field.name}
           id={props.label}
           value={meta.value}
@@ -191,16 +209,18 @@ function CreateCampaign() {
             startSearch: new Date(),
             searchDate: getMinDate(),
             finishDate: getMinDate(),
+
+            typeCategory: [],
+            channel: [],
+
             presidentName: '',
             about: '',
+            photo: [],
+
             sponsoredItem: '',
             content: '',
             publicText: '',
             tags: '',
-            photo: '',
-
-            typeCategory: [],
-            channel: [],
           }}
           enableReinitialize
           validationSchema={mySchema}
@@ -289,7 +309,7 @@ function CreateCampaign() {
                       </div>
                       <Grid container spacing={2} className="text-right">
                         {
-                          nameArray.counter().map(item => (
+                          counter.map(item => (
                             <Grid item md={12}>
                               <MyTextField
                                 name={item.name}
@@ -369,10 +389,193 @@ function CreateCampaign() {
                 <Grid item md={12}>
                   <div className="label-holder">
                     <label htmlFor="companyName">
+                      제품 카테고리를 선택하세요
+                    </label>
+                  </div>
+                  <FieldArray
+                    name="typeCategory"
+                    render={arrayHelpers => (
+                      <Grid container className="category-cards" spacing={3}>
+                        {category.map(item => (
+                          <Grid item md={3} key={item.name}>
+                            <label htmlFor={item.name} className="category-item">
+                              <input
+                                type="checkbox"
+                                name="typeCategory"
+                                value={item.name}
+                                checked={values.typeCategory.includes(item.name)}
+                                id={item.name}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    arrayHelpers.push(item.name);
+                                  } else {
+                                    const idx = values.typeCategory.indexOf(item.name);
+                                    arrayHelpers.remove(idx);
+                                  }
+                                }}
+                              />
+                              <div className="category-name">
+                                <Grid container>
+                                  <Grid item md={7}>{item.name}</Grid>
+                                  <Grid item md={5} className="count">
+                                    {item.count}
+                                          명
+                                  </Grid>
+                                </Grid>
+                              </div>
+                            </label>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    )}
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <div className="label-holder">
+                    <label htmlFor="companyName">
                       원하시는 채널을 선택하세요
                     </label>
                   </div>
+                  <FieldArray
+                    name="channel"
+                    render={arrayHelpers => (
+                      <Grid container className="category-cards" spacing={3}>
+                        <Grid item md={3}>
+                          <label htmlFor="social1" className="category-item">
+                            <input
+                              type="checkbox"
+                              name="channel"
+                              value="instagram"
+                              id="social1"
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  arrayHelpers.push('instagram');
+                                } else {
+                                  const idx = values.channel.indexOf('instagram');
+                                  arrayHelpers.remove(idx);
+                                }
+                              }}
+                            />
+                            <div className="category-name">
+                                  Instagram
+                            </div>
+                          </label>
+                        </Grid>
+                        <Grid item md={3}>
+                          <label htmlFor="social2" className="category-item">
+                            <input
+                              type="checkbox"
+                              name="channel"
+                              value="youtube"
+                              id="social2"
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  arrayHelpers.push('youtube');
+                                } else {
+                                  const idx = values.channel.indexOf('youtube');
+                                  arrayHelpers.remove(idx);
+                                }
+                              }}
+                            />
+                            <div className="category-name">
+                                  Youtube
+                            </div>
+                          </label>
+                        </Grid>
+                      </Grid>
+                    )}
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Divider />
+                </Grid>
+                <Grid item md={12}>
+                  <Grid container spacing={2}>
+                    <Grid item md={12}>
+                      <div className="label-holder">
+                        <label htmlFor="companyName">
+                          캠페인 제목을 입력하세요 (25자 이하).
+                        </label>
+                      </div>
+                      <MyTextField name="presidentName" type="text" />
+                    </Grid>
+                    <Grid item md={12}>
+                      <div className="label-holder">
+                        <label htmlFor="companyName">
+                          캠페인에 대해 소개해주세요
+                        </label>
+                      </div>
+                      <MyTextField name="about" type="text" />
+                    </Grid>
+                    <Grid item md={12}>
+                      <div className="label-holder">
+                        <label htmlFor="companyName">
+                          필수 해시태그를 2개 입력하세요
+                        </label>
+                      </div>
+                      <MyTextField name="tags" type="text" />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item md={12}>
+                  <Divider />
+                </Grid>
+                <Grid item md={12}>
 
+                  <div className="label-holder">
+                    <label htmlFor="companyName">
+                      캠페인 대표 이미지를 올려주세요
+                    </label>
+                  </div>
+
+                  <Grid container spacing={2} className="category-cards">
+                    <Grid item md={3}>
+                      <label htmlFor="picAdd" className="category-item">
+                        <div className="category-name image">
+                          이미지 등록
+                          <input
+                            id="picAdd"
+                            type="file"
+                            style={{ display: 'none' }}
+                            multiple
+                            accept="image/*"
+                            onChange={(event => addPicture(event, values.photo, setFieldValue))}
+                          />
+                        </div>
+                      </label>
+                    </Grid>
+                    <Grid item md={12}>
+                      <div>
+                        - 이미지 권장 사이즈 700*700
+                        <br />
+                        - 여러장 올리실 수 있으며 파일크기는 최대 10MB까지 가능해요
+                      </div>
+                    </Grid>
+                    <Grid item md={12}>
+                      <FieldArray
+                        name="photo"
+                        render={arrayHelpers => (
+                          <Grid container spacing={2}>
+                            {values.photo.map((file, index) => (
+                              <Grid item key={file.picUrl} md={3} className="image-holder">
+                                <div>
+                                  <img
+                                    className=""
+                                    alt="img"
+                                    src={file.picUrl}
+                                  />
+                                  <span onClick={() => arrayHelpers.remove(index)}>button</span>
+                                </div>
+                              </Grid>
+                            ))}
+                          </Grid>
+                        )}
+                      />
+                      {errors.photo && touched.photo ? (
+                        <div className="error-message">{errors.photo}</div>
+                      ) : null}
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </Form>
