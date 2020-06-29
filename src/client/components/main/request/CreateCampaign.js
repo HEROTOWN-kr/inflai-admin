@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import {
-  CircularProgress, Divider, Grid, MenuItem, Select, TextField, InputAdornment, Box
+  CircularProgress,
+  Divider,
+  Grid,
+  MenuItem,
+  Select,
+  TextField,
+  InputAdornment,
+  Box,
+  Button,
+  FormHelperText,
+  FormControl
 } from '@material-ui/core';
 import {
   Field, Form, Formik, FormikProps, getIn, FieldProps, ErrorMessage, useField, FieldArray
@@ -236,6 +246,7 @@ function CreateCampaign() {
             handleBlur,
             setFieldValue,
             setFieldTouched,
+            submitForm
           }) => (
             <Form>
               <Grid container spacing={5}>
@@ -250,22 +261,27 @@ function CreateCampaign() {
                       <MyTextField name="name" type="text" />
                     </Grid>
                     <Grid item md={6}>
-                      <div className="label-holder">
-                        <label htmlFor="companyName">
-                              캠페인 유형을 선택하세요
-                        </label>
-                      </div>
-                      <Select
-                        value={values.type}
-                        variant="outlined"
+                      <FormControl
                         fullWidth
-                        onChange={(event => setFieldValue('type', event.target.value))}
+                        error={errors.type && touched.type}
                       >
-                        <MenuItem value="1">상품 리뷰</MenuItem>
-                        <MenuItem value="2">방문 리뷰</MenuItem>
-                        <MenuItem value="3">서비스 리뷰</MenuItem>
-                        <MenuItem value="4">리그램</MenuItem>
-                      </Select>
+                        <div className="label-holder">
+                          <label htmlFor="companyName">
+                            캠페인 유형을 선택하세요
+                          </label>
+                        </div>
+                        <Select
+                          value={values.type}
+                          variant="outlined"
+                          onChange={(event => setFieldValue('type', event.target.value))}
+                        >
+                          <MenuItem value="1">상품 리뷰</MenuItem>
+                          <MenuItem value="2">방문 리뷰</MenuItem>
+                          <MenuItem value="3">서비스 리뷰</MenuItem>
+                          <MenuItem value="4">리그램</MenuItem>
+                        </Select>
+                        <FormHelperText>{errors.type && touched.type ? <span className="error-message">{errors.type}</span> : null}</FormHelperText>
+                      </FormControl>
                     </Grid>
                     <Grid item md={6}>
                       <div className="label-holder">
@@ -575,6 +591,13 @@ function CreateCampaign() {
                         <div className="error-message">{errors.photo}</div>
                       ) : null}
                     </Grid>
+                  </Grid>
+                </Grid>
+                <Grid container justify="center" item md={12}>
+                  <Grid item md={3}>
+                    <Button fullWidth onClick={submitForm} variant="contained" color="primary">
+                      등록
+                    </Button>
                   </Grid>
                 </Grid>
               </Grid>
