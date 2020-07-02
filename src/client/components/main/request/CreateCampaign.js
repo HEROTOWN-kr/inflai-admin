@@ -21,7 +21,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import nameArray from '../../../lib/nameArray';
 
-function CreateCampaign() {
+function CreateCampaign(props) {
   const [requestData, setRequestData] = useState({});
   const [process, setProcess] = useState(false);
   const [prices, setPrices] = useState({
@@ -33,6 +33,7 @@ function CreateCampaign() {
   });
   const category = nameArray.category();
   const counter = nameArray.counter();
+  const { history, match } = props;
 
   function getPrices() {
     axios.get('/api/TB_PRICE/').then((res) => {
@@ -48,14 +49,45 @@ function CreateCampaign() {
     });
   }
 
+  function getStatistic() {
+    axios.get('/api/TB_REQ_AD/detail', {
+      params: {
+        id: match.params.id
+      }
+    }).then((res) => {
+      console.log(res.data);
+      const { data } = res.data;
+      setRequestData(data);
+      setProcess(false);
+    });
+  }
+
   useEffect(() => {
     getPrices();
+    getStatistic();
   }, []);
 
 
   const mySchema = Yup.object().shape({
+    name: Yup.string()
+      .required('제품명을 선택해주세요'),
     type: Yup.string()
       .required('캠페인 유형을 선택해주세요'),
+    typeCategory: Yup.array()
+      .of(Yup.string().required('제품 카테고리를 선택하세요'))
+      .min(1, '제품 카테고리를 선택하세요'),
+    channel: Yup.array()
+      .of(Yup.string().required('원하시는 채널을 선택하세요'))
+      .min(1, '원하시는 채널을 선택하세요'),
+    presidentName: Yup.string()
+      .required('캠페인 제목을 입력하세요'),
+    about: Yup.string()
+      .required('캠페인에 대해 소개를 입력하세요'),
+    tags: Yup.string()
+      .required('필수 해시태그를 2개 입력하세요'),
+    photo: Yup.array()
+      .of(Yup.string().required('제품 카테고리를 선택하세요'))
+      .min(1, '캠페인 대표 이미지를 올려주세요'),
     sumCount: Yup.string()
       .when(['nano', 'micro', 'macro', 'mega', 'celebrity'], {
         is: (nano, micro, macro, mega, celebrity) => !(parseInt(nano, 10)) && !(parseInt(micro, 10)) && !(parseInt(macro, 10)) && !(parseInt(mega, 10)) && !(parseInt(celebrity, 10)),
@@ -100,6 +132,23 @@ function CreateCampaign() {
 
     // input same pictures multiple times
     event.target.value = '';
+  }
+
+  function saveProduct(values) {
+    const apiObj = { ...values, advId: requestData.ADV_ID };
+
+    axios.post('/api/TB_AD/adminCreateAd', apiObj)
+      .then((res) => {
+        if (res.data.code === 200) {
+          history.push('/Main/Payment');
+          // props.history.push(`${props.match.path}/write/${res.data.id}`);
+        } else if (res.data.code === 401) {
+          alert(res);
+        } else {
+          alert(res);
+        }
+      })
+      .catch(error => (error));
   }
 
   function CalendarComponent(props) {
@@ -215,7 +264,7 @@ function CreateCampaign() {
             videoCheck: '0',
             reuse: false,
 
-            name: '',
+            name: requestData.REQ_BRAND || '',
             startSearch: new Date(),
             searchDate: getMinDate(),
             finishDate: getMinDate(),
@@ -235,7 +284,7 @@ function CreateCampaign() {
           enableReinitialize
           validationSchema={mySchema}
           onSubmit={(values) => {
-            console.log(values);
+            saveProduct(values);
           }}
         >
           {({
@@ -339,6 +388,7 @@ function CreateCampaign() {
                             </Grid>
                           ))
                         }
+                        {errors.sumCount && touched.sumCount ? <Grid item md={12} className="error-message">{errors.sumCount}</Grid> : null}
                       </Grid>
                     </Grid>
                     <Grid item md={6}>
@@ -445,6 +495,11 @@ function CreateCampaign() {
                       </Grid>
                     )}
                   />
+                  <Grid item md={12}>
+                    {errors.typeCategory && touched.typeCategory ? (
+                      <div className="error-message">{errors.typeCategory}</div>
+                    ) : null}
+                  </Grid>
                 </Grid>
                 <Grid item md={12}>
                   <div className="label-holder">
@@ -501,6 +556,9 @@ function CreateCampaign() {
                       </Grid>
                     )}
                   />
+                  {errors.channel && touched.channel ? (
+                    <div className="error-message">{errors.channel}</div>
+                  ) : null}
                 </Grid>
                 <Grid item md={12}>
                   <Divider />
