@@ -140,7 +140,7 @@ function CreateCampaign(props) {
     axios.post('/api/TB_AD/adminCreateAd', apiObj)
       .then((res) => {
         if (res.data.code === 200) {
-          history.push('/Main/Payment');
+          history.push('/Main/Campaign');
           // props.history.push(`${props.match.path}/write/${res.data.id}`);
         } else if (res.data.code === 401) {
           alert(res);

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import PaymentList from './PaymentList';
-import PaymentDetail from './PaymentDetail';
+import CampaignList from './CampaignList';
+import CampaignDetail from './CampaignDetail';
 
-function Payment(props) {
+function Campaign(props) {
   function goBack() {
     props.history.push(props.match.path);
   }
@@ -12,14 +12,14 @@ function Payment(props) {
     <Switch>
       <Route
         path={`${props.match.path}/:id`}
-        render={renderProps => <PaymentDetail {...renderProps} goBack={goBack} />}
+        render={renderProps => <CampaignDetail {...renderProps} goBack={goBack} />}
       />
       <Route
         path={`${props.match.path}/`}
-        render={renderProps => <PaymentList {...renderProps} />}
+        render={renderProps => <CampaignList {...renderProps} />}
       />
     </Switch>
   );
 }
 
-export default Payment;
+export default Campaign;

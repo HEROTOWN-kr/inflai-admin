@@ -12,7 +12,7 @@ import axios from 'axios';
 import StyledTableCell from "../../containers/StyledTableCell";
 import StyledTableRow from "../../containers/StyledTableRow";
 
-function PaymentList(props) {
+function CampaignList(props) {
   const [payments, setPayments] = useState([]);
   const tableHeader = [
     {
@@ -115,4 +115,4 @@ function PaymentList(props) {
   );
 }
 
-export default PaymentList;
+export default CampaignList;

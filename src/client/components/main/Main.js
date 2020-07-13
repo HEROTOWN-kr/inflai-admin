@@ -14,12 +14,12 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import HelpIcon from '@material-ui/icons/Help';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import Payment from './payment/Payment';
 import Influencer from './influencer/Influencer';
 import Advertiser from './advertiser/Advertiser';
 import Ranking from './ranking/Ranking';
 import Request from './request/Request';
 import Dashboard from './dashboard/Dashboard';
+import Campaign from "./campaign/Campaign";
 
 function Main(props) {
   const links = [
@@ -39,8 +39,8 @@ function Main(props) {
       icon: YouTubeIcon
     },
     {
-      name: '판매관리 (결제관리)',
-      link: '/Payment',
+      name: '캠페인관리 (결제관리)',
+      link: '/Campaign',
       icon: MonetizationOnIcon
     },
     {
@@ -97,8 +97,8 @@ function Main(props) {
             render={renderProps => <Influencer {...renderProps} />}
           />
           <Route
-            path={`${props.match.path}/Payment`}
-            render={renderProps => <Payment {...renderProps} />}
+            path={`${props.match.path}/Campaign`}
+            render={renderProps => <Campaign {...renderProps} />}
           />
           <Route
             path={`${props.match.path}/Ranking`}

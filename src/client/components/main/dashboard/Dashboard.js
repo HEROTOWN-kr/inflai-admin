@@ -28,7 +28,7 @@ function Dashboard({
       label: '최근캠페인',
       title: ['회사명', '제품명', '협찬품 가격을', '인플루언서수', '결제상태'],
       body: ['ADV_COM_NAME', 'AD_PROD_NAME', 'AD_PROD_PRICE', 'INF_SUM', 'AD_PAID'],
-      link: '/Payment'
+      link: '/Campaign'
     }
   };
 
