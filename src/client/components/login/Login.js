@@ -24,7 +24,7 @@ function Login({
     if (!user.token) {
       history.push('/Login');
     } else {
-      history.push('/Main/Dashboard');
+      history.push('/Dashboard');
     }
   }, [user]);
 

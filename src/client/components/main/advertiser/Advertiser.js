@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Grid,
   TableContainer,
   Table,
   TableHead,
@@ -9,12 +8,14 @@ import {
   TableRow,
   Paper
 } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 
 
 function Advertiser() {
   const [advertisers, setAdvertisers] = useState([]);
+  const [page, setPage] = React.useState(1);
 
   function createAdvertisers(data) {
     const array = [];
@@ -45,39 +46,48 @@ function Advertiser() {
     getAdvertisers();
   }, []);
 
+  const changePage = (event, value) => {
+    setPage(value);
+  };
+
+  const getPageCount = () => {
+    console.log((advertisers.length / 10).ceil);
+    return (advertisers.length / 10).ceil;
+  };
+
   return (
-    <Grid container justify="center">
-      <Grid item md={10}>
-        <TableContainer component={Paper}>
-          <Table aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>이름</StyledTableCell>
-                <StyledTableCell align="right">이메일</StyledTableCell>
-                <StyledTableCell align="right">전화번호</StyledTableCell>
-                <StyledTableCell align="right">회사&nbsp;명</StyledTableCell>
-                <StyledTableCell align="right">기업구분</StyledTableCell>
-                <StyledTableCell align="right">가입일차</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {advertisers.map(row => (
-                <StyledTableRow hover key={row.id}>
-                  <StyledTableCell component="th" scope="row">
-                    {row.name}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">{row.email}</StyledTableCell>
-                  <StyledTableCell align="right">{row.phoneNumber}</StyledTableCell>
-                  <StyledTableCell align="right">{row.companyName}</StyledTableCell>
-                  <StyledTableCell align="right">{row.companyType}</StyledTableCell>
-                  <StyledTableCell align="right">{row.registerDate}</StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Grid>
-    </Grid>
+    <>
+      <TableContainer component={Paper}>
+        <Table aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>이름</StyledTableCell>
+              <StyledTableCell align="right">이메일</StyledTableCell>
+              <StyledTableCell align="right">전화번호</StyledTableCell>
+              <StyledTableCell align="right">회사&nbsp;명</StyledTableCell>
+              <StyledTableCell align="right">기업구분</StyledTableCell>
+              <StyledTableCell align="right">가입일차</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {advertisers.map(row => (
+              <StyledTableRow hover key={row.id}>
+                <StyledTableCell component="th" scope="row">
+                  {row.name}
+                </StyledTableCell>
+                <StyledTableCell align="right">{row.email}</StyledTableCell>
+                <StyledTableCell align="right">{row.phoneNumber}</StyledTableCell>
+                <StyledTableCell align="right">{row.companyName}</StyledTableCell>
+                <StyledTableCell align="right">{row.companyType}</StyledTableCell>
+                <StyledTableCell align="right">{row.registerDate}</StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Pagination count={getPageCount} page={page} onChange={changePage} />
+    </>
+
   );
 }
 

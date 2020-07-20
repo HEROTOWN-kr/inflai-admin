@@ -1,12 +1,8 @@
 import React from 'react';
 import {
-  Button,
-  Grid, List, ListItem, ListItemIcon, ListItemText, SvgIcon
+  Box
 } from '@material-ui/core';
-
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import YouTubeIcon from '@material-ui/icons/YouTube';
@@ -19,7 +15,9 @@ import Advertiser from './advertiser/Advertiser';
 import Ranking from './ranking/Ranking';
 import Request from './request/Request';
 import Dashboard from './dashboard/Dashboard';
-import Campaign from "./campaign/Campaign";
+import Campaign from './campaign/Campaign';
+import Navbar from './navbar/Navbar';
+import Settings from './settings/Settings';
 
 function Main(props) {
   const links = [
@@ -57,60 +55,49 @@ function Main(props) {
 
 
   return (
-    <Grid container className="main" alignItems="center">
-      <Grid item md={2} className="left-panel">
-        <Grid container justify="center" spacing={3} alignItems="center">
-          <Grid item md={6}>
-            <Button fullWidth variant="contained" color="secondary" onClick={() => props.changeUser({ token: '' })}>로그아웃</Button>
-          </Grid>
-          <Grid item md={12}>
-            <List component="nav" aria-label="main mailbox folders">
-              {links.map(item => (
-                <ListItem
-                  key={item.name}
-                  button
-                  component={renderProps => <Link to={props.match.path + item.link} {...renderProps} />}
-                >
-                  <ListItemIcon>
-                    {/* <InboxIcon /> */}
-                    <SvgIcon component={item.icon} />
-                  </ListItemIcon>
-                  <ListItemText primary={item.name} />
-                </ListItem>
-              ))}
-            </List>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item md={10}>
+    <div>
+      <Navbar {...props} />
+      <Box py={6} px={2} className="main">
         <Switch>
           <Route
-            path={`${props.match.path}/Dashboard`}
+            path="/Dashboard"
             render={renderProps => <Dashboard {...renderProps} />}
           />
           <Route
-            path={`${props.match.path}/Advertiser`}
+            path="/Advertiser"
             render={renderProps => <Advertiser {...renderProps} />}
           />
           <Route
-            path={`${props.match.path}/Influencer`}
+            path="/Influencer"
             render={renderProps => <Influencer {...renderProps} />}
           />
           <Route
-            path={`${props.match.path}/Campaign`}
+            path="/Campaign"
             render={renderProps => <Campaign {...renderProps} />}
           />
           <Route
-            path={`${props.match.path}/Ranking`}
+            path="/Ranking"
             render={renderProps => <Ranking {...renderProps} />}
           />
           <Route
-            path={`${props.match.path}/Request`}
+            path="/Request"
             render={renderProps => <Request {...renderProps} />}
           />
+          <Route
+            path="/Settings"
+            render={renderProps => <Settings {...renderProps} />}
+          />
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <Redirect to="/Dashboard" />
+            )}
+          />
         </Switch>
-      </Grid>
-    </Grid>
+      </Box>
+    </div>
+
   );
 }
 

@@ -51,51 +51,47 @@ function Dashboard({
   }, []);
 
   return (
-    <Grid container justify="center" className="dashboard">
-      <Grid item md={11}>
-        <Grid container spacing={2}>
-          {
-            ['influencers', 'advertisers', 'advertises'].map(category => (
-              <Grid key={category} item xs={12}>
-                <div className="category-label">{tableRows[category].label}</div>
-                <TableContainer component={Paper}>
-                  <Table aria-label="customized table">
-                    <TableHead>
-                      <TableRow>
-                        {tableRows[category].title.map((item, index) => (
-                          <StyledTableCell key={item} align={index > 0 ? 'right' : ''}>{item}</StyledTableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {
-                       tableData[category].map(row => (
-                         <StyledTableRow hover key={row.INF_ID || row.ADV_ID || row.AD_ID}>
-                           {tableRows[category].body.map((item, index) => (
-                             <StyledTableCell key={item} component={index === 0 ? 'th' : ''} scope={index === 0 ? 'row' : ''} align={index > 0 ? 'right' : ''}>
-                               {category === 'advertises' && item === 'ADV_COM_NAME' ? row.TB_ADVERTISER[item] : row[item]}
-                             </StyledTableCell>
-                           ))}
-                         </StyledTableRow>
-                       ))
-                      }
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <div className="see-all-button">
-                  <Grid container justify="flex-end">
-                    <Grid item>
-                      <Button variant="contained" onClick={() => history.push(`/Main${tableRows[category].link}`)}>
-                        전체보기
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </div>
+    <Grid container spacing={2}>
+      {
+        ['influencers', 'advertisers', 'advertises'].map(category => (
+          <Grid key={category} item xs={12}>
+            <div className="category-label">{tableRows[category].label}</div>
+            <TableContainer component={Paper}>
+              <Table aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    {tableRows[category].title.map((item, index) => (
+                      <StyledTableCell key={item} align={index > 0 ? 'right' : ''}>{item}</StyledTableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {
+                   tableData[category].map(row => (
+                     <StyledTableRow hover key={row.INF_ID || row.ADV_ID || row.AD_ID}>
+                       {tableRows[category].body.map((item, index) => (
+                         <StyledTableCell key={item} component={index === 0 ? 'th' : ''} scope={index === 0 ? 'row' : ''} align={index > 0 ? 'right' : ''}>
+                           {category === 'advertises' && item === 'ADV_COM_NAME' ? row.TB_ADVERTISER[item] : row[item]}
+                         </StyledTableCell>
+                       ))}
+                     </StyledTableRow>
+                   ))
+                  }
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <div className="see-all-button">
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <Button variant="contained" onClick={() => history.push(`/Main${tableRows[category].link}`)}>
+                    전체보기
+                  </Button>
+                </Grid>
               </Grid>
-            ))
-          }
-        </Grid>
-      </Grid>
+            </div>
+          </Grid>
+        ))
+      }
     </Grid>
   );
 }

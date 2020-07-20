@@ -31,13 +31,8 @@ function App(props) {
         path="/Login"
         render={renderProps => <Login {...renderProps} user={user} changeUser={changeUser} />}
       />
-      {/* <Route
-        path="/Main"
-          // render={props => <ProductMix {...props} user={user} changeUser={changeUser} />}
-        render={renderProps => <Main {...renderProps} />}
-      /> */}
       <Route
-        path="/Main"
+        path="/"
         render={renderProps => <Main {...renderProps} changeUser={changeUser} />}
       />
       <Route
@@ -45,7 +40,7 @@ function App(props) {
         path="/"
         render={() => (
           user.token
-            ? <Redirect to="/Main/Dashboard" />
+            ? <Redirect to="/" />
             : <Redirect to="/Login" />
         )}
       />

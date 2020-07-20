@@ -18,6 +18,8 @@ $colorRed: #fa4616;
 }
 
 .main {
+  max-width: 1200px;
+  margin: 0 auto;
   .left-panel {
     background: $colorDarkBlue;
     height: inherit;
@@ -170,6 +172,13 @@ $colorRed: #fa4616;
         }
       }
     }
+  }
+}
+
+.navbar {
+  background: $colorDarkBlue;
+  .navbar-content {
+    padding: 0 64px;
   }
 }
 
