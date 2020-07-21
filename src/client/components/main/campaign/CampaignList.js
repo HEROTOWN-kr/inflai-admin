@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Box,
   Grid,
   Paper,
   Table,
@@ -11,9 +12,13 @@ import {
 import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
+import MyPagination from '../../containers/MyPagination';
 
 function CampaignList(props) {
-  const [payments, setPayments] = useState([]);
+  const {
+    payments, setPayments, count, setCount, page, setPage
+  } = props;
+
   const tableHeader = [
     {
       text: '회사명',
@@ -55,10 +60,15 @@ function CampaignList(props) {
   }
 
   function getPayments() {
-    axios.get('/api/TB_AD/getAll')
-      .then((res) => {
-        createPayments(res.data.data);
-      });
+    axios.get('/api/TB_AD/getAll', {
+      params: {
+        page
+      }
+    }).then((res) => {
+      const { rows, count } = res.data.data;
+      createPayments(rows);
+      setCount(count);
+    });
   }
 
   function paymentDetail(event, id) {
@@ -68,46 +78,60 @@ function CampaignList(props) {
 
   useEffect(() => {
     getPayments();
-  }, []);
+  }, [page]);
+
+  const changePage = (event, value) => {
+    setPage(value);
+  };
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            {tableHeader.map(item => (
-              <StyledTableCell key={item.text} align={item.align}>{item.text}</StyledTableCell>
+    <>
+      <TableContainer component={Paper}>
+        <Table aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              {tableHeader.map(item => (
+                <StyledTableCell key={item.text} align={item.align}>{item.text}</StyledTableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {payments.map(row => (
+              <StyledTableRow
+                hover
+                key={row.id}
+                onClick={event => paymentDetail(event, row.id)}
+              >
+                <StyledTableCell component="th" scope="row">
+                  {row.companyName}
+                </StyledTableCell>
+                <StyledTableCell align="right">{row.productName}</StyledTableCell>
+                <StyledTableCell align="right">{row.productPrice}</StyledTableCell>
+                <StyledTableCell align="right">{row.influencerCount}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {row.isPaid === 'Y'
+                    ? <span style={{ color: 'green' }}>결제완료</span>
+                    : <span style={{ color: 'red' }}>결제안됨</span>
+                      }
+                </StyledTableCell>
+              </StyledTableRow>
             ))}
-            {/* <StyledTableCell>회사명</StyledTableCell>
-                <StyledTableCell align="right">회사명</StyledTableCell>
-                <StyledTableCell align="right">전화번호</StyledTableCell>
-                <StyledTableCell align="right">가입일차</StyledTableCell> */}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {payments.map(row => (
-            <StyledTableRow
-              hover
-              key={row.id}
-              onClick={event => paymentDetail(event, row.id)}
-            >
-              <StyledTableCell component="th" scope="row">
-                {row.companyName}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.productName}</StyledTableCell>
-              <StyledTableCell align="right">{row.productPrice}</StyledTableCell>
-              <StyledTableCell align="right">{row.influencerCount}</StyledTableCell>
-              <StyledTableCell align="right">
-                {row.isPaid === 'Y'
-                  ? <span style={{ color: 'green' }}>결제완료</span>
-                  : <span style={{ color: 'red' }}>결제안됨</span>
-                                        }
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Box py={4}>
+        <Grid container justify="center">
+          <Grid item>
+            <MyPagination
+              itemCount={count}
+              page={page}
+              changePage={changePage}
+              perPage={10}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    </>
   );
 }
 

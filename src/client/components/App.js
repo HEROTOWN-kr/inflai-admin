@@ -3,13 +3,20 @@ import {
   withRouter, Switch, Route, Redirect
 } from 'react-router-dom';
 
+
 import Main from './main/Main';
 import Login from './login/Login';
 import Common from '../lib/common';
 
 
 function App(props) {
+  const { history } = props;
+  const { pathname } = history.location;
   const [user, setUser] = useState(Common.getUserInfo());
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   function changeUser(data) {
     const newUser = { ...data };
@@ -19,7 +26,7 @@ function App(props) {
 
   useEffect(() => {
     if (!user.token) {
-      props.history.push('/Login');
+      history.push('/Login');
     }
   }, [user]);
 

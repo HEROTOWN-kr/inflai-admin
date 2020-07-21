@@ -6,16 +6,20 @@ import {
   TableHead,
   TableBody,
   TableRow,
-  Paper
+  Paper,
+  Grid,
+  Box
 } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
+import MyPagination from '../../containers/MyPagination';
 
 
-function Advertiser() {
+function Advertiser(props) {
   const [advertisers, setAdvertisers] = useState([]);
+  const [count, setCount] = useState(0);
   const [page, setPage] = React.useState(1);
+  const { setMenuIndicator } = props;
 
   function createAdvertisers(data) {
     const array = [];
@@ -36,23 +40,27 @@ function Advertiser() {
   }
 
   function getAdvertisers() {
-    axios.get('/api/TB_ADVERTISER/getAdvertisers')
-      .then((res) => {
-        createAdvertisers(res.data.data);
-      });
+    axios.get('/api/TB_ADVERTISER/getAdvertisers', {
+      params: {
+        page
+      }
+    }).then((res) => {
+      const { rows, count } = res.data.data;
+      createAdvertisers(rows);
+      setCount(count);
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   useEffect(() => {
     getAdvertisers();
-  }, []);
+  }, [page]);
+
+  useEffect(() => setMenuIndicator(1), []);
 
   const changePage = (event, value) => {
     setPage(value);
-  };
-
-  const getPageCount = () => {
-    console.log((advertisers.length / 10).ceil);
-    return (advertisers.length / 10).ceil;
   };
 
   return (
@@ -85,9 +93,19 @@ function Advertiser() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Pagination count={getPageCount} page={page} onChange={changePage} />
+      <Box py={4}>
+        <Grid container justify="center">
+          <Grid item>
+            <MyPagination
+              itemCount={count}
+              page={page}
+              changePage={changePage}
+              perPage={10}
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </>
-
   );
 }
 

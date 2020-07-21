@@ -3,30 +3,47 @@ import { Route, Switch } from 'react-router-dom';
 import RequestDetail from './RequestDetail';
 import RequestList from './RequestList';
 import CreateCampaign from './CreateCampaign';
+import CampaignList from '../campaign/CampaignList';
 
 function Request(props) {
+  const { setMenuIndicator, history, match } = props;
+  useEffect(() => setMenuIndicator(5), []);
+  const [influencers, setInfluencers] = useState([]);
+  const [count, setCount] = useState(0);
+  const [page, setPage] = React.useState(1);
+
   function goBack() {
-    props.history.push(props.match.path);
+    history.push(match.path);
   }
 
   function goToCreate(id) {
-    props.history.push(`${props.match.path}/create/${id}`);
+    history.push(`${match.path}/create/${id}`);
   }
 
   return (
     <div className="request">
       <Switch>
         <Route
-          path={`${props.match.path}/create/:id`}
+          path={`${match.path}/create/:id`}
           render={renderProps => <CreateCampaign {...renderProps} goBack={goBack} />}
         />
         <Route
-          path={`${props.match.path}/:id`}
+          path={`${match.path}/:id`}
           render={renderProps => <RequestDetail {...renderProps} goBack={goBack} goToCreate={goToCreate} />}
         />
         <Route
-          path={`${props.match.path}/`}
-          render={renderProps => <RequestList {...renderProps} />}
+          path={`${match.path}/`}
+          render={renderProps => (
+            <RequestList
+              {...renderProps}
+              influencers={influencers}
+              setInfluencers={setInfluencers}
+              count={count}
+              setCount={setCount}
+              page={page}
+              setPage={setPage}
+            />
+          )}
         />
       </Switch>
     </div>

@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import CampaignList from './CampaignList';
 import CampaignDetail from './CampaignDetail';
 
 function Campaign(props) {
+  const { setMenuIndicator } = props;
+  useEffect(() => setMenuIndicator(3), []);
+  const [payments, setPayments] = useState([]);
+  const [count, setCount] = useState(0);
+  const [page, setPage] = React.useState(1);
+
   function goBack() {
     props.history.push(props.match.path);
   }
@@ -16,7 +22,17 @@ function Campaign(props) {
       />
       <Route
         path={`${props.match.path}/`}
-        render={renderProps => <CampaignList {...renderProps} />}
+        render={renderProps => (
+          <CampaignList
+            {...renderProps}
+            payments={payments}
+            setPayments={setPayments}
+            count={count}
+            setCount={setCount}
+            page={page}
+            setPage={setPage}
+          />
+        )}
       />
     </Switch>
   );

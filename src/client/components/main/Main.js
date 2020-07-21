@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box
 } from '@material-ui/core';
@@ -20,72 +20,44 @@ import Navbar from './navbar/Navbar';
 import Settings from './settings/Settings';
 
 function Main(props) {
-  const links = [
-    {
-      name: '대시보드',
-      link: '/Dashboard',
-      icon: DashboardIcon
-    },
-    {
-      name: '광고주',
-      link: '/Advertiser',
-      icon: AccessibilityNewIcon
-    },
-    {
-      name: '인플루언서',
-      link: '/Influencer',
-      icon: YouTubeIcon
-    },
-    {
-      name: '캠페인관리 (결제관리)',
-      link: '/Campaign',
-      icon: MonetizationOnIcon
-    },
-    {
-      name: '랭킹(순위)',
-      link: '/Ranking',
-      icon: EqualizerIcon
-    },
-    {
-      name: '켐페인 요청',
-      link: '/Request',
-      icon: HelpIcon
-    },
-  ];
+  const [pageIndicator, setPageIndicator] = useState(0);
 
+  function setMenuIndicator(value) {
+    setPageIndicator(value);
+  }
 
   return (
     <div>
-      <Navbar {...props} />
+      <Navbar {...props} pageIndicator={pageIndicator} setMenuIndicator={setMenuIndicator} />
       <Box py={6} px={2} className="main">
         <Switch>
           <Route
             path="/Dashboard"
-            render={renderProps => <Dashboard {...renderProps} />}
+            render={renderProps => <Dashboard {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
           <Route
             path="/Advertiser"
-            render={renderProps => <Advertiser {...renderProps} />}
+            render={renderProps => <Advertiser {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
           <Route
             path="/Influencer"
-            render={renderProps => <Influencer {...renderProps} />}
+            render={renderProps => <Influencer {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
           <Route
             path="/Campaign"
-            render={renderProps => <Campaign {...renderProps} />}
+            render={renderProps => <Campaign {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
           <Route
             path="/Ranking"
-            render={renderProps => <Ranking {...renderProps} />}
+            render={renderProps => <Ranking {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
           <Route
             path="/Request"
-            render={renderProps => <Request {...renderProps} />}
+            render={renderProps => <Request {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
           <Route
             path="/Settings"
-            render={renderProps => <Settings {...renderProps} />}
+            render={renderProps => <Settings {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
           <Route
             exact

@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
+  Box,
   Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 } from '@material-ui/core';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
+import MyPagination from '../../containers/MyPagination';
 
 function RequestList(props) {
-  const [influencers, setInfluencers] = useState([]);
+  const {
+    influencers, setInfluencers, count, setCount, page, setPage, history, match
+  } = props;
 
   function createInfluencers(data) {
     const array = [];
@@ -28,55 +32,74 @@ function RequestList(props) {
   }
 
   function getInfluencers() {
-    axios.get('/api/TB_REQ_AD/').then((res) => {
-      // console.log(res);
-      createInfluencers(res.data.data);
+    axios.get('/api/TB_REQ_AD/', {
+      params: {
+        page
+      }
+    }).then((res) => {
+      const { rows, count } = res.data.data;
+      createInfluencers(rows);
+      setCount(count);
     });
   }
 
   useEffect(() => {
     getInfluencers();
-  }, []);
+  }, [page]);
+
+  const changePage = (event, value) => {
+    setPage(value);
+  };
 
   function requestDetail(event, id) {
-    props.history.push(`${props.match.path}${id}`);
+    history.push(`${match.path}${id}`);
   }
 
   return (
-    <Grid container justify="center">
-      <Grid item md={10}>
-        <TableContainer component={Paper}>
-          <Table aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>브랜드명(제품명)</StyledTableCell>
-                <StyledTableCell align="right">업체명</StyledTableCell>
-                <StyledTableCell align="right">담당자명</StyledTableCell>
-                <StyledTableCell align="right">전화번호</StyledTableCell>
-                <StyledTableCell align="right">가입일차</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {influencers.map(row => (
-                <StyledTableRow
-                  hover
-                  key={row.id}
-                  onClick={event => requestDetail(event, row.id)}
-                >
-                  <StyledTableCell component="th" scope="row">
-                    {row.brand}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">{row.companyName}</StyledTableCell>
-                  <StyledTableCell align="right">{row.name}</StyledTableCell>
-                  <StyledTableCell align="right">{row.phoneNumber}</StyledTableCell>
-                  <StyledTableCell align="right">{row.registerDate}</StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Grid>
-    </Grid>
+    <>
+      <TableContainer component={Paper}>
+        <Table aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>브랜드명(제품명)</StyledTableCell>
+              <StyledTableCell align="right">업체명</StyledTableCell>
+              <StyledTableCell align="right">담당자명</StyledTableCell>
+              <StyledTableCell align="right">전화번호</StyledTableCell>
+              <StyledTableCell align="right">가입일차</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {influencers.map(row => (
+              <StyledTableRow
+                hover
+                key={row.id}
+                onClick={event => requestDetail(event, row.id)}
+              >
+                <StyledTableCell component="th" scope="row">
+                  {row.brand}
+                </StyledTableCell>
+                <StyledTableCell align="right">{row.companyName}</StyledTableCell>
+                <StyledTableCell align="right">{row.name}</StyledTableCell>
+                <StyledTableCell align="right">{row.phoneNumber}</StyledTableCell>
+                <StyledTableCell align="right">{row.registerDate}</StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Box py={4}>
+        <Grid container justify="center">
+          <Grid item>
+            <MyPagination
+              itemCount={count}
+              page={page}
+              changePage={changePage}
+              perPage={10}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    </>
   );
 }
 

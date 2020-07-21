@@ -13,7 +13,7 @@ function Navbar(props) {
             <NavbarLogo />
           </Grid>
           <Grid item>
-            <NavbarLinks />
+            <NavbarLinks {...props} />
           </Grid>
           <Grid item>
             <Button variant="contained" color="secondary" onClick={() => changeUser({ token: '' })}>로그아웃</Button>

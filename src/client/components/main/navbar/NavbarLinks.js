@@ -15,6 +15,7 @@ import AntTab from './StyledTab';
 
 
 function NavbarLinks(props) {
+  const { pageIndicator, setMenuIndicator } = props;
   const menuLinks = [
     {
       name: '대시보드',
@@ -53,16 +54,14 @@ function NavbarLinks(props) {
     },
   ];
 
-  const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setMenuIndicator(newValue);
   };
 
   return (
     <Box className="navbar-links">
       <AntTabs
-        value={value}
+        value={pageIndicator}
         onChange={handleChange}
         /* indicatorColor="secondary"
         textColor="secondary" */
@@ -72,6 +71,7 @@ function NavbarLinks(props) {
           const IconTag = item.icon;
           return (
             <AntTab
+              key={item.link}
               icon={<IconTag />}
               label={item.name}
               component={Link}

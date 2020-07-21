@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button
+  Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button, Box
 } from '@material-ui/core';
-import { setIn } from 'formik';
-import index from 'async';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 
@@ -55,13 +53,22 @@ function Dashboard({
       {
         ['influencers', 'advertisers', 'advertises'].map(category => (
           <Grid key={category} item xs={12}>
-            <div className="category-label">{tableRows[category].label}</div>
+            <Box className="category-label">
+              <Grid container justify="space-between">
+                <Grid item>{tableRows[category].label}</Grid>
+                <Grid item>
+                  <button onClick={() => history.push(tableRows[category].link)}>
+                    전체보기
+                  </button>
+                </Grid>
+              </Grid>
+            </Box>
             <TableContainer component={Paper}>
               <Table aria-label="customized table">
                 <TableHead>
                   <TableRow>
                     {tableRows[category].title.map((item, index) => (
-                      <StyledTableCell key={item} align={index > 0 ? 'right' : ''}>{item}</StyledTableCell>
+                      <StyledTableCell key={item} align={index > 0 ? 'right' : 'left'}>{item}</StyledTableCell>
                     ))}
                   </TableRow>
                 </TableHead>
@@ -70,7 +77,7 @@ function Dashboard({
                    tableData[category].map(row => (
                      <StyledTableRow hover key={row.INF_ID || row.ADV_ID || row.AD_ID}>
                        {tableRows[category].body.map((item, index) => (
-                         <StyledTableCell key={item} component={index === 0 ? 'th' : ''} scope={index === 0 ? 'row' : ''} align={index > 0 ? 'right' : ''}>
+                         <StyledTableCell key={item} component={index === 0 ? 'th' : ''} scope={index === 0 ? 'row' : ''} align={index > 0 ? 'right' : 'left'}>
                            {category === 'advertises' && item === 'ADV_COM_NAME' ? row.TB_ADVERTISER[item] : row[item]}
                          </StyledTableCell>
                        ))}
@@ -80,15 +87,6 @@ function Dashboard({
                 </TableBody>
               </Table>
             </TableContainer>
-            <div className="see-all-button">
-              <Grid container justify="flex-end">
-                <Grid item>
-                  <Button variant="contained" onClick={() => history.push(`/Main${tableRows[category].link}`)}>
-                    전체보기
-                  </Button>
-                </Grid>
-              </Grid>
-            </div>
           </Grid>
         ))
       }

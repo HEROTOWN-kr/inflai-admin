@@ -14,7 +14,6 @@ function Settings() {
     celebrity: '',
   });
 
-
   const category = [
     {
       name: '나노',

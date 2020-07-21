@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Box,
   Grid,
   Paper,
   Table,
@@ -12,9 +13,14 @@ import axios from 'axios';
 import { Formik } from 'formik';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
+import MyPagination from '../../containers/MyPagination';
 
-function Influencer() {
+function Influencer(props) {
   const [influencers, setInfluencers] = useState([]);
+  const [count, setCount] = useState(0);
+  const [page, setPage] = React.useState(1);
+  const { setMenuIndicator } = props;
+  useEffect(() => setMenuIndicator(2), []);
 
   function createInfluencers(data) {
     const array = [];
@@ -34,14 +40,24 @@ function Influencer() {
   }
 
   function getInfluencers() {
-    axios.get('/api/TB_INFLUENCER/getInfluencers').then((res) => {
-      createInfluencers(res.data.data);
+    axios.get('/api/TB_INFLUENCER/getInfluencers', {
+      params: {
+        page
+      }
+    }).then((res) => {
+      const { rows, count } = res.data.data;
+      createInfluencers(rows);
+      setCount(count);
     });
   }
 
   useEffect(() => {
     getInfluencers();
-  }, []);
+  }, [page]);
+
+  const changePage = (event, value) => {
+    setPage(value);
+  };
 
   return (
     <Grid container justify="center">
@@ -71,6 +87,18 @@ function Influencer() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Box py={4}>
+        <Grid container justify="center">
+          <Grid item>
+            <MyPagination
+              itemCount={count}
+              page={page}
+              changePage={changePage}
+              perPage={10}
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </Grid>
   );
 }
