@@ -14,20 +14,32 @@ import {
 import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
+import RequestDialog from './RequestDialog';
 
 function CampaignDetail(props) {
+  const { match, goBack } = props;
   const [requests, setRequests] = useState({});
+  const [dialog, setDialog] = useState(false);
+  const [requestToChange, setRequestToChange] = useState(0);
+
+  function toggleDialog() {
+    setDialog(!dialog);
+  }
 
   function getStatistic() {
     axios.get('/api/TB_NOTIFICATION/getRequests', {
       params: {
-        id: props.match.params.id
+        id: match.params.id
       }
     }).then((res) => {
       const { data } = res.data;
       console.log(data);
       setRequests(data);
     });
+  }
+
+  function changeState(id) {
+    console.log(`Change state from id: ${id}`);
   }
 
   useEffect(() => {
@@ -61,9 +73,8 @@ function CampaignDetail(props) {
     },
   ];
 
-  function MyTableRow({
-    data
-  }) {
+  function MyTableRow(fnProps) {
+    const { data } = fnProps;
     const {
       NOTI_ID, NOTI_STATE, NOTI_DT, TB_INFLUENCER
     } = data;
@@ -87,9 +98,13 @@ function CampaignDetail(props) {
       };
     }
 
+    function openDialog(requestData) {
+      setRequestToChange({ ...requestData });
+      setDialog(true);
+    }
 
     return (
-      <StyledTableRow hover>
+      <StyledTableRow hover onClick={() => openDialog(data)}>
         <StyledTableCell component="th" scope="row">
           {INF_NAME}
         </StyledTableCell>
@@ -103,36 +118,33 @@ function CampaignDetail(props) {
   }
 
   return (
-    <Grid container justify="center">
-      <Grid item md={10}>
-        <Grid container spacing={3}>
-          <Grid item md={12}>
-            <TableContainer component={Paper}>
-              <Table aria-label="customized table">
-                <TableHead>
-                  <TableRow>
-                    {tableHeader.map(item => (
-                      <StyledTableCell key={item.text} align={item.align}>{item.text}</StyledTableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {Object.keys(requests).map(key => (
-                    <MyTableRow key={requests[key].NOTI_ID} data={requests[key]} />
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Grid>
-          <Grid item md={12}>
-            <Grid container justify="center">
-              <Grid item md={2}>
-                <Button variant="contained" color="secondary" fullWidth onClick={props.goBack}>이전</Button>
-              </Grid>
-            </Grid>
+    <Grid container spacing={3}>
+      <Grid item md={12}>
+        <TableContainer component={Paper}>
+          <Table aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                {tableHeader.map(item => (
+                  <StyledTableCell key={item.text} align={item.align}>{item.text}</StyledTableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Object.keys(requests).map(key => (
+                <MyTableRow key={requests[key].NOTI_ID} data={requests[key]} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      <Grid item md={12}>
+        <Grid container justify="center">
+          <Grid item md={2}>
+            <Button variant="contained" color="secondary" fullWidth onClick={goBack}>이전</Button>
           </Grid>
         </Grid>
       </Grid>
+      <RequestDialog open={dialog} close={toggleDialog} changeState={changeState} info={requestToChange} />
     </Grid>
   );
 }
