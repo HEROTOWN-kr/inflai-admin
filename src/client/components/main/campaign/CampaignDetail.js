@@ -8,19 +8,65 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TableFooter,
-  withStyles, Button
+  Box,
+  Button,
+  Checkbox,
+  Typography
 } from '@material-ui/core';
 import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import RequestDialog from './RequestDialog';
 
+const tableHeader = [
+  {
+    text: '이름',
+    align: 'left'
+  },
+  {
+    text: '이메일',
+    align: 'right'
+  },
+  {
+    text: '전화번호',
+    align: 'right'
+  },
+  {
+    text: '소셜',
+    align: 'right'
+  },
+  {
+    text: '상태',
+    align: 'right'
+  },
+  {
+    text: '요청날짜',
+    align: 'right'
+  },
+];
+
+const stateCategory = [
+  {
+    text: '승인',
+    value: 1
+  },
+  {
+    text: '거절',
+    value: 2
+  },
+  {
+    text: '대기중',
+    value: 3
+  }
+];
+
 function CampaignDetail(props) {
   const { match, goBack } = props;
   const [requests, setRequests] = useState({});
+  const [reqState, setReqState] = useState(1);
   const [dialog, setDialog] = useState(false);
   const [requestToChange, setRequestToChange] = useState(0);
+  const [selected, setSelected] = React.useState([]);
 
   function toggleDialog() {
     setDialog(!dialog);
@@ -38,40 +84,53 @@ function CampaignDetail(props) {
     });
   }
 
-  function changeState(id) {
-    console.log(`Change state from id: ${id}`);
-  }
-
   useEffect(() => {
     getStatistic();
   }, []);
 
-  const tableHeader = [
-    {
-      text: '이름',
-      align: 'left'
-    },
-    {
-      text: '이메일',
-      align: 'right'
-    },
-    {
-      text: '전화번호',
-      align: 'right'
-    },
-    {
-      text: '소셜',
-      align: 'right'
-    },
-    {
-      text: '상태',
-      align: 'right'
-    },
-    {
-      text: '요청날짜',
-      align: 'right'
-    },
-  ];
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = Object.keys(requests).map(n => requests[n].NOTI_ID);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const clickOnTableRow = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
+    setSelected(newSelected);
+  };
+
+  const EnhancedTableToolbar = () => (
+    <Grid container justify="space-between">
+      <Grid item>
+        <Box mb={1}>
+          인플루언서 요청 리스트
+        </Box>
+      </Grid>
+      <Grid item>
+        {selected.length > 0 ? (
+          <div>change</div>
+        ) : null}
+      </Grid>
+    </Grid>
+  );
 
   function MyTableRow(fnProps) {
     const { data } = fnProps;
@@ -98,32 +157,57 @@ function CampaignDetail(props) {
       };
     }
 
-    function openDialog(requestData) {
-      setRequestToChange({ ...requestData });
+    const isSelected = id => selected.indexOf(id) !== -1;
+    const isItemSelected = isSelected(NOTI_ID);
+    const labelId = `enhanced-table-checkbox-${NOTI_ID}`;
+
+    function openDialog() {
+      setRequestToChange({ ...data });
+      setReqState(stateCategory[NOTI_STATE].value);
       setDialog(true);
     }
 
     return (
-      <StyledTableRow hover onClick={() => openDialog(data)}>
-        <StyledTableCell component="th" scope="row">
+      <TableRow
+        hover
+        // onClick={() => openDialog(data)}
+        role="checkbox"
+        aria-checked={isItemSelected}
+        tabIndex={-1}
+        onClick={event => clickOnTableRow(event, NOTI_ID)}
+        selected={isItemSelected}
+      >
+        <TableCell component="th" scope="row">
+          <Checkbox
+            checked={isItemSelected}
+            inputProps={{ 'aria-labelledby': labelId }}
+          />
+        </TableCell>
+        <TableCell component="th" scope="row">
           {INF_NAME}
-        </StyledTableCell>
-        <StyledTableCell align="right">{INF_EMAIL}</StyledTableCell>
-        <StyledTableCell align="right">{INF_TEL}</StyledTableCell>
-        <StyledTableCell align="right">{INF_BLOG_TYPE}</StyledTableCell>
-        <StyledTableCell align="right" style={getColor(NOTI_STATE)}>{NOTI_STATE}</StyledTableCell>
-        <StyledTableCell align="right">{NOTI_DT}</StyledTableCell>
-      </StyledTableRow>
+        </TableCell>
+        <TableCell align="right">{INF_EMAIL}</TableCell>
+        <TableCell align="right">{INF_TEL}</TableCell>
+        <TableCell align="right">{INF_BLOG_TYPE}</TableCell>
+        <TableCell align="right" style={getColor(NOTI_STATE)}>{NOTI_STATE}</TableCell>
+        <TableCell align="right">{NOTI_DT}</TableCell>
+      </TableRow>
     );
   }
 
   return (
     <Grid container spacing={3}>
       <Grid item md={12}>
+        <EnhancedTableToolbar />
         <TableContainer component={Paper}>
-          <Table aria-label="customized table">
+          <Table aria-label="customized table" size="small">
             <TableHead>
               <TableRow>
+                <StyledTableCell>
+                  <Checkbox
+                      // onChange={}
+                  />
+                </StyledTableCell>
                 {tableHeader.map(item => (
                   <StyledTableCell key={item.text} align={item.align}>{item.text}</StyledTableCell>
                 ))}
@@ -144,7 +228,15 @@ function CampaignDetail(props) {
           </Grid>
         </Grid>
       </Grid>
-      <RequestDialog open={dialog} close={toggleDialog} changeState={changeState} info={requestToChange} />
+      {/* <RequestDialog
+        open={dialog}
+        close={toggleDialog}
+        changeState={changeState}
+        state={reqState}
+        setState={setReqState}
+        stateCategory={stateCategory}
+        info={requestToChange}
+      /> */}
     </Grid>
   );
 }
