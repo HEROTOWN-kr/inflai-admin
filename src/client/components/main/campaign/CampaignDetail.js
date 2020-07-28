@@ -17,6 +17,7 @@ import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import RequestDialog from './RequestDialog';
+import StyledTitle from '../../containers/StyledTitle';
 
 const tableHeader = [
   {
@@ -120,13 +121,11 @@ function CampaignDetail(props) {
   const EnhancedTableToolbar = () => (
     <Grid container justify="space-between">
       <Grid item>
-        <Box mb={1}>
-          인플루언서 요청 리스트
-        </Box>
+        <StyledTitle title="인플루언서 요청 리스트" />
       </Grid>
       <Grid item>
         {selected.length > 0 ? (
-          <div>change</div>
+          <div>{selected.length}</div>
         ) : null}
       </Grid>
     </Grid>
@@ -204,9 +203,7 @@ function CampaignDetail(props) {
             <TableHead>
               <TableRow>
                 <StyledTableCell>
-                  <Checkbox
-                      // onChange={}
-                  />
+                  <Checkbox />
                 </StyledTableCell>
                 {tableHeader.map(item => (
                   <StyledTableCell key={item.text} align={item.align}>{item.text}</StyledTableCell>
