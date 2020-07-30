@@ -10,3 +10,11 @@ const StyledTableRow = withStyles(theme => ({
 }))(TableRow);
 
 export default StyledTableRow;
+
+
+/*.MuiTableCell-root {
+    padding: 10px;
+  }
+  .MuiOutlinedInput-input {
+    padding: 8px 14px;
+  }*/

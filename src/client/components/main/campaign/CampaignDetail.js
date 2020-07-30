@@ -11,13 +11,20 @@ import {
   Box,
   Button,
   Checkbox,
-  Typography
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  Snackbar
 } from '@material-ui/core';
 import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import RequestDialog from './RequestDialog';
 import StyledTitle from '../../containers/StyledTitle';
+import Alert from '../../containers/Alert';
+import StyledCheckBox from '../../containers/StyledCheckBox';
+import StyledSelect from '../../containers/StyledSelect';
 
 const tableHeader = [
   {
@@ -64,8 +71,13 @@ const stateCategory = [
 function CampaignDetail(props) {
   const { match, goBack } = props;
   const [requests, setRequests] = useState({});
-  const [reqState, setReqState] = useState(1);
+  const [reqState, setReqState] = useState('0');
   const [dialog, setDialog] = useState(false);
+  const [message, setMessage] = useState({
+    open: false,
+    text: '',
+    type: 'success'
+  });
   const [requestToChange, setRequestToChange] = useState(0);
   const [selected, setSelected] = React.useState([]);
 
@@ -118,14 +130,55 @@ function CampaignDetail(props) {
     setSelected(newSelected);
   };
 
+  const messageClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setMessage({ ...message, open: false });
+  };
+
+  function changeState() {
+    if (reqState !== '0') {
+      axios.post('/api/TB_NOTIFICATION/changeState', { id: selected, state: reqState }).then((res) => {
+        if (res.data.code === 200) {
+          setReqState('0');
+          setSelected([]);
+          setMessage({ type: 'success', open: true, text: '저장되었습니다' });
+          getStatistic();
+        } else if (res.data.code === 401) {
+          console.log(res);
+        } else {
+          console.log(res);
+        }
+      }).catch(error => (error));
+    } else {
+      setMessage({ type: 'error', open: true, text: '상태선택해주세요' });
+    }
+  }
+
   const EnhancedTableToolbar = () => (
-    <Grid container justify="space-between">
+    <Grid container justify="space-between" alignItems="center">
       <Grid item>
         <StyledTitle title="인플루언서 요청 리스트" />
       </Grid>
       <Grid item>
         {selected.length > 0 ? (
-          <div>{selected.length}</div>
+          <FormControl
+            fullWidth
+            variant="outlined"
+          >
+            <StyledSelect
+              value={reqState}
+              onChange={(event => setReqState(event.target.value))}
+            >
+              <MenuItem value="0">상태선택</MenuItem>
+              <MenuItem value="1">승인</MenuItem>
+              <MenuItem value="2">거절</MenuItem>
+              <MenuItem value="3">대기중</MenuItem>
+            </StyledSelect>
+          </FormControl>
+
         ) : null}
       </Grid>
     </Grid>
@@ -162,7 +215,7 @@ function CampaignDetail(props) {
 
     function openDialog() {
       setRequestToChange({ ...data });
-      setReqState(stateCategory[NOTI_STATE].value);
+      // setReqState(stateCategory[NOTI_STATE].value);
       setDialog(true);
     }
 
@@ -176,20 +229,20 @@ function CampaignDetail(props) {
         onClick={event => clickOnTableRow(event, NOTI_ID)}
         selected={isItemSelected}
       >
-        <TableCell component="th" scope="row">
-          <Checkbox
+        <StyledTableCell component="th" scope="row">
+          <StyledCheckBox
             checked={isItemSelected}
             inputProps={{ 'aria-labelledby': labelId }}
           />
-        </TableCell>
-        <TableCell component="th" scope="row">
+        </StyledTableCell>
+        <StyledTableCell component="th" scope="row">
           {INF_NAME}
-        </TableCell>
-        <TableCell align="right">{INF_EMAIL}</TableCell>
-        <TableCell align="right">{INF_TEL}</TableCell>
-        <TableCell align="right">{INF_BLOG_TYPE}</TableCell>
-        <TableCell align="right" style={getColor(NOTI_STATE)}>{NOTI_STATE}</TableCell>
-        <TableCell align="right">{NOTI_DT}</TableCell>
+        </StyledTableCell>
+        <StyledTableCell align="right">{INF_EMAIL}</StyledTableCell>
+        <StyledTableCell align="right">{INF_TEL}</StyledTableCell>
+        <StyledTableCell align="right">{INF_BLOG_TYPE}</StyledTableCell>
+        <StyledTableCell align="right" style={getColor(NOTI_STATE)}>{NOTI_STATE}</StyledTableCell>
+        <StyledTableCell align="right">{NOTI_DT}</StyledTableCell>
       </TableRow>
     );
   }
@@ -199,11 +252,16 @@ function CampaignDetail(props) {
       <Grid item md={12}>
         <EnhancedTableToolbar />
         <TableContainer component={Paper}>
-          <Table aria-label="customized table" size="small">
+          <Table aria-label="customized table">
             <TableHead>
               <TableRow>
                 <StyledTableCell>
-                  <Checkbox />
+                  <StyledCheckBox
+                    indeterminate={selected.length > 0 && selected.length < requests.length}
+                    checked={requests.length > 0 && selected.length === requests.length}
+                    onChange={handleSelectAllClick}
+                    inputProps={{ 'aria-label': 'select all desserts' }}
+                  />
                 </StyledTableCell>
                 {tableHeader.map(item => (
                   <StyledTableCell key={item.text} align={item.align}>{item.text}</StyledTableCell>
@@ -218,13 +276,28 @@ function CampaignDetail(props) {
           </Table>
         </TableContainer>
       </Grid>
-      <Grid item md={12}>
+      <Grid item xs={12}>
         <Grid container justify="center">
-          <Grid item md={2}>
-            <Button variant="contained" color="secondary" fullWidth onClick={goBack}>이전</Button>
+          <Grid item xs={4} container justify="space-between">
+            <Grid item xs={5}>
+              <Button variant="contained" color="secondary" fullWidth onClick={goBack}>이전</Button>
+            </Grid>
+            <Grid item xs={5}>
+              <Button variant="contained" color="primary" fullWidth onClick={changeState}>저장</Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
+      <Snackbar
+        open={message.open}
+        autoHideDuration={4000}
+        onClose={messageClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={messageClose} severity={message.type}>
+          {message.text}
+        </Alert>
+      </Snackbar>
       {/* <RequestDialog
         open={dialog}
         close={toggleDialog}

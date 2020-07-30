@@ -1,6 +1,9 @@
 import { TableCell, withStyles } from '@material-ui/core';
 
 const StyledTableCell = withStyles(theme => ({
+  root: {
+    padding: '10px'
+  },
   head: {
     backgroundColor: '#3f4b5c',
     // backgroundColor: 'theme.palette.common.black',

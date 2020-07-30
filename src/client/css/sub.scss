@@ -9,8 +9,9 @@ $colorRed: #fa4616;
   height: 100vh;
 }
 .login-form {
-  border: 1px solid $colorGrey;
+  border: 2px solid #f50057;
   padding: 50px;
+  border-radius: 3%;
   .login-text {
     text-align: center;
     font-size: 33px;
@@ -50,12 +51,6 @@ $colorRed: #fa4616;
     margin: 0 0 10px;
     font-size: 1.1em;
     font-weight: bold;
-  }
-  .MuiTableCell-root {
-    padding: 10px;
-  }
-  .MuiOutlinedInput-input {
-    padding: 8px 14px;
   }
   .request {
     .data-form {
