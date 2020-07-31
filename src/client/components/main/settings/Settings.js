@@ -4,6 +4,7 @@ import {
 } from '@material-ui/core';
 import { Formik } from 'formik';
 import axios from 'axios';
+import MyTextField from '../../containers/MyTextField';
 
 function Settings() {
   const [prices, setPrices] = useState({
@@ -91,24 +92,16 @@ function Settings() {
               <Grid container spacing={2}>
                 {category.map(item => (
                   <Grid key={item.name} item xs={12}>
-                    <Grid container justify="space-between" alignItems="center">
-                      <Grid item className="influencer-type">
-                        {item.name}
-                      </Grid>
+                    <Grid container justify="center" alignItems="center">
                       <Grid item>
                         <Grid container alignItems="center" spacing={1}>
                           <Grid item>
-                            <TextField
+                            <MyTextField
                               name={item.value}
-                              value={values[item.value]}
-                              onChange={handleChange}
-                              className="counter"
-                              placeholder="0"
-                              variant="outlined"
+                              label={item.name}
+                              ph="0"
+                              eA="원"
                             />
-                          </Grid>
-                          <Grid item className="influencer-type">
-                                  원
                           </Grid>
                         </Grid>
                       </Grid>

@@ -13,6 +13,8 @@ import {
 import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
+import StyledSelect from '../../containers/StyledSelect';
+import StyledTitle from '../../containers/StyledTitle';
 
 function Ranking() {
   const [influencers, setInfluencers] = useState([]);
@@ -82,14 +84,17 @@ function Ranking() {
       <Grid item md={10}>
         <Grid container spacing={2}>
           <Grid item sm={12}>
-            <Select
+            <StyledTitle title="인플루언서 랭킹" />
+          </Grid>
+          <Grid item sm={12}>
+            <StyledSelect
               value={blogType}
               variant="outlined"
               onChange={(event => setBlogType(event.target.value))}
             >
               <MenuItem value="1">Instagram</MenuItem>
               <MenuItem value="2">Youtube</MenuItem>
-            </Select>
+            </StyledSelect>
           </Grid>
           <Grid item sm={12}>
             <TableContainer component={Paper}>

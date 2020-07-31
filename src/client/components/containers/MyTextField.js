@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField } from '@material-ui/core';
+import { TextField, InputAdornment } from '@material-ui/core';
 import '../../css/sub.scss';
 import { useField } from 'formik';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -19,24 +19,34 @@ function MyTextField(props) {
     },
   });
 
-  const [field, meta, helpers] = useField(props.name);
+  const {
+    name, label, ph, sA, eA
+  } = props;
+  const [field, meta, helpers] = useField(name);
+
+  const adornments = {};
+  if (sA) adornments.startAdornment = <InputAdornment disablePointerEvents position="start">{sA}</InputAdornment>;
+  if (eA) adornments.endAdornment = <InputAdornment disablePointerEvents position="end">{eA}</InputAdornment>;
+
 
   return (
     <React.Fragment>
       <div className="label-holder">
-        <label htmlFor={props.label}>{props.label}</label>
+        <label htmlFor={label}>{label}</label>
       </div>
       <ThemeProvider theme={theme}>
         <TextField
+          error={meta.touched && meta.error}
           name={field.name}
-          id={props.label}
+          id={label}
                 // className={classes.textField}
-          placeholder=""
+          placeholder={ph || null}
           value={meta.value}
           onChange={field.onChange}
           onBlur={field.onBlur}
           fullWidth
           variant="outlined"
+          InputProps={adornments}
           helperText={meta.touched && meta.error ? (
             <span className="error-message">{meta.error}</span>
           ) : null}
