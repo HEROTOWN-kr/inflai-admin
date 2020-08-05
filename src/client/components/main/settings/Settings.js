@@ -6,7 +6,7 @@ import { Formik } from 'formik';
 import axios from 'axios';
 import MyTextField from '../../containers/MyTextField';
 
-function Settings() {
+function Settings(props) {
   const [prices, setPrices] = useState({
     nano: '',
     micro: '',
@@ -14,6 +14,9 @@ function Settings() {
     mega: '',
     celebrity: '',
   });
+
+  const { setMenuIndicator } = props;
+  useEffect(() => setMenuIndicator(6), []);
 
   const category = [
     {

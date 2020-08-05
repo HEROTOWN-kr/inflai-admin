@@ -110,7 +110,16 @@ function CampaignDetail(props) {
     setSelected([]);
   };
 
+  const messageClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setMessage({ ...message, open: false });
+  };
+
   const clickOnTableRow = (event, name) => {
+    messageClose();
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
@@ -128,14 +137,6 @@ function CampaignDetail(props) {
     }
 
     setSelected(newSelected);
-  };
-
-  const messageClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setMessage({ ...message, open: false });
   };
 
   function changeState() {
