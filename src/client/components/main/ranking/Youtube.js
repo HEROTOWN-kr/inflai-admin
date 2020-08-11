@@ -15,7 +15,20 @@ function Youtube() {
   const [influencers, setInfluencers] = useState([]);
 
   const tableRows = {
-    title: ['이름', '구독수', '보기수'],
+    title: [
+      {
+        text: '이름',
+        align: 'left'
+      },
+      {
+        text: '구독수',
+        align: 'right'
+      },
+      {
+        text: '보기수',
+        align: 'right'
+      }
+    ],
     body: ['INF_NAME', 'YOU_SUBS', 'YOU_VIEWS']
   };
 
@@ -39,7 +52,7 @@ function Youtube() {
           <TableRow>
             {
               tableRows.title.map(item => (
-                <StyledTableCell key={item}>{item}</StyledTableCell>
+                <StyledTableCell key={item.text} align={item.align}>{item.text}</StyledTableCell>
               ))
             }
           </TableRow>
@@ -55,7 +68,7 @@ function Youtube() {
                     scope={index === 0 ? 'row' : ''}
                     align={index > 0 ? 'right' : ''}
                   >
-                    {row[item] || row.TB_INFLUENCER[item]}
+                    {row[item] >= 0 ? row[item] : row.TB_INFLUENCER[item]}
                   </StyledTableCell>
                 ))
               }
