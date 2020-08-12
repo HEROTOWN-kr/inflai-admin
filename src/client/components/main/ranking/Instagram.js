@@ -17,6 +17,11 @@ function Instagram() {
   const tableRows = {
     title: [
       {
+        text: '#',
+        align: 'center',
+        isRank: true
+      },
+      {
         text: '이름',
         align: 'left'
       },
@@ -25,14 +30,14 @@ function Instagram() {
         align: 'right'
       }
     ],
-    body: ['INF_NAME', 'INS_FLWR']
+    body: ['rownum', 'INF_NAME', 'INS_FLWR']
   };
 
   function getInfluencers() {
     axios.get('/api/TB_INSTA/').then(
       (res) => {
-        const { data } = res.data;
-        setInfluencers(data);
+        const { list } = res.data.data;
+        setInfluencers(list);
       }
     );
   }
@@ -48,7 +53,13 @@ function Instagram() {
           <TableRow>
             {
                 tableRows.title.map(item => (
-                  <StyledTableCell key={item.text} align={item.align}>{item.text}</StyledTableCell>
+                  <StyledTableCell
+                    key={item.text}
+                    align={item.align}
+                    className={item.isRank ? 'number' : null}
+                  >
+                    {item.text}
+                  </StyledTableCell>
                 ))
               }
           </TableRow>
@@ -60,9 +71,9 @@ function Instagram() {
                 tableRows.body.map((item, index) => (
                   <StyledTableCell
                     key={item}
-                    component={index === 0 ? 'th' : ''}
-                    scope={index === 0 ? 'row' : ''}
-                    align={index > 0 ? 'right' : ''}
+                    component={index === 1 ? 'th' : ''}
+                    scope={index === 1 ? 'row' : ''}
+                    align={index === 1 ? 'left' : 'right'}
                   >
                     {row[item] >= 0 ? row[item] : row.TB_INFLUENCER[item]}
                   </StyledTableCell>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Grid,
   MenuItem,
@@ -8,8 +8,10 @@ import StyledTitle from '../../containers/StyledTitle';
 import Instagram from './Instagram';
 import Youtube from './Youtube';
 
-function Ranking() {
+function Ranking(props) {
   const [blogType, setBlogType] = useState('1');
+  const { setMenuIndicator } = props;
+  useEffect(() => setMenuIndicator(4), []);
 
   return (
     <Grid container justify="center">
