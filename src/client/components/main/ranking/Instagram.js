@@ -42,6 +42,11 @@ function Instagram() {
     );
   }
 
+  async function getGoogleVisionData(INS_ID) {
+    const googleData = await axios.get('/api/TB_INSTA/getGoogleData', { params: { INS_ID } });
+    console.log(googleData.data.message);
+  }
+
   useEffect(() => {
     getInfluencers();
   }, []);
@@ -66,7 +71,7 @@ function Instagram() {
         </TableHead>
         <TableBody>
           {influencers.map(row => (
-            <StyledTableRow hover key={row.id}>
+            <StyledTableRow hover key={row.id} onClick={() => getGoogleVisionData(row.INS_ID)}>
               {
                 tableRows.body.map((item, index) => (
                   <StyledTableCell
