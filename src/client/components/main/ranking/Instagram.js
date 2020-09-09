@@ -19,7 +19,7 @@ function Instagram() {
       {
         text: '#',
         align: 'center',
-        isRank: true
+        width: '8px'
       },
       {
         text: '이름',
@@ -61,7 +61,7 @@ function Instagram() {
                   <StyledTableCell
                     key={item.text}
                     align={item.align}
-                    className={item.isRank ? 'number' : null}
+                    width={item.width || null}
                   >
                     {item.text}
                   </StyledTableCell>
@@ -71,7 +71,7 @@ function Instagram() {
         </TableHead>
         <TableBody>
           {influencers.map(row => (
-            <StyledTableRow hover key={row.id} onClick={() => getGoogleVisionData(row.INS_ID)}>
+            <StyledTableRow hover key={row.INS_ID} onClick={() => getGoogleVisionData(row.INS_ID)}>
               {
                 tableRows.body.map((item, index) => (
                   <StyledTableCell

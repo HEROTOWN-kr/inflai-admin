@@ -60,7 +60,7 @@ function Youtube() {
                 <StyledTableCell
                   key={item.text}
                   align={item.align}
-                  className={item.isRank ? 'number' : null}
+                  width={item.isRank || null}
                 >
                   {item.text}
                 </StyledTableCell>
@@ -70,13 +70,13 @@ function Youtube() {
         </TableHead>
         <TableBody>
           {influencers.map(row => (
-            <StyledTableRow hover key={row.id}>
+            <StyledTableRow hover key={row.YOU_ID}>
               {
                 tableRows.body.map((item, index) => (
                   <StyledTableCell
                     key={item}
-                    component={index === 1 ? 'th' : ''}
-                    scope={index === 1 ? 'row' : ''}
+                    /*component={index === 1 ? 'th' : ''}
+                    scope={index === 1 ? 'row' : ''}*/
                     align={index === 1 ? 'left' : 'right'}
                   >
                     {row[item] >= 0 ? row[item] : row.TB_INFLUENCER[item]}
