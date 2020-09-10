@@ -1,20 +1,38 @@
-import { TableRow, withStyles } from '@material-ui/core';
+import {
+  makeStyles, TableCell, TableRow, withStyles
+} from '@material-ui/core';
+import React from 'react';
 
+const useStyles = makeStyles({
+  root: ({ backgroundColor }) => ({
+    backgroundColor: backgroundColor || 'transparent',
+    '&.Mui-selected': {
+      backgroundColor: '#39ca66',
+      color: '#fff',
+      '&:hover': {
+        backgroundColor: '#39ca66',
+      }
+    }
+  }),
+});
 
-const StyledTableRow = withStyles(theme => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.background.default,
-    },
-  },
-}))(TableRow);
+function StyledTableRow(props) {
+  const {
+    id, onClick, className, children, selected
+  } = props;
+  const classes = useStyles(props);
+
+  return (
+    <TableRow
+      hover
+      classes={classes}
+      className={className}
+      selected={selected}
+      onClick={() => onClick(id)}
+    >
+      {children}
+    </TableRow>
+  );
+}
 
 export default StyledTableRow;
-
-
-/*.MuiTableCell-root {
-    padding: 10px;
-  }
-  .MuiOutlinedInput-input {
-    padding: 8px 14px;
-  }*/
