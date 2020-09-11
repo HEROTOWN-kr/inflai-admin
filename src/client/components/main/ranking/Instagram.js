@@ -12,6 +12,9 @@ import {
 import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
+import defaultAccountImage from '../../../img/default_account_image.png';
+import StyledLink from '../../containers/StyledLink';
+import StyledText from '../../containers/StyledText';
 
 function Instagram() {
   const [influencers, setInfluencers] = useState([]);
@@ -24,16 +27,25 @@ function Instagram() {
       {
         text: '#',
         align: 'center',
-        width: '8px'
+        width: '60px'
       },
       {
-        text: '이름',
+        text: '인스타그램 정보',
+        align: 'left',
+        // width: '200px'
+      },
+      {
+        text: '팔로워 수',
         align: 'left'
       },
       {
-        text: '구독수',
-        align: 'right'
-      }
+        text: '팔로잉 수',
+        align: 'left'
+      },
+      {
+        text: '게시물 수',
+        align: 'left'
+      },
     ],
     body: ['rownum', 'INF_NAME', 'INS_FLWR']
   };
@@ -64,10 +76,8 @@ function Instagram() {
 
   async function getGoogleVisionData(INS_ID) {
     setSelectedRow(INS_ID);
-    console.log(selectedRow);
     setProcess(true);
     const googleData = await axios.get('/api/TB_INSTA/getGoogleData', { params: { INS_ID } });
-    console.log(googleData);
     setDetectData({ ...googleData.data.message });
     setProcess(false);
   }
@@ -89,7 +99,12 @@ function Instagram() {
                     align={item.align}
                     width={item.width || null}
                   >
-                    {item.text}
+                    <StyledText
+                      color="#ffffff"
+                      textAlign="center"
+                    >
+                      {item.text}
+                    </StyledText>
                   </StyledTableCell>
                 ))
               }
@@ -106,25 +121,84 @@ function Instagram() {
                 <StyledTableCell
                   align="center"
                 >
-                  {row.rownum}
+                  <StyledText
+                    fontSize="20px"
+                    fontWeight="700"
+                    textAlign="center"
+                  >
+                    {row.rownum}
+                  </StyledText>
                 </StyledTableCell>
                 <StyledTableCell
                   align="left"
                 >
                   <Grid container spacing={2}>
                     <Grid item>
-                      <Box width="37px" height="37px" borderRadius="100%" src={row.INS_PROFILE_IMG} component="img" />
+                      <Box
+                        width="37px"
+                        height="37px"
+                        borderRadius="100%"
+                        alt="noFoto"
+                        onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
+                        src={row.INS_PROFILE_IMG || defaultAccountImage}
+                        component="img"
+                      />
                     </Grid>
                     <Grid item>
-                      {row.TB_INFLUENCER.INF_NAME}
+                      <StyledText
+                        fontWeight="600"
+                        fontSize="14px"
+                        color="#222"
+                      >
+                        {row.INS_NAME || row.TB_INFLUENCER.INF_NAME}
+                      </StyledText>
+                      <Box
+                        paddingTop="3px"
+                        fontSize="12px"
+                        color="#555"
+                      >
+                        <StyledLink
+                          href={`https://www.instagram.com/${row.INS_USERNAME || 'instagram'}/`}
+                          target="_blank"
+                        >
+                          {`@${row.INS_USERNAME || 'instagram'}`}
+                        </StyledLink>
+                      </Box>
                     </Grid>
                   </Grid>
-
                 </StyledTableCell>
                 <StyledTableCell
-                  align="right"
+                  align="left"
                 >
-                  {row.INS_FLWR}
+                  <StyledText
+                    fontWeight="500"
+                    fontSize="16px"
+                    textAlign="center"
+                  >
+                    {row.INS_FLWR}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell
+                  align="left"
+                >
+                  <StyledText
+                    fontWeight="500"
+                    fontSize="16px"
+                    textAlign="center"
+                  >
+                    {row.INS_FLW}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell
+                  align="left"
+                >
+                  <StyledText
+                    fontWeight="500"
+                    fontSize="16px"
+                    textAlign="center"
+                  >
+                    {row.INS_MEDIA_CNT}
+                  </StyledText>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
@@ -134,7 +208,7 @@ function Instagram() {
       <Grid item xs={3}>
         <Box
           border="1px solid #cacaca"
-          height="540px"
+          height="675px"
           padding="30px"
           boxSizing="border-box"
           style={{ overflowY: 'scroll' }}
@@ -142,7 +216,6 @@ function Instagram() {
           {leftPanel}
         </Box>
       </Grid>
-
     </Grid>
 
   );
