@@ -20,7 +20,7 @@ function MyTextField(props) {
   });
 
   const {
-    name, label, ph, sA, eA
+    name, label, type, ph, sA, eA
   } = props;
   const [field, meta, helpers] = useField(name);
 
@@ -38,6 +38,7 @@ function MyTextField(props) {
         <TextField
           error={meta.touched && meta.error}
           name={field.name}
+          type={type || 'text'}
           id={label}
                 // className={classes.textField}
           placeholder={ph || null}

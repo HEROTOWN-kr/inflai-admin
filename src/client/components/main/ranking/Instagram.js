@@ -50,8 +50,32 @@ function Instagram() {
         text: '게시물 수',
         align: 'left'
       },
+      /* {
+        text: '',
+        align: 'left'
+      }, */
+    ],
+    titleDetectInfo: [
       {
         text: '',
+        align: 'center',
+        width: '40px'
+      },
+      {
+        text: '타입',
+        align: 'left',
+        // width: '200px'
+      },
+      {
+        text: '좋아요 수',
+        align: 'left'
+      },
+      {
+        text: '댓글 수',
+        align: 'left'
+      },
+      {
+        text: '콘텐츠 수',
         align: 'left'
       },
     ],
@@ -66,37 +90,127 @@ function Instagram() {
 
   const leftPanel = process ? <CircularProgress /> : (
     <div>
-      <Box
-        width="300px"
-        height="200px"
-      >
-        <PieChart
-          data={detectData}
-          animate="true"
-          animationDuration="800"
-          label={({ dataEntry }) => `${dataEntry.description}`}
-          labelStyle={index => ({
-            fill: detectData[index].color,
-            // fill: 'red',
-            fontSize: '12px',
-            fontFamily: 'sans-serif',
-          })}
-          radius={35}
-          labelPosition={112}
-        />
-      </Box>
-      {detectData
-        ? detectData.map(item => (
+      {detectData && detectData.length
+        ? (
+          <Box
+            maxWidth="800px"
+            height="200px"
+            margin="0 auto"
+          >
+            <PieChart
+              data={detectData}
+              animate="true"
+              animationDuration="800"
+              label={({ dataEntry }) => `${dataEntry.description} : ${dataEntry.value}%`}
+              labelStyle={index => ({
+                fill: detectData[index].color,
+                // fill: 'red',
+                fontSize: '10px',
+                fontFamily: 'sans-serif',
+              })}
+              radius={35}
+              labelPosition={120}
+            />
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  {
+                    tableRows.titleDetectInfo.map(item => (
+                      <StyledTableCell
+                        key={item.text}
+                        align={item.align}
+                        width={item.width || null}
+                      >
+                        <StyledText
+                          color="#ffffff"
+                          textAlign="center"
+                        >
+                          {item.text}
+                        </StyledText>
+                      </StyledTableCell>
+                    ))
+                  }
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {detectData.map(item => (
+                  <StyledTableRow key={item.description}>
+                    <StyledTableCell align="center">
+                      <Box
+                        width="40px"
+                        height="20px"
+                        bgcolor={item.color}
+                        component="div"
+                      />
+                    </StyledTableCell>
+                    <StyledTableCell
+                      align="left"
+                    >
+                      <StyledText
+                        fontWeight="500"
+                        fontSize="16px"
+                        textAlign="center"
+                      >
+                        {item.description}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      align="left"
+                    >
+                      <StyledText
+                        fontWeight="500"
+                        fontSize="16px"
+                        textAlign="center"
+                      >
+                        {item.likeCountSum}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      align="left"
+                    >
+                      <StyledText
+                        fontWeight="500"
+                        fontSize="16px"
+                        textAlign="center"
+                      >
+                        {item.commentsCountSum}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      align="left"
+                    >
+                      <StyledText
+                        fontWeight="500"
+                        fontSize="16px"
+                        textAlign="center"
+                      >
+                        {item.count}
+                      </StyledText>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
+        )
+      /* detectData.map(item => (
           <div key={item.description}>
-            {/* <Box fontWeight="bold" fontSize="18px">{item.description}</Box>
+
+             <Box fontWeight="bold" fontSize="18px">{item.description}</Box>
             <Box pl={1}>
               <div>{`percentage: ${item.percentage}%`}</div>
               <div>{`likeCountSum: ${item.likeCountSum}`}</div>
               <div>{`commentsCountSum: ${item.commentsCountSum}`}</div>
-            </Box> */}
+            </Box>
           </div>
-        ))
-        : 'No data'}
+        )) */
+        : (
+          <Grid container justify="center">
+            <Grid item>
+                Google Vision Data
+            </Grid>
+          </Grid>
+        )}
     </div>
   );
 
@@ -122,7 +236,7 @@ function Instagram() {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={9}>
+        <Grid item md={7} xl={8}>
           <Table aria-label="customized table">
             <TableHead>
               <TableRow>
@@ -234,7 +348,7 @@ function Instagram() {
                       {row.INS_MEDIA_CNT}
                     </StyledText>
                   </StyledTableCell>
-                  <StyledTableCell
+                  {/* <StyledTableCell
                     align="center"
                   >
                     <StyledButton
@@ -243,13 +357,13 @@ function Instagram() {
                     >
                     상세
                     </StyledButton>
-                  </StyledTableCell>
+                  </StyledTableCell> */}
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item md={5} xl={4}>
           <Box
             border="1px solid #cacaca"
             height="675px"
@@ -261,8 +375,6 @@ function Instagram() {
           </Box>
         </Grid>
       </Grid>
-
-
     </>
 
   );

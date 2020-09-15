@@ -69,7 +69,7 @@ function Login({
                       <MyTextField name="email" label="아이디" />
                     </Grid>
                     <Grid item md={12}>
-                      <MyTextField name="password" label="비밀번호" />
+                      <MyTextField name="password" type="password" label="비밀번호" />
                     </Grid>
                   </Grid>
                 </Form>
