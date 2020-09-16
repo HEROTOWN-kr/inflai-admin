@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/sub.scss';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, Box } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -29,65 +29,77 @@ function Login({
   }, [user]);
 
   return (
-    <Grid container alignItems="center" justify="center" className="login">
-      <Grid item md={2} className="login-form">
-
-        <Formik
-          initialValues={{
-            email: '',
-            password: ''
-          }}
-          validationSchema={SignupSchema}
-          onSubmit={(values) => {
-            axios.post('/api/TB_ADMIN/login', values)
-              .then((res) => {
-                if (res.data.code === 200) {
-                  changeUser({ token: res.data.token });
-                } else if (res.data.code === 400) {
-                  setError(res.data.message);
-                } else {
-                  console.log(res);
-                }
-              })
-              .catch(error => (error));
-          }}
+    <Grid container className="login" alignItems="center" justify="center">
+      <Grid item>
+        <Box
+          width="320px"
+          boxSizing="border-box"
+          p={6}
+          border="2px solid #f50057"
+          borderRadius="3%"
         >
-          {({
-            submitForm
-          }) => (
-            <Grid container spacing={4}>
-              <Grid item md={12} className="login-text">
-                      로그인
-              </Grid>
-              <Grid item md={12}>
-                <Form>
-                  <Grid container spacing={1}>
-                    <Grid item md={12}>
-                      <div className="error-message center">{error}</div>
+          <Formik
+            initialValues={{
+              email: '',
+              password: ''
+            }}
+            validationSchema={SignupSchema}
+            onSubmit={(values) => {
+              axios.post('/api/TB_ADMIN/login', values)
+                .then((res) => {
+                  if (res.data.code === 200) {
+                    changeUser({ token: res.data.token });
+                  } else if (res.data.code === 400) {
+                    setError(res.data.message);
+                  } else {
+                    console.log(res);
+                  }
+                })
+                .catch(error => (error));
+            }}
+          >
+            {({
+              submitForm
+            }) => (
+              <Grid container spacing={4}>
+                <Grid item xs={12} className="login-text">
+                                로그인
+                </Grid>
+                <Grid item xs={12}>
+                  <Form>
+                    <Grid container spacing={1}>
+                      <Grid item xs={12}>
+                        <div className="error-message center">{error}</div>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <MyTextField name="email" label="아이디" />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <MyTextField
+                          name="password"
+                          type="password"
+                          label="비밀번호"
+                          onEnter={submitForm}
+                        />
+                      </Grid>
                     </Grid>
-                    <Grid item md={12}>
-                      <MyTextField name="email" label="아이디" />
-                    </Grid>
-                    <Grid item md={12}>
-                      <MyTextField name="password" type="password" label="비밀번호" />
-                    </Grid>
-                  </Grid>
-                </Form>
+                  </Form>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    className="login-button"
+                    onClick={submitForm}
+                  >
+                                    로그인
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item md={12}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="secondary"
-                  className="login-button"
-                  onClick={submitForm}
-                >
-                  로그인
-                </Button>
-              </Grid>
-            </Grid>
-          )}
-        </Formik>
+            )}
+          </Formik>
+        </Box>
       </Grid>
     </Grid>
   );

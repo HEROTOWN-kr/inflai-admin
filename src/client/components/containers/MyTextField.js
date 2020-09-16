@@ -20,7 +20,7 @@ function MyTextField(props) {
   });
 
   const {
-    name, label, type, ph, sA, eA
+    name, label, type, onEnter, ph, sA, eA
   } = props;
   const [field, meta, helpers] = useField(name);
 
@@ -51,6 +51,13 @@ function MyTextField(props) {
           helperText={meta.touched && meta.error ? (
             <span className="error-message">{meta.error}</span>
           ) : null}
+          onKeyPress={(ev) => {
+            if (onEnter && ev.key === 'Enter') {
+              // Do code here
+              ev.preventDefault();
+              onEnter();
+            }
+          }}
         />
       </ThemeProvider>
 

@@ -8,14 +8,10 @@ $colorRed: #fa4616;
 .login, .main {
   height: 100vh;
 }
-.login-form {
-  border: 2px solid #f50057;
-  padding: 50px;
-  border-radius: 3%;
-  .login-text {
-    text-align: center;
-    font-size: 33px;
-  }
+
+.login-text {
+  text-align: center;
+  font-size: 33px;
 }
 
 .main {
