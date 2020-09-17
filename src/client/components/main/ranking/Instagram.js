@@ -6,6 +6,7 @@ import {
   Table,
   TableBody,
   TableContainer,
+  TableSortLabel,
   TableHead,
   TableRow, CircularProgress,
 } from '@material-ui/core';
@@ -17,6 +18,7 @@ import defaultAccountImage from '../../../img/default_account_image.png';
 import StyledLink from '../../containers/StyledLink';
 import StyledText from '../../containers/StyledText';
 import StyledButton from '../../containers/StyledButton';
+import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
 
 
 function Instagram() {
@@ -24,29 +26,35 @@ function Instagram() {
   const [detectData, setDetectData] = useState([]);
   const [selectedRow, setSelectedRow] = useState('');
   const [process, setProcess] = useState(false);
+  const [order, setOrder] = useState({ orderBy: 'INS_FLWR', direction: 'desc' });
 
 
   const tableRows = {
     title: [
       {
+        id: '',
         text: '#',
         align: 'center',
         width: '60px'
       },
       {
+        id: '',
         text: '인스타그램 정보',
         align: 'left',
         // width: '200px'
       },
       {
+        id: 'INS_FLWR',
         text: '팔로워 수',
         align: 'left'
       },
       {
+        id: 'INS_FLW',
         text: '팔로잉 수',
         align: 'left'
       },
       {
+        id: 'INS_MEDIA_CNT',
         text: '게시물 수',
         align: 'left'
       },
@@ -82,11 +90,6 @@ function Instagram() {
     body: ['rownum', 'INF_NAME', 'INS_FLWR']
   };
 
-  const dataMock = [
-    { title: 'One', value: 10, color: '#E38627' },
-    { title: 'Two', value: 15, color: '#C13C37' },
-    { title: 'Three', value: 20, color: '#6A2135' },
-  ];
 
   const leftPanel = process ? <CircularProgress /> : (
     <div>
@@ -215,7 +218,11 @@ function Instagram() {
   );
 
   async function getInfluencers() {
-    const InstaData = await axios.get('/api/TB_INSTA/');
+    const InstaData = await axios.get('/api/TB_INSTA/', {
+      params: {
+        ...order
+      }
+    });
     const { list } = InstaData.data.data;
     console.log(list);
     setInfluencers(list);
@@ -231,7 +238,15 @@ function Instagram() {
 
   useEffect(() => {
     getInfluencers();
-  }, []);
+  }, [order]);
+
+  function sortTable(id) {
+    const isDesc = order.orderBy === id && order.direction === 'desc';
+    setOrder({
+      orderBy: id,
+      direction: isDesc ? 'asc' : 'desc'
+    });
+  }
 
   return (
     <>
@@ -247,12 +262,30 @@ function Instagram() {
                     align={item.align}
                     width={item.width || null}
                   >
-                    <StyledText
-                      color="#ffffff"
-                      textAlign="center"
-                    >
-                      {item.text}
-                    </StyledText>
+                    { item.id ? (
+                      <Grid container justify="center">
+                        <Grid item>
+                          <StyledTableSortLabel
+                            id={item.id}
+                            color="#66f8ff"
+                            active={order.orderBy === item.id}
+                            direction={order.orderBy === item.id ? order.direction : 'desc'}
+                            sortTable={sortTable}
+                          >
+                            {item.text}
+                          </StyledTableSortLabel>
+                        </Grid>
+                      </Grid>
+
+                    ) : (
+                      <StyledText
+                        color="#ffffff"
+                        textAlign="center"
+                      >
+                        {item.text}
+                      </StyledText>
+                    )}
+
                   </StyledTableCell>
                 ))
               }
