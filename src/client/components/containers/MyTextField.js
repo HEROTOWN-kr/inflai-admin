@@ -1,5 +1,8 @@
 import React from 'react';
-import { TextField, InputAdornment } from '@material-ui/core';
+import {
+  TextField, InputAdornment, SvgIcon, IconButton
+} from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 import '../../css/sub.scss';
 import { useField } from 'formik';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -20,14 +23,25 @@ function MyTextField(props) {
   });
 
   const {
-    name, label, type, onEnter, ph, sA, eA
+    name, label, type, onEnter, ph, sA, eA, clickFunc
   } = props;
   const [field, meta, helpers] = useField(name);
 
   const adornments = {};
   if (sA) adornments.startAdornment = <InputAdornment disablePointerEvents position="start">{sA}</InputAdornment>;
-  if (eA) adornments.endAdornment = <InputAdornment disablePointerEvents position="end">{eA}</InputAdornment>;
-
+  if (eA) {
+    adornments.endAdornment = typeof (eA) === 'object' ? (
+      <InputAdornment position="end">
+        <IconButton
+          onClick={() => clickFunc(meta.value)}
+        >
+          <SvgIcon component={eA} />
+        </IconButton>
+      </InputAdornment>
+    ) : (
+      <InputAdornment disablePointerEvents position="end">{eA}</InputAdornment>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -55,7 +69,7 @@ function MyTextField(props) {
             if (onEnter && ev.key === 'Enter') {
               // Do code here
               ev.preventDefault();
-              onEnter();
+              onEnter(meta.value);
             }
           }}
         />

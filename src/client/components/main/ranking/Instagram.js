@@ -21,7 +21,8 @@ import StyledButton from '../../containers/StyledButton';
 import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
 
 
-function Instagram() {
+function Instagram(props) {
+  const { searchWord } = props;
   const [influencers, setInfluencers] = useState([]);
   const [detectData, setDetectData] = useState([]);
   const [selectedRow, setSelectedRow] = useState('');
@@ -220,7 +221,7 @@ function Instagram() {
   async function getInfluencers() {
     const InstaData = await axios.get('/api/TB_INSTA/', {
       params: {
-        ...order
+        ...order, searchWord
       }
     });
     const { list } = InstaData.data.data;
@@ -238,7 +239,11 @@ function Instagram() {
 
   useEffect(() => {
     getInfluencers();
-  }, [order]);
+  }, [order, searchWord]);
+
+  /* useEffect(() => {
+    console.log(searchWord);
+  }, [searchWord]); */
 
   function sortTable(id) {
     const isDesc = order.orderBy === id && order.direction === 'desc';
@@ -331,7 +336,7 @@ function Instagram() {
                           fontSize="14px"
                           color="#222"
                         >
-                          {row.INS_NAME || row.TB_INFLUENCER.INF_NAME}
+                          {row.INS_NAME ? `${row.INS_NAME} / ${row.TB_INFLUENCER.INF_NAME}` : row.TB_INFLUENCER.INF_NAME}
                         </StyledText>
                         <Box
                           paddingTop="3px"
