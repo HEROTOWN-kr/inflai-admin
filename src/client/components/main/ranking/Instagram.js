@@ -59,6 +59,16 @@ function Instagram(props) {
         text: '게시물 수',
         align: 'left'
       },
+      {
+        id: 'INS_LIKES',
+        text: '좋아요 수',
+        align: 'left'
+      },
+      {
+        id: 'INS_CMNT',
+        text: '댓글 수',
+        align: 'left'
+      },
       /* {
         text: '',
         align: 'left'
@@ -384,6 +394,28 @@ function Instagram(props) {
                       textAlign="center"
                     >
                       {row.INS_MEDIA_CNT}
+                    </StyledText>
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="left"
+                  >
+                    <StyledText
+                      fontWeight="500"
+                      fontSize="16px"
+                      textAlign="center"
+                    >
+                      {row.INS_LIKES}
+                    </StyledText>
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="left"
+                  >
+                    <StyledText
+                      fontWeight="500"
+                      fontSize="16px"
+                      textAlign="center"
+                    >
+                      {row.INS_CMNT}
                     </StyledText>
                   </StyledTableCell>
                   {/* <StyledTableCell
