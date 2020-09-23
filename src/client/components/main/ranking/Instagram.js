@@ -242,7 +242,11 @@ function Instagram(props) {
   async function getGoogleVisionData(INS_ID) {
     setSelectedRow(INS_ID);
     setProcess(true);
-    const googleData = await axios.get('/api/TB_INSTA/getGoogleData', { params: { INS_ID } });
+    const isLocal = window.location.host !== 'admin.inflai.com';
+
+    const googleData = await axios.get('/api/TB_INSTA/getGoogleData', {
+      params: { INS_ID, isLocal }
+    });
     setDetectData(googleData.data.statistics);
     setProcess(false);
   }
@@ -300,7 +304,6 @@ function Instagram(props) {
                         {item.text}
                       </StyledText>
                     )}
-
                   </StyledTableCell>
                 ))
               }

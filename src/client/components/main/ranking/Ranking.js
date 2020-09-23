@@ -5,23 +5,37 @@ import {
 } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import SearchIcon from '@material-ui/icons/Search';
+import axios from 'axios';
 import StyledSelect from '../../containers/StyledSelect';
 import StyledTitle from '../../containers/StyledTitle';
 import Instagram from './Instagram';
 import Youtube from './Youtube';
 import FormikContainer from '../../containers/FormikContainer';
 import MyTextField from '../../containers/MyTextField';
+import StyledText from '../../containers/StyledText';
 
 function Ranking(props) {
   const [blogType, setBlogType] = useState('1');
   const [searchWord, setSearchWord] = useState('');
+  const [updateTime, setUpdateTime] = useState('');
 
   const { setMenuIndicator } = props;
   useEffect(() => setMenuIndicator(4), []);
 
+  async function getUpdateData() {
+    const InstaData = await axios.get('/api/TB_ADMIN/getUpdateDate');
+    const { ADM_UPDATE_DT } = InstaData.data.data;
+    setUpdateTime(ADM_UPDATE_DT);
+  }
+
+  useEffect(() => {
+    getUpdateData();
+  }, []);
+
   function searchFunc(data) {
     setSearchWord(data);
   }
+
 
   return (
     <Grid container spacing={2}>
@@ -29,7 +43,7 @@ function Ranking(props) {
         <StyledTitle title="인플루언서 랭킹" />
       </Grid>
       <Grid item xs={7} xl={8}>
-        <Grid container justify="space-between">
+        <Grid container justify="space-between" alignItems="flex-end">
           <Grid item>
             <StyledSelect
               value={blogType}
@@ -61,6 +75,14 @@ function Ranking(props) {
                 </Form>
               )}
             </Formik>
+          </Grid>
+          <Grid item>
+            <StyledText
+              color="#b9b9b9"
+              fontSize="14px"
+            >
+              {`최근 업데이트: ${updateTime}`}
+            </StyledText>
           </Grid>
         </Grid>
       </Grid>
