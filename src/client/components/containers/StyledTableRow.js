@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 
 function StyledTableRow(props) {
   const {
-    id, onClick, className, children, selected
+    id, types, onClick, className, children, selected
   } = props;
   const classes = useStyles(props);
 
@@ -28,7 +28,7 @@ function StyledTableRow(props) {
       classes={classes}
       className={className}
       selected={selected}
-      onClick={() => onClick(id)}
+      onClick={() => onClick(id, types)}
     >
       {children}
     </TableRow>

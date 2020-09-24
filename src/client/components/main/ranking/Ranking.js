@@ -25,7 +25,20 @@ function Ranking(props) {
   async function getUpdateData() {
     const InstaData = await axios.get('/api/TB_ADMIN/getUpdateDate');
     const { ADM_UPDATE_DT } = InstaData.data.data;
-    setUpdateTime(ADM_UPDATE_DT);
+    const updateDate = new Date(ADM_UPDATE_DT);
+
+    const Year = updateDate.getFullYear();
+    const Month = (`0${updateDate.getMonth() + 1}`).slice(-2);
+    const Day = (`0${updateDate.getDate()}`).slice(-2);
+    const Hours = (`0${updateDate.getHours()}`).slice(-2);
+    const Minutes = (`0${updateDate.getMinutes()}`).slice(-2);
+    const Seconds = (`0${updateDate.getSeconds()}`).slice(-2);
+
+    const myDate = [Year, Month, Day].join('-');
+    const Time = [Hours, Minutes, Seconds].join(':');
+    const fullDate = `${myDate} ${Time}`;
+
+    setUpdateTime(fullDate);
   }
 
   useEffect(() => {
@@ -59,7 +72,7 @@ function Ranking(props) {
               initialValues={{ search: '' }}
               enableReinitialize
               onSubmit={(values) => {
-                console.log(values);
+                // console.log(values);
               }}
             >
               {() => (

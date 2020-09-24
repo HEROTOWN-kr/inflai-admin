@@ -69,10 +69,11 @@ function Instagram(props) {
         text: '댓글 수',
         align: 'left'
       },
-      /* {
-        text: '',
+      {
+        id: '',
+        text: 'is Fake?',
         align: 'left'
-      }, */
+      },
     ],
     titleDetectInfo: [
       {
@@ -235,11 +236,11 @@ function Instagram(props) {
       }
     });
     const { list } = InstaData.data.data;
-    console.log(list);
+    // console.log(list);
     setInfluencers(list);
   }
 
-  async function getGoogleVisionData(INS_ID) {
+  async function getGoogleVisionData(INS_ID, TYPES) {
     setSelectedRow(INS_ID);
     setProcess(true);
     const isLocal = window.location.host !== 'admin.inflai.com';
@@ -248,6 +249,13 @@ function Instagram(props) {
       params: { INS_ID, isLocal }
     });
     setDetectData(googleData.data.statistics);
+    setProcess(false);
+  }
+
+  function getGoogleVisionDataOffline(INS_ID, TYPES) {
+    setSelectedRow(INS_ID);
+    setProcess(true);
+    setDetectData(JSON.parse(TYPES));
     setProcess(false);
   }
 
@@ -313,6 +321,7 @@ function Instagram(props) {
               {influencers.map(row => (
                 <StyledTableRow
                   key={row.INS_ID}
+                  types={row.INS_TYPES}
                   id={row.INS_ID}
                   selected={row.INS_ID === selectedRow}
                   onClick={getGoogleVisionData}
@@ -419,6 +428,17 @@ function Instagram(props) {
                       textAlign="center"
                     >
                       {row.INS_CMNT}
+                    </StyledText>
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="left"
+                  >
+                    <StyledText
+                      fontWeight="500"
+                      fontSize="16px"
+                      textAlign="center"
+                    >
+                      {`${(row.INS_CMNT * 100 / row.INS_LIKES).toFixed(2)}%`}
                     </StyledText>
                   </StyledTableCell>
                   {/* <StyledTableCell
