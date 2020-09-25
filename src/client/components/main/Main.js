@@ -3,13 +3,6 @@ import {
   Box
 } from '@material-ui/core';
 import { Redirect, Route, Switch } from 'react-router-dom';
-
-import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
-import YouTubeIcon from '@material-ui/icons/YouTube';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import EqualizerIcon from '@material-ui/icons/Equalizer';
-import HelpIcon from '@material-ui/icons/Help';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 import Influencer from './influencer/Influencer';
 import Advertiser from './advertiser/Advertiser';
 import Ranking from './ranking/Ranking';

@@ -6,9 +6,7 @@ import {
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 
-function Dashboard({
-  history
-}) {
+function Dashboard(props) {
   const tableRows = {
     influencers: {
       label: '신규가입인플루언서',
@@ -35,6 +33,9 @@ function Dashboard({
     advertisers: [],
     advertises: []
   });
+
+  const { setMenuIndicator, history } = props;
+  useEffect(() => setMenuIndicator(0), []);
 
   function getData() {
     axios.get('/api/TB_ADMIN/dashboard').then((res) => {

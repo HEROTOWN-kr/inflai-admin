@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import {
   Grid,
   Box,
@@ -12,6 +13,8 @@ import {
 } from '@material-ui/core';
 import axios from 'axios';
 import { PieChart } from 'react-minimal-pie-chart';
+import { Form, Formik } from 'formik';
+import SearchIcon from '@material-ui/icons/Search';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import defaultAccountImage from '../../../img/default_account_image.png';
@@ -19,16 +22,24 @@ import StyledLink from '../../containers/StyledLink';
 import StyledText from '../../containers/StyledText';
 import StyledButton from '../../containers/StyledButton';
 import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
+import MyTextField from '../../containers/MyTextField';
+import StyledTitle from '../../containers/StyledTitle';
 
 
 function Instagram(props) {
-  const { searchWord } = props;
+  const [searchWord, setSearchWord] = useState('');
+  const [updateTime, setUpdateTime] = useState('');
   const [influencers, setInfluencers] = useState([]);
   const [detectData, setDetectData] = useState([]);
   const [selectedRow, setSelectedRow] = useState('');
   const [process, setProcess] = useState(false);
   const [order, setOrder] = useState({ orderBy: 'INS_FLWR', direction: 'desc' });
+  const { history, match } = props;
 
+
+  function searchFunc(data) {
+    setSearchWord(data);
+  }
 
   const tableRows = {
     title: [
@@ -101,7 +112,6 @@ function Instagram(props) {
     ],
     body: ['rownum', 'INF_NAME', 'INS_FLWR']
   };
-
 
   const leftPanel = process ? <CircularProgress /> : (
     <div>
@@ -240,6 +250,25 @@ function Instagram(props) {
     setInfluencers(list);
   }
 
+  async function getUpdateData() {
+    const InstaData = await axios.get('/api/TB_ADMIN/getUpdateDate');
+    const { ADM_UPDATE_DT } = InstaData.data.data;
+    const updateDate = new Date(ADM_UPDATE_DT);
+
+    const Year = updateDate.getFullYear();
+    const Month = (`0${updateDate.getMonth() + 1}`).slice(-2);
+    const Day = (`0${updateDate.getDate()}`).slice(-2);
+    const Hours = (`0${updateDate.getHours()}`).slice(-2);
+    const Minutes = (`0${updateDate.getMinutes()}`).slice(-2);
+    const Seconds = (`0${updateDate.getSeconds()}`).slice(-2);
+
+    const myDate = [Year, Month, Day].join('-');
+    const Time = [Hours, Minutes, Seconds].join(':');
+    const fullDate = `${myDate} ${Time}`;
+
+    setUpdateTime(fullDate);
+  }
+
   async function getGoogleVisionData(INS_ID, TYPES) {
     setSelectedRow(INS_ID);
     setProcess(true);
@@ -263,9 +292,9 @@ function Instagram(props) {
     getInfluencers();
   }, [order, searchWord]);
 
-  /* useEffect(() => {
-    console.log(searchWord);
-  }, [searchWord]); */
+  useEffect(() => {
+    getUpdateData();
+  }, []);
 
   function sortTable(id) {
     const isDesc = order.orderBy === id && order.direction === 'desc';
@@ -279,169 +308,149 @@ function Instagram(props) {
     <>
       <Grid container spacing={2}>
         <Grid item md={7} xl={8}>
-          <Table aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                {
-                tableRows.title.map(item => (
-                  <StyledTableCell
-                    key={item.text}
-                    align={item.align}
-                    width={item.width || null}
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Grid container justify="space-between" alignItems="flex-end">
+                <Grid item>
+                  <Formik
+                    initialValues={{ search: '' }}
+                    enableReinitialize
+                    onSubmit={(values) => {
+                      // console.log(values);
+                    }}
                   >
-                    { item.id ? (
-                      <Grid container justify="center">
-                        <Grid item>
-                          <StyledTableSortLabel
-                            id={item.id}
-                            color="#66f8ff"
-                            active={order.orderBy === item.id}
-                            direction={order.orderBy === item.id ? order.direction : 'desc'}
-                            sortTable={sortTable}
-                          >
-                            {item.text}
-                          </StyledTableSortLabel>
-                        </Grid>
-                      </Grid>
-
-                    ) : (
-                      <StyledText
-                        color="#ffffff"
-                        textAlign="center"
-                      >
-                        {item.text}
-                      </StyledText>
-                    )}
-                  </StyledTableCell>
-                ))
-              }
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {influencers.map(row => (
-                <StyledTableRow
-                  key={row.INS_ID}
-                  types={row.INS_TYPES}
-                  id={row.INS_ID}
-                  selected={row.INS_ID === selectedRow}
-                  onClick={getGoogleVisionData}
-                >
-                  <StyledTableCell
-                    align="center"
-                  >
-                    <StyledText
-                      fontSize="20px"
-                      fontWeight="700"
-                      textAlign="center"
-                    >
-                      {row.rownum}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell
-                    align="left"
-                  >
-                    <Grid container spacing={2}>
-                      <Grid item>
-                        <Box
-                          width="37px"
-                          height="37px"
-                          borderRadius="100%"
-                          alt="noFoto"
-                          onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
-                          src={row.INS_PROFILE_IMG || defaultAccountImage}
-                          component="img"
+                    {() => (
+                      <Form>
+                        <MyTextField
+                          name="search"
+                          label=""
+                          eA={SearchIcon}
+                          clickFunc={searchFunc}
+                          onEnter={searchFunc}
+                          ph="검색"
                         />
-                      </Grid>
-                      <Grid item>
-                        <StyledText
-                          fontWeight="600"
-                          fontSize="14px"
-                          color="#222"
-                        >
-                          {row.INS_NAME ? `${row.INS_NAME} / ${row.TB_INFLUENCER.INF_NAME}` : row.TB_INFLUENCER.INF_NAME}
+                      </Form>
+                    )}
+                  </Formik>
+                </Grid>
+                <Grid item>
+                  <StyledText
+                    color="#b9b9b9"
+                    fontSize="14px"
+                  >
+                    {`최근 업데이트: ${updateTime}`}
+                  </StyledText>
+                </Grid>
+              </Grid>
+
+            </Grid>
+            <Grid item xs={12}>
+              <Table aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    {
+                      tableRows.title.map(item => (
+                        <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
+                          { item.id ? (
+                            <Grid container justify="center">
+                              <Grid item>
+                                <StyledTableSortLabel
+                                  id={item.id}
+                                  color="#66f8ff"
+                                  active={order.orderBy === item.id}
+                                  direction={order.orderBy === item.id ? order.direction : 'desc'}
+                                  sortTable={sortTable}
+                                >
+                                  {item.text}
+                                </StyledTableSortLabel>
+                              </Grid>
+                            </Grid>
+                          ) : (
+                            <StyledText
+                              color="#ffffff"
+                              textAlign="center"
+                            >
+                              {item.text}
+                            </StyledText>
+                          )}
+                        </StyledTableCell>
+                      ))
+                    }
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {influencers.map(row => (
+                    <StyledTableRow
+                      key={row.INS_ID}
+                      types={row.INS_TYPES}
+                      id={row.INS_ID}
+                      selected={row.INS_ID === selectedRow}
+                      onClick={getGoogleVisionData}
+                    >
+                      <StyledTableCell align="center">
+                        <StyledText fontSize="20px" fontWeight="700" textAlign="center">
+                          {row.rownum}
                         </StyledText>
-                        <Box
-                          paddingTop="3px"
-                          fontSize="12px"
-                          color="#555"
-                        >
-                          <StyledLink
-                            href={`https://www.instagram.com/${row.INS_USERNAME || 'instagram'}/`}
-                            target="_blank"
-                          >
-                            {`@${row.INS_USERNAME || 'instagram'}`}
-                          </StyledLink>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </StyledTableCell>
-                  <StyledTableCell
-                    align="left"
-                  >
-                    <StyledText
-                      fontWeight="500"
-                      fontSize="16px"
-                      textAlign="center"
-                    >
-                      {row.INS_FLWR}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell
-                    align="left"
-                  >
-                    <StyledText
-                      fontWeight="500"
-                      fontSize="16px"
-                      textAlign="center"
-                    >
-                      {row.INS_FLW}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell
-                    align="left"
-                  >
-                    <StyledText
-                      fontWeight="500"
-                      fontSize="16px"
-                      textAlign="center"
-                    >
-                      {row.INS_MEDIA_CNT}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell
-                    align="left"
-                  >
-                    <StyledText
-                      fontWeight="500"
-                      fontSize="16px"
-                      textAlign="center"
-                    >
-                      {row.INS_LIKES}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell
-                    align="left"
-                  >
-                    <StyledText
-                      fontWeight="500"
-                      fontSize="16px"
-                      textAlign="center"
-                    >
-                      {row.INS_CMNT}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell
-                    align="left"
-                  >
-                    <StyledText
-                      fontWeight="500"
-                      fontSize="16px"
-                      textAlign="center"
-                    >
-                      {`${(row.INS_CMNT * 100 / row.INS_LIKES).toFixed(2)}%`}
-                    </StyledText>
-                  </StyledTableCell>
-                  {/* <StyledTableCell
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        <Grid container spacing={2}>
+                          <Grid item>
+                            <Box
+                              width="37px"
+                              height="37px"
+                              borderRadius="100%"
+                              alt="noFoto"
+                              onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
+                              src={row.INS_PROFILE_IMG || defaultAccountImage}
+                              component="img"
+                            />
+                          </Grid>
+                          <Grid item>
+                            <StyledText fontWeight="600" fontSize="14px" color="#222">
+                              {row.INS_NAME ? `${row.INS_NAME} / ${row.TB_INFLUENCER.INF_NAME}` : row.TB_INFLUENCER.INF_NAME}
+                            </StyledText>
+                            <Box paddingTop="3px" fontSize="12px" color="#555">
+                              <StyledLink
+                                href={`https://www.instagram.com/${row.INS_USERNAME || 'instagram'}/`}
+                                target="_blank"
+                              >
+                                {`@${row.INS_USERNAME || 'instagram'}`}
+                              </StyledLink>
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                          {row.INS_FLWR}
+                        </StyledText>
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                          {row.INS_FLW}
+                        </StyledText>
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                          {row.INS_MEDIA_CNT}
+                        </StyledText>
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                          {row.INS_LIKES}
+                        </StyledText>
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                          {row.INS_CMNT}
+                        </StyledText>
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                          {`${(row.INS_CMNT * 100 / row.INS_LIKES).toFixed(2)}%`}
+                        </StyledText>
+                      </StyledTableCell>
+                      {/* <StyledTableCell
                     align="center"
                   >
                     <StyledButton
@@ -451,12 +460,25 @@ function Instagram(props) {
                     상세
                     </StyledButton>
                   </StyledTableCell> */}
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item md={5} xl={4}>
+          <Grid container justify="space-between">
+            <Grid item>
+              <StyledTitle title="Stats" />
+            </Grid>
+            <Grid item>
+              <StyledButton onClick={() => history.push(`${match.path}/detail/${selectedRow}`)}>
+                상세보기
+              </StyledButton>
+            </Grid>
+          </Grid>
+
           <Box
             border="1px solid #cacaca"
             height="675px"
@@ -469,7 +491,6 @@ function Instagram(props) {
         </Grid>
       </Grid>
     </>
-
   );
 }
 
