@@ -473,9 +473,11 @@ function Instagram(props) {
               <StyledTitle title="Stats" />
             </Grid>
             <Grid item>
-              <StyledButton onClick={() => history.push(`${match.path}/detail/${selectedRow}`)}>
-                상세보기
-              </StyledButton>
+              { selectedRow ? (
+                <StyledButton onClick={() => history.push(`${match.path}/Detail/${selectedRow}`)}>
+                    상세보기
+                </StyledButton>
+              ) : null}
             </Grid>
           </Grid>
 

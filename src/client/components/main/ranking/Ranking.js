@@ -1,26 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import RankingList from './RankingList';
 import RankingDetail from './RankingDetail';
+import Dashboard from '../dashboard/Dashboard';
 
 function Ranking(props) {
+  const { setMenuIndicator, history, match } = props;
+  useEffect(() => setMenuIndicator(4), []);
+
   return (
     <Switch>
       <Route
-        path="/List"
-        render={renderProps => <RankingList {...renderProps} setMenuIndicator={setMenuIndicator} />}
+        path={`${match.path}/List/`}
+        render={renderProps => <RankingList {...props} />}
       />
       <Route
-        path="/Advertiser"
-        render={renderProps => <RankingDetail {...renderProps} setMenuIndicator={setMenuIndicator} />}
+        path={`${match.path}/Detail/:id`}
+        render={renderProps => <RankingDetail {...renderProps} />}
       />
       <Route
         exact
-        path="/"
+        path={`${match.path}/`}
         render={() => (
-          <Redirect to="/Dashboard" />
+          <Redirect to={`${match.path}/List/`} />
         )}
       />
     </Switch>

@@ -8,8 +8,7 @@ import Youtube from './Youtube';
 function RankingList(props) {
   const [blogType, setBlogType] = useState('1');
 
-  const { setMenuIndicator, history, match } = props;
-  useEffect(() => setMenuIndicator(4), []);
+  const { history, match } = props;
 
 
   return (
