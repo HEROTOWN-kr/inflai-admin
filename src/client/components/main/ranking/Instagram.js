@@ -9,7 +9,7 @@ import {
   TableContainer,
   TableSortLabel,
   TableHead,
-  TableRow, CircularProgress,
+  TableRow, CircularProgress, Button,
 } from '@material-ui/core';
 import axios from 'axios';
 import { PieChart } from 'react-minimal-pie-chart';
@@ -35,7 +35,6 @@ function Instagram(props) {
   const [process, setProcess] = useState(false);
   const [order, setOrder] = useState({ orderBy: 'INS_FLWR', direction: 'desc' });
   const { history, match } = props;
-
 
   function searchFunc(data) {
     setSearchWord(data);
@@ -117,119 +116,121 @@ function Instagram(props) {
     <div>
       {detectData && detectData.length
         ? (
-          <Box
-            maxWidth="800px"
-            height="200px"
-            margin="0 auto"
-          >
-            <PieChart
-              data={detectData}
-              animate="true"
-              animationDuration="800"
-              label={({ dataEntry }) => `${dataEntry.description} : ${dataEntry.value}%`}
-              labelStyle={index => ({
-                fill: detectData[index].color,
-                // fill: 'red',
-                fontSize: '10px',
-                fontFamily: 'sans-serif',
-              })}
-              radius={35}
-              labelPosition={120}
-            />
-            <Table aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  {
-                    tableRows.titleDetectInfo.map(item => (
+          <Grid container spacing={2}>
+            <Grid item xs={12} container justify="space-between">
+              <Grid item>
+                <StyledButton onClick={() => history.push(`${match.path}/Detail/${selectedRow}`)}>
+                      상세보기
+                </StyledButton>
+              </Grid>
+              <Grid item><StyledButton onClick={() => getGoogleVisionData(selectedRow, 1)}>라벨 인식</StyledButton></Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Box
+                maxWidth="800px"
+                height="200px"
+                margin="0 auto"
+              >
+                <PieChart
+                  data={detectData}
+                  animate="true"
+                  animationDuration="800"
+                  label={({ dataEntry }) => `${dataEntry.description} : ${dataEntry.value}%`}
+                  labelStyle={index => ({
+                    fill: detectData[index].color,
+                    // fill: 'red',
+                    fontSize: '10px',
+                    fontFamily: 'sans-serif',
+                  })}
+                  radius={35}
+                  labelPosition={120}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Table aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    {
+                      tableRows.titleDetectInfo.map(item => (
+                        <StyledTableCell
+                          key={item.text}
+                          align={item.align}
+                          width={item.width || null}
+                        >
+                          <StyledText
+                            color="#ffffff"
+                            textAlign="center"
+                          >
+                            {item.text}
+                          </StyledText>
+                        </StyledTableCell>
+                      ))
+                    }
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {detectData.map(item => (
+                    <StyledTableRow key={item.description}>
+                      <StyledTableCell align="center">
+                        <Box
+                          width="40px"
+                          height="20px"
+                          bgcolor={item.color}
+                          component="div"
+                        />
+                      </StyledTableCell>
                       <StyledTableCell
-                        key={item.text}
-                        align={item.align}
-                        width={item.width || null}
+                        align="left"
                       >
                         <StyledText
-                          color="#ffffff"
+                          fontWeight="500"
+                          fontSize="16px"
                           textAlign="center"
                         >
-                          {item.text}
+                          {item.description}
                         </StyledText>
                       </StyledTableCell>
-                    ))
-                  }
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {detectData.map(item => (
-                  <StyledTableRow key={item.description}>
-                    <StyledTableCell align="center">
-                      <Box
-                        width="40px"
-                        height="20px"
-                        bgcolor={item.color}
-                        component="div"
-                      />
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="left"
-                    >
-                      <StyledText
-                        fontWeight="500"
-                        fontSize="16px"
-                        textAlign="center"
+                      <StyledTableCell
+                        align="left"
                       >
-                        {item.description}
-                      </StyledText>
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="left"
-                    >
-                      <StyledText
-                        fontWeight="500"
-                        fontSize="16px"
-                        textAlign="center"
+                        <StyledText
+                          fontWeight="500"
+                          fontSize="16px"
+                          textAlign="center"
+                        >
+                          {item.likeCountSum}
+                        </StyledText>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="left"
                       >
-                        {item.likeCountSum}
-                      </StyledText>
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="left"
-                    >
-                      <StyledText
-                        fontWeight="500"
-                        fontSize="16px"
-                        textAlign="center"
+                        <StyledText
+                          fontWeight="500"
+                          fontSize="16px"
+                          textAlign="center"
+                        >
+                          {item.commentsCountSum}
+                        </StyledText>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="left"
                       >
-                        {item.commentsCountSum}
-                      </StyledText>
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="left"
-                    >
-                      <StyledText
-                        fontWeight="500"
-                        fontSize="16px"
-                        textAlign="center"
-                      >
-                        {item.count}
-                      </StyledText>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Box>
-        )
-      /* detectData.map(item => (
-          <div key={item.description}>
-
-             <Box fontWeight="bold" fontSize="18px">{item.description}</Box>
-            <Box pl={1}>
-              <div>{`percentage: ${item.percentage}%`}</div>
-              <div>{`likeCountSum: ${item.likeCountSum}`}</div>
-              <div>{`commentsCountSum: ${item.commentsCountSum}`}</div>
-            </Box>
-          </div>
-        )) */
-        : (
+                        <StyledText
+                          fontWeight="500"
+                          fontSize="16px"
+                          textAlign="center"
+                        >
+                          {item.count}
+                        </StyledText>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Grid>
+          </Grid>
+        ) : (
           <Grid container justify="center">
             <Grid item>
                 Google Vision Data
@@ -269,12 +270,14 @@ function Instagram(props) {
     setUpdateTime(fullDate);
   }
 
-  async function getGoogleVisionData(INS_ID, TYPES) {
+  async function getGoogleVisionData(INS_ID, type) {
     setSelectedRow(INS_ID);
     setProcess(true);
     const isLocal = window.location.host !== 'admin.inflai.com';
 
-    const googleData = await axios.get('/api/TB_INSTA/getGoogleData', {
+    const apiUrl = type === 1 ? 'getGoogleData' : 'getGoogleDataObject';
+
+    const googleData = await axios.get(`/api/TB_INSTA/${apiUrl}`, {
       params: { INS_ID, isLocal }
     });
     setDetectData(googleData.data.statistics);
@@ -382,7 +385,7 @@ function Instagram(props) {
                   {influencers.map(row => (
                     <StyledTableRow
                       key={row.INS_ID}
-                      types={row.INS_TYPES}
+                      types={2}
                       id={row.INS_ID}
                       selected={row.INS_ID === selectedRow}
                       onClick={getGoogleVisionData}
@@ -471,13 +474,6 @@ function Instagram(props) {
           <Grid container justify="space-between">
             <Grid item>
               <StyledTitle title="Stats" />
-            </Grid>
-            <Grid item>
-              { selectedRow ? (
-                <StyledButton onClick={() => history.push(`${match.path}/Detail/${selectedRow}`)}>
-                    상세보기
-                </StyledButton>
-              ) : null}
             </Grid>
           </Grid>
 
