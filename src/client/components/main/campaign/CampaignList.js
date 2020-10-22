@@ -13,10 +13,13 @@ import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
+import StyledTitle from '../../containers/StyledTitle';
+import StyledButton from '../../containers/StyledButton';
+import { Colors } from '../../../lib/Сonstants';
 
 function CampaignList(props) {
   const {
-    payments, setPayments, count, setCount, page, setPage
+    payments, setPayments, count, setCount, page, setPage, history, match
   } = props;
 
   const tableHeader = [
@@ -73,7 +76,7 @@ function CampaignList(props) {
 
   function paymentDetail(event, id) {
     // console.log(id);
-    props.history.push(`${props.match.path}${id}`);
+    history.push(`${props.match.path}/${id}`);
   }
 
   useEffect(() => {
@@ -85,7 +88,12 @@ function CampaignList(props) {
   };
 
   return (
-    <>
+    <Box width={1200} css={{ margin: '0 auto' }}>
+      <Grid container justify="space-between" alignItems="center">
+        <Grid item><StyledTitle title="캠페인 리스트" /></Grid>
+        <Grid item><StyledButton background={Colors.blue2} onClick={() => history.push(`${match.path}/create`)}>캠페인 등록</StyledButton></Grid>
+      </Grid>
+
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
@@ -131,7 +139,7 @@ function CampaignList(props) {
           </Grid>
         </Grid>
       </Box>
-    </>
+    </Box>
   );
 }
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import CampaignList from './CampaignList';
 import CampaignDetail from './CampaignDetail';
+import CampaignCreate from './CampaignCreate';
 
 function Campaign(props) {
   const { setMenuIndicator } = props;
@@ -17,14 +18,11 @@ function Campaign(props) {
   return (
     <Switch>
       <Route
-        path={`${props.match.path}/:id`}
-        render={renderProps => <CampaignDetail {...renderProps} goBack={goBack} />}
-      />
-      <Route
-        path={`${props.match.path}/`}
+        exact
+        path={`${props.match.path}/List`}
         render={renderProps => (
           <CampaignList
-            {...renderProps}
+            {...props}
             payments={payments}
             setPayments={setPayments}
             count={count}
@@ -32,6 +30,23 @@ function Campaign(props) {
             page={page}
             setPage={setPage}
           />
+        )}
+      />
+      <Route
+        exact
+        path={`${props.match.path}/create`}
+        render={renderProps => <CampaignCreate {...renderProps} goBack={goBack} />}
+      />
+      <Route
+        exact
+        path={`${props.match.path}/:id`}
+        render={renderProps => <CampaignDetail {...renderProps} goBack={goBack} />}
+      />
+      <Route
+        exact
+        path={`${props.match.path}/`}
+        render={() => (
+          <Redirect to={`${props.match.path}/List`} />
         )}
       />
     </Switch>
