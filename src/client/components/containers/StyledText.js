@@ -9,7 +9,7 @@ function StyledText(props) {
 
   return (
     <Box
-      fontFamily={fontFamily || 'Montserrat, sans-serif'}
+      fontFamily={fontFamily || 'Noto Sans KR, sans-serif'}
       fontWeight={fontWeight || 'normal'}
       fontSize={fontSize || '14'}
       textAlign={textAlign || 'left'}
