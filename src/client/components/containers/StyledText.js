@@ -11,7 +11,7 @@ function StyledText(props) {
     <Box
       fontFamily={fontFamily || 'Noto Sans KR, sans-serif'}
       fontWeight={fontWeight || 'normal'}
-      fontSize={fontSize || '14'}
+      fontSize={fontSize || '14px'}
       textAlign={textAlign || 'left'}
       letterSpacing="0"
       component="div"

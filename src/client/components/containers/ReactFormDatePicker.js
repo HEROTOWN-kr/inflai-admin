@@ -16,6 +16,7 @@ function ReactFormDatePicker(props) {
         autoOk
         disablePast
         name={name}
+        defaultValue={new Date()}
         disableToolbar
         variant="inline"
         format="yyyy/MM/dd"

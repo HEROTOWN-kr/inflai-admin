@@ -178,6 +178,7 @@ export const Colors = {
   blue: '#093c5e',
   blue2: '#409CFF',
   blue2Back: '#DDEFFF',
+  blue2Hover: '#467fbd',
   orange: '#FF835D',
   orangeBack: '#FFEAE6',
   skyBlue: '#4376e8',
@@ -188,6 +189,15 @@ export const Colors = {
   grey2: '#999999',
   grey3: '#f5f6f7',
   grey4: '#eaeaea',
-
 };
+export const AdvertiseTypes = {
+  mainType: ['지역', '제품', '서비스', '가치단'],
+  subType: [
+    ['맛집', '뷰티', '숙박', '문화', '기타'],
+    ['생활', '유아동', '뷰티', '디지털', '패션', '도서', '식품'],
+    ['쇼핑몰', '웹서비스', '이벤트', '교육'],
+    []
+  ],
+};
+
 export const campaignSteps = [{ value: '1', text: '리뷰어 신청' }, { value: '2', text: '리뷰어 발표' }, { value: '3', text: '리뷰등록' }, { value: '4', text: '베스트발표' }];

@@ -14,9 +14,9 @@ function App(props) {
   const { pathname } = history.location;
   const [user, setUser] = useState(Common.getUserInfo());
 
-  useEffect(() => {
+  /* useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname]); */
 
   function changeUser(data) {
     const newUser = { ...data };
