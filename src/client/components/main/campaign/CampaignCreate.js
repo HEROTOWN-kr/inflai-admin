@@ -24,8 +24,8 @@ import StyledSelect from '../../containers/StyledSelect';
 import { AdvertiseTypes, Colors } from '../../../lib/Сonstants';
 import StyledImage from '../../containers/StyledImage';
 import deleteIcon from '../../../img/photo_del.png';
-import CKEditor from '../../containers/CKEditorComponent';
 import CKEditorComponent from '../../containers/CKEditorComponent';
+import DaumPostCode from '../../containers/DaumPostCode';
 
 const schema = Yup.object().shape({
   /* name: Yup.string()
@@ -65,6 +65,8 @@ function CampaignCreate() {
 
   useEffect(() => {
     register({ name: 'image' }, {});
+    register({ name: 'detailInfo' }, {});
+    register({ name: 'provideInfo' }, {});
   }, [register]);
 
   function addPicture(event) {
@@ -185,6 +187,13 @@ function CampaignCreate() {
                 />
               </Grid>
             </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Box mb={1}><StyledText color="#3f51b5">제공상품 배송여부</StyledText></Box>
+            <FormControlLabel
+              control={(<Checkbox name="delivery" inputRef={register} />)}
+              label="배송형 상품"
+            />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">캠페인 출력상태</StyledText></Box>
@@ -358,7 +367,15 @@ function CampaignCreate() {
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <CKEditorComponent />
+            <Box mb={1}><StyledText color="#3f51b5">상세정보</StyledText></Box>
+            <CKEditorComponent setValue={setValue} name="detailInfo" />
+          </Grid>
+          <Grid item xs={12}>
+            <Box mb={1}><StyledText color="#3f51b5">제공내역 상세정보</StyledText></Box>
+            <CKEditorComponent setValue={setValue} name="provideInfo" />
+          </Grid>
+          <Grid item xs={12}>
+            <DaumPostCode setValue={setValue} register={register} errors={errors} />
           </Grid>
           <Grid item xs={12}>
             <button type="submit">submit</button>

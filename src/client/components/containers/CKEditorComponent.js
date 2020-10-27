@@ -1,28 +1,39 @@
 import React from 'react';
 import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 
-function CKEditorComponent() {
+function CKEditorComponent(props) {
+  const { setValue, name } = props;
   return (
     <div>
-      <h2>Using CKEditor 5 build in React</h2>
+      <div id={`${name}_toolbar-container`} />
       <CKEditor
-        editor={ClassicEditor}
-        data="<p>Hello from CKEditor 5!</p>"
+        editor={DecoupledEditor}
+        config={
+            {
+              ckfinder: {
+                uploadUrl: '/api/TB_AD/upload'
+              },
+            }
+        }
+        // data="<p>Hello from CKEditor 5!</p>"
         onInit={(editor) => {
-          // You can store the "editor" and use when it is needed.
-          console.log('Editor is ready to use!', editor);
+          const toolbarContainer = document.querySelector(`#${name}_toolbar-container`);
+          toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+          window.editor = editor;
+          setValue(name, editor.getData());
         }}
         onChange={(event, editor) => {
           const data = editor.getData();
-          console.log({ event, editor, data });
+          setValue(name, data);
         }}
-        onBlur={(event, editor) => {
+        /* onBlur={(event, editor) => {
           console.log('Blur.', editor);
         }}
         onFocus={(event, editor) => {
           console.log('Focus.', editor);
-        }}
+        }} */
       />
     </div>
   );
