@@ -17,6 +17,7 @@ import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { all } from 'async';
+import axios from 'axios';
 import ReactFormText from '../../containers/ReactFormText';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
@@ -26,30 +27,95 @@ import StyledImage from '../../containers/StyledImage';
 import deleteIcon from '../../../img/photo_del.png';
 import CKEditorComponent from '../../containers/CKEditorComponent';
 import DaumPostCode from '../../containers/DaumPostCode';
+import StyledButton from '../../containers/StyledButton';
+
+function compareDates(date1, date2) {
+  const day1 = date1.getDate();
+  const day2 = date2.getDate();
+  const month1 = date1.getMonth();
+  const month2 = date2.getMonth();
+  const year1 = date1.getFullYear();
+  const year2 = date2.getFullYear();
+
+  if (year1 > year2) {
+    return false;
+  } if (year1 === year2 && month1 > month2) {
+    return false;
+  } if (year1 === year2 && month1 === month2 && day1 >= day2) {
+    return false;
+  }
+  return true;
+}
 
 const schema = Yup.object().shape({
-  /* name: Yup.string()
-    .required('콘텐츠 유형을 선택하세요'), */
-  /* videoType: Yup.string()
-    .required('원하시는 촬영방법을 선택하세요'),
-  publicText: Yup.string()
-    .required('필수 작성 내용과 예시를 넣어주세요'),
-  tags: Yup.string()
-    .required('필수 해시태그를 2개 입력하세요'), */
+  influencerCount: Yup.string()
+    .required('모집인원수를 입력해주세요'),
+  insta: Yup.bool()
+    .when(['naver', 'youtube'], {
+      is: (naver, youtube) => !naver && !youtube,
+      then: Yup.bool().oneOf([true], '모집회망SNS를 선택해주세요'),
+    }),
+  searchFinish: Yup.date()
+    .when('searchStart', (searchStart, testSchema) => testSchema.test({
+      test: searchFinish => compareDates(searchStart, searchFinish),
+      message: '리뷰어 신청 마감일을 시작일 이후로 설정해주세요'
+    })),
+  advertiserId: Yup.string()
+    .required('등록인아이디를 입력해주세요'),
+  detailAddress: Yup.string()
+    .required('상세주소를 입력해주세요'),
+  phone: Yup.string()
+    .required('연락처를 입력해주세요'),
+  email: Yup.string()
+    .required('이메일을 입력해주세요'),
+  campaignName: Yup.string()
+    .required('캠페인명을 입력해주세요'),
+  shortDisc: Yup.string()
+    .required('짧은설명을 입력해주세요'),
+  searchKeyword: Yup.string()
+    .required('검색키워드를 입력해주세요'),
+  discription: Yup.string()
+    .required('참여 안내 사항을 입력해주세요'),
 });
 
-function CampaignCreate() {
+const schema2 = Yup.object().shape({});
+
+function CampaignCreate(props) {
+  const { goBack } = props;
   const {
     register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues
   } = useForm({
     mode: 'onBlur',
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema2)
   });
+
+  const snsTypes = [
+    { name: 'insta', text: '인스타' },
+    { name: 'naver', text: '네이버' },
+    { name: 'youtube', text: '유튜브' },
+  ];
 
   const [images, setImages] = useState([]);
   const [allSelected, setAllSelected] = useState(false);
 
-  const onSubmit = data => console.log(data);
+  const onSubmit = (data) => {
+    const {
+      insta, youtube, naver, delivery
+    } = data;
+
+    const obj = {
+      ...data,
+      insta: insta ? 1 : 0,
+      youtube: youtube ? 1 : 0,
+      naver: naver ? 1 : 0,
+      delivery: delivery ? 1 : 0
+    };
+
+    axios.post('/api/TB_AD/create', obj).then((res) => {
+      console.log(res.data);
+    }).catch((error) => { alert(error.response.data); });
+  };
+
   const getType = watch('type');
   const deleteBtn = {
     width: '26px',
@@ -117,10 +183,10 @@ function CampaignCreate() {
     setImages(filterImages);
   }
 
-  function ImageActionButton(props) {
+  function ImageActionButton(componentProps) {
     const {
       children, color, background, onClick, borderRadius, padding
-    } = props;
+    } = componentProps;
 
     const styles = {
       cursor: 'pointer',
@@ -150,19 +216,24 @@ function CampaignCreate() {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">모집희망SNS</StyledText></Box>
-            {['인스타', '블로그', '유튜브'].map(name => (
+            {snsTypes.map(item => (
               <FormControlLabel
                 control={(
-                  <Checkbox name={name} inputRef={register} />
+                  <Checkbox name={item.name} inputRef={register} />
                     )}
-                key={name}
-                label={name}
+                key={item.name}
+                label={item.text}
               />
             ))}
+            {
+              errors.insta ? (
+                <div className="error-message">{errors.insta.message}</div>
+              ) : null
+            }
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">모집인원</StyledText></Box>
-            <ReactFormText register={register} errors={errors} name="name" />
+            <ReactFormText register={register} errors={errors} name="influencerCount" />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">리뷰어 신청기간</StyledText></Box>
@@ -187,6 +258,11 @@ function CampaignCreate() {
                 />
               </Grid>
             </Grid>
+            {
+              errors.searchFinish ? (
+                <div className="error-message">{errors.searchFinish.message}</div>
+              ) : null
+            }
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">제공상품 배송여부</StyledText></Box>
@@ -199,8 +275,8 @@ function CampaignCreate() {
             <Box mb={1}><StyledText color="#3f51b5">캠페인 출력상태</StyledText></Box>
             <FormControl component="fieldset">
               <Controller
-                render={props => (
-                  <RadioGroup row aria-label="gender" {...props} name="gender1">
+                render={controllerProps => (
+                  <RadioGroup row aria-label="gender" {...controllerProps} name="visible" onChange={event => console.log(event.target.value)}>
                     <FormControlLabel
                       value="0"
                       control={<Radio />}
@@ -221,17 +297,17 @@ function CampaignCreate() {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">등록인아이디</StyledText></Box>
-            <ReactFormText register={register} errors={errors} name="advertiserName" />
+            <ReactFormText register={register} errors={errors} name="advertiserId" />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">카테고리</StyledText></Box>
             <Grid container spacing={2}>
               <Grid item xs={2}>
                 <Controller
-                  render={props => (
+                  render={controllerProps => (
                     <StyledSelect
                       native
-                      {...props}
+                      {...controllerProps}
                       variant="outlined"
                       fullWidth
                     >
@@ -247,10 +323,10 @@ function CampaignCreate() {
                 AdvertiseTypes.subType[getType] ? (
                   <Grid item xs={2}>
                     <Controller
-                      render={props => (
+                      render={controllerProps => (
                         <StyledSelect
                           native
-                          {...props}
+                          {...controllerProps}
                           variant="outlined"
                           fullWidth
                         >
@@ -267,6 +343,10 @@ function CampaignCreate() {
             </Grid>
           </Grid>
           <Grid item xs={12}>
+            <Box mb={1}><StyledText color="#3f51b5">주소</StyledText></Box>
+            <DaumPostCode setValue={setValue} register={register} errors={errors} />
+          </Grid>
+          <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">연락처</StyledText></Box>
             <ReactFormText register={register} errors={errors} name="phone" />
           </Grid>
@@ -280,7 +360,12 @@ function CampaignCreate() {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">짧은설명</StyledText></Box>
-            <TextareaAutosize ref={register} rowsMin={3} placeholder="짧은설명" name="shortDisc" />
+            <TextareaAutosize ref={register} rowsMin={8} style={{ width: '99%' }} placeholder="짧은설명" name="shortDisc" />
+            {
+              errors.shortDisc ? (
+                <div className="error-message">{errors.shortDisc.message}</div>
+              ) : null
+            }
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">검색키워드</StyledText></Box>
@@ -288,7 +373,12 @@ function CampaignCreate() {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">참여 안내 사항</StyledText></Box>
-            <TextareaAutosize ref={register} rowsMin={3} placeholder="참여 안내 사항" name="discription" />
+            <TextareaAutosize ref={register} rowsMin={8} style={{ width: '99%' }} placeholder="참여 안내 사항" name="discription" />
+            {
+              errors.discription ? (
+                <div className="error-message">{errors.discription.message}</div>
+              ) : null
+            }
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">이미지 업로드</StyledText></Box>
@@ -299,14 +389,14 @@ function CampaignCreate() {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   {images.length > 0 ? (
-                    <Grid container spacing={1}>
+                    <Grid container spacing={2}>
                       {images.map(item => (
                         <Grid item key={item.id}>
                           <div style={{ position: 'relative' }}>
                             <StyledImage
                               width="130"
                               height="130"
-                              borderRadius="100%"
+                              borderRadius="12px"
                               src={item.url}
                             />
                             <span onClick={() => deletePicture(item.id)} style={deleteBtn}>button</span>
@@ -375,10 +465,11 @@ function CampaignCreate() {
             <CKEditorComponent setValue={setValue} name="provideInfo" />
           </Grid>
           <Grid item xs={12}>
-            <DaumPostCode setValue={setValue} register={register} errors={errors} />
-          </Grid>
-          <Grid item xs={12}>
-            <button type="submit">submit</button>
+            {/* <button type="submit">submit</button> */}
+            <Grid container justify="center" spacing={1}>
+              <Grid item xs={2}><StyledButton onClick={goBack}>취소</StyledButton></Grid>
+              <Grid item xs={2}><StyledButton onClick={handleSubmit(onSubmit)}>저장하기</StyledButton></Grid>
+            </Grid>
           </Grid>
         </Grid>
       </form>

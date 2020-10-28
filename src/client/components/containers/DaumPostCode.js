@@ -38,6 +38,7 @@ function DaumPostCode(props) {
         // 우편번호와 주소 정보를 해당 필드에 넣는다.
         setValue('postcode', zonecode);
         setValue('roadAddress', roadAddr);
+        console.log(roadAddr);
         // setValue('jibunAddress', jibunAddress);
 
         // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
@@ -65,8 +66,8 @@ function DaumPostCode(props) {
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <Grid container spacing={1}>
-            <Grid item xs={2}>
-              <ReactFormText register={register} errors={errors} name="postcode" placeholder="우편번호" />
+            <Grid item xs={2} onClick={execDaumPostcode}>
+              <ReactFormText register={register} errors={errors} name="postcode" placeholder="우편번호" inputProps={{ readOnly: true }} />
             </Grid>
             <Grid item xs={2}>
               <StyledButton onClick={execDaumPostcode} height="40px">우편번호 찾기</StyledButton>
@@ -76,7 +77,7 @@ function DaumPostCode(props) {
         <Grid item xs={12}>
           <Grid container spacing={1}>
             <Grid item xs={10}>
-              <ReactFormText register={register} errors={errors} name="roadAddress" placeholder="도로명주소" />
+              <ReactFormText register={register} errors={errors} name="roadAddress" onChange={event => setValue('roadAddress', event.target.value)} placeholder="도로명주소" inputProps={{ readOnly: true }} />
             </Grid>
             {/* <Grid item xs={5}>
               <ReactFormText register={register} errors={errors} name="jibunAddress" placeholder="지번주소" />
@@ -96,7 +97,7 @@ function DaumPostCode(props) {
               <ReactFormText register={register} errors={errors} name="detailAddress" placeholder="상세주소" />
             </Grid>
             <Grid item xs={4}>
-              <ReactFormText register={register} errors={errors} name="extraAddress" placeholder="참고항목" />
+              <ReactFormText register={register} errors={errors} name="extraAddress" placeholder="참고항목" inputProps={{ readOnly: true }} />
             </Grid>
           </Grid>
         </Grid>

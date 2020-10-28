@@ -14,6 +14,11 @@ $colorRed: #fa4616;
   font-size: 33px;
 }
 
+.ck.ck-editor__editable_inline {
+  border: 1px solid #0000003b !important;
+  min-height: 500px;
+}
+
 .main {
   max-width: 1900px;
   margin: 0 auto;

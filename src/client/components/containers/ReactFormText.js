@@ -6,7 +6,7 @@ import StyledTextField from './StyledTextField';
 
 function ReactFormText(props) {
   const {
-    name, errorMessage, register, errors, placeholder
+    name, errorMessage, register, errors, placeholder, disabled, inputProps
   } = props;
 
   return (
@@ -14,12 +14,14 @@ function ReactFormText(props) {
       variant="outlined"
       fullWidth
       name={name}
+      disabled={disabled}
       placeholder={placeholder || ''}
       // defaultValue={userInfo.INF_NAME || ''}
       inputRef={register({ required: true })}
       error={!!errors[name]}
       helperText={<span className="error-message">{errors[name]?.message}</span>}
       css={{ transition: 'all 1s ease-out' }}
+      inputProps={inputProps || {}}
     />
   );
 }
