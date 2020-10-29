@@ -81,12 +81,12 @@ const schema = Yup.object().shape({
 const schema2 = Yup.object().shape({});
 
 function CampaignCreate(props) {
-  const { goBack } = props;
+  const { goBack, match } = props;
   const {
     register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues
   } = useForm({
     mode: 'onBlur',
-    resolver: yupResolver(schema2)
+    resolver: yupResolver(schema2),
   });
 
   const snsTypes = [
@@ -97,11 +97,15 @@ function CampaignCreate(props) {
 
   const [images, setImages] = useState([]);
   const [allSelected, setAllSelected] = useState(false);
+  const [campaignData, setCampaignData] = useState({});
+  const [campaignEditor, setCampaignEditor] = useState({ test: 'test' });
 
   const onSubmit = (data) => {
     const {
       insta, youtube, naver, delivery
     } = data;
+
+    console.log(data);
 
     const obj = {
       ...data,
@@ -111,9 +115,9 @@ function CampaignCreate(props) {
       delivery: delivery ? 1 : 0
     };
 
-    axios.post('/api/TB_AD/create', obj).then((res) => {
+    /* axios.post('/api/TB_AD/create', obj).then((res) => {
       console.log(res.data);
-    }).catch((error) => { alert(error.response.data); });
+    }).catch((error) => { alert(error.response.data); }); */
   };
 
   const getType = watch('type');
@@ -129,11 +133,63 @@ function CampaignCreate(props) {
     cursor: 'pointer'
   };
 
+  async function getCampaignData() {
+    try {
+      const response = await axios.get('/api/TB_AD/detail', { params: { id: match.params.id } });
+      const { data } = response.data;
+      const {
+        AD_NAME, AD_CTG, AD_CTG2, AD_DELIVERY, AD_DETAIL, AD_DETAIL_ADDR,
+        AD_DISC, AD_DT, AD_EMAIL, AD_EXTR_ADDR, AD_ID, AD_INF_CNT, AD_INSTA,
+        AD_NAVER, AD_POST_CODE, AD_PROVIDE, AD_ROAD_ADDR, AD_SEARCH_KEY,
+        AD_SHRT_DISC, AD_SRCH_END, AD_SRCH_START, AD_TEL, AD_VISIBLE,
+        AD_YOUTUBE
+      } = data;
+      setCampaignData(data);
+      setValue('campaignName', AD_NAME);
+      setValue('type', AD_CTG);
+      setValue('subtype', AD_CTG2);
+      setValue('delivery', !!AD_DELIVERY);
+      setValue('detailAddress', AD_DETAIL_ADDR);
+      setValue('discription', AD_DISC);
+      setValue('email', AD_EMAIL);
+      setValue('extraAddress', AD_EXTR_ADDR);
+      setValue('influencerCount', AD_INF_CNT);
+      setValue('insta', !!AD_INSTA);
+      setValue('naver', !!AD_NAVER);
+      setValue('postcode', AD_POST_CODE);
+      setValue('roadAddress', AD_ROAD_ADDR);
+      setValue('searchKeyword', AD_SEARCH_KEY);
+      setValue('shortDisc', AD_SHRT_DISC);
+      setValue('searchFinish', AD_SRCH_END);
+      setValue('searchStart', AD_SRCH_START);
+      setValue('phone', AD_TEL);
+      setValue('visible', AD_VISIBLE);
+      setValue('youtube', !!AD_YOUTUBE);
+    } catch (err) {
+      alert(err);
+    }
+  }
+
   useEffect(() => {
     register({ name: 'image' }, {});
     register({ name: 'detailInfo' }, {});
     register({ name: 'provideInfo' }, {});
   }, [register]);
+
+  useEffect(() => {
+    if (match.params.id) {
+      getCampaignData();
+    }
+  }, [match]);
+
+  useEffect(() => {
+    if (campaignEditor.detailInfo && campaignData.AD_DETAIL) {
+      campaignEditor.detailInfo.data.set(campaignData.AD_DETAIL);
+    }
+    if (campaignEditor.provideInfo && campaignData.AD_PROVIDE) {
+      campaignEditor.provideInfo.data.set(campaignData.AD_PROVIDE);
+    }
+  }, [campaignData]);
 
   function addPicture(event) {
     const { files } = event.target;
@@ -458,11 +514,11 @@ function CampaignCreate(props) {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">상세정보</StyledText></Box>
-            <CKEditorComponent setValue={setValue} name="detailInfo" />
+            <CKEditorComponent setValue={setValue} name="detailInfo" control={control} campaignEditor={campaignEditor} setCampaignEditor={setCampaignEditor} />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">제공내역 상세정보</StyledText></Box>
-            <CKEditorComponent setValue={setValue} name="provideInfo" />
+            <CKEditorComponent setValue={setValue} name="provideInfo" control={control} campaignEditor={campaignEditor} setCampaignEditor={setCampaignEditor} />
           </Grid>
           <Grid item xs={12}>
             {/* <button type="submit">submit</button> */}

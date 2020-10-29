@@ -7,9 +7,6 @@ import CampaignCreate from './CampaignCreate';
 function Campaign(props) {
   const { setMenuIndicator } = props;
   useEffect(() => setMenuIndicator(3), []);
-  const [payments, setPayments] = useState([]);
-  const [count, setCount] = useState(0);
-  const [page, setPage] = React.useState(1);
 
   function goBack() {
     props.history.push(props.match.path);
@@ -20,17 +17,7 @@ function Campaign(props) {
       <Route
         exact
         path={`${props.match.path}/List`}
-        render={renderProps => (
-          <CampaignList
-            {...props}
-            payments={payments}
-            setPayments={setPayments}
-            count={count}
-            setCount={setCount}
-            page={page}
-            setPage={setPage}
-          />
-        )}
+        render={renderProps => (<CampaignList {...props} />)}
       />
       <Route
         exact
@@ -40,7 +27,7 @@ function Campaign(props) {
       <Route
         exact
         path={`${props.match.path}/:id`}
-        render={renderProps => <CampaignDetail {...renderProps} goBack={goBack} />}
+        render={renderProps => <CampaignCreate {...renderProps} goBack={goBack} />}
       />
       <Route
         exact

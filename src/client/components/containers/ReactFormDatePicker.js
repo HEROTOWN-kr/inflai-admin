@@ -14,7 +14,7 @@ function ReactFormDatePicker(props) {
         as={(<KeyboardDatePicker />)}
         control={control}
         autoOk
-        disablePast
+        // disablePast
         name={name}
         defaultValue={new Date()}
         disableToolbar
