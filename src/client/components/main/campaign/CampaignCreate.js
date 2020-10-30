@@ -28,6 +28,7 @@ import deleteIcon from '../../../img/photo_del.png';
 import CKEditorComponent from '../../containers/CKEditorComponent';
 import DaumPostCode from '../../containers/DaumPostCode';
 import StyledButton from '../../containers/StyledButton';
+import ImageHolder from './ImageHolder';
 
 function compareDates(date1, date2) {
   const day1 = date1.getDate();
@@ -82,56 +83,87 @@ const schema2 = Yup.object().shape({});
 
 function CampaignCreate(props) {
   const { goBack, match } = props;
+  const campaignId = match.params.id;
   const {
     register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues
   } = useForm({
     mode: 'onBlur',
-    resolver: yupResolver(schema2),
+    resolver: yupResolver(schema2)
   });
 
   const snsTypes = [
-    { name: 'insta', text: '인스타' },
-    { name: 'naver', text: '네이버' },
-    { name: 'youtube', text: '유튜브' },
+    { name: 'insta', text: '인스타', dbValue: 'AD_INSTA' },
+    { name: 'naver', text: '네이버', dbValue: 'AD_NAVER' },
+    { name: 'youtube', text: '유튜브', dbValue: 'AD_YOUTUBE' },
   ];
 
+  const [campaignData, setCampaignData] = useState({
+    AD_INSTA: false,
+    AD_YOUTUBE: false,
+    AD_NAVER: false,
+    AD_DELIVERY: false
+  });
+  const [campaignEditor, setCampaignEditor] = useState({});
   const [images, setImages] = useState([]);
-  const [allSelected, setAllSelected] = useState(false);
-  const [campaignData, setCampaignData] = useState({});
-  const [campaignEditor, setCampaignEditor] = useState({ test: 'test' });
+  const [dbImages, setDbImages] = useState([]);
 
-  const onSubmit = (data) => {
-    const {
-      insta, youtube, naver, delivery
-    } = data;
 
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const obj = {
+        ...data,
+        insta: campaignData.AD_INSTA ? 1 : 0,
+        youtube: campaignData.AD_YOUTUBE ? 1 : 0,
+        naver: campaignData.AD_NAVER ? 1 : 0,
+        delivery: campaignData.AD_DELIVERY ? 1 : 0
+      };
 
-    const obj = {
-      ...data,
-      insta: insta ? 1 : 0,
-      youtube: youtube ? 1 : 0,
-      naver: naver ? 1 : 0,
-      delivery: delivery ? 1 : 0
-    };
-
-    /* axios.post('/api/TB_AD/create', obj).then((res) => {
-      console.log(res.data);
-    }).catch((error) => { alert(error.response.data); }); */
+      if (campaignId) {
+        await axios.post('/api/TB_AD/update', { ...obj, campaignId });
+        if (images.length > 0) {
+          const uploaders = images.map((item) => {
+            const formData = new FormData();
+            formData.append('file', item.file);
+            formData.append('id', campaignId);
+            return axios.post('/api/TB_PHOTO_AD/uploadImage', formData, {
+              headers: { 'Content-Type': 'multipart/form-data' }
+            }).then(response => ('sucess')).catch(error => ('error'));
+          });
+          axios.all(uploaders).then(() => {
+            goBack();
+          });
+        } else {
+          goBack();
+        }
+      } else {
+        axios.post('/api/TB_AD/create', obj).then((res) => {
+          if (images.length > 0) {
+            const id = res.data.data.AD_ID;
+            const uploaders = images.map((item) => {
+              const formData = new FormData();
+              formData.append('file', item.file);
+              formData.append('id', id);
+              return axios.post('/api/TB_PHOTO_AD/uploadImage', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+              }).then(response => ('sucess')).catch(error => ('error'));
+            });
+            axios.all(uploaders).then(() => {
+              goBack();
+            });
+          } else {
+            goBack();
+          }
+        }).catch((error) => {
+          alert(error.response.data);
+        });
+      }
+    } catch (e) {
+      alert(e);
+    }
   };
 
   const getType = watch('type');
-  const deleteBtn = {
-    width: '26px',
-    height: '26px',
-    position: 'absolute',
-    display: 'inline-block',
-    top: '5px',
-    right: ' 6px',
-    backgroundImage: `url(${deleteIcon})`,
-    textIndent: '-10000px',
-    cursor: 'pointer'
-  };
+
 
   async function getCampaignData() {
     try {
@@ -142,20 +174,20 @@ function CampaignCreate(props) {
         AD_DISC, AD_DT, AD_EMAIL, AD_EXTR_ADDR, AD_ID, AD_INF_CNT, AD_INSTA,
         AD_NAVER, AD_POST_CODE, AD_PROVIDE, AD_ROAD_ADDR, AD_SEARCH_KEY,
         AD_SHRT_DISC, AD_SRCH_END, AD_SRCH_START, AD_TEL, AD_VISIBLE,
-        AD_YOUTUBE
+        AD_YOUTUBE, TB_PHOTO_ADs
       } = data;
-      setCampaignData(data);
+      // debugger;
+      setCampaignData({
+        ...campaignData, AD_INSTA, AD_NAVER, AD_YOUTUBE, AD_DELIVERY, AD_DETAIL, AD_PROVIDE
+      });
       setValue('campaignName', AD_NAME);
       setValue('type', AD_CTG);
       setValue('subtype', AD_CTG2);
-      setValue('delivery', !!AD_DELIVERY);
       setValue('detailAddress', AD_DETAIL_ADDR);
       setValue('discription', AD_DISC);
       setValue('email', AD_EMAIL);
       setValue('extraAddress', AD_EXTR_ADDR);
       setValue('influencerCount', AD_INF_CNT);
-      setValue('insta', !!AD_INSTA);
-      setValue('naver', !!AD_NAVER);
       setValue('postcode', AD_POST_CODE);
       setValue('roadAddress', AD_ROAD_ADDR);
       setValue('searchKeyword', AD_SEARCH_KEY);
@@ -164,7 +196,9 @@ function CampaignCreate(props) {
       setValue('searchStart', AD_SRCH_START);
       setValue('phone', AD_TEL);
       setValue('visible', AD_VISIBLE);
-      setValue('youtube', !!AD_YOUTUBE);
+      if (TB_PHOTO_ADs.length > 0) {
+        setDbImages(TB_PHOTO_ADs);
+      } else { setDbImages([]); }
     } catch (err) {
       alert(err);
     }
@@ -177,10 +211,10 @@ function CampaignCreate(props) {
   }, [register]);
 
   useEffect(() => {
-    if (match.params.id) {
+    if (campaignId) {
       getCampaignData();
     }
-  }, [match]);
+  }, []);
 
   useEffect(() => {
     if (campaignEditor.detailInfo && campaignData.AD_DETAIL) {
@@ -190,75 +224,6 @@ function CampaignCreate(props) {
       campaignEditor.provideInfo.data.set(campaignData.AD_PROVIDE);
     }
   }, [campaignData]);
-
-  function addPicture(event) {
-    const { files } = event.target;
-    setValue('image', files);
-    const dateNow = Date.now();
-
-    const imagesArray = Array.from(files).map((item, index) => {
-      const picUrl = URL.createObjectURL(item);
-      return {
-        id: dateNow + item.name,
-        file: item,
-        url: picUrl,
-        checked: false
-      };
-    });
-    setImages(images.concat(imagesArray));
-  }
-
-  function selectImage(id) {
-    const imagesArray = images.map((item) => {
-      if (item.id === id) {
-        return { ...item, checked: !item.checked };
-      }
-      return item;
-    });
-    setImages(imagesArray);
-  }
-
-  function selectAll() {
-    let imagesArray;
-    if (allSelected) {
-      imagesArray = images.map(item => ({ ...item, checked: false }));
-    } else {
-      imagesArray = images.map(item => ({ ...item, checked: true }));
-    }
-    setImages(imagesArray);
-    setAllSelected(!allSelected);
-  }
-
-  function deletePicture(id) {
-    const filterImages = images.filter(image => image.id !== id);
-    setImages(filterImages);
-  }
-
-  function deleteSelected() {
-    const filterImages = images.filter(image => !image.checked);
-    setImages(filterImages);
-  }
-
-  function ImageActionButton(componentProps) {
-    const {
-      children, color, background, onClick, borderRadius, padding
-    } = componentProps;
-
-    const styles = {
-      cursor: 'pointer',
-      background: background || Colors.blue2,
-      color: color || '#ffffff',
-      borderRadius: borderRadius || 0,
-      fontSize: '14px',
-      padding: padding || '3px 16px'
-    };
-
-    return (
-      <div style={styles} onClick={onClick}>
-        {children}
-      </div>
-    );
-  }
 
   return (
     <Box
@@ -275,8 +240,8 @@ function CampaignCreate(props) {
             {snsTypes.map(item => (
               <FormControlLabel
                 control={(
-                  <Checkbox name={item.name} inputRef={register} />
-                    )}
+                  <Checkbox checked={!!campaignData[item.dbValue]} onChange={event => setCampaignData({ ...campaignData, [item.dbValue]: event.target.checked })} />
+                      )}
                 key={item.name}
                 label={item.text}
               />
@@ -322,8 +287,14 @@ function CampaignCreate(props) {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">제공상품 배송여부</StyledText></Box>
-            <FormControlLabel
+            {/* <FormControlLabel
               control={(<Checkbox name="delivery" inputRef={register} />)}
+              label="배송형 상품"
+            /> */}
+            <FormControlLabel
+              control={(
+                <Checkbox checked={!!campaignData.AD_DELIVERY} onChange={event => setCampaignData({ ...campaignData, AD_DELIVERY: event.target.checked })} />
+                )}
               label="배송형 상품"
             />
           </Grid>
@@ -438,78 +409,8 @@ function CampaignCreate(props) {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">이미지 업로드</StyledText></Box>
-            <Box
-              border="1px solid #0000003b"
-              p={3}
-            >
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  {images.length > 0 ? (
-                    <Grid container spacing={2}>
-                      {images.map(item => (
-                        <Grid item key={item.id}>
-                          <div style={{ position: 'relative' }}>
-                            <StyledImage
-                              width="130"
-                              height="130"
-                              borderRadius="12px"
-                              src={item.url}
-                            />
-                            <span onClick={() => deletePicture(item.id)} style={deleteBtn}>button</span>
-                            <input
-                              type="checkbox"
-                              checked={item.checked}
-                              onChange={() => selectImage(item.id)}
-                              style={{
-                                position: 'absolute',
-                                top: '3px',
-                                left: '3px'
-                              }}
-                            />
-                          </div>
-                        </Grid>
-                      ))}
-                    </Grid>
-                  ) : <React.Fragment>이미지 없습니다</React.Fragment>
-                    }
-                </Grid>
-                <Grid item xs={12}>
-                  <Divider />
-                </Grid>
-                <Grid item xs={12}>
-                  <Grid container spacing={1}>
-                    <Grid item>
-                      <label htmlFor="image">
-                        <ImageActionButton padding="13px 22px">
-                              파일추가
-                          <input
-                            id="image"
-                            name="image"
-                            type="file"
-                            style={{ display: 'none' }}
-                            multiple
-                            accept="image/*"
-                            onChange={(event => addPicture(event))}
-                          />
-                        </ImageActionButton>
-                      </label>
-                    </Grid>
-                    {
-                      images.length > 0 ? (
-                        <React.Fragment>
-                          <Grid item>
-                            <ImageActionButton onClick={deleteSelected} padding="13px 22px">선택삭제</ImageActionButton>
-                          </Grid>
-                          <Grid item>
-                            <ImageActionButton onClick={selectAll} padding="13px 22px">모두선택</ImageActionButton>
-                          </Grid>
-                        </React.Fragment>
-
-                      ) : null
-                    }
-                  </Grid>
-                </Grid>
-              </Grid>
+            <Box border="1px solid #0000003b" p={3}>
+              <ImageHolder setValue={setValue} images={images} setImages={setImages} dbImages={dbImages} getCampaignData={getCampaignData} />
             </Box>
           </Grid>
           <Grid item xs={12}>
@@ -521,7 +422,6 @@ function CampaignCreate(props) {
             <CKEditorComponent setValue={setValue} name="provideInfo" control={control} campaignEditor={campaignEditor} setCampaignEditor={setCampaignEditor} />
           </Grid>
           <Grid item xs={12}>
-            {/* <button type="submit">submit</button> */}
             <Grid container justify="center" spacing={1}>
               <Grid item xs={2}><StyledButton onClick={goBack}>취소</StyledButton></Grid>
               <Grid item xs={2}><StyledButton onClick={handleSubmit(onSubmit)}>저장하기</StyledButton></Grid>
