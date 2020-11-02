@@ -11,7 +11,8 @@ import {
   FormLabel,
   MenuItem,
   TextareaAutosize,
-  Divider
+  Divider,
+  TextField
 } from '@material-ui/core';
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -88,7 +89,8 @@ function CampaignCreate(props) {
     register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues
   } = useForm({
     mode: 'onBlur',
-    resolver: yupResolver(schema2)
+    resolver: yupResolver(schema2),
+    defaultValues: { RadioGroup: '0', visible: '0' }
   });
 
   const snsTypes = [
@@ -162,6 +164,10 @@ function CampaignCreate(props) {
     }
   };
 
+  const onSubmit2 = (data) => {
+    console.log(data);
+  };
+
   const getType = watch('type');
 
 
@@ -195,7 +201,9 @@ function CampaignCreate(props) {
       setValue('searchFinish', AD_SRCH_END);
       setValue('searchStart', AD_SRCH_START);
       setValue('phone', AD_TEL);
-      setValue('visible', AD_VISIBLE);
+      setValue('visible', '1');
+      setValue('RadioGroup', '1');
+      // setValue('visible2', 'test');
       if (TB_PHOTO_ADs.length > 0) {
         setDbImages(TB_PHOTO_ADs);
       } else { setDbImages([]); }
@@ -203,6 +211,10 @@ function CampaignCreate(props) {
       alert(err);
     }
   }
+
+  /* useEffect(() => {
+    setValue('RadioGroup', '1');
+  }, [campaignData]); */
 
   useEffect(() => {
     register({ name: 'image' }, {});
@@ -300,27 +312,24 @@ function CampaignCreate(props) {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">캠페인 출력상태</StyledText></Box>
-            <FormControl component="fieldset">
-              <Controller
-                render={controllerProps => (
-                  <RadioGroup row aria-label="gender" {...controllerProps} name="visible" onChange={event => console.log(event.target.value)}>
-                    <FormControlLabel
-                      value="0"
-                      control={<Radio />}
-                      label="대기상태"
-                    />
-                    <FormControlLabel
-                      value="1"
-                      control={<Radio />}
-                      label="노출상태"
-                    />
-                  </RadioGroup>
-                )}
-                defaultValue="0"
-                name="visible"
-                control={control}
-              />
-            </FormControl>
+            <Controller
+              as={(
+                <RadioGroup row aria-label="gender">
+                  <FormControlLabel
+                    value="0"
+                    control={<Radio />}
+                    label="대기상태"
+                  />
+                  <FormControlLabel
+                    value="1"
+                    control={<Radio />}
+                    label="노출상태"
+                  />
+                </RadioGroup>
+              )}
+              name="visible"
+              control={control}
+            />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">등록인아이디</StyledText></Box>
@@ -425,6 +434,7 @@ function CampaignCreate(props) {
             <Grid container justify="center" spacing={1}>
               <Grid item xs={2}><StyledButton onClick={goBack}>취소</StyledButton></Grid>
               <Grid item xs={2}><StyledButton onClick={handleSubmit(onSubmit)}>저장하기</StyledButton></Grid>
+              <Grid item xs={2}><StyledButton onClick={handleSubmit(onSubmit2)}>test</StyledButton></Grid>
             </Grid>
           </Grid>
         </Grid>
