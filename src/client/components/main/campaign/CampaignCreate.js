@@ -201,9 +201,8 @@ function CampaignCreate(props) {
       setValue('searchFinish', AD_SRCH_END);
       setValue('searchStart', AD_SRCH_START);
       setValue('phone', AD_TEL);
-      setValue('visible', '1');
+      setValue('visible', AD_VISIBLE);
       setValue('RadioGroup', '1');
-      // setValue('visible2', 'test');
       if (TB_PHOTO_ADs.length > 0) {
         setDbImages(TB_PHOTO_ADs);
       } else { setDbImages([]); }
