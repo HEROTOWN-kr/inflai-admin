@@ -7,25 +7,17 @@ import {
   Checkbox,
   Radio,
   RadioGroup,
-  FormControl,
-  FormLabel,
-  MenuItem,
   TextareaAutosize,
-  Divider,
-  TextField
 } from '@material-ui/core';
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { all } from 'async';
 import axios from 'axios';
 import ReactFormText from '../../containers/ReactFormText';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
 import StyledSelect from '../../containers/StyledSelect';
 import { AdvertiseTypes, Colors } from '../../../lib/Сonstants';
-import StyledImage from '../../containers/StyledImage';
-import deleteIcon from '../../../img/photo_del.png';
 import CKEditorComponent from '../../containers/CKEditorComponent';
 import DaumPostCode from '../../containers/DaumPostCode';
 import StyledButton from '../../containers/StyledButton';
@@ -108,7 +100,6 @@ function CampaignCreate(props) {
   const [campaignEditor, setCampaignEditor] = useState({});
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
-
 
   const onSubmit = async (data) => {
     try {

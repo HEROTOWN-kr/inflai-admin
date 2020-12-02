@@ -11,6 +11,7 @@ import Dashboard from './dashboard/Dashboard';
 import Campaign from './campaign/Campaign';
 import Navbar from './navbar/Navbar';
 import Settings from './settings/Settings';
+import Subscription from './subscription/Subscription';
 
 function Main(props) {
   const [pageIndicator, setPageIndicator] = useState(0);
@@ -47,6 +48,10 @@ function Main(props) {
           <Route
             path="/Request"
             render={renderProps => <Request {...renderProps} setMenuIndicator={setMenuIndicator} />}
+          />
+          <Route
+            path="/Subscription"
+            render={renderProps => <Subscription {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
           <Route
             path="/Settings"

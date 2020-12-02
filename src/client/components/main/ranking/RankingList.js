@@ -31,9 +31,7 @@ function RankingList(props) {
         </Grid>
       </Grid>
       <Grid item sm={12}>
-        {
-            blogType === '1' ? <Instagram history={history} match={match} /> : <Youtube />
-          }
+        { blogType === '1' ? <Instagram history={history} match={match} /> : <Youtube /> }
       </Grid>
     </Grid>
   );

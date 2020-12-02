@@ -23,9 +23,7 @@ import defaultAccountImage from '../../../img/default_account_image.png';
 import StyledLink from '../../containers/StyledLink';
 
 function CampaignList(props) {
-  const {
-    history, match
-  } = props;
+  const { history, match } = props;
 
   const [campaigns, setCampaigns] = useState([]);
   const [count, setCount] = useState(0);
@@ -81,7 +79,7 @@ function CampaignList(props) {
     }
   }
 
-  function paymentDetail(event, id) {
+  function campaignDetail(event, id) {
     history.push(`${props.match.path}/${id}`);
   }
 
@@ -156,7 +154,7 @@ function CampaignList(props) {
                   </StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <IconButton onClick={event => paymentDetail(event, row.id)}>
+                  <IconButton onClick={event => campaignDetail(event, row.id)}>
                     <Edit />
                   </IconButton>
                   <IconButton>
@@ -175,7 +173,7 @@ function CampaignList(props) {
               itemCount={count}
               page={page}
               changePage={changePage}
-              perPage={10}
+              perPage={5}
             />
           </Grid>
         </Grid>

@@ -42,10 +42,15 @@ function NavbarLinks(props) {
       link: '/Ranking',
       icon: EqualizerIcon
     },
-    {
+    /* {
       name: '켐페인 요청',
       link: '/Request',
       icon: HelpIcon
+    }, */
+    {
+      name: '서브스크립션',
+      link: '/Subscription',
+      icon: MonetizationOnIcon
     },
     {
       name: '설정',
