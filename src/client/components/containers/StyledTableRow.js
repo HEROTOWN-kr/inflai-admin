@@ -28,7 +28,7 @@ function StyledTableRow(props) {
       classes={classes}
       className={className}
       selected={selected}
-      onClick={() => onClick(id, types)}
+      onClick={onClick ? () => onClick(id, types) : null}
     >
       {children}
     </TableRow>

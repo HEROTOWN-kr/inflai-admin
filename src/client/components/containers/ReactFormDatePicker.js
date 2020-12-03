@@ -5,7 +5,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 
 function ReactFormDatePicker(props) {
   const {
-    control, setValue, handleBlur, getValues, name
+    control, setValue, handleBlur, getValues, name, disablePast
   } = props;
 
   return (
@@ -13,10 +13,11 @@ function ReactFormDatePicker(props) {
       <Controller
         as={(<KeyboardDatePicker />)}
         control={control}
+        emptyLabel="날짜를 선택해주세요"
         autoOk
-        // disablePast
+        disablePast={disablePast}
         name={name}
-        defaultValue={new Date()}
+        defaultValue={null}
         disableToolbar
         variant="inline"
         format="yyyy/MM/dd"

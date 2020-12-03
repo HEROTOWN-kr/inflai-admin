@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Box, Grid, Table, TableBody, TableHead, TableRow
+  Box, Grid, IconButton, Table, TableBody, TableHead, TableRow
 } from '@material-ui/core';
+import { Edit, Delete } from '@material-ui/icons';
 import StyledTitle from '../../containers/StyledTitle';
 import StyledText from '../../containers/StyledText';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
+import { Colors } from '../../../lib/Сonstants';
+import SubscriptionDialog from './SubscriptionDialog';
+
 
 const tableRows = [
   {
@@ -41,12 +45,23 @@ const tableRows = [
     text: '상태',
     align: 'left'
   },
+  {
+    text: '괄리자툴',
+    align: 'left'
+  },
 ];
 
 function SubscriptionList(props) {
+  const { history } = props;
   const [subscribeData, setSubscribeData] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
+  const [selectedId, setSelectedId] = useState(7);
+  const [editDialog, setEditDialog] = useState(true);
+
+  function toggleEditDialog() {
+    setEditDialog(!editDialog);
+  }
 
 
   function getSubscribtions() {
@@ -72,6 +87,7 @@ function SubscriptionList(props) {
       });
       setSubscribeData(subscribeArray);
       setCount(countRes);
+      // console.log(subscribeArray);
     }).catch(err => alert(err));
   }
 
@@ -79,9 +95,19 @@ function SubscriptionList(props) {
     getSubscribtions();
   }, [page]);
 
+  function openDialog(id) {
+    setSelectedId(id);
+    toggleEditDialog();
+  }
+
+
   const changePage = (event, value) => {
     setPage(value);
   };
+
+  function editRow(event, id) {
+    history.push(`${props.match.path}/${id}`);
+  }
 
   return (
     <Box width={1200} css={{ margin: '0 auto' }}>
@@ -105,7 +131,7 @@ function SubscriptionList(props) {
         </TableHead>
         <TableBody>
           {subscribeData.map(item => (
-            <StyledTableRow>
+            <StyledTableRow key={item.id}>
               <StyledTableCell align="center">
                 {item.rowNum}
               </StyledTableCell>
@@ -116,13 +142,23 @@ function SubscriptionList(props) {
                 {item.planName}
               </StyledTableCell>
               <StyledTableCell align="center">
-                {item.startDate}
+                {item.startDate || '-'}
               </StyledTableCell>
               <StyledTableCell align="center">
-                {item.finishDate}
+                {item.finishDate || '-'}
               </StyledTableCell>
               <StyledTableCell align="center">
-                {item.status}
+                <StyledText textAlign="center" color={item.status === '대기' ? Colors.red : 'green'}>
+                  {item.status}
+                </StyledText>
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                <IconButton onClick={event => editRow(event, item.id)}>
+                  <Edit />
+                </IconButton>
+                <IconButton onClick={() => openDialog(item.id)}>
+                  <Delete />
+                </IconButton>
               </StyledTableCell>
             </StyledTableRow>
           ))}
@@ -140,6 +176,12 @@ function SubscriptionList(props) {
           </Grid>
         </Grid>
       </Box>
+      <SubscriptionDialog
+        open={editDialog}
+        handleClose={toggleEditDialog}
+        onConfirm={() => console.log('confirm')}
+        selectedId={selectedId}
+      />
     </Box>
   );
 }
