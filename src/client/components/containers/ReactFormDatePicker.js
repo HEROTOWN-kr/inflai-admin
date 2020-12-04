@@ -21,7 +21,7 @@ function ReactFormDatePicker(props) {
         disableToolbar
         variant="inline"
         format="yyyy/MM/dd"
-        margin="normal"
+        // margin="normal"
         id="date-picker-inline"
         KeyboardButtonProps={{
           'aria-label': 'change date',

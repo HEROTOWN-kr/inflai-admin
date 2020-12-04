@@ -189,6 +189,7 @@ export const Colors = {
   grey2: '#999999',
   grey3: '#f5f6f7',
   grey4: '#eaeaea',
+  green: '#24d024',
 };
 export const AdvertiseTypes = {
   mainType: ['지역', '제품', '서비스', '가치단'],

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Dialog, useMediaQuery, Grid, Box
+  Dialog, useMediaQuery, Grid, Box, Divider
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { Controller, useForm } from 'react-hook-form';
+import axios from 'axios';
 import StyledButton from '../../containers/StyledButton';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
@@ -30,7 +31,7 @@ function getFinishDate(date) {
 
 function SubscriptionDialog(props) {
   const {
-    open, handleClose, onConfirm, selectedId
+    open, handleClose, dialogData, setDialogData, getSubData, setSelectedId, setMessage
   } = props;
   const [endDate, setEndDate] = useState('정보 없습니다');
   const theme = useTheme();
@@ -45,12 +46,40 @@ function SubscriptionDialog(props) {
     if (watchStart) {
       const finishDate = getFinishDate(watchStart);
       setEndDate(finishDate);
+    } else {
+      setEndDate('정보 없습니다');
     }
   }, [watchStart]);
 
+  useEffect(() => {
+    setValue('startDate', dialogData.startDate);
+    setValue('status', dialogData.status);
+  }, [dialogData]);
+
   const onSubmit = (data) => {
-    console.log(data);
+    const { status, startDate } = data;
+    const post = {
+      id: dialogData.id,
+      status,
+      startDate,
+      endDate: endDate.replace(/\//g, '-')
+    };
+    axios.post('/api/TB_SUBSCRIPTION/update', post).then((res) => {
+      setSelectedId(null);
+      setDialogData({});
+      setMessage({ type: 'success', open: true, text: '저장되었습니다' });
+      getSubData();
+      handleClose();
+    }).catch((err) => {
+      alert(err.response.data.message);
+    });
   };
+
+  function dialogClose() {
+    setSelectedId(null);
+    setDialogData({});
+    handleClose();
+  }
 
   return (
     <Dialog
@@ -58,7 +87,7 @@ function SubscriptionDialog(props) {
       fullWidth
       maxWidth="xs"
       open={open}
-      onClose={handleClose}
+      onClose={dialogClose}
       aria-labelledby="responsive-dialog-title"
     >
       <Box p={4}>
@@ -68,7 +97,7 @@ function SubscriptionDialog(props) {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">플랜</StyledText></Box>
-            plan
+            {dialogData.planName}
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">시작 날짜</StyledText></Box>
@@ -107,6 +136,7 @@ function SubscriptionDialog(props) {
               </Grid>
             </Grid>
           </Grid>
+          <Grid item xs={12}><Divider /></Grid>
           <Grid item xs={12}>
             <Grid container justify="center" spacing={2}>
               <Grid item>

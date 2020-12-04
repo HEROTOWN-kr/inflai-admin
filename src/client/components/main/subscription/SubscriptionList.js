@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Box, Grid, IconButton, Table, TableBody, TableHead, TableRow
+  Box, Grid, IconButton, Snackbar, Table, TableBody, TableHead, TableRow
 } from '@material-ui/core';
 import { Edit, Delete } from '@material-ui/icons';
 import StyledTitle from '../../containers/StyledTitle';
@@ -11,6 +11,7 @@ import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
 import { Colors } from '../../../lib/Сonstants';
 import SubscriptionDialog from './SubscriptionDialog';
+import Alert from '../../containers/Alert';
 
 
 const tableRows = [
@@ -56,8 +57,21 @@ function SubscriptionList(props) {
   const [subscribeData, setSubscribeData] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [selectedId, setSelectedId] = useState(7);
-  const [editDialog, setEditDialog] = useState(true);
+  const [selectedId, setSelectedId] = useState(null);
+  const [dialogData, setDialogData] = useState({});
+  const [editDialog, setEditDialog] = useState(false);
+  const [message, setMessage] = useState({
+    open: false,
+    text: '',
+    type: 'success'
+  });
+  const messageClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setMessage({ ...message, open: false });
+  };
 
   function toggleEditDialog() {
     setEditDialog(!editDialog);
@@ -94,6 +108,13 @@ function SubscriptionList(props) {
   useEffect(() => {
     getSubscribtions();
   }, [page]);
+
+  useEffect(() => {
+    if (selectedId) {
+      const data = subscribeData.filter(item => item.id === selectedId);
+      if (data[0]) setDialogData(data[0]);
+    }
+  }, [selectedId]);
 
   function openDialog(id) {
     setSelectedId(id);
@@ -148,15 +169,15 @@ function SubscriptionList(props) {
                 {item.finishDate || '-'}
               </StyledTableCell>
               <StyledTableCell align="center">
-                <StyledText textAlign="center" color={item.status === '대기' ? Colors.red : 'green'}>
-                  {item.status}
+                <StyledText textAlign="center" color={item.status === '1' ? Colors.red : Colors.green}>
+                  {item.status === '1' ? '대기' : '승인'}
                 </StyledText>
               </StyledTableCell>
               <StyledTableCell align="center">
-                <IconButton onClick={event => editRow(event, item.id)}>
+                <IconButton onClick={event => openDialog(item.id)}>
                   <Edit />
                 </IconButton>
-                <IconButton onClick={() => openDialog(item.id)}>
+                <IconButton>
                   <Delete />
                 </IconButton>
               </StyledTableCell>
@@ -179,9 +200,22 @@ function SubscriptionList(props) {
       <SubscriptionDialog
         open={editDialog}
         handleClose={toggleEditDialog}
-        onConfirm={() => console.log('confirm')}
-        selectedId={selectedId}
+        dialogData={dialogData}
+        setDialogData={setDialogData}
+        getSubData={getSubscribtions}
+        setSelectedId={setSelectedId}
+        setMessage={setMessage}
       />
+      <Snackbar
+        open={message.open}
+        autoHideDuration={4000}
+        onClose={messageClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={messageClose} severity={message.type}>
+          {message.text}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
