@@ -200,9 +200,9 @@ function SubscriptionList(props) {
       <SubscriptionDialog
         open={editDialog}
         handleClose={toggleEditDialog}
-        dialogData={dialogData}
-        setDialogData={setDialogData}
+        subData={subscribeData}
         getSubData={getSubscribtions}
+        selectedId={selectedId}
         setSelectedId={setSelectedId}
         setMessage={setMessage}
       />

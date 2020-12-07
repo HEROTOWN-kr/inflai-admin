@@ -31,9 +31,10 @@ function getFinishDate(date) {
 
 function SubscriptionDialog(props) {
   const {
-    open, handleClose, dialogData, setDialogData, getSubData, setSelectedId, setMessage
+    open, handleClose, getSubData, setMessage, subData, selectedId
   } = props;
   const [endDate, setEndDate] = useState('정보 없습니다');
+  const [dialogData, setDialogData] = useState({});
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const {
@@ -51,10 +52,10 @@ function SubscriptionDialog(props) {
     }
   }, [watchStart]);
 
-  useEffect(() => {
-    setValue('startDate', dialogData.startDate);
-    setValue('status', dialogData.status);
-  }, [dialogData]);
+  function dialogClose() {
+    setDialogData({});
+    handleClose();
+  }
 
   const onSubmit = (data) => {
     const { status, startDate } = data;
@@ -65,20 +66,26 @@ function SubscriptionDialog(props) {
       endDate: endDate.replace(/\//g, '-')
     };
     axios.post('/api/TB_SUBSCRIPTION/update', post).then((res) => {
-      setSelectedId(null);
-      setDialogData({});
       setMessage({ type: 'success', open: true, text: '저장되었습니다' });
       getSubData();
-      handleClose();
+      dialogClose();
     }).catch((err) => {
       alert(err.response.data.message);
     });
   };
 
-  function dialogClose() {
-    setSelectedId(null);
-    setDialogData({});
-    handleClose();
+  useEffect(() => {
+    setValue('startDate', dialogData.startDate);
+    setValue('status', dialogData.status);
+  }, [dialogData]);
+
+  function onDialogOpen() {
+    if (selectedId) {
+      const data = subData.filter(item => item.id === selectedId);
+      if (data[0]) {
+        setDialogData(data[0]);
+      }
+    }
   }
 
   return (
@@ -87,6 +94,7 @@ function SubscriptionDialog(props) {
       fullWidth
       maxWidth="xs"
       open={open}
+      onEnter={onDialogOpen}
       onClose={dialogClose}
       aria-labelledby="responsive-dialog-title"
     >
