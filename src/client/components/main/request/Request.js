@@ -7,10 +7,7 @@ import CampaignList from '../campaign/CampaignList';
 
 function Request(props) {
   const { setMenuIndicator, history, match } = props;
-  useEffect(() => setMenuIndicator(5), []);
-  const [influencers, setInfluencers] = useState([]);
-  const [count, setCount] = useState(0);
-  const [page, setPage] = React.useState(1);
+
 
   function goBack() {
     history.push(match.path);
@@ -33,17 +30,7 @@ function Request(props) {
         />
         <Route
           path={`${match.path}/`}
-          render={renderProps => (
-            <RequestList
-              {...renderProps}
-              influencers={influencers}
-              setInfluencers={setInfluencers}
-              count={count}
-              setCount={setCount}
-              page={page}
-              setPage={setPage}
-            />
-          )}
+          render={renderProps => <RequestList {...renderProps} />}
         />
       </Switch>
     </div>

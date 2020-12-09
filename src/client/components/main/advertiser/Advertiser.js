@@ -64,7 +64,7 @@ function Advertiser(props) {
   };
 
   return (
-    <>
+    <Box width={1200} css={{ margin: '0 auto' }}>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
@@ -105,7 +105,7 @@ function Advertiser(props) {
           </Grid>
         </Grid>
       </Box>
-    </>
+    </Box>
   );
 }
 

@@ -45,10 +45,7 @@ function Main(props) {
             path="/Ranking"
             render={renderProps => <Ranking {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
-          <Route
-            path="/Request"
-            render={renderProps => <Request {...renderProps} setMenuIndicator={setMenuIndicator} />}
-          />
+
           <Route
             path="/Subscription"
             render={renderProps => <Subscription {...renderProps} setMenuIndicator={setMenuIndicator} />}

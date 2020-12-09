@@ -9,9 +9,11 @@ import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
 
 function RequestList(props) {
-  const {
-    influencers, setInfluencers, count, setCount, page, setPage, history, match
-  } = props;
+  const { history, match } = props;
+
+  const [influencers, setInfluencers] = useState([]);
+  const [count, setCount] = useState(0);
+  const [page, setPage] = React.useState(1);
 
   function createInfluencers(data) {
     const array = [];
@@ -52,11 +54,11 @@ function RequestList(props) {
   };
 
   function requestDetail(event, id) {
-    history.push(`${match.path}${id}`);
+    history.push(`${match.path}/${id}`);
   }
 
   return (
-    <>
+    <Box mt={4} width={1200} css={{ margin: '0 auto' }}>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
@@ -99,7 +101,7 @@ function RequestList(props) {
           </Grid>
         </Grid>
       </Box>
-    </>
+    </Box>
   );
 }
 

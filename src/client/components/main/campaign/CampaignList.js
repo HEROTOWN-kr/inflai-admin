@@ -92,7 +92,7 @@ function CampaignList(props) {
   };
 
   return (
-    <Box width={1200} css={{ margin: '0 auto' }}>
+    <Box mt={4} width={1200} css={{ margin: '0 auto' }}>
       <Grid container justify="space-between" alignItems="center">
         <Grid item><StyledTitle title="캠페인 리스트" /></Grid>
         <Grid item><StyledButton background={Colors.blue2} onClick={() => history.push(`${match.path}/create`)}>캠페인 등록</StyledButton></Grid>

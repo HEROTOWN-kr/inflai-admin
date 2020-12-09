@@ -229,9 +229,10 @@ function CampaignCreate(props) {
 
   return (
     <Box
+      mt={4}
       p={4}
       width={1200}
-      css={{ margin: '0 auto' }}
+      css={{ margin: '0 auto', boxSizing: 'border-box' }}
       component={Paper}
     >
       <Box component="h1" css={{ textAlign: 'center' }}>캠페인 정보</Box>

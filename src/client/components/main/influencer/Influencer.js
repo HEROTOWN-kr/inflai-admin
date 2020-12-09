@@ -60,7 +60,7 @@ function Influencer(props) {
   };
 
   return (
-    <Grid container justify="center">
+    <Box width={1200} css={{ margin: '0 auto' }}>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
@@ -99,7 +99,7 @@ function Influencer(props) {
           </Grid>
         </Grid>
       </Box>
-    </Grid>
+    </Box>
   );
 }
 
