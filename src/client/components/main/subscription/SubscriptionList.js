@@ -19,7 +19,7 @@ const tableRows = [
     id: '',
     text: '#',
     align: 'center',
-    width: '60px'
+    width: '40px'
   },
   {
     id: 'ADV_NAME',

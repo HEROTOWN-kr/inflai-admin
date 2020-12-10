@@ -33,12 +33,12 @@ function CampaignList(props) {
     {
       text: '번호',
       align: 'center',
-      width: '60px'
+      width: '40px'
     },
     {
       text: '등록번호',
       align: 'center',
-      width: '60px'
+      width: '40px'
     },
     {
       text: '캠페인정보',

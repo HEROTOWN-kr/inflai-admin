@@ -1,27 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box,
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableRow,
+  Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 } from '@material-ui/core';
 import axios from 'axios';
-import { Formik } from 'formik';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
-import MyPagination from '../../containers/MyPagination';
 
-function Influencer(props) {
+function DashInfluencers(props) {
+  const { history } = props;
   const [influencers, setInfluencers] = useState([]);
-  const [count, setCount] = useState(0);
-  const [page, setPage] = React.useState(1);
-  const { setMenuIndicator } = props;
-  const limit = 10;
-  useEffect(() => setMenuIndicator(2), []);
+  const limit = 5;
+  const page = 1;
 
   function createInfluencers(data) {
     const array = [];
@@ -47,22 +36,27 @@ function Influencer(props) {
         page, limit
       }
     }).then((res) => {
-      const { data, InfluencerCount } = res.data;
+      const { data } = res.data;
       createInfluencers(data);
-      setCount(InfluencerCount);
-    });
+    }).catch(err => alert(err.response.data.message));
   }
 
   useEffect(() => {
     getInfluencers();
-  }, [page]);
-
-  const changePage = (event, value) => {
-    setPage(value);
-  };
+  }, []);
 
   return (
-    <Box width={1200} css={{ margin: '0 auto' }}>
+    <React.Fragment>
+      <Box className="category-label">
+        <Grid container justify="space-between">
+          <Grid item>신규가입인플루언서</Grid>
+          <Grid item>
+            <button onClick={() => history.push('/Influencer')}>
+              전체보기
+            </button>
+          </Grid>
+        </Grid>
+      </Box>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
@@ -91,20 +85,8 @@ function Influencer(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box py={4}>
-        <Grid container justify="center">
-          <Grid item>
-            <MyPagination
-              itemCount={count}
-              page={page}
-              changePage={changePage}
-              perPage={10}
-            />
-          </Grid>
-        </Grid>
-      </Box>
-    </Box>
+    </React.Fragment>
   );
 }
 
-export default Influencer;
+export default DashInfluencers;

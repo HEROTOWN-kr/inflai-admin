@@ -13,14 +13,15 @@ function RequestList(props) {
 
   const [influencers, setInfluencers] = useState([]);
   const [count, setCount] = useState(0);
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = useState(1);
 
-  function createInfluencers(data) {
+  function createRequests(data) {
     const array = [];
 
     data.map(item => (
       array.push({
         id: item.REQ_ID,
+        rownum: item.rownum,
         name: item.REQ_NAME,
         brand: item.REQ_BRAND,
         phoneNumber: item.REQ_TEL,
@@ -33,20 +34,20 @@ function RequestList(props) {
     setInfluencers(array);
   }
 
-  function getInfluencers() {
+  function getRequests() {
     axios.get('/api/TB_REQ_AD/', {
       params: {
         page
       }
     }).then((res) => {
-      const { rows, count } = res.data.data;
-      createInfluencers(rows);
-      setCount(count);
+      const { data, RequestsCount } = res.data;
+      createRequests(data);
+      setCount(RequestsCount);
     });
   }
 
   useEffect(() => {
-    getInfluencers();
+    getRequests();
   }, [page]);
 
   const changePage = (event, value) => {
@@ -63,6 +64,7 @@ function RequestList(props) {
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
+              <StyledTableCell align="center" width="40px">번호</StyledTableCell>
               <StyledTableCell>브랜드명(제품명)</StyledTableCell>
               <StyledTableCell align="right">업체명</StyledTableCell>
               <StyledTableCell align="right">담당자명</StyledTableCell>
@@ -77,6 +79,7 @@ function RequestList(props) {
                 key={row.id}
                 onClick={event => requestDetail(event, row.id)}
               >
+                <StyledTableCell align="center">{row.rownum}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   {row.brand}
                 </StyledTableCell>

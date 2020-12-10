@@ -1,28 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  Paper,
-  Grid,
-  Box
+  Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 } from '@material-ui/core';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
-import MyPagination from '../../containers/MyPagination';
-import StyledImage from '../../containers/StyledImage';
-import defaultAccountImage from '../../../img/default_account_image.png';
 
-
-function Advertiser(props) {
+function DashAdvertisers(props) {
+  const { history } = props;
   const [advertisers, setAdvertisers] = useState([]);
-  const [count, setCount] = useState(0);
-  const [page, setPage] = useState(1);
-  const { setMenuIndicator } = props;
-  const limit = 10;
+  const page = 1; const limit = 5;
 
   function createAdvertisers(data) {
     const array = [];
@@ -32,7 +19,6 @@ function Advertiser(props) {
         id: item.ADV_ID,
         rownum: item.rownum,
         name: item.ADV_NAME,
-        photo: item.ADV_PHOTO,
         email: item.ADV_EMAIL,
         phoneNumber: item.ADV_TEL,
         companyName: item.ADV_COM_NAME,
@@ -46,34 +32,35 @@ function Advertiser(props) {
 
   function getAdvertisers() {
     axios.get('/api/TB_ADVERTISER/getAdvertisers', {
-      params: { page, limit }
+      params: { page, limit },
     }).then((res) => {
-      const { data, AdvertiserCount } = res.data;
+      const { data } = res.data;
       createAdvertisers(data);
-      setCount(AdvertiserCount);
-    }).catch((error) => {
-      console.log(error);
-    });
+    }).catch(error => alert(error.response.data.message));
   }
 
   useEffect(() => {
     getAdvertisers();
-  }, [page]);
-
-  useEffect(() => setMenuIndicator(1), []);
-
-  const changePage = (event, value) => {
-    setPage(value);
-  };
+  }, []);
 
   return (
-    <Box width={1200} css={{ margin: '0 auto' }}>
+    <React.Fragment>
+      <Box className="category-label">
+        <Grid container justify="space-between">
+          <Grid item>신규가입광고주</Grid>
+          <Grid item>
+            <button onClick={() => history.push('/Advertiser')}>
+                전체보기
+            </button>
+          </Grid>
+        </Grid>
+      </Box>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell align="center" width="40px">번호</StyledTableCell>
-              <StyledTableCell>정보</StyledTableCell>
+              <StyledTableCell>이름</StyledTableCell>
               <StyledTableCell align="right">이메일</StyledTableCell>
               <StyledTableCell align="right">전화번호</StyledTableCell>
               <StyledTableCell align="right">회사&nbsp;명</StyledTableCell>
@@ -86,17 +73,7 @@ function Advertiser(props) {
               <StyledTableRow hover key={row.id}>
                 <StyledTableCell align="center">{row.rownum}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">
-                  <Grid container spacing={1} alignItems="center">
-                    <Grid item>
-                      <StyledImage
-                        width="40"
-                        height="40"
-                        borderRadius="100%"
-                        src={row.photo || defaultAccountImage}
-                      />
-                    </Grid>
-                    <Grid item>{row.name}</Grid>
-                  </Grid>
+                  {row.name}
                 </StyledTableCell>
                 <StyledTableCell align="right">{row.email}</StyledTableCell>
                 <StyledTableCell align="right">{row.phoneNumber}</StyledTableCell>
@@ -108,20 +85,8 @@ function Advertiser(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box py={4}>
-        <Grid container justify="center">
-          <Grid item>
-            <MyPagination
-              itemCount={count}
-              page={page}
-              changePage={changePage}
-              perPage={limit}
-            />
-          </Grid>
-        </Grid>
-      </Box>
-    </Box>
+    </React.Fragment>
   );
 }
 
-export default Advertiser;
+export default DashAdvertisers;
