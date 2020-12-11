@@ -273,12 +273,13 @@ function Instagram(props) {
   async function getGoogleVisionData(INS_ID, type) {
     setSelectedRow(INS_ID);
     setProcess(true);
-    const isLocal = window.location.host !== 'admin.inflai.com';
+    // const isLocal = window.location.host !== 'admin.inflai.com';
+    const { host } = window.location;
 
     const apiUrl = type === 1 ? 'getGoogleData' : 'getGoogleDataObject';
 
     const googleData = await axios.get(`/api/TB_INSTA/${apiUrl}`, {
-      params: { INS_ID, isLocal }
+      params: { INS_ID, host }
     });
     setDetectData(googleData.data.statistics);
     setProcess(false);
