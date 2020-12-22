@@ -41,49 +41,11 @@ function compareDates(date1, date2) {
   return true;
 }
 
-const schema = Yup.object().shape({
-  influencerCount: Yup.string()
-    .required('모집인원수를 입력해주세요'),
-  insta: Yup.bool()
-    .when(['naver', 'youtube'], {
-      is: (naver, youtube) => !naver && !youtube,
-      then: Yup.bool().oneOf([true], '모집회망SNS를 선택해주세요'),
-    }),
-  searchFinish: Yup.date()
-    .when('searchStart', (searchStart, testSchema) => testSchema.test({
-      test: searchFinish => compareDates(searchStart, searchFinish),
-      message: '리뷰어 신청 마감일을 시작일 이후로 설정해주세요'
-    })),
-  advertiserId: Yup.string()
-    .required('등록인아이디를 입력해주세요'),
-  detailAddress: Yup.string()
-    .required('상세주소를 입력해주세요'),
-  phone: Yup.string()
-    .required('연락처를 입력해주세요'),
-  email: Yup.string()
-    .required('이메일을 입력해주세요'),
-  campaignName: Yup.string()
-    .required('캠페인명을 입력해주세요'),
-  shortDisc: Yup.string()
-    .required('짧은설명을 입력해주세요'),
-  searchKeyword: Yup.string()
-    .required('검색키워드를 입력해주세요'),
-  discription: Yup.string()
-    .required('참여 안내 사항을 입력해주세요'),
-});
-
 const schema2 = Yup.object().shape({});
 
 function CampaignCreate(props) {
   const { goBack, match } = props;
   const campaignId = match.params.id;
-  const {
-    register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues
-  } = useForm({
-    mode: 'onBlur',
-    resolver: yupResolver(schema2),
-    defaultValues: { RadioGroup: '0', visible: '0' }
-  });
 
   const snsTypes = [
     { name: 'insta', text: '인스타', dbValue: 'AD_INSTA' },
@@ -100,6 +62,41 @@ function CampaignCreate(props) {
   const [campaignEditor, setCampaignEditor] = useState({});
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
+
+  const schema = Yup.object().shape({
+    influencerCount: Yup.string()
+      .required('모집인원수를 입력해주세요'),
+    sns: Yup.string().test('snsTypeCheck', '모집회망SNS를 선택해주세요', val => campaignData.AD_INSTA === true || campaignData.AD_YOUTUBE === true || campaignData.AD_NAVER === true),
+    searchFinish: Yup.date()
+      .when('searchStart', (searchStart, testSchema) => testSchema.test({
+        test: searchFinish => compareDates(searchStart, searchFinish),
+        message: '리뷰어 신청 마감일을 시작일 이후로 설정해주세요'
+      })),
+    /* advertiserId: Yup.string()
+      .required('등록인아이디를 입력해주세요'), */
+    detailAddress: Yup.string()
+      .required('상세주소를 입력해주세요'),
+    phone: Yup.string()
+      .required('연락처를 입력해주세요'),
+    email: Yup.string()
+      .required('이메일을 입력해주세요'),
+    campaignName: Yup.string()
+      .required('캠페인명을 입력해주세요'),
+    shortDisc: Yup.string()
+      .required('짧은설명을 입력해주세요'),
+    searchKeyword: Yup.string()
+      .required('검색키워드를 입력해주세요'),
+    discription: Yup.string()
+      .required('참여 안내 사항을 입력해주세요'),
+  });
+
+  const {
+    register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues
+  } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(schema),
+    defaultValues: { RadioGroup: '0', visible: '0' }
+  });
 
   const onSubmit = async (data) => {
     try {
@@ -175,7 +172,13 @@ function CampaignCreate(props) {
       } = data;
       // debugger;
       setCampaignData({
-        ...campaignData, AD_INSTA, AD_NAVER, AD_YOUTUBE, AD_DELIVERY, AD_DETAIL, AD_PROVIDE
+        ...campaignData,
+        AD_INSTA: AD_INSTA === 1,
+        AD_NAVER: AD_NAVER === 1,
+        AD_YOUTUBE: AD_YOUTUBE === 1,
+        AD_DELIVERY,
+        AD_DETAIL,
+        AD_PROVIDE
       });
       setValue('campaignName', AD_NAME);
       setValue('type', AD_CTG);
@@ -189,8 +192,8 @@ function CampaignCreate(props) {
       setValue('roadAddress', AD_ROAD_ADDR);
       setValue('searchKeyword', AD_SEARCH_KEY);
       setValue('shortDisc', AD_SHRT_DISC);
-      setValue('searchFinish', AD_SRCH_END);
-      setValue('searchStart', AD_SRCH_START);
+      setValue('searchFinish', new Date(AD_SRCH_END));
+      setValue('searchStart', new Date(AD_SRCH_START));
       setValue('phone', AD_TEL);
       setValue('visible', AD_VISIBLE);
       setValue('RadioGroup', '1');
@@ -249,9 +252,18 @@ function CampaignCreate(props) {
                 label={item.text}
               />
             ))}
+            <input
+              type="text"
+              readOnly
+              name="sns"
+              ref={register}
+              style={{
+                opacity: '0', width: '0', padding: '0', border: '0', height: '0'
+              }}
+            />
             {
-              errors.insta ? (
-                <div className="error-message">{errors.insta.message}</div>
+              errors.sns ? (
+                <div className="error-message">{errors.sns.message}</div>
               ) : null
             }
           </Grid>
@@ -425,7 +437,7 @@ function CampaignCreate(props) {
             <Grid container justify="center" spacing={1}>
               <Grid item xs={2}><StyledButton onClick={goBack}>취소</StyledButton></Grid>
               <Grid item xs={2}><StyledButton onClick={handleSubmit(onSubmit)}>저장하기</StyledButton></Grid>
-              <Grid item xs={2}><StyledButton onClick={handleSubmit(onSubmit2)}>test</StyledButton></Grid>
+              {/* <Grid item xs={2}><StyledButton onClick={handleSubmit(onSubmit2)}>test</StyledButton></Grid> */}
             </Grid>
           </Grid>
         </Grid>

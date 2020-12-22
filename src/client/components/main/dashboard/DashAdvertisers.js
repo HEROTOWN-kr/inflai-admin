@@ -26,7 +26,6 @@ function DashAdvertisers(props) {
         registerDate: item.ADV_DT,
       })
     ));
-
     setAdvertisers(array);
   }
 

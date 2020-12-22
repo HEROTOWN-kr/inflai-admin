@@ -21,38 +21,41 @@ import { AdvertiseTypes, Colors } from '../../../lib/Сonstants';
 import StyledText from '../../containers/StyledText';
 import defaultAccountImage from '../../../img/default_account_image.png';
 import StyledLink from '../../containers/StyledLink';
+import ConfirmDialog from '../../containers/ConfirmDialog';
+
+const tableHeader = [
+  {
+    text: '번호',
+    align: 'center',
+    width: '40px'
+  },
+  {
+    text: '등록번호',
+    align: 'center',
+    width: '40px'
+  },
+  {
+    text: '캠페인정보',
+    align: 'center'
+  },
+  {
+    text: '등록/옵션기간',
+    align: 'center'
+  },
+  {
+    text: '관리자툴',
+    align: 'center'
+  }
+];
 
 function CampaignList(props) {
   const { history, match } = props;
-
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState(0);
   const [campaigns, setCampaigns] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
 
-  const tableHeader = [
-    {
-      text: '번호',
-      align: 'center',
-      width: '40px'
-    },
-    {
-      text: '등록번호',
-      align: 'center',
-      width: '40px'
-    },
-    {
-      text: '캠페인정보',
-      align: 'center'
-    },
-    {
-      text: '등록/옵션기간',
-      align: 'center'
-    },
-    {
-      text: '관리자툴',
-      align: 'center'
-    }
-  ];
 
   async function getCampaigns() {
     try {
@@ -77,6 +80,15 @@ function CampaignList(props) {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  function deleteDbPicture() {
+    axios.post('/api/TB_AD/delete', { id: selectedCampaign }).then((res) => {
+      setSelectedCampaign(0);
+      getCampaigns();
+    }).catch((err) => {
+      alert(err.response.data.message);
+    });
   }
 
   function campaignDetail(event, id) {
@@ -157,7 +169,7 @@ function CampaignList(props) {
                   <IconButton onClick={event => campaignDetail(event, row.id)}>
                     <Edit />
                   </IconButton>
-                  <IconButton>
+                  <IconButton onClick={() => { setSelectedCampaign(row.id); setDialogOpen(true); }}>
                     <Delete />
                   </IconButton>
                 </StyledTableCell>
@@ -178,6 +190,12 @@ function CampaignList(props) {
           </Grid>
         </Grid>
       </Box>
+      <ConfirmDialog
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+        onConfirm={deleteDbPicture}
+        dialogText="삭제하시겠습니까?"
+      />
     </Box>
   );
 }
