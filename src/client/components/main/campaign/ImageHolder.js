@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Divider, Grid } from '@material-ui/core';
 import axios from 'axios';
 import StyledImage from '../../containers/StyledImage';
@@ -8,11 +8,29 @@ import ConfirmDialog from '../../containers/ConfirmDialog';
 
 function ImageHolder(props) {
   const {
-    setValue, images, setImages, dbImages, getCampaignData
+    setValue, images, setImages, campaignId, getCampaignData
   } = props;
   const [allSelected, setAllSelected] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [imageId, setImageId] = useState(0);
+  const [dbImages, setDbImages] = useState([]);
+
+
+  async function getCampaignPhoto() {
+    try {
+      const response = await axios.get('/api/TB_PHOTO_AD/', { params: { id: campaignId } });
+      const { data } = response.data;
+      if (data && data.length > 0) setDbImages(data);
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  useEffect(() => {
+    if (campaignId) {
+      getCampaignPhoto();
+    }
+  }, []);
 
   function ImageActionButton(componentProps) {
     const {
@@ -45,6 +63,20 @@ function ImageHolder(props) {
     backgroundImage: `url(${deleteIcon})`,
     textIndent: '-10000px',
     cursor: 'pointer'
+  };
+
+  const mainImgButton = {
+    width: '26px',
+    height: '26px',
+    position: 'absolute',
+    display: 'inline-block',
+    top: '5px',
+    left: ' 6px',
+    textIndent: '-10000px',
+    cursor: 'pointer',
+    background: '#ffffff',
+    borderRadius: '100%',
+    boxSizing: 'border-box'
   };
 
   function selectImage(id) {
@@ -92,7 +124,15 @@ function ImageHolder(props) {
 
   function deleteDbPicture(id) {
     axios.post('/api/TB_PHOTO_AD/delete', { id }).then((res) => {
-      getCampaignData();
+      getCampaignPhoto();
+    }).catch((err) => {
+      alert(err.response.message);
+    });
+  }
+
+  function setMainPicture(id) {
+    axios.post('/api/TB_PHOTO_AD/setMain', { id, adId: campaignId }).then((res) => {
+      getCampaignPhoto();
     }).catch((err) => {
       alert(err.response.message);
     });
@@ -121,6 +161,7 @@ function ImageHolder(props) {
                           src={item.PHO_FILE}
                         />
                         <span onClick={() => { setImageId(item.PHO_ID); setDialogOpen(true); }} style={deleteBtn}>button</span>
+                        <span onClick={() => setMainPicture(item.PHO_ID)} style={{ ...mainImgButton, border: `4px solid ${item.PHO_IS_MAIN === 1 ? '#e03f3f' : '#dfe2e8'}` }}>button</span>
                       </div>
                     </Grid>
                   ))}
