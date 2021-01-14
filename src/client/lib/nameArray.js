@@ -37,23 +37,23 @@ class NameArray {
     const aim = [
       {
         value: '1',
-        text: '영향력 있는 소수 인플루언서를 통한 인지도 확산'
+        text: '블로그 체험단'
       },
       {
         value: '2',
-        text: '다수의 리뷰어를 활용한 리뷰 생성'
+        text: '인스타그램 체험단'
       },
       {
         value: '3',
-        text: '인플루언서 믹스를 통한 통합 캠페인'
+        text: '유튜브 체험단'
       },
       {
         value: '4',
-        text: '인플루언서를 활용한 판매'
+        text: '카페 바이럴'
       },
       {
         value: '5',
-        text: '기타 (직접입력)'
+        text: '혼합형'
       },
     ];
     return aim;
@@ -63,23 +63,23 @@ class NameArray {
     const consult = [
       {
         value: '1',
-        text: '유튜브 크리에이터 섭외'
+        text: '제품사진촬영'
       },
       {
         value: '2',
-        text: '네이버 블로거 섭외'
+        text: '홍보영상제작'
       },
       {
         value: '3',
-        text: '페이스북 파워 페이지 홍보'
+        text: '상세페이지제작'
       },
       {
         value: '4',
-        text: '소셜미디어 유료 광고 대행 (인스타그램/페이스북 등)'
+        text: '메뉴판/배너/포스터'
       },
       {
         value: '5',
-        text: '통합 디지털 마케팅 대행'
+        text: '홈페이지제작'
       }
     ];
     return consult;

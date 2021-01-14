@@ -18,7 +18,7 @@ import MyPagination from '../../containers/MyPagination';
 function Influencer(props) {
   const [influencers, setInfluencers] = useState([]);
   const [count, setCount] = useState(0);
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = useState(1);
   const { setMenuIndicator } = props;
   const limit = 10;
   useEffect(() => setMenuIndicator(2), []);

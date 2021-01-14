@@ -24,7 +24,79 @@ import StyledButton from '../../containers/StyledButton';
 import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
 import MyTextField from '../../containers/MyTextField';
 import StyledTitle from '../../containers/StyledTitle';
+import MyPagination from '../../containers/MyPagination';
 
+const tableRows = {
+  title: [
+    {
+      id: '',
+      text: '#',
+      align: 'center',
+      width: '60px'
+    },
+    {
+      id: '',
+      text: '인스타그램 정보',
+      align: 'left',
+      // width: '200px'
+    },
+    {
+      id: 'INS_FLWR',
+      text: '팔로워 수',
+      align: 'left'
+    },
+    {
+      id: 'INS_FLW',
+      text: '팔로잉 수',
+      align: 'left'
+    },
+    {
+      id: 'INS_MEDIA_CNT',
+      text: '게시물 수',
+      align: 'left'
+    },
+    {
+      id: 'INS_LIKES',
+      text: '좋아요 수',
+      align: 'left'
+    },
+    {
+      id: 'INS_CMNT',
+      text: '댓글 수',
+      align: 'left'
+    },
+    {
+      id: '',
+      text: 'is Fake?',
+      align: 'left'
+    },
+  ],
+  titleDetectInfo: [
+    {
+      text: '',
+      align: 'center',
+      width: '40px'
+    },
+    {
+      text: '타입',
+      align: 'left',
+      // width: '200px'
+    },
+    {
+      text: '좋아요 수',
+      align: 'left'
+    },
+    {
+      text: '댓글 수',
+      align: 'left'
+    },
+    {
+      text: '콘텐츠 수',
+      align: 'left'
+    },
+  ],
+  body: ['rownum', 'INF_NAME', 'INS_FLWR']
+};
 
 function Instagram(props) {
   const [searchWord, setSearchWord] = useState('');
@@ -34,82 +106,20 @@ function Instagram(props) {
   const [selectedRow, setSelectedRow] = useState('');
   const [process, setProcess] = useState(false);
   const [order, setOrder] = useState({ orderBy: 'INS_FLWR', direction: 'desc' });
+
+  const [count, setCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
   const { history, match } = props;
 
   function searchFunc(data) {
+    setPage(1);
     setSearchWord(data);
   }
 
-  const tableRows = {
-    title: [
-      {
-        id: '',
-        text: '#',
-        align: 'center',
-        width: '60px'
-      },
-      {
-        id: '',
-        text: '인스타그램 정보',
-        align: 'left',
-        // width: '200px'
-      },
-      {
-        id: 'INS_FLWR',
-        text: '팔로워 수',
-        align: 'left'
-      },
-      {
-        id: 'INS_FLW',
-        text: '팔로잉 수',
-        align: 'left'
-      },
-      {
-        id: 'INS_MEDIA_CNT',
-        text: '게시물 수',
-        align: 'left'
-      },
-      {
-        id: 'INS_LIKES',
-        text: '좋아요 수',
-        align: 'left'
-      },
-      {
-        id: 'INS_CMNT',
-        text: '댓글 수',
-        align: 'left'
-      },
-      {
-        id: '',
-        text: 'is Fake?',
-        align: 'left'
-      },
-    ],
-    titleDetectInfo: [
-      {
-        text: '',
-        align: 'center',
-        width: '40px'
-      },
-      {
-        text: '타입',
-        align: 'left',
-        // width: '200px'
-      },
-      {
-        text: '좋아요 수',
-        align: 'left'
-      },
-      {
-        text: '댓글 수',
-        align: 'left'
-      },
-      {
-        text: '콘텐츠 수',
-        align: 'left'
-      },
-    ],
-    body: ['rownum', 'INF_NAME', 'INS_FLWR']
+  const changePage = (event, value) => {
+    setPage(value);
   };
 
   const leftPanel = process ? <CircularProgress /> : (
@@ -243,12 +253,12 @@ function Instagram(props) {
   async function getInfluencers() {
     const InstaData = await axios.get('/api/TB_INSTA/', {
       params: {
-        ...order, searchWord
+        ...order, searchWord, limit, page
       }
     });
-    const { list } = InstaData.data.data;
-    // console.log(list);
+    const { list, cnt } = InstaData.data.data;
     setInfluencers(list);
+    setCount(cnt);
   }
 
   async function getUpdateData() {
@@ -294,7 +304,7 @@ function Instagram(props) {
 
   useEffect(() => {
     getInfluencers();
-  }, [order, searchWord]);
+  }, [order, searchWord, page]);
 
   useEffect(() => {
     getUpdateData();
@@ -346,7 +356,6 @@ function Instagram(props) {
                   </StyledText>
                 </Grid>
               </Grid>
-
             </Grid>
             <Grid item xs={12}>
               <Table aria-label="customized table">
@@ -454,20 +463,24 @@ function Instagram(props) {
                           {`${(row.INS_CMNT * 100 / row.INS_LIKES).toFixed(2)}%`}
                         </StyledText>
                       </StyledTableCell>
-                      {/* <StyledTableCell
-                    align="center"
-                  >
-                    <StyledButton
-                      padding="0 2px"
-                      borderRadius="10px"
-                    >
-                    상세
-                    </StyledButton>
-                  </StyledTableCell> */}
                     </StyledTableRow>
                   ))}
                 </TableBody>
               </Table>
+            </Grid>
+            <Grid item xs={12}>
+              <Box py={4}>
+                <Grid container justify="center">
+                  <Grid item>
+                    <MyPagination
+                      itemCount={count}
+                      page={page}
+                      changePage={changePage}
+                      perPage={10}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
             </Grid>
           </Grid>
         </Grid>

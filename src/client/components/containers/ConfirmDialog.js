@@ -8,18 +8,14 @@ import StyledText from './StyledText';
 
 export default function ConfirmDialog(props) {
   const {
-    open, setOpen, onConfirm, dialogText
+    open, closeDialog, onConfirm, dialogText
   } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const onConfirmFunc = () => {
     onConfirm();
-    handleClose();
+    closeDialog();
   };
 
   return (
@@ -27,7 +23,7 @@ export default function ConfirmDialog(props) {
       <Dialog
         fullScreen={fullScreen}
         open={open}
-        onClose={handleClose}
+        onClose={closeDialog}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
@@ -39,7 +35,7 @@ export default function ConfirmDialog(props) {
           <StyledText textAlign="center" fontSize="14">{dialogText}</StyledText>
         </DialogContent>
         <DialogActions>
-          <StyledButton onClick={handleClose}>
+          <StyledButton onClick={closeDialog}>
                         아니요
           </StyledButton>
           <StyledButton onClick={onConfirmFunc}>

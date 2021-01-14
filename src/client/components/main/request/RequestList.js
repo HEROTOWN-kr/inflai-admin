@@ -23,11 +23,13 @@ function RequestList(props) {
         id: item.REQ_ID,
         rownum: item.rownum,
         name: item.REQ_NAME,
-        brand: item.REQ_BRAND,
+        industry: item.REQ_INDUSTRY,
+        visit: item.REQ_VISIT,
+        // brand: item.REQ_BRAND,
         phoneNumber: item.REQ_TEL,
         registerDate: item.REQ_DT,
         companyName: item.REQ_COMP_NAME,
-        advertiserName: item.TB_ADVERTISER.ADV_NAME
+        // advertiserName: item.TB_ADVERTISER.ADV_NAME
       })
     ));
 
@@ -65,9 +67,11 @@ function RequestList(props) {
           <TableHead>
             <TableRow>
               <StyledTableCell align="center" width="40px">번호</StyledTableCell>
-              <StyledTableCell>브랜드명(제품명)</StyledTableCell>
-              <StyledTableCell align="right">업체명</StyledTableCell>
+              <StyledTableCell>업체명</StyledTableCell>
               <StyledTableCell align="right">담당자명</StyledTableCell>
+              <StyledTableCell align="right">업종</StyledTableCell>
+              <StyledTableCell align="right">방문경로</StyledTableCell>
+              {/* <StyledTableCell align="right">브랜드명(제품명)</StyledTableCell> */}
               <StyledTableCell align="right">전화번호</StyledTableCell>
               <StyledTableCell align="right">가입일차</StyledTableCell>
             </TableRow>
@@ -80,11 +84,11 @@ function RequestList(props) {
                 onClick={event => requestDetail(event, row.id)}
               >
                 <StyledTableCell align="center">{row.rownum}</StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  {row.brand}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.companyName}</StyledTableCell>
+                <StyledTableCell component="th" scope="row">{row.companyName}</StyledTableCell>
                 <StyledTableCell align="right">{row.name}</StyledTableCell>
+                <StyledTableCell align="right">{row.industry}</StyledTableCell>
+                <StyledTableCell align="right">{row.visit}</StyledTableCell>
+                {/* <StyledTableCell align="right">{row.brand}</StyledTableCell> */}
                 <StyledTableCell align="right">{row.phoneNumber}</StyledTableCell>
                 <StyledTableCell align="right">{row.registerDate}</StyledTableCell>
               </StyledTableRow>

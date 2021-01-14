@@ -60,7 +60,8 @@ function Settings(props) {
   }, []);
 
   return (
-    <Grid container spacing={2}>
+    <Box />
+  /* <Grid container spacing={2}>
       <Grid item xs={12}>
           인플루언서 1인단 서비스비
       </Grid>
@@ -121,7 +122,7 @@ function Settings(props) {
           </Formik>
         </Box>
       </Grid>
-    </Grid>
+    </Grid> */
   );
 }
 

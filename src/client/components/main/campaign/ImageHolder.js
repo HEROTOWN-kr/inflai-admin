@@ -8,13 +8,15 @@ import ConfirmDialog from '../../containers/ConfirmDialog';
 
 function ImageHolder(props) {
   const {
-    setValue, images, setImages, campaignId, getCampaignData
+    setValue, images, setImages, dbImages, setDbImages, campaignId,
   } = props;
   const [allSelected, setAllSelected] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [imageId, setImageId] = useState(0);
-  const [dbImages, setDbImages] = useState([]);
 
+  function toggleDialog() {
+    setDialogOpen(!dialogOpen);
+  }
 
   async function getCampaignPhoto() {
     try {
@@ -107,12 +109,16 @@ function ImageHolder(props) {
 
     const imagesArray = Array.from(files).map((item, index) => {
       const picUrl = URL.createObjectURL(item);
-      return {
+      const imageObj = {
         id: dateNow + item.name,
         file: item,
         url: picUrl,
-        checked: false
+        checked: false,
+        isMain: 0
       };
+      if (dbImages.length === 0 && index === 0) imageObj.isMain = 1;
+
+      return imageObj;
     });
     setImages(images.concat(imagesArray));
   }
@@ -141,6 +147,14 @@ function ImageHolder(props) {
   function deleteSelected() {
     const filterImages = images.filter(image => !image.checked);
     setImages(filterImages);
+  }
+
+  function setMainLocalPicture(id) {
+    const newImages = images.map((item) => {
+      const isMain = item.id === id ? 1 : 0;
+      return { ...item, isMain };
+    });
+    setImages(newImages);
   }
 
   return (
@@ -188,6 +202,15 @@ function ImageHolder(props) {
                     src={item.url}
                   />
                   <span onClick={() => deletePicture(item.id)} style={deleteBtn}>button</span>
+                  <span
+                    onClick={() => setMainLocalPicture(item.id)}
+                    style={{
+                      ...mainImgButton,
+                      top: 'auto',
+                      bottom: '5px',
+                      border: `4px solid ${item.isMain === 1 ? '#e03f3f' : '#dfe2e8'}`
+                    }}
+                  />
                   <input
                     type="checkbox"
                     checked={item.checked}
@@ -243,7 +266,7 @@ function ImageHolder(props) {
       </Grid>
       <ConfirmDialog
         open={dialogOpen}
-        setOpen={setDialogOpen}
+        closeDialog={toggleDialog}
         onConfirm={() => { deleteDbPicture(imageId); setImageId(0); }}
         dialogText="삭제하시겠습니까?"
       />

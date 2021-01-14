@@ -9,6 +9,8 @@ import CampaignCreate from './CampaignCreate';
 import Request from '../request/Request';
 import RequestList from '../request/RequestList';
 import RequestDetail from '../request/RequestDetail';
+import CampaignCreateNew from './CampaignCreateNew';
+import CampaignEdit from './CampaignEdit';
 
 function Campaign(props) {
   const { setMenuIndicator, history, match } = props;
@@ -64,12 +66,12 @@ function Campaign(props) {
         <Route
           exact
           path={`${match.path}/create`}
-          render={renderProps => <CampaignCreate {...renderProps} goBack={goBack} />}
+          render={renderProps => <CampaignCreateNew {...renderProps} goBack={goBack} />}
         />
         <Route
           exact
           path={`${match.path}/:id`}
-          render={renderProps => <CampaignCreate {...renderProps} goBack={goBack} />}
+          render={renderProps => <CampaignEdit {...renderProps} goBack={goBack} />}
         />
         <Route
           exact

@@ -86,12 +86,20 @@ function RequestDetail(props) {
             <Grid item md={12}>
               <Divider />
             </Grid>
-            <Grid item md={12}>
+            <Grid item xs={12} md={6}>
               <div className="label-holder">
-                <label htmlFor="companyName">브랜드명(제품명)</label>
+                <label htmlFor="companyName">업종</label>
               </div>
               <div className="text-holder">
-                {requestData.REQ_BRAND}
+                {requestData.REQ_INDUSTRY}
+              </div>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <div className="label-holder">
+                <label htmlFor="companyName">방문경로</label>
+              </div>
+              <div className="text-holder">
+                {requestData.REQ_VISIT}
               </div>
             </Grid>
             <Grid item md={12}>
@@ -147,7 +155,7 @@ function RequestDetail(props) {
                 {requestData.REQ_OTHER}
               </div>
             </Grid>
-            <Grid container justify="center" item md={12}>
+            {/* <Grid container justify="center" item md={12}>
               <Grid item md={3}>
                 <Button
                   fullWidth
@@ -158,7 +166,7 @@ function RequestDetail(props) {
                   등록
                 </Button>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Grid>
         )}
       </div>

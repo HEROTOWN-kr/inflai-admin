@@ -61,6 +61,7 @@ function CampaignCreate(props) {
   });
   const [campaignEditor, setCampaignEditor] = useState({});
   const [images, setImages] = useState([]);
+  const [dbImages, setDbImages] = useState([]);
 
   const schema = Yup.object().shape({
     influencerCount: Yup.string()
@@ -179,6 +180,8 @@ function CampaignCreate(props) {
         AD_DETAIL,
         AD_PROVIDE
       });
+      if (TB_PHOTO_ADs && TB_PHOTO_ADs.length > 0) setDbImages(TB_PHOTO_ADs);
+
       setValue('campaignName', AD_NAME);
       setValue('type', AD_CTG);
       setValue('subtype', AD_CTG2);
@@ -418,7 +421,7 @@ function CampaignCreate(props) {
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">이미지 업로드</StyledText></Box>
             <Box border="1px solid #0000003b" p={3}>
-              <ImageHolder setValue={setValue} images={images} setImages={setImages} campaignId={campaignId} getCampaignData={getCampaignData} />
+              <ImageHolder setValue={setValue} images={images} setImages={setImages} dbImages={dbImages} setDbImages={setDbImages} campaignId={campaignId} />
             </Box>
           </Grid>
           <Grid item xs={12}>

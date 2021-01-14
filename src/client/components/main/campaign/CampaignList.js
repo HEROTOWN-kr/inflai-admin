@@ -56,6 +56,10 @@ function CampaignList(props) {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
 
+  function toggleDialog() {
+    setDialogOpen(!dialogOpen);
+  }
+
 
   async function getCampaigns() {
     try {
@@ -192,7 +196,7 @@ function CampaignList(props) {
       </Box>
       <ConfirmDialog
         open={dialogOpen}
-        setOpen={setDialogOpen}
+        closeDialog={toggleDialog}
         onConfirm={deleteDbPicture}
         dialogText="삭제하시겠습니까?"
       />
