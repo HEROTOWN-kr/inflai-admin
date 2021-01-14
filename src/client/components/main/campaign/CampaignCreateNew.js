@@ -140,12 +140,11 @@ function CampaignCreateNew() {
           }).then(response => ('sucess')).catch(error => ('error'));
         });
         axios.all(uploaders).then(() => {
-          alert('캠페인이 등록되었습니다!!');
-          // history.push('/Profile/CampaignInfo');
+          history.push('/Campaign/List');
         });
       } else {
         alert('캠페인이 등록되었습니다!!');
-        // history.push('/Profile/CampaignInfo');
+        history.push('/Campaign/List');
       }
     }).catch((error) => {
       alert(error.response.data);

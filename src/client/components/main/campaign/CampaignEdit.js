@@ -185,11 +185,11 @@ function CampaignEdit() {
         });
         axios.all(uploaders).then(() => {
           alert('수정되었습니다!');
-          // history.push('/Profile/CampaignInfo');
+          history.push('/Campaign/List');
         });
       } else {
         alert('수정되었습니다!');
-        // history.push('/Profile/CampaignInfo');
+        history.push('/Campaign/List');
       }
     }).catch((error) => {
       alert(error.response.data);
