@@ -32,6 +32,11 @@ const deliveryTypes = [
   { value: '1', text: '배송상품' },
 ];
 
+const visibleTypes = [
+  { value: '0', text: '대기상태' },
+  { value: '1', text: '노출상태' },
+];
+
 function CampaignEdit() {
   const history = useHistory();
   const params = useParams();
@@ -56,7 +61,9 @@ function CampaignEdit() {
 
   const defaultValues = {
     sns: '',
+    visible: '0',
     delivery: '',
+    detailInfo: '',
     type: 0,
     subtype: 0,
     searchStart: today,
@@ -136,17 +143,17 @@ function CampaignEdit() {
           AD_INF_CNT, AD_SRCH_START, AD_SRCH_END, AD_DELIVERY, AD_CTG,
           AD_CTG2, AD_TEL, AD_EMAIL, AD_NAME, AD_SHRT_DISC, AD_DISC, AD_SEARCH_KEY,
           AD_TYPE, AD_DETAIL, AD_PROVIDE, AD_POST_CODE, AD_ROAD_ADDR,
-          AD_DETAIL_ADDR, AD_EXTR_ADDR, TB_PHOTO_ADs
+          AD_DETAIL_ADDR, AD_EXTR_ADDR, TB_PHOTO_ADs, AD_VISIBLE
         } = data;
-
-        if (AD_DETAIL) setCampaignData({ ...campaignData, AD_DETAIL });
 
         const resetObj = {
           ...defaultValues,
+          visible: AD_VISIBLE,
           influencerCount: AD_INF_CNT,
           searchStart: new Date(AD_SRCH_START),
           searchFinish: new Date(AD_SRCH_END),
           delivery: AD_DELIVERY.toString(),
+          detailInfo: AD_DETAIL,
           type: AD_CTG,
           subtype: AD_CTG2,
           phone: AD_TEL,
@@ -197,12 +204,6 @@ function CampaignEdit() {
   };
 
   useEffect(() => {
-    if (campaignEditor.detailInfo && campaignData.AD_DETAIL) {
-      campaignEditor.detailInfo.data.set(campaignData.AD_DETAIL);
-    }
-  }, [campaignData]);
-
-  useEffect(() => {
     getCampaignData();
   }, []);
 
@@ -226,6 +227,7 @@ function CampaignEdit() {
             errors={errors}
             multiline
             rows={5}
+            rowsMax={10}
             name="shortDisc"
             placeholder="예시) 3단계의 공기청정 기능이 탑재된 휴대용 공기청정기 입니다. 설명이 정확하고 매력적일수록 더 많은 인플루언서의 신청을 받을 수 있습니다"
           />
@@ -298,6 +300,25 @@ function CampaignEdit() {
               </Box>
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Box mb={1}><StyledText color="#3f51b5">캠페인 출력상태</StyledText></Box>
+          <Controller
+            as={(
+              <RadioGroup row aria-label="gender">
+                {visibleTypes.map((item, index) => (
+                  <FormControlLabel
+                    key={item.value}
+                    value={item.value}
+                    control={<Radio />}
+                    label={item.text}
+                  />
+                ))}
+              </RadioGroup>
+              )}
+            name="visible"
+            control={control}
+          />
         </Grid>
         <Grid item xs={12}>
           <Box mb={1}><StyledText color="#3f51b5">제공상품 배송여부</StyledText></Box>

@@ -13,7 +13,8 @@ function CKEditorComponent(props) {
     <div>
       <div id={`${name}_toolbar-container`} />
       <Controller
-        render={controllerProps => (
+        name={name}
+        render={({ onChange, value }) => (
           <CKEditor
             editor={DecoupledEditor}
             config={
@@ -27,17 +28,15 @@ function CKEditorComponent(props) {
             onInit={(editor) => {
               const toolbarContainer = document.querySelector(`#${name}_toolbar-container`);
               toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-              setCampaignEditor({ ...campaignEditor, [name]: editor });
+              // setCampaignEditor({ ...campaignEditor, [name]: editor });
               // window[name] = editor;
             }}
             onChange={(event, editor) => {
-              const data = editor.getData();
-              setValue(name, data);
+              onChange(editor.getData());
             }}
+            data={value}
           />
         )}
-        defaultValue=""
-        name={name}
         control={control}
       />
     </div>
