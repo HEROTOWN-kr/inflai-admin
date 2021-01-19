@@ -87,12 +87,13 @@ function SubscriptionList(props) {
         const {
           SUB_ID, SUB_START_DT, SUB_END_DT, SUB_STATUS, TB_PLAN, TB_ADVERTISER, rowNum
         } = item;
-        const { PLN_NAME } = TB_PLAN;
+        const { PLN_NAME, PLN_MONTH } = TB_PLAN;
         const { ADV_NAME } = TB_ADVERTISER;
         return {
           id: SUB_ID,
           advertiserName: ADV_NAME,
           planName: PLN_NAME,
+          planMonth: PLN_MONTH,
           startDate: SUB_START_DT,
           finishDate: SUB_END_DT,
           status: SUB_STATUS,
@@ -192,7 +193,7 @@ function SubscriptionList(props) {
               itemCount={count}
               page={page}
               changePage={changePage}
-              perPage={5}
+              perPage={10}
             />
           </Grid>
         </Grid>

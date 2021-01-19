@@ -19,9 +19,9 @@ function addMonths(date, months) {
   return date;
 }
 
-function getFinishDate(date) {
+function getFinishDate(date, month) {
   const startDate = new Date(date);
-  const finishDate = addMonths(startDate, 6);
+  const finishDate = addMonths(startDate, month);
   const dd = String(finishDate.getDate()).padStart(2, '0');
   const mm = String(finishDate.getMonth() + 1).padStart(2, '0'); // January is 0!
   const yyyy = finishDate.getFullYear();
@@ -45,7 +45,7 @@ function SubscriptionDialog(props) {
 
   useEffect(() => {
     if (watchStart) {
-      const finishDate = getFinishDate(watchStart);
+      const finishDate = getFinishDate(watchStart, dialogData.planMonth);
       setEndDate(finishDate);
     } else {
       setEndDate('정보 없습니다');
