@@ -62,6 +62,11 @@ function CampaignCreate(props) {
   const [campaignEditor, setCampaignEditor] = useState({});
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
+  const [savingMode, setSavingMode] = useState(false);
+
+  function toggleSavingMode() {
+    setSavingMode(!savingMode);
+  }
 
   const schema = Yup.object().shape({
     influencerCount: Yup.string()

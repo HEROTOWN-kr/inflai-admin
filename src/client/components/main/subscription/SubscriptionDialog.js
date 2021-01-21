@@ -10,45 +10,36 @@ import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
 import StyledSelect from '../../containers/StyledSelect';
 
-function addMonths(date, months) {
-  const d = date.getDate();
-  date.setMonth(date.getMonth() + +months);
-  if (date.getDate() !== d) {
-    date.setDate(0);
-  }
-  return date;
-}
-
 function getFinishDate(date, month) {
   const startDate = new Date(date);
-  const finishDate = addMonths(startDate, month);
-  const dd = String(finishDate.getDate()).padStart(2, '0');
-  const mm = String(finishDate.getMonth() + 1).padStart(2, '0'); // January is 0!
-  const yyyy = finishDate.getFullYear();
-
-  return `${yyyy}/${mm}/${dd}`;
+  return new Date(startDate.setMonth(startDate.getMonth() + month));
 }
+
+const defaultValues = {
+  startDate: new Date(),
+  endDate: new Date(),
+  status: '1'
+};
 
 function SubscriptionDialog(props) {
   const {
     open, handleClose, getSubData, setMessage, subData, selectedId
   } = props;
-  const [endDate, setEndDate] = useState('정보 없습니다');
   const [dialogData, setDialogData] = useState({});
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const {
-    register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues
-  } = useForm();
+    reset, handleSubmit, handleBlur, watch, errors, setValue, control, getValues
+  } = useForm({ defaultValues });
 
   const watchStart = watch('startDate');
 
   useEffect(() => {
     if (watchStart) {
       const finishDate = getFinishDate(watchStart, dialogData.planMonth);
-      setEndDate(finishDate);
+      setValue('endDate', new Date(finishDate));
     } else {
-      setEndDate('정보 없습니다');
+      setValue('endDate', null);
     }
   }, [watchStart]);
 
@@ -58,12 +49,14 @@ function SubscriptionDialog(props) {
   }
 
   const onSubmit = (data) => {
-    const { status, startDate } = data;
+    const { status, startDate, endDate } = data;
+
     const post = {
       id: dialogData.id,
       status,
       startDate,
-      endDate: endDate.replace(/\//g, '-')
+      endDate
+      // endDate: endDate.replace(/\//g, '-')
     };
     axios.post('/api/TB_SUBSCRIPTION/update', post).then((res) => {
       setMessage({ type: 'success', open: true, text: '저장되었습니다' });
@@ -74,15 +67,15 @@ function SubscriptionDialog(props) {
     });
   };
 
-  useEffect(() => {
-    setValue('startDate', dialogData.startDate);
-    setValue('status', dialogData.status);
-  }, [dialogData]);
-
   function onDialogOpen() {
     if (selectedId) {
       const data = subData.filter(item => item.id === selectedId);
       if (data[0]) {
+        reset({
+          startDate: data[0].startDate ? new Date(data[0].startDate) : null,
+          endDate: data[0].finishDate ? new Date(data[0].finishDate) : null,
+          status: data[0].status
+        });
         setDialogData(data[0]);
       }
     }
@@ -119,7 +112,14 @@ function SubscriptionDialog(props) {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">마감 날짜</StyledText></Box>
-            {endDate}
+            <ReactFormDatePicker
+              name="endDate"
+              disabled
+              control={control}
+              setValue={setValue}
+              handleBlur={handleBlur}
+              getValues={getValues}
+            />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">상태</StyledText></Box>
@@ -137,7 +137,6 @@ function SubscriptionDialog(props) {
                       <option value="1">대기</option>
                     </StyledSelect>
                   )}
-                  defaultValue="1"
                   name="status"
                   control={control}
                 />

@@ -14,6 +14,28 @@ import { Formik } from 'formik';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
+import InstaIcon from '../../../img/instagram-icon.png';
+import YoutubeIcon from '../../../img/icon_youtube_url.png';
+import BlogIcon from '../../../img/icon_blog_url.png';
+import StyledImage from '../../containers/StyledImage';
+
+const snsTypes = [
+  {
+    id: 1,
+    icon: InstaIcon,
+    name: 'insta'
+  },
+  {
+    id: 2,
+    icon: YoutubeIcon,
+    name: 'youtube'
+  },
+  {
+    id: 3,
+    icon: BlogIcon,
+    name: 'naver'
+  }
+];
 
 function Influencer(props) {
   const [influencers, setInfluencers] = useState([]);
@@ -34,7 +56,10 @@ function Influencer(props) {
         email: item.INF_EMAIL,
         phoneNumber: item.INF_TEL,
         registerDate: item.INF_DT,
-        social: item.INF_BLOG_TYPE
+        social: item.INF_BLOG_TYPE,
+        insta: item.INS_ID || null,
+        youtube: item.YOU_ID || null,
+        naver: item.NAV_ID || null,
       })
     ));
 
@@ -69,9 +94,10 @@ function Influencer(props) {
             <TableRow>
               <StyledTableCell align="center" width="40px">번호</StyledTableCell>
               <StyledTableCell>이름</StyledTableCell>
-              <StyledTableCell align="right">이메일</StyledTableCell>
-              <StyledTableCell align="right">전화번호</StyledTableCell>
-              <StyledTableCell align="right">소셜</StyledTableCell>
+              <StyledTableCell align="center">이메일</StyledTableCell>
+              <StyledTableCell align="center">전화번호</StyledTableCell>
+              <StyledTableCell align="center">가입방식</StyledTableCell>
+              <StyledTableCell align="center">SNS</StyledTableCell>
               <StyledTableCell align="right">가입일차</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -82,9 +108,24 @@ function Influencer(props) {
                 <StyledTableCell component="th" scope="row">
                   {row.name}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.email}</StyledTableCell>
-                <StyledTableCell align="right">{row.phoneNumber}</StyledTableCell>
-                <StyledTableCell align="right">{row.social}</StyledTableCell>
+                <StyledTableCell align="center">{row.email}</StyledTableCell>
+                <StyledTableCell align="center">{row.phoneNumber}</StyledTableCell>
+                <StyledTableCell align="center">{row.social}</StyledTableCell>
+                <StyledTableCell align="center">
+                  <Grid container spacing={1} justify="center">
+                    {snsTypes.map(item => (
+                      row[item.name] ? (
+                        <Grid key={item.id} item>
+                          <StyledImage
+                            cursor="pointer"
+                            width="20"
+                            height="20"
+                            src={item.icon}
+                          />
+                        </Grid>
+                      ) : null))}
+                  </Grid>
+                </StyledTableCell>
                 <StyledTableCell align="right">{row.registerDate}</StyledTableCell>
               </StyledTableRow>
             ))}
