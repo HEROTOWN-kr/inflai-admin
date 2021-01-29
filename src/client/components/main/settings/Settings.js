@@ -1,19 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box, Button, Grid, TextField
-} from '@material-ui/core';
-import { Formik } from 'formik';
-import axios from 'axios';
-import MyTextField from '../../containers/MyTextField';
-import StyledButton from '../../containers/StyledButton';
-import StyledBackDrop from '../../containers/StyledBackDrop';
+  Route, Switch, Redirect, useRouteMatch
+} from 'react-router-dom';
+import KakaoNotify from './pages/KakaoNotify';
+import NotFound from '../NotFound';
 
 function Settings(props) {
+  const match = useRouteMatch();
   const { setMenuIndicator } = props;
+
   useEffect(() => setMenuIndicator(6), []);
 
   return (
-    <Box />
+    <Switch>
+      <Route
+        path={`${match.url}/KakaoNotify`}
+        render={renderProps => <KakaoNotify {...props} />}
+      />
+      <Route
+        exact
+        path={`${match.url}/`}
+        render={() => (
+          <Redirect to={`${match.url}/KakaoNotify`} />
+        )}
+      />
+      <Route
+        component={NotFound}
+      />
+    </Switch>
   );
 }
 

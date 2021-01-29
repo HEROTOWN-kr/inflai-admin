@@ -55,6 +55,7 @@ function CampaignList(props) {
   const [campaigns, setCampaigns] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
+  const limit = 5;
 
   function toggleDialog() {
     setDialogOpen(!dialogOpen);
@@ -63,7 +64,7 @@ function CampaignList(props) {
 
   async function getCampaigns() {
     try {
-      const response = await axios.get('/api/TB_AD/getAll', { params: { page } });
+      const response = await axios.get('/api/TB_AD/getAll', { params: { page, limit } });
       const { campaignsRes, countRes } = response.data.data;
       const campaignsArray = campaignsRes.map((item) => {
         const {
@@ -140,7 +141,7 @@ function CampaignList(props) {
                     {row.id}
                   </StyledText>
                 </StyledTableCell>
-                <StyledTableCell align="center">
+                <StyledTableCell>
                   <Grid container spacing={2}>
                     <Grid item>
                       <Box
@@ -189,7 +190,7 @@ function CampaignList(props) {
               itemCount={count}
               page={page}
               changePage={changePage}
-              perPage={5}
+              perPage={limit}
             />
           </Grid>
         </Grid>

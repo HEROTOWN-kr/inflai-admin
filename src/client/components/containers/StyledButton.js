@@ -24,10 +24,10 @@ const useStyles = makeStyles({
 
 function StyledButton(props) {
   const {
+    background, border, borderRadius, boxShadow, color, height, padding, hoverBackground,
     className,
     children,
-    onClick,
-    disabledObj,
+    ...rest
   } = props;
   const classes = useStyles(props);
 
@@ -36,8 +36,7 @@ function StyledButton(props) {
       variant="contained"
       fullWidth
       className={`${classes.root} ${className}`}
-      onClick={onClick}
-      disabled={disabledObj}
+      {...rest}
     >
       {children}
     </Button>

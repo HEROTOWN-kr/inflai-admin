@@ -4,8 +4,9 @@ import {
 import React from 'react';
 
 const useStyles = makeStyles({
-  root: ({ backgroundColor }) => ({
+  root: ({ backgroundColor, color }) => ({
     backgroundColor: backgroundColor || 'transparent',
+    cursor: 'pointer',
     '&.Mui-selected': {
       backgroundColor: '#39ca66',
       color: '#fff',

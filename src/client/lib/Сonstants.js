@@ -190,6 +190,7 @@ export const Colors = {
   grey3: '#f5f6f7',
   grey4: '#eaeaea',
   green: '#24d024',
+  disabled: 'rgba(0, 0, 0, 0.26)'
 };
 export const AdvertiseTypes = {
   mainType: ['지역', '제품', '서비스', '가치단'],
