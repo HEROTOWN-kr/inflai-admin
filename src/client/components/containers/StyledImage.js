@@ -15,12 +15,13 @@ const useStyles = makeStyles({
 
 function StyledImage(props) {
   const {
-    className, src
+    width, margin, height, borderRadius,
+    className, ...rest
   } = props;
   const classes = useStyles(props);
 
   return (
-    <img src={src} className={`${classes.common} ${className}`} alt="noImage" />
+    <img className={`${classes.common} ${className}`} alt="noImage" {...rest} />
   );
 }
 

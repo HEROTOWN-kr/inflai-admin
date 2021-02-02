@@ -22,6 +22,8 @@ import StyledText from '../../containers/StyledText';
 import defaultAccountImage from '../../../img/default_account_image.png';
 import StyledLink from '../../containers/StyledLink';
 import ConfirmDialog from '../../containers/ConfirmDialog';
+import ParticipantDialog from './ParticipantDialog';
+import StyledImage from '../../containers/StyledImage';
 
 const tableHeader = [
   {
@@ -30,9 +32,9 @@ const tableHeader = [
     width: '40px'
   },
   {
-    text: '등록번호',
+    text: '아이디',
     align: 'center',
-    width: '40px'
+    width: '50px'
   },
   {
     text: '캠페인정보',
@@ -44,13 +46,15 @@ const tableHeader = [
   },
   {
     text: '관리자툴',
-    align: 'center'
+    align: 'center',
+    width: '100px'
   }
 ];
 
 function CampaignList(props) {
   const { history, match } = props;
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [participantDialog, setParticipantDialog] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(0);
   const [campaigns, setCampaigns] = useState([]);
   const [count, setCount] = useState(0);
@@ -59,6 +63,10 @@ function CampaignList(props) {
 
   function toggleDialog() {
     setDialogOpen(!dialogOpen);
+  }
+
+  function toggleParticipantDialog() {
+    setParticipantDialog(!participantDialog);
   }
 
 
@@ -142,25 +150,39 @@ function CampaignList(props) {
                   </StyledText>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <Grid container spacing={2}>
-                    <Grid item>
-                      <Box
-                        width="100px"
-                        height="100px"
-                        alt="noFoto"
-                        onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
+                  <Grid container>
+                    <Grid item xs="auto">
+                      <StyledImage
+                        width="80"
+                        height="80"
                         src={row.photo.length > 0 ? row.photo[0].PHO_FILE : defaultAccountImage}
-                        component="img"
+                        onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
                       />
                     </Grid>
-                    <Grid item>
-                      <Box py={1}>
-                        <StyledText fontSize="14px" color="#222">
-                          {row.campaignName}
-                        </StyledText>
-                        <StyledText fontSize="14px" color="#222">
-                          {`${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
-                        </StyledText>
+                    <Grid item xs>
+                      <Box ml="14px" height="100%">
+                        <Grid container direction="column" justify="space-between" style={{ height: '100%' }}>
+                          <Grid item>
+                            <StyledText fontSize="14px" color="#222">
+                              {row.campaignName}
+                            </StyledText>
+                            <StyledText fontSize="14px" color="#222">
+                              {`${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
+                            </StyledText>
+                          </Grid>
+                          <Grid item>
+                            <Box width="70px">
+                              <StyledButton
+                                onClick={() => history.push(`/Campaign/Participant/${row.id}`)}
+                                padding="0"
+                                height="26px"
+                                fontSize="0.790rem"
+                              >
+                                신청자
+                              </StyledButton>
+                            </Box>
+                          </Grid>
+                        </Grid>
                       </Box>
                     </Grid>
                   </Grid>
@@ -195,6 +217,10 @@ function CampaignList(props) {
           </Grid>
         </Grid>
       </Box>
+      <ParticipantDialog
+        open={participantDialog}
+        closeDialog={toggleParticipantDialog}
+      />
       <ConfirmDialog
         open={dialogOpen}
         closeDialog={toggleDialog}
