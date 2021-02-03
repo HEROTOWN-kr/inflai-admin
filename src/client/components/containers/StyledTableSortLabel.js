@@ -22,18 +22,12 @@ const useStyles = makeStyles({
 
 function StyledTableSortLabel(props) {
   const {
-    className, children, align, active, direction, id, sortTable
+    color, children, ...rest
   } = props;
   const classes = useStyles(props);
 
   return (
-    <TableSortLabel
-      classes={classes}
-      className={className}
-      active={active}
-      direction={direction}
-      onClick={() => sortTable(id)}
-    >
+    <TableSortLabel classes={classes} {...rest}>
       {children}
     </TableSortLabel>
   );

@@ -76,10 +76,11 @@ function CampaignList(props) {
       const { campaignsRes, countRes } = response.data.data;
       const campaignsArray = campaignsRes.map((item) => {
         const {
-          AD_ID, AD_NAME, AD_CTG, AD_CTG2, AD_DT, TB_PHOTO_ADs, rownum
+          AD_ID, AD_NAME, AD_CTG, AD_CTG2, AD_DT, TB_PHOTO_ADs, AD_TYPE, rownum
         } = item;
         return {
           id: AD_ID,
+          type: AD_TYPE,
           campaignName: AD_NAME,
           category: AD_CTG,
           subcategory: AD_CTG2,
@@ -106,6 +107,14 @@ function CampaignList(props) {
 
   function campaignDetail(event, id) {
     history.push(`${props.match.path}/${id}`);
+  }
+
+  function campaignParticipant(id, type) {
+    if (type === '1') {
+      history.push(`/Campaign/ParInsta/${id}`);
+    } else if (type === '3') {
+      history.push(`/Campaign/ParBlog/${id}`);
+    }
   }
 
   useEffect(() => {
@@ -161,19 +170,28 @@ function CampaignList(props) {
                     </Grid>
                     <Grid item xs>
                       <Box ml="14px" height="100%">
-                        <Grid container direction="column" justify="space-between" style={{ height: '100%' }}>
-                          <Grid item>
+                        <Grid container alignContent="space-between" style={{ height: '100%' }}>
+                          <Grid item xs={12}>
                             <StyledText fontSize="14px" color="#222">
                               {row.campaignName}
                             </StyledText>
                             <StyledText fontSize="14px" color="#222">
-                              {`${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
+                              {row.type === '1' ? (
+                                <span style={{ color: Colors.pink, fontWeight: '600' }}>Instagram</span>
+                              ) : null}
+                              {row.type === '2' ? (
+                                <span style={{ color: Colors.red, fontWeight: '600' }}>Youtube</span>
+                              ) : null}
+                              {row.type === '3' ? (
+                                <span style={{ color: Colors.green, fontWeight: '600' }}>Blog</span>
+                              ) : null}
+                              {` ${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
                             </StyledText>
                           </Grid>
-                          <Grid item>
+                          <Grid item xs={12}>
                             <Box width="70px">
                               <StyledButton
-                                onClick={() => history.push(`/Campaign/Participant/${row.id}`)}
+                                onClick={() => campaignParticipant(row.id, row.type)}
                                 padding="0"
                                 height="26px"
                                 fontSize="0.790rem"

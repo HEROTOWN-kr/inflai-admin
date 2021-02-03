@@ -11,7 +11,8 @@ import RequestList from '../request/RequestList';
 import RequestDetail from '../request/RequestDetail';
 import CampaignCreateNew from './CampaignCreateNew';
 import CampaignEdit from './CampaignEdit';
-import CampaignParticipant from './CampaignParticipant';
+import CampaignParInsta from './CampaignParInsta';
+import CampaignParBlog from './CampaignParBlog';
 
 function Campaign(props) {
   const { setMenuIndicator, history, match } = props;
@@ -56,8 +57,13 @@ function Campaign(props) {
         />
         <Route
           exact
-          path={`${match.path}/Participant/:id`}
-          render={renderProps => <CampaignParticipant {...renderProps} />}
+          path={`${match.path}/ParInsta/:id`}
+          render={renderProps => <CampaignParInsta {...renderProps} />}
+        />
+        <Route
+          exact
+          path={`${match.path}/ParBlog/:id`}
+          render={renderProps => <CampaignParBlog {...renderProps} />}
         />
         <Route
           exact

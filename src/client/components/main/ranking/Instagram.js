@@ -372,7 +372,7 @@ function Instagram(props) {
                                   color="#66f8ff"
                                   active={order.orderBy === item.id}
                                   direction={order.orderBy === item.id ? order.direction : 'desc'}
-                                  sortTable={sortTable}
+                                  onClick={() => sortTable(item.id)}
                                 >
                                   {item.text}
                                 </StyledTableSortLabel>

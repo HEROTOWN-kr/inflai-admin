@@ -2,29 +2,21 @@ import React from 'react';
 import { Link, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles({
-  root: ({
-    color
-  }) => ({
+  colorPrimary: ({ color }) => ({
     color: color || '#555'
-    /* '&.MuiTypography-colorPrimary': {
-      color: '#555'
-    } */
   }),
 });
 
 function StyledLink(props) {
-  const {
-    className, href, target, children
-  } = props;
+  const { children, color, ...rest } = props;
   const classes = useStyles(props);
 
   return (
     <Link
-      classes={classes}
       rel="noopener"
-      href={href}
-      target={target}
       underline="none"
+      TypographyClasses={{ ...classes }}
+      {...rest}
     >
       {children}
     </Link>
