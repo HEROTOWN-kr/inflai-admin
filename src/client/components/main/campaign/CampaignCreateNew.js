@@ -72,6 +72,8 @@ function CampaignCreateNew() {
     subtype: 0,
     searchStart: today,
     searchFinish: tomorrow,
+    selectStart: today,
+    selectFinish: tomorrow,
     phone: '',
     email: ''
   };
@@ -116,7 +118,7 @@ function CampaignCreateNew() {
     defaultValues
   });
 
-  const watchObj = watch(['type', 'delivery', 'searchStart', 'shortDisc', 'influencerCount']);
+  const watchObj = watch(['type', 'delivery', 'searchStart', 'searchFinish', 'shortDisc', 'influencerCount']);
 
   useEffect(() => {
     if (watchObj.delivery === '1') {
@@ -127,13 +129,22 @@ function CampaignCreateNew() {
   }, [watchObj.delivery]);
 
   useEffect(() => {
-    const minDate = new Date(watchObj.searchStart);
+    const selectStart = new Date(watchObj.searchFinish);
+    selectStart.setDate(selectStart.getDate() + 1);
+    const selectFinish = new Date(selectStart);
+    selectFinish.setDate(selectFinish.getDate() + 6);
+    setValue('selectStart', selectStart);
+    setValue('selectFinish', selectFinish);
+  }, [watchObj.searchFinish]);
+
+  function onSearchStartChange(date) {
+    const minDate = new Date(date);
     minDate.setDate(minDate.getDate() + 1);
     const maxDate = new Date(minDate);
     maxDate.setDate(maxDate.getDate() + 6);
     setValue('searchFinish', minDate);
     setPickerDates({ min: minDate, max: maxDate });
-  }, [watchObj.searchStart]);
+  }
 
   const onSubmit = async (data) => {
     setSavingMode(true);
@@ -241,6 +252,7 @@ function CampaignCreateNew() {
                 <ReactFormDatePicker
                   name="searchStart"
                   control={control}
+                  onAccept={onSearchStartChange}
                   // disablePast
                 />
               </Box>
@@ -253,6 +265,34 @@ function CampaignCreateNew() {
                   control={control}
                   minDate={pickerDates.min}
                   // maxDate={pickerDates.max}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Box mb={1}>
+            <StyledText color="#3f51b5">
+              인플루언서 발표기간
+            </StyledText>
+          </Box>
+          <Grid container spacing={isSM ? 3 : 1} alignItems="center">
+            <Grid item xs sm="auto">
+              <Box width={isSM ? '250px' : '100%'}>
+                <ReactFormDatePicker
+                  name="selectStart"
+                  disabled
+                  control={control}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={1} sm="auto"><Box textAlign="center">~</Box></Grid>
+            <Grid item xs sm="auto">
+              <Box width={isSM ? '250px' : '100%'}>
+                <ReactFormDatePicker
+                  name="selectFinish"
+                  disabled
+                  control={control}
                 />
               </Box>
             </Grid>
