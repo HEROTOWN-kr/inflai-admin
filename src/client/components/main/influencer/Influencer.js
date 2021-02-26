@@ -118,8 +118,8 @@ function Influencer(props) {
                         <Grid key={item.id} item>
                           <StyledImage
                             cursor="pointer"
-                            width="20"
-                            height="20"
+                            width="20px"
+                            height="20px"
                             src={item.icon}
                           />
                         </Grid>

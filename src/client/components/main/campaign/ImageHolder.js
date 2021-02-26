@@ -169,8 +169,8 @@ function ImageHolder(props) {
                     <Grid item key={item.PHO_ID}>
                       <div style={{ position: 'relative' }}>
                         <StyledImage
-                          width="130"
-                          height="130"
+                          width="130px"
+                          height="130px"
                           borderRadius="12px"
                           src={item.PHO_FILE}
                         />
@@ -196,8 +196,8 @@ function ImageHolder(props) {
               <Grid item key={item.id}>
                 <div style={{ position: 'relative' }}>
                   <StyledImage
-                    width="130"
-                    height="130"
+                    width="130px"
+                    height="130px"
                     borderRadius="12px"
                     src={item.url}
                   />

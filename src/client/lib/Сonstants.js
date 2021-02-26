@@ -189,6 +189,10 @@ export const Colors = {
   grey2: '#999999',
   grey3: '#f5f6f7',
   grey4: '#eaeaea',
+  grey5: '#a8a8a8',
+  grey6: '#efefef',
+  grey7: '#e9e9e9',
+  grey8: '#ddd',
   green: '#24d024',
   pink: '#eb128c',
   disabled: 'rgba(0, 0, 0, 0.26)'

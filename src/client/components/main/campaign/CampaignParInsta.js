@@ -10,6 +10,10 @@ import StyledText from '../../containers/StyledText';
 import MyPagination from '../../containers/MyPagination';
 import StyledLink from '../../containers/StyledLink';
 import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
+import StyledButton from '../../containers/StyledButton';
+import { Colors } from '../../../lib/Сonstants';
+import InsightDialog from './InsightDialog';
+import ConfirmDialog from '../../containers/ConfirmDialog';
 
 const tableHeader = [
   {
@@ -50,18 +54,38 @@ const tableHeader = [
     align: 'center',
     width: '100px',
     colName: 'INS_RANK',
+  },
+  {
+    text: '분석',
+    align: 'center',
+    width: '50px',
+  },
+  {
+    text: '선정',
+    align: 'center',
+    width: '50px',
   }
 ];
 
 function CampaignParInsta() {
   const [participants, setParticipants] = useState([]);
   const [count, setCount] = useState(0);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(0);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState({ orderBy: 'INS_FLWR', direction: 'desc' });
   const params = useParams();
-  const history = useHistory();
   const adId = params.id;
   const limit = 10;
+
+  function toggleDialog() {
+    setDialogOpen(!dialogOpen);
+  }
+
+  function toggleConfirmDialog() {
+    setConfirmDialogOpen(!confirmDialogOpen);
+  }
 
   function getParticipants() {
     axios.get('/api/TB_PARTICIPANT/getListInsta', {
@@ -83,11 +107,32 @@ function CampaignParInsta() {
   };
 
   function sortTable(id) {
-    const isDesc = order.orderBy === id && order.direction === 'desc';
+    let isDesc = order.orderBy === id && order.direction === 'desc';
+    if (order.orderBy !== 'INS_RANK' && id === 'INS_RANK') isDesc = true;
     setOrder({
       orderBy: id,
       direction: isDesc ? 'asc' : 'desc'
     });
+  }
+
+  function selectParticipant() {
+    axios.post('/api/TB_PARTICIPANT/change', { adId, participantId: selectedId }).then((res) => {
+      if (res.status === 201) {
+        alert(res.data.message);
+      } else {
+        getParticipants();
+      }
+    }).catch(err => alert(err.response.data.message));
+  }
+
+  function clickInfo(id) {
+    setSelectedId(id);
+    toggleDialog();
+  }
+
+  function clickSelect(id) {
+    setSelectedId(id);
+    toggleConfirmDialog();
   }
 
   return (
@@ -165,6 +210,30 @@ function CampaignParInsta() {
                   {row.INS_RANK || '-'}
                 </StyledText>
               </StyledTableCell>
+              <StyledTableCell align="center">
+                <StyledButton
+                  height="25px"
+                  padding="0px 5px"
+                  onClick={() => clickInfo(row.INF_ID)}
+                >
+                  분석
+                </StyledButton>
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {row.PAR_STATUS === '1' ? (
+                  <StyledButton
+                    background={Colors.green}
+                    hoverBackground={Colors.greenHover}
+                    height="25px"
+                    padding="0px 5px"
+                    onClick={() => clickSelect(row.PAR_ID)}
+                  >
+                      선정
+                  </StyledButton>
+                ) : (
+                  <StyledText color={Colors.green}>선정됨</StyledText>
+                )}
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
@@ -181,6 +250,13 @@ function CampaignParInsta() {
           </Grid>
         </Grid>
       </Box>
+      <InsightDialog open={dialogOpen} closeDialog={toggleDialog} selectedId={selectedId} />
+      <ConfirmDialog
+        open={confirmDialogOpen}
+        closeDialog={toggleConfirmDialog}
+        dialogText="선정하시겠습니까?"
+        onConfirm={selectParticipant}
+      />
     </Box>
   );
 }

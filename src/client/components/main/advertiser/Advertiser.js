@@ -89,8 +89,8 @@ function Advertiser(props) {
                   <Grid container spacing={1} alignItems="center">
                     <Grid item>
                       <StyledImage
-                        width="40"
-                        height="40"
+                        width="40px"
+                        height="40px"
                         borderRadius="100%"
                         src={row.photo || defaultAccountImage}
                       />

@@ -162,8 +162,8 @@ function CampaignList(props) {
                   <Grid container>
                     <Grid item xs="auto">
                       <StyledImage
-                        width="80"
-                        height="80"
+                        width="80px"
+                        height="80px"
                         src={row.photo.length > 0 ? row.photo[0].PHO_FILE : defaultAccountImage}
                         onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
                       />
