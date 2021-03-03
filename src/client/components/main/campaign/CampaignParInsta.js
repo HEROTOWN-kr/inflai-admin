@@ -45,7 +45,7 @@ const tableHeader = [
     colName: 'INS_CMNT',
   },
   {
-    text: '점수',
+    text: 'AI 종합 점수',
     align: 'center',
     colName: 'INS_SCORE',
   },
@@ -62,6 +62,11 @@ const tableHeader = [
   },
   {
     text: '선정',
+    align: 'center',
+    width: '50px',
+  },
+  {
+    text: '리뷰',
     align: 'center',
     width: '50px',
   }
@@ -233,6 +238,19 @@ function CampaignParInsta() {
                 ) : (
                   <StyledText color={Colors.green}>선정됨</StyledText>
                 )}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {row.PAR_REVIEW ? (
+                  <StyledButton
+                    background={Colors.green}
+                    hoverBackground={Colors.greenHover}
+                    height="25px"
+                    padding="0px 5px"
+                    onClick={() => window.open(row.PAR_REVIEW, '_blank')}
+                  >
+                      링크
+                  </StyledButton>
+                ) : null}
               </StyledTableCell>
             </StyledTableRow>
           ))}

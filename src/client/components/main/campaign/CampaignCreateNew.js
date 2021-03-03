@@ -3,14 +3,14 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import {
-  Box, Grid, Paper, FormControlLabel, Checkbox, RadioGroup, Radio, TextareaAutosize
+  Box, Grid, Paper, FormControlLabel, RadioGroup, Radio, InputAdornment
 } from '@material-ui/core';
 import { useForm, Controller, get } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
 import ReactFormText from '../../containers/ReactFormText';
@@ -38,12 +38,26 @@ const visibleTypes = [
   { value: '1', text: '노출상태' },
 ];
 
+const useStyles = makeStyles({
+  endAdornment: {
+    // padding: '0'
+  },
+  input: {
+    padding: '15px 14px',
+    textAlign: 'right',
+    paddingRight: '2px'
+  },
+  positionEnd: {
+    margin: '0'
+  }
+});
+
 function CampaignCreateNew() {
   const history = useHistory();
-  const [campaignEditor, setCampaignEditor] = useState({});
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
   const [savingMode, setSavingMode] = useState(false);
+  const classes = useStyles();
 
   function toggleSavingMode() {
     setSavingMode(!savingMode);
@@ -75,7 +89,9 @@ function CampaignCreateNew() {
     selectStart: today,
     selectFinish: tomorrow,
     phone: '',
-    email: ''
+    email: '',
+    provideInfo: '',
+    provideMoney: '',
   };
 
   Yup.addMethod(Yup.string, 'integerString', function () {
@@ -103,6 +119,14 @@ function CampaignCreateNew() {
     email: Yup.string().required('이메일을 입력해주세요').email('잘못된 이메일 형식입니다'),
     searchKeyword: Yup.string().required('필수키워드를 입력해주세요'),
     discription: Yup.string().required('포스팅가이드를 입력해주세요'),
+    provideInfo: Yup.string().required('제공내역을 입력해주세요'),
+    provideMoney: Yup.string().notRequired().test('provideMoney', '숫자 입력만 가능합니다', (value) => {
+      if (value) {
+        const moneySchema = Yup.string().integerString();
+        return moneySchema.isValidSync(value);
+      }
+      return true;
+    }),
     picArray: Yup.string()
       .test('picCheck', '이미지 업러드 해주세요', val => images.length > 0 || dbImages.length > 0)
       .test('picLength', '이미지 5개만 업러드 가능합니다', val => (images.length + dbImages.length) < 6),
@@ -226,11 +250,9 @@ function CampaignCreateNew() {
             name="sns"
             control={control}
           />
-          {
-            errors.sns ? (
-              <div className="error-message">{errors.sns.message}</div>
-            ) : null
-          }
+          { errors.sns ? (
+            <div className="error-message">{errors.sns.message}</div>
+          ) : null }
         </Grid>
         <Grid item xs={12}>
           <Box mb={1}>
@@ -412,14 +434,43 @@ function CampaignCreateNew() {
           />
         </Grid>
         <Grid item xs={12}>
-          <Box mb={1}><StyledText color="#3f51b5">제공내역 (선택)</StyledText></Box>
+          <Box mb={1}><StyledText color="#3f51b5">제공내역 (필수)</StyledText></Box>
           <ReactFormText
             register={register}
             errors={errors}
             multiline
             rows={5}
             name="provideInfo"
+            placeholder="예시) 시가 12만원 상당 스틱형벌꿀 1박스"
           />
+        </Grid>
+        <Grid item xs={12}>
+          <Box mb={1}><StyledText color="#3f51b5">추가 제공금액 (선택)</StyledText></Box>
+          <Grid container spacing={1} alignItems="center">
+            <Grid item xs={12} md="auto">
+              <Box width={{ xs: '100%', md: '200px' }}>
+                <ReactFormText
+                  register={register}
+                  errors={errors}
+                  name="provideMoney"
+                  placeholder=""
+                  InputProps={{
+                    endAdornment: <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>원</InputAdornment>,
+                    classes: {
+                      adornedEnd: classes.endAdornment,
+                      input: classes.input
+                    }
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} md>
+              <Box fontSize="14px">
+                제공하는 물품(서비스)의 시가가 낮은 경우 인플루언서 모집이 원활하지 않을 수 있습니다.
+                이럴 때 추가적인 금액을 제공해 주시면 더 좋은 인플루언서가 신청할 가능성이 커집니다.
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <Box mb={1}>
