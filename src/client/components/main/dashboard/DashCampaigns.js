@@ -57,7 +57,7 @@ function DashCampaigns(props) {
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center" width="40px">번호</StyledTableCell>
+              <StyledTableCell align="center" width="60px">번호</StyledTableCell>
               <StyledTableCell>이름</StyledTableCell>
               <StyledTableCell align="right">카테고리</StyledTableCell>
               <StyledTableCell align="right">등록일차</StyledTableCell>

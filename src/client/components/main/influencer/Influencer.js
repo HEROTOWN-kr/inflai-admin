@@ -92,7 +92,7 @@ function Influencer(props) {
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center" width="40px">번호</StyledTableCell>
+              <StyledTableCell align="center" width="90px">번호</StyledTableCell>
               <StyledTableCell>이름</StyledTableCell>
               <StyledTableCell align="center">이메일</StyledTableCell>
               <StyledTableCell align="center">전화번호</StyledTableCell>

@@ -19,7 +19,7 @@ const tableHeader = [
   {
     text: '번호',
     align: 'center',
-    width: '40px'
+    width: '60px'
   },
   {
     text: '이름',

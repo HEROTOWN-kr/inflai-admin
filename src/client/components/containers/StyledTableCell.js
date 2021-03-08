@@ -3,6 +3,7 @@ import React from 'react';
 
 const useStyles = makeStyles({
   root: ({ padding }) => ({
+    boxSizing: 'border-box',
     padding: padding || '10px'
   }),
   head: ({ backgroundColor, color, width }) => ({

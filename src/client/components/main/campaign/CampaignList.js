@@ -29,7 +29,7 @@ const tableHeader = [
   {
     text: '번호',
     align: 'center',
-    width: '40px'
+    width: '60px'
   },
   {
     text: '아이디',
@@ -47,7 +47,7 @@ const tableHeader = [
   {
     text: '관리자툴',
     align: 'center',
-    width: '100px'
+    width: '120px'
   }
 ];
 

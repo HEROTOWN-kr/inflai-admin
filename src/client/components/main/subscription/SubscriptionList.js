@@ -19,7 +19,7 @@ const tableRows = [
     id: '',
     text: '#',
     align: 'center',
-    width: '40px'
+    width: '60px'
   },
   {
     id: 'ADV_NAME',
@@ -30,6 +30,11 @@ const tableRows = [
     id: 'PLN_NAME',
     text: '플랜',
     align: 'left'
+  },
+  {
+    id: 'PLN_PRICE_MONTH',
+    text: '요금',
+    align: 'center'
   },
   {
     id: 'PLN_START_DATE',
@@ -47,8 +52,9 @@ const tableRows = [
     align: 'left'
   },
   {
-    text: '괄리자툴',
-    align: 'left'
+    text: '관리자툴',
+    align: 'left',
+    width: '120px'
   },
 ];
 
@@ -87,12 +93,13 @@ function SubscriptionList(props) {
         const {
           SUB_ID, SUB_START_DT, SUB_END_DT, SUB_STATUS, TB_PLAN, TB_ADVERTISER, rowNum
         } = item;
-        const { PLN_NAME, PLN_MONTH } = TB_PLAN;
+        const { PLN_NAME, PLN_MONTH, PLN_PRICE_MONTH } = TB_PLAN;
         const { ADV_NAME } = TB_ADVERTISER;
         return {
           id: SUB_ID,
           advertiserName: ADV_NAME,
           planName: PLN_NAME,
+          planPriceMonth: PLN_PRICE_MONTH,
           planMonth: PLN_MONTH,
           startDate: SUB_START_DT,
           finishDate: SUB_END_DT,
@@ -137,18 +144,16 @@ function SubscriptionList(props) {
       <Table aria-label="customized table">
         <TableHead>
           <TableRow>
-            {
-              tableRows.map(item => (
-                <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
-                  <StyledText
-                    color="#ffffff"
-                    textAlign="center"
-                  >
-                    {item.text}
-                  </StyledText>
-                </StyledTableCell>
-              ))
-            }
+            { tableRows.map(item => (
+              <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
+                <StyledText
+                  color="#ffffff"
+                  textAlign="center"
+                >
+                  {item.text}
+                </StyledText>
+              </StyledTableCell>
+            )) }
           </TableRow>
         </TableHead>
         <TableBody>
@@ -162,6 +167,9 @@ function SubscriptionList(props) {
               </StyledTableCell>
               <StyledTableCell align="center">
                 {item.planName}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {item.planPriceMonth}
               </StyledTableCell>
               <StyledTableCell align="center">
                 {item.startDate || '-'}

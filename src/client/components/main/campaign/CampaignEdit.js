@@ -55,6 +55,7 @@ const useStyles = makeStyles({
 function CampaignEdit() {
   const history = useHistory();
   const params = useParams();
+  const [dbVisible, setDbVisible] = useState('');
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
   const [savingMode, setSavingMode] = useState(false);
@@ -218,13 +219,16 @@ function CampaignEdit() {
         if (TB_PHOTO_ADs && TB_PHOTO_ADs.length > 0) setDbImages(TB_PHOTO_ADs);
 
         reset(resetObj);
+        setDbVisible(AD_VISIBLE);
       }
     });
   }
 
   const onSubmit = async (data) => {
     setSavingMode(true);
-    axios.post('/api/TB_AD/updateAdmin', { ...data, adId: params.id }).then((res) => {
+    const post = { ...data, adId: params.id };
+    if (dbVisible === '0' && data.visible === '1') post.visibilityChanged = true;
+    axios.post('/api/TB_AD/updateAdmin', post).then((res) => {
       if (images.length > 0) {
         const { id } = params;
         const uploaders = images.map((item) => {
