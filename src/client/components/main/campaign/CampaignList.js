@@ -97,7 +97,7 @@ function CampaignList(props) {
   }
 
   function deleteDbPicture() {
-    axios.post('/api/TB_AD/delete', { id: selectedCampaign }).then((res) => {
+    axios.post('/api/TB_AD/deleteAWS', { id: selectedCampaign }).then((res) => {
       setSelectedCampaign(0);
       getCampaigns();
     }).catch((err) => {
@@ -164,7 +164,7 @@ function CampaignList(props) {
                       <StyledImage
                         width="80px"
                         height="80px"
-                        src={row.photo.length > 0 ? row.photo[0].PHO_FILE : defaultAccountImage}
+                        src={row.photo.length > 0 ? row.photo[0].PHO_FILE_URL : defaultAccountImage}
                         onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
                       />
                     </Grid>
