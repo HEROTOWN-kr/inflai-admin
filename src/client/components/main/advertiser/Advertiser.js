@@ -32,7 +32,7 @@ function Advertiser(props) {
         id: item.ADV_ID,
         rownum: item.rownum,
         name: item.ADV_NAME,
-        photo: item.ADV_PHOTO,
+        photo: item.ADV_PHOTO_URL,
         email: item.ADV_EMAIL,
         phoneNumber: item.ADV_TEL,
         companyName: item.ADV_COM_NAME,
