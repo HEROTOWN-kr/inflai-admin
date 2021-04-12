@@ -9,7 +9,7 @@ function Settings(props) {
   const match = useRouteMatch();
   const { setMenuIndicator } = props;
 
-  useEffect(() => setMenuIndicator(6), []);
+  useEffect(() => setMenuIndicator(7), []);
 
   return (
     <Switch>

@@ -12,6 +12,7 @@ import Campaign from './campaign/Campaign';
 import Navbar from './navbar/Navbar';
 import Settings from './settings/Settings';
 import Subscription from './subscription/Subscription';
+import Payment from './payment/Payment';
 
 function Main(props) {
   const [pageIndicator, setPageIndicator] = useState(0);
@@ -45,10 +46,13 @@ function Main(props) {
             path="/Ranking"
             render={renderProps => <Ranking {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
-
           <Route
             path="/Subscription"
             render={renderProps => <Subscription {...renderProps} setMenuIndicator={setMenuIndicator} />}
+          />
+          <Route
+            path="/Payment"
+            render={renderProps => <Payment {...renderProps} setMenuIndicator={setMenuIndicator} />}
           />
           <Route
             path="/Settings"

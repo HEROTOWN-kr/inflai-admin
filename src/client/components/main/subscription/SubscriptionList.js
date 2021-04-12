@@ -27,6 +27,16 @@ const tableRows = [
     align: 'left',
   },
   {
+    id: 'ADV_EMAIL',
+    text: '이메일',
+    align: 'left',
+  },
+  {
+    id: 'ADV_TEL',
+    text: '전화번호',
+    align: 'left',
+  },
+  {
     id: 'PLN_NAME',
     text: '플랜',
     align: 'left'
@@ -91,13 +101,15 @@ function SubscriptionList(props) {
       const { data, countRes } = res.data;
       const subscribeArray = data.map((item) => {
         const {
-          SUB_ID, SUB_START_DT, SUB_END_DT, SUB_STATUS, TB_PLAN, TB_ADVERTISER, rowNum
+          SUB_ID, SUB_START_DT, SUB_END_DT, SUB_STATUS, PLN_NAME, PLN_MONTH, PLN_PRICE_MONTH,
+          ADV_NAME, ADV_EMAIL, ADV_TEL, rowNum
         } = item;
-        const { PLN_NAME, PLN_MONTH, PLN_PRICE_MONTH } = TB_PLAN;
-        const { ADV_NAME } = TB_ADVERTISER;
+
         return {
           id: SUB_ID,
           advertiserName: ADV_NAME,
+          advertiserEmail: ADV_EMAIL,
+          advertiserTel: ADV_TEL,
           planName: PLN_NAME,
           planPriceMonth: PLN_PRICE_MONTH,
           planMonth: PLN_MONTH,
@@ -109,7 +121,6 @@ function SubscriptionList(props) {
       });
       setSubscribeData(subscribeArray);
       setCount(countRes);
-      // console.log(subscribeArray);
     }).catch(err => alert(err));
   }
 
@@ -164,6 +175,12 @@ function SubscriptionList(props) {
               </StyledTableCell>
               <StyledTableCell align="center">
                 {item.advertiserName}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {item.advertiserEmail}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {item.advertiserTel}
               </StyledTableCell>
               <StyledTableCell align="center">
                 {item.planName}
