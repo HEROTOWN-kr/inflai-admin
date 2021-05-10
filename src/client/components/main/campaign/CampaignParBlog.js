@@ -18,23 +18,38 @@ const tableHeader = [
   {
     text: '번호',
     align: 'center',
-    width: '60px'
+    width: '40px'
   },
   {
     text: '이름',
-    align: 'center'
+    align: 'center',
+    width: '100px'
   },
   {
-    text: '블로그주소',
-    align: 'center'
+    text: '방문자(평균)',
+    align: 'center',
+    width: '80px',
+    colName: 'NAV_GUEST_AVG'
   },
   {
-    text: '선정',
+    text: '이웃',
+    align: 'center',
+    width: '80px',
+    colName: 'NAV_FLWR'
+  },
+  {
+    text: '게시물',
+    align: 'center',
+    width: '80px',
+    colName: 'NAV_CONT'
+  },
+  {
+    text: '블로그',
     align: 'center',
     width: '50px',
   },
   {
-    text: '리뷰',
+    text: '선정',
     align: 'center',
     width: '50px',
   }
@@ -46,6 +61,7 @@ function CampaignParBlog() {
   const [page, setPage] = useState(1);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(0);
+  const [order, setOrder] = useState({ orderBy: 'NAV_FLWR', direction: 'desc' });
   const params = useParams();
   const adId = params.id;
   const limit = 10;
@@ -56,7 +72,9 @@ function CampaignParBlog() {
 
   function getParticipants() {
     axios.get('/api/TB_PARTICIPANT/getListBlog', {
-      params: { adId, limit, page }
+      params: {
+        ...order, adId, limit, page
+      }
     }).then((res) => {
       setParticipants(res.data.data);
       setCount(res.data.count);
@@ -75,11 +93,20 @@ function CampaignParBlog() {
 
   useEffect(() => {
     getParticipants();
-  }, [page]);
+  }, [order, page]);
 
   const changePage = (event, value) => {
     setPage(value);
   };
+
+  function sortTable(id) {
+    const isDesc = order.orderBy === id && order.direction === 'desc';
+    setPage(1);
+    setOrder({
+      orderBy: id,
+      direction: isDesc ? 'asc' : 'desc'
+    });
+  }
 
   function clickSelect(id) {
     setSelectedId(id);
@@ -95,7 +122,16 @@ function CampaignParBlog() {
               <TableRow>
                 {tableHeader.map(item => (
                   <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
-                    {item.text}
+                    {item.colName ? (
+                      <StyledTableSortLabel
+                        color="#66f8ff"
+                        active={order.orderBy === item.colName}
+                        direction={order.orderBy === item.colName ? order.direction : 'desc'}
+                        onClick={() => sortTable(item.colName)}
+                      >
+                        {item.text}
+                      </StyledTableSortLabel>
+                    ) : item.text}
                   </StyledTableCell>
                 ))}
               </TableRow>
@@ -118,13 +154,31 @@ function CampaignParBlog() {
                     </StyledText>
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {row.NAV_URL ? (
-                      <StyledLink
-                        href={row.NAV_URL}
-                        target="_blank"
+                    <StyledText textAlign="center">
+                      {row.NAV_GUEST_AVG || '-'}
+                    </StyledText>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <StyledText textAlign="center">
+                      {row.NAV_FLWR || '-'}
+                    </StyledText>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <StyledText textAlign="center">
+                      {row.NAV_CONT || '-'}
+                    </StyledText>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.NAV_BLOG_ID ? (
+                      <StyledButton
+                        background={Colors.green}
+                        hoverBackground={Colors.greenHover}
+                        height="25px"
+                        padding="0px 5px"
+                        onClick={() => window.open(`https://blog.naver.com/${row.NAV_BLOG_ID}`, '_blank')}
                       >
-                        {`@${row.NAV_URL}`}
-                      </StyledLink>
+                            링크
+                      </StyledButton>
                     ) : (
                       <StyledText textAlign="center">-</StyledText>
                     )}
@@ -138,24 +192,11 @@ function CampaignParBlog() {
                         padding="0px 5px"
                         onClick={() => clickSelect(row.PAR_ID)}
                       >
-                          선정
+                            선정
                       </StyledButton>
                     ) : (
                       <StyledText color={Colors.green}>선정됨</StyledText>
                     )}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.PAR_REVIEW ? (
-                      <StyledButton
-                        background={Colors.green}
-                        hoverBackground={Colors.greenHover}
-                        height="25px"
-                        padding="0px 5px"
-                        onClick={() => window.open(row.PAR_REVIEW, '_blank')}
-                      >
-                          링크
-                      </StyledButton>
-                    ) : null}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
