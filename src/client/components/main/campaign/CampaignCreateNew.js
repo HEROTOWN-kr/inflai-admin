@@ -104,8 +104,8 @@ function CampaignCreateNew() {
     sns: Yup.string().required('모집SNS를 선택해주세요'),
     influencerCount: Yup.string()
       .required('모집인원을 입력해주세요')
-      .integerString()
-      .test('checkTen', '10명까지 모집이 가능합니다!', val => parseInt(val, 10) <= 10),
+      .integerString(),
+    // .test('checkTen', '10명까지 모집이 가능합니다!', val => parseInt(val, 10) <= 10),
     delivery: Yup.string().required('제공상품 배송여부를 선택해주세요'),
     postcode: Yup.string().when('type', {
       is: type => parseInt(type, 10) === 0,
