@@ -55,7 +55,7 @@ function InsightDialog(props) {
         params: { instaId: selectedId }
       });
       const { data } = InstaData.data;
-      setInstaData(data);
+      if (data) setInstaData(data);
     } catch (err) {
       alert(err.response.data.message);
     }
