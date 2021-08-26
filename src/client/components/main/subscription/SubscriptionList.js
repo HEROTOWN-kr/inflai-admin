@@ -16,48 +16,43 @@ import Alert from '../../containers/Alert';
 
 const tableRows = [
   {
-    id: '',
     text: '#',
     align: 'center',
     width: '60px'
   },
   {
-    id: 'ADV_NAME',
     text: '이름',
     align: 'left',
   },
   {
-    id: 'ADV_EMAIL',
     text: '이메일',
     align: 'left',
   },
   {
-    id: 'ADV_TEL',
     text: '전화번호',
     align: 'left',
   },
   {
-    id: 'PLN_NAME',
     text: '플랜',
     align: 'left'
   },
   {
-    id: 'PLN_PRICE_MONTH',
     text: '요금',
     align: 'center'
   },
   {
-    id: 'PLN_START_DATE',
+    text: '쿠폰',
+    align: 'center'
+  },
+  {
     text: '시작 날짜',
     align: 'left'
   },
   {
-    id: 'PLN_FINISH_DATE',
     text: '마감 날짜',
     align: 'left'
   },
   {
-    id: 'PLN_STATE',
     text: '상태',
     align: 'left'
   },
@@ -101,7 +96,7 @@ function SubscriptionList(props) {
       const { data, countRes } = res.data;
       const subscribeArray = data.map((item) => {
         const {
-          SUB_ID, SUB_START_DT, SUB_END_DT, SUB_STATUS, PLN_NAME, PLN_MONTH, PLN_PRICE_MONTH,
+          SUB_ID, SUB_START_DT, SUB_END_DT, SUB_STATUS, SUB_COUPON, PLN_NAME, PLN_MONTH, PLN_PRICE_MONTH,
           ADV_NAME, ADV_EMAIL, ADV_TEL, rowNum
         } = item;
 
@@ -116,6 +111,7 @@ function SubscriptionList(props) {
           startDate: SUB_START_DT,
           finishDate: SUB_END_DT,
           status: SUB_STATUS,
+          coupon: SUB_COUPON,
           rowNum
         };
       });
@@ -187,6 +183,11 @@ function SubscriptionList(props) {
               </StyledTableCell>
               <StyledTableCell align="center">
                 {item.planPriceMonth}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                <StyledText textAlign="center" color={item.coupon ? Colors.green : Colors.red}>
+                  {item.coupon ? '사용' : '미사용'}
+                </StyledText>
               </StyledTableCell>
               <StyledTableCell align="center">
                 {item.startDate || '-'}
