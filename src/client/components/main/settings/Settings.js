@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Route, Switch, Redirect, useRouteMatch
+  Route, Switch, Redirect, useRouteMatch, useHistory
 } from 'react-router-dom';
 import {
   Box, Grid, List, ListItem, ListItemIcon, ListItemText
@@ -13,19 +13,26 @@ import Coupon from './pages/Coupon';
 const Menu = [
   {
     text: '쿠폰',
-    icon: Inbox
+    icon: Inbox,
+    url: '/Coupon'
   },
   {
     text: '카카오 알림',
-    icon: Drafts
+    icon: Drafts,
+    url: '/KakaoNotify'
   },
 ];
 
 function Settings(props) {
-  const match = useRouteMatch();
   const { setMenuIndicator } = props;
+  const match = useRouteMatch();
+  const history = useHistory();
 
   useEffect(() => setMenuIndicator(7), []);
+
+  const handleListItemClick = (index) => {
+    history.push(match.url + Menu[index].url);
+  };
 
   return (
     <Grid container>
@@ -35,7 +42,7 @@ function Settings(props) {
             {Menu.map((item, index) => {
               const IconTag = item.icon;
               return (
-                <ListItem button>
+                <ListItem button key={item.text} onClick={() => handleListItemClick(index)}>
                   <ListItemIcon>
                     <IconTag />
                   </ListItemIcon>
@@ -60,7 +67,7 @@ function Settings(props) {
             exact
             path={`${match.url}/`}
             render={() => (
-              <Redirect to={`${match.url}/KakaoNotify`} />
+              <Redirect to={`${match.url}/Coupon`} />
             )}
           />
           <Route
