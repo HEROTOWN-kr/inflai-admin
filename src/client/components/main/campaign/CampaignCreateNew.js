@@ -251,13 +251,13 @@ function CampaignCreateNew() {
             control={control}
           />
           { watchObj.sns === '2' ? (
-              <Box color={Colors.orange}>
+            <Box color={Colors.orange}>
                 유튜버 모집 경우 제품체험단 외에 추가로 편집비용이 최소 20만원 이상부터 모집이 가능합니다.
-                <br />
+              <br />
                 편집비용은 유튜버 개인에게 주시면 되며
-                <br />
+              <br />
                 신청자중 선발하여 개별 계약을 하시면 됩니다
-              </Box>
+            </Box>
           ) : null }
           { errors.sns ? (
             <div className="error-message">{errors.sns.message}</div>
