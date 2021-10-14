@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Box } from '@material-ui/core';
 import axios from 'axios';
-import MainBlock from '../../containers/MainBlock';
+import MainBlock from '../../../containers/MainBlock';
 
 function RankingDetail(props) {
   const [statistics, setStatistics] = useState({

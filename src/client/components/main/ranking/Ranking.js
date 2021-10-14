@@ -1,15 +1,16 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import {
   Link, Redirect, Route, Switch
 } from 'react-router-dom';
 
 import {
-  Box, makeStyles, Tab, Tabs, Typography
+  Box, makeStyles, Tab, Tabs, Typography, withStyles
 } from '@material-ui/core';
-import RankingList from './RankingList';
-import RankingDetail from './RankingDetail';
+import RankingDetail from './Instagram/RankingDetail';
 import Dashboard from '../dashboard/Dashboard';
+import Youtube from './Youtube/Youtube';
+import Instagram from './Instagram/Instagram';
 
 const useStyles = makeStyles({
   title: {
@@ -20,16 +21,35 @@ const useStyles = makeStyles({
   },
   tabs: {
     root: {
-      color: 'red'
+
     },
-    indicator: {
-      backgroundColor: '#66f8ff',
-    }
+    indicator: {}
   }
 });
 
+const StyledTabs = withStyles({
+  indicator: {
+    backgroundColor: 'rgba(63, 75, 92, 1)',
+  },
+})(Tabs);
+
+const StyledTab = withStyles({
+  root: {
+    color: 'rgba(63, 75, 92, 0.5)',
+    '&:hover': {
+      color: 'rgba(63, 75, 92, 1)',
+    }
+  },
+  selected: {
+    color: 'rgba(63, 75, 92, 1)',
+  },
+
+})(props => <Tab disableRipple {...props} />);
+
 function Ranking(props) {
   const { setMenuIndicator, history, match } = props;
+  const [tab, setTab] = useState(0);
+
   const classes = useStyles();
 
   useEffect(() => setMenuIndicator(4), []);
@@ -39,38 +59,38 @@ function Ranking(props) {
       <Box borderBottom="1px solid #e4dfdf">
         <Box maxWidth={1276} m="0 auto">
           <Typography variant="h4" classes={{ root: classes.title }}>인플루언서 랭킹</Typography>
-          <Tabs
+          <StyledTabs
             className={classes.tabs}
-            value={0}
+            value={tab}
           >
-            <Tab
-              label="youtube"
-              component={Link}
-              to="/Ranking/List/"
-            />
-            <Tab
+            <StyledTab
               label="instagram"
               component={Link}
-              to="/Ranking/List/"
+              to={`${match.url}/Instagram`}
             />
-          </Tabs>
+            <StyledTab
+              label="youtube"
+              component={Link}
+              to={`${match.url}/Youtube`}
+            />
+          </StyledTabs>
         </Box>
       </Box>
       <Box pt={6} bgcolor="#f4f4f4">
         <Switch>
           <Route
-            path={`${match.path}/List/`}
-            render={renderProps => <RankingList {...props} />}
+            path={`${match.url}/Instagram`}
+            render={renderProps => <Instagram {...props} setTab={setTab} />}
           />
           <Route
-            path={`${match.path}/Detail/:id`}
-            render={renderProps => <RankingDetail {...renderProps} />}
+            path={`${match.url}/Youtube`}
+            render={renderProps => <Youtube {...renderProps} setTab={setTab} />}
           />
           <Route
             exact
-            path={`${match.path}/`}
+            path={`${match.url}/`}
             render={() => (
-              <Redirect to={`${match.path}/List/`} />
+              <Redirect to={`${match.url}/Youtube`} />
             )}
           />
         </Switch>

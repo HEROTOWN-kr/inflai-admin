@@ -1,30 +1,21 @@
 import React, { useEffect, useState } from 'react';
-
 import {
-  Grid,
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableContainer,
-  TableSortLabel,
-  TableHead,
-  TableRow, CircularProgress, Button,
+  Box, CircularProgress, Grid, Table, TableBody, TableHead, TableRow
 } from '@material-ui/core';
-import axios from 'axios';
 import { PieChart } from 'react-minimal-pie-chart';
+import axios from 'axios';
 import { Form, Formik } from 'formik';
 import SearchIcon from '@material-ui/icons/Search';
-import StyledTableCell from '../../containers/StyledTableCell';
-import StyledTableRow from '../../containers/StyledTableRow';
-import defaultAccountImage from '../../../img/default_account_image.png';
-import StyledLink from '../../containers/StyledLink';
-import StyledText from '../../containers/StyledText';
-import StyledButton from '../../containers/StyledButton';
-import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
-import MyTextField from '../../containers/MyTextField';
-import StyledTitle from '../../containers/StyledTitle';
-import MyPagination from '../../containers/MyPagination';
+import StyledButton from '../../../containers/StyledButton';
+import StyledTableCell from '../../../containers/StyledTableCell';
+import StyledText from '../../../containers/StyledText';
+import StyledTableRow from '../../../containers/StyledTableRow';
+import MyTextField from '../../../containers/MyTextField';
+import StyledTableSortLabel from '../../../containers/StyledTableSortLabel';
+import defaultAccountImage from '../../../../img/default_account_image.png';
+import StyledLink from '../../../containers/StyledLink';
+import MyPagination from '../../../containers/MyPagination';
+import StyledTitle from '../../../containers/StyledTitle';
 
 const tableRows = {
   title: [
@@ -98,7 +89,7 @@ const tableRows = {
   body: ['rownum', 'INF_NAME', 'INS_FLWR']
 };
 
-function Instagram(props) {
+function InstagramList(props) {
   const [searchWord, setSearchWord] = useState('');
   const [updateTime, setUpdateTime] = useState('');
   const [influencers, setInfluencers] = useState([]);
@@ -130,7 +121,7 @@ function Instagram(props) {
             <Grid item xs={12} container justify="space-between">
               <Grid item>
                 <StyledButton onClick={() => history.push(`${match.path}/Detail/${selectedRow}`)}>
-                      상세보기
+                                    상세보기
                 </StyledButton>
               </Grid>
               <Grid item><StyledButton onClick={() => getGoogleVisionData(selectedRow, 1)}>라벨 인식</StyledButton></Grid>
@@ -162,21 +153,21 @@ function Instagram(props) {
                 <TableHead>
                   <TableRow>
                     {
-                      tableRows.titleDetectInfo.map(item => (
-                        <StyledTableCell
-                          key={item.text}
-                          align={item.align}
-                          width={item.width || null}
-                        >
-                          <StyledText
-                            color="#ffffff"
-                            textAlign="center"
-                          >
-                            {item.text}
-                          </StyledText>
-                        </StyledTableCell>
-                      ))
-                    }
+                                            tableRows.titleDetectInfo.map(item => (
+                                              <StyledTableCell
+                                                key={item.text}
+                                                align={item.align}
+                                                width={item.width || null}
+                                              >
+                                                <StyledText
+                                                  color="#ffffff"
+                                                  textAlign="center"
+                                                >
+                                                  {item.text}
+                                                </StyledText>
+                                              </StyledTableCell>
+                                            ))
+                                        }
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -243,7 +234,7 @@ function Instagram(props) {
         ) : (
           <Grid container justify="center">
             <Grid item>
-                Google Vision Data
+                            Google Vision Data
             </Grid>
           </Grid>
         )}
@@ -319,7 +310,7 @@ function Instagram(props) {
   }
 
   return (
-    <>
+    <Box maxWidth={1276} m="0 auto">
       <Grid container spacing={2}>
         <Grid item md={7} xl={8}>
           <Grid container spacing={2}>
@@ -362,33 +353,33 @@ function Instagram(props) {
                 <TableHead>
                   <TableRow>
                     {
-                      tableRows.title.map(item => (
-                        <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
-                          { item.id ? (
-                            <Grid container justify="center">
-                              <Grid item>
-                                <StyledTableSortLabel
-                                  id={item.id}
-                                  color="#66f8ff"
-                                  active={order.orderBy === item.id}
-                                  direction={order.orderBy === item.id ? order.direction : 'desc'}
-                                  onClick={() => sortTable(item.id)}
-                                >
-                                  {item.text}
-                                </StyledTableSortLabel>
-                              </Grid>
-                            </Grid>
-                          ) : (
-                            <StyledText
-                              color="#ffffff"
-                              textAlign="center"
-                            >
-                              {item.text}
-                            </StyledText>
-                          )}
-                        </StyledTableCell>
-                      ))
-                    }
+                                            tableRows.title.map(item => (
+                                              <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
+                                                { item.id ? (
+                                                  <Grid container justify="center">
+                                                    <Grid item>
+                                                      <StyledTableSortLabel
+                                                        id={item.id}
+                                                        color="#66f8ff"
+                                                        active={order.orderBy === item.id}
+                                                        direction={order.orderBy === item.id ? order.direction : 'desc'}
+                                                        onClick={() => sortTable(item.id)}
+                                                      >
+                                                        {item.text}
+                                                      </StyledTableSortLabel>
+                                                    </Grid>
+                                                  </Grid>
+                                                ) : (
+                                                  <StyledText
+                                                    color="#ffffff"
+                                                    textAlign="center"
+                                                  >
+                                                    {item.text}
+                                                  </StyledText>
+                                                )}
+                                              </StyledTableCell>
+                                            ))
+                                        }
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -502,8 +493,8 @@ function Instagram(props) {
           </Box>
         </Grid>
       </Grid>
-    </>
+    </Box>
   );
 }
 
-export default Instagram;
+export default InstagramList;
