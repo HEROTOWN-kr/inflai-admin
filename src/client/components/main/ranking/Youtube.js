@@ -75,8 +75,8 @@ function Youtube() {
                 tableRows.body.map((item, index) => (
                   <StyledTableCell
                     key={item}
-                    /*component={index === 1 ? 'th' : ''}
-                    scope={index === 1 ? 'row' : ''}*/
+                    /* component={index === 1 ? 'th' : ''}
+                    scope={index === 1 ? 'row' : ''} */
                     align={index === 1 ? 'left' : 'right'}
                   >
                     {row[item] >= 0 ? row[item] : row.TB_INFLUENCER[item]}

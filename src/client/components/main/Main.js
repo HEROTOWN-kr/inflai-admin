@@ -24,7 +24,7 @@ function Main(props) {
   return (
     <div>
       <Navbar {...props} pageIndicator={pageIndicator} setMenuIndicator={setMenuIndicator} />
-      <Box py={6} px={4} className="main">
+      <Box className="main">
         <Switch>
           <Route
             path="/Dashboard"

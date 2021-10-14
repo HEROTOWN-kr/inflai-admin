@@ -14,7 +14,7 @@ function Dashboard(props) {
   useEffect(() => setMenuIndicator(0), []);
 
   return (
-    <Box width={1200} css={{ margin: '0 auto' }}>
+    <Box py={6} width={1200} css={{ margin: '0 auto' }}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <DashInfluencers {...props} />
