@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@amcharts/amcharts4": "^4.10.20",
+    "@amcharts/amcharts4-geodata": "^4.1.21",
     "@ckeditor/ckeditor5-build-classic": "^23.0.0",
     "@ckeditor/ckeditor5-build-decoupled-document": "^23.0.0",
     "@ckeditor/ckeditor5-image": "^23.1.0",

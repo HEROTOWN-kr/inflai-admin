@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box, Grid,
+  Box, Grid, IconButton, MuiThemeProvider,
   Paper,
   Table,
   TableBody,
@@ -10,9 +10,13 @@ import {
 } from '@material-ui/core';
 import axios from 'axios';
 import { useRouteMatch } from 'react-router-dom';
+import { AssessmentRounded } from '@material-ui/icons/';
+import { createMuiTheme } from '@material-ui/core/styles';
 import StyledTableCell from '../../../containers/StyledTableCell';
 import StyledTableRow from '../../../containers/StyledTableRow';
 import MyPagination from '../../../containers/MyPagination';
+import AnalysisDialog from './AnalysisDialog';
+import StyledIconButton from '../../../containers/StyledIconButton';
 
 const tableRows = {
   title: [
@@ -34,6 +38,11 @@ const tableRows = {
       text: '보기수',
       align: 'center',
       width: '100px'
+    },
+    {
+      text: '관리자툴',
+      align: 'center',
+      width: '100px'
     }
   ],
   body: ['rownum', 'INF_NAME', 'YOU_SUBS', 'YOU_VIEWS']
@@ -44,8 +53,15 @@ function Youtube(props) {
   const [influencers, setInfluencers] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  useEffect(() => setTab(1), []);
+  const changePage = (event, value) => {
+    setPage(value);
+  };
+
+  function toggleDialog() {
+    setDialogOpen(!dialogOpen);
+  }
 
   function getInfluencers() {
     axios.get('/api/TB_YOUTUBE/', {
@@ -59,13 +75,12 @@ function Youtube(props) {
     );
   }
 
+  useEffect(() => setTab(1), []);
+
   useEffect(() => {
     getInfluencers();
   }, [page]);
 
-  const changePage = (event, value) => {
-    setPage(value);
-  };
 
   return (
     <Box maxWidth={1276} m="0 auto">
@@ -99,6 +114,11 @@ function Youtube(props) {
                 <StyledTableCell align="center">
                   {row.YOU_VIEWS}
                 </StyledTableCell>
+                <StyledTableCell padding="2px" align="center">
+                  <StyledIconButton onClick={toggleDialog}>
+                    <AssessmentRounded />
+                  </StyledIconButton>
+                </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
@@ -116,6 +136,10 @@ function Youtube(props) {
           </Grid>
         </Grid>
       </Box>
+      <AnalysisDialog
+        open={dialogOpen}
+        closeDialog={toggleDialog}
+      />
     </Box>
   );
 }
