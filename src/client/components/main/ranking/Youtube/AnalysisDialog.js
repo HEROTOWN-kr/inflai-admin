@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AnalysisDialog(props) {
-  const { open, closeDialog } = props;
+  const { open, closeDialog, id } = props;
 
   const classes = useStyles();
   return (
@@ -39,7 +39,7 @@ function AnalysisDialog(props) {
       aria-labelledby="simple-dialog-title"
       open={open}
     >
-      <YoutubeAnalysis />
+      <YoutubeAnalysis id={id} />
     </Dialog>
   );
 }

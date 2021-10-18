@@ -50,6 +50,7 @@ const tableRows = {
 
 function Youtube(props) {
   const { setTab } = props;
+  const [youtubeId, setYoutubeId] = useState(null);
   const [influencers, setInfluencers] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
@@ -62,6 +63,12 @@ function Youtube(props) {
   function toggleDialog() {
     setDialogOpen(!dialogOpen);
   }
+
+  function getAnalysis(id) {
+    setYoutubeId(id);
+    toggleDialog();
+  }
+
 
   function getInfluencers() {
     axios.get('/api/TB_YOUTUBE/', {
@@ -115,7 +122,7 @@ function Youtube(props) {
                   {row.YOU_VIEWS}
                 </StyledTableCell>
                 <StyledTableCell padding="2px" align="center">
-                  <StyledIconButton onClick={toggleDialog}>
+                  <StyledIconButton onClick={() => getAnalysis(row.YOU_ID)}>
                     <AssessmentRounded />
                   </StyledIconButton>
                 </StyledTableCell>
@@ -139,6 +146,7 @@ function Youtube(props) {
       <AnalysisDialog
         open={dialogOpen}
         closeDialog={toggleDialog}
+        id={youtubeId}
       />
     </Box>
   );

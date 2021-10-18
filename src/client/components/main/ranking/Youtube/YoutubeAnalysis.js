@@ -168,6 +168,7 @@ function LoadingPage() {
 }
 
 function YoutubeAnalysis(props) {
+  const { id } = props;
   const [process, setProcess] = useState(false);
   const [youtubeInfo, setYoutubeInfo] = useState(defaultValues);
   const [youtubeAnalytics, setYoutubeAnalytics] = useState(defaultAnalyticsValues);
@@ -224,23 +225,27 @@ function YoutubeAnalysis(props) {
 
   function getYoutubeInfo() {
     setProcess(true);
-    axios.get('/api/TB_YOUTUBE/getYoutubeFile').then((res) => {
+    axios.get('/api/TB_YOUTUBE/getYoutubeFile', {
+      params: { id }
+    }).then((res) => {
       const { data } = res.data;
       setYoutubeInfo(data);
     }).catch((err) => {
       setProcess(false);
-      alert(err.response.data.message);
+      // alert(err.response.data.message);
     });
   }
 
   function getYoutubeAnalytics() {
-    axios.get('/api/testRoute/getYoutubeAnalytics').then((res) => {
+    axios.get('/api/TB_YOUTUBE/getYoutubeAnalytics', {
+      params: { id }
+    }).then((res) => {
       const { data } = res;
       setYoutubeAnalytics(data);
       setProcess(false);
     }).catch((err) => {
       setProcess(false);
-      alert(err.response.data.message);
+      // alert(err.response.data.message);
     });
   }
 
