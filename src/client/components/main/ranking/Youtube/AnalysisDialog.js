@@ -39,7 +39,7 @@ function AnalysisDialog(props) {
       aria-labelledby="simple-dialog-title"
       open={open}
     >
-      <YoutubeAnalysis id={id} />
+      <YoutubeAnalysis id={id} closeDialog={closeDialog} />
     </Dialog>
   );
 }

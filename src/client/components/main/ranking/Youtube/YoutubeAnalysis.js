@@ -168,7 +168,7 @@ function LoadingPage() {
 }
 
 function YoutubeAnalysis(props) {
-  const { id } = props;
+  const { id, closeDialog } = props;
   const [process, setProcess] = useState(false);
   const [youtubeInfo, setYoutubeInfo] = useState(defaultValues);
   const [youtubeAnalytics, setYoutubeAnalytics] = useState(defaultAnalyticsValues);
@@ -261,7 +261,7 @@ function YoutubeAnalysis(props) {
       ) : (
         <Box bgcolor="#f6f7fb" p={2} position="relative">
           <Box position="absolute" top="0" right="0">
-            <IconButton style={{ position: 'fixed' }}>
+            <IconButton style={{ position: 'fixed', color: '#fff' }} onClick={closeDialog}>
               <Cancel />
             </IconButton>
           </Box>

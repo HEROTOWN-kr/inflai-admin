@@ -30,6 +30,11 @@ const tableRows = {
       align: 'left'
     },
     {
+      text: '채널 이름',
+      align: 'left',
+      width: '250px'
+    },
+    {
       text: '구독수',
       align: 'center',
       width: '100px'
@@ -40,7 +45,7 @@ const tableRows = {
       width: '100px'
     },
     {
-      text: '관리자툴',
+      text: '분석결과',
       align: 'center',
       width: '100px'
     }
@@ -73,13 +78,11 @@ function Youtube(props) {
   function getInfluencers() {
     axios.get('/api/TB_YOUTUBE/', {
       params: { page }
-    }).then(
-      (res) => {
-        const { list, dbCount } = res.data.data;
-        setInfluencers(list);
-        setCount(dbCount);
-      }
-    );
+    }).then((res) => {
+      const { list, dbCount } = res.data.data;
+      setInfluencers(list);
+      setCount(dbCount);
+    });
   }
 
   useEffect(() => setTab(1), []);
@@ -113,7 +116,10 @@ function Youtube(props) {
                   {row.rownum}
                 </StyledTableCell>
                 <StyledTableCell>
-                  {row.TB_INFLUENCER.INF_NAME}
+                  {row.INF_NAME}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {row.YOU_NAME}
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   {row.YOU_SUBS}
