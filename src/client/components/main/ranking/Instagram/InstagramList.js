@@ -352,34 +352,32 @@ function InstagramList(props) {
               <Table aria-label="customized table">
                 <TableHead>
                   <TableRow>
-                    {
-                                            tableRows.title.map(item => (
-                                              <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
-                                                { item.id ? (
-                                                  <Grid container justify="center">
-                                                    <Grid item>
-                                                      <StyledTableSortLabel
-                                                        id={item.id}
-                                                        color="#66f8ff"
-                                                        active={order.orderBy === item.id}
-                                                        direction={order.orderBy === item.id ? order.direction : 'desc'}
-                                                        onClick={() => sortTable(item.id)}
-                                                      >
-                                                        {item.text}
-                                                      </StyledTableSortLabel>
-                                                    </Grid>
-                                                  </Grid>
-                                                ) : (
-                                                  <StyledText
-                                                    color="#ffffff"
-                                                    textAlign="center"
-                                                  >
-                                                    {item.text}
-                                                  </StyledText>
-                                                )}
-                                              </StyledTableCell>
-                                            ))
-                                        }
+                    { tableRows.title.map(item => (
+                      <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
+                        { item.id ? (
+                          <Grid container justify="center">
+                            <Grid item>
+                              <StyledTableSortLabel
+                                id={item.id}
+                                color="#66f8ff"
+                                active={order.orderBy === item.id}
+                                direction={order.orderBy === item.id ? order.direction : 'desc'}
+                                onClick={() => sortTable(item.id)}
+                              >
+                                {item.text}
+                              </StyledTableSortLabel>
+                            </Grid>
+                          </Grid>
+                        ) : (
+                          <StyledText
+                            color="#ffffff"
+                            textAlign="center"
+                          >
+                            {item.text}
+                          </StyledText>
+                        )}
+                      </StyledTableCell>
+                    )) }
                   </TableRow>
                 </TableHead>
                 <TableBody>
