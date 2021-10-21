@@ -28,7 +28,9 @@ function ReactFormText(props) {
       FormHelperTextProps={{
         classes: { contained: classes.FormHelperContained }
       }}
-      helperText={<span className="error-message">{errors[name]?.message}</span>}
+      helperText={errors[name] ? (
+        <span className="error-message">{errors[name]?.message}</span>
+      ) : null}
       css={{ transition: 'all 1s ease-out' }}
       {...rest}
     />

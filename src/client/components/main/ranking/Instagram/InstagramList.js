@@ -384,10 +384,8 @@ function InstagramList(props) {
                   {influencers.map(row => (
                     <StyledTableRow
                       key={row.INS_ID}
-                      types={2}
-                      id={row.INS_ID}
                       selected={row.INS_ID === selectedRow}
-                      onClick={getGoogleVisionData}
+                      onClick={() => getGoogleVisionData(row.INS_ID, 2)}
                     >
                       <StyledTableCell align="center">
                         <StyledText fontSize="20px" fontWeight="700" textAlign="center">

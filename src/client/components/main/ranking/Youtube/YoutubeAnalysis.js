@@ -20,7 +20,11 @@ const useStyles = makeStyles(theme => ({
     color: '#fff',
     borderRadius: '5px',
     boxSizing: 'border-box',
-    height: '100%'
+    height: '100%',
+    transition: 'all 0.3s ease-in-out',
+    '&:hover': {
+      boxShadow: '0 0 25px -5px #9e9c9e',
+    }
   },
   boxTitle: {
     fontSize: '20px',
@@ -32,6 +36,9 @@ const useStyles = makeStyles(theme => ({
   },
   circular: {
     color: '#fff',
+  },
+  youtubeLink: {
+    cursor: 'pointer'
   },
   bgBlue: { background: 'linear-gradient(45deg, #4099ff, #73b4ff)' },
   bgGreen: { background: 'linear-gradient(45deg, #2ed8b6, #59e0c5)' },
@@ -268,7 +275,10 @@ function YoutubeAnalysis(props) {
           <Box maxWidth={1500} m="0 auto">
             <Grid container spacing={3}>
               <Grid item xs={3}>
-                <Box className={`${classes.box} ${classes.bgBlue}`}>
+                <Box
+                  className={`${classes.box} ${classes.bgBlue} ${classes.youtubeLink}`}
+                  onClick={() => window.open(`https://www.youtube.com/channel/${youtubeInfo.channel_info.Channel_id}`, '_blank')}
+                >
                   <Grid container alignItems="center" style={{ height: '100%' }}>
                     <Grid item>
                       <img width={70} height={70} className={classes.avatar} src={youtubeInfo.channel_info.Avatar_url || defaultAccountImage} alt="noImage" />
@@ -342,13 +352,13 @@ function YoutubeAnalysis(props) {
               <Grid container spacing={3}>
                 <Grid item xs={6}>
                   <Box p={3} bgcolor="#FFF">
-                    <Box className={classes.boxTitle}>최근 10개의 비디오 콘텐츠 3862 클래스 추론</Box>
+                    <Box className={classes.boxTitle}>상위 카테고리 분석 결과</Box>
                     <CategoryPieChart detectData={youtubeInfo.content_primary_prediction} process={process} />
                   </Box>
                 </Grid>
                 <Grid item xs={6}>
                   <Box p={3} bgcolor="#FFF">
-                    <Box className={classes.boxTitle}>최근 10개의 비디오 콘텐츠 26 클래스 추론</Box>
+                    <Box className={classes.boxTitle}>하위 카테고리 분석 결과</Box>
                     <CategoryPieChart detectData={youtubeInfo.content_second_prediction} process={process} />
                   </Box>
                 </Grid>
@@ -357,13 +367,13 @@ function YoutubeAnalysis(props) {
             <Grid container spacing={3}>
               <Grid item xs={6}>
                 <Box p={3} bgcolor="#FFF">
-                  <Box className={classes.boxTitle}>최근 10개의 비디오 제목 26 클래스 추론</Box>
+                  <Box className={classes.boxTitle}>비디오 제목 분석 결과</Box>
                   <CategoryPieChart detectData={youtubeInfo.title_prediction} process={process} />
                 </Box>
               </Grid>
               <Grid item xs={6}>
                 <Box p={3} bgcolor="#FFF">
-                  <Box className={classes.boxTitle}>최근 10개의 비디오 댓글 평가</Box>
+                  <Box className={classes.boxTitle}>비디오 댓글 평가</Box>
                   <CategoryPieChart detectData={youtubeInfo.comment_prediction} process={process} />
                 </Box>
               </Grid>

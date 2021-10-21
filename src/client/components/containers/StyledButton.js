@@ -15,7 +15,8 @@ const useStyles = makeStyles({
     padding: padding || '0 30px',
     fontSize: fontSize || '0.875rem',
     '&:hover': {
-      background: hoverBackground || Colors.blue2Hover
+      background: hoverBackground || Colors.blue2Hover,
+
     }
   }),
 });

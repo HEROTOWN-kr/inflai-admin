@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 function StyledTableRow(props) {
   const {
-    id, types, onClick, className, children, selected
+    children, ...rest
   } = props;
   const classes = useStyles(props);
 
@@ -27,9 +27,7 @@ function StyledTableRow(props) {
     <TableRow
       hover
       classes={classes}
-      className={className}
-      selected={selected}
-      onClick={onClick ? () => onClick(id, types) : null}
+      {...rest}
     >
       {children}
     </TableRow>
