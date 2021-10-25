@@ -352,13 +352,13 @@ function YoutubeAnalysis(props) {
               <Grid container spacing={3}>
                 <Grid item xs={6}>
                   <Box p={3} bgcolor="#FFF">
-                    <Box className={classes.boxTitle}>상위 카테고리 분석 결과</Box>
+                    <Box className={classes.boxTitle}>하위 카테고리 분석 결과</Box>
                     <CategoryPieChart detectData={youtubeInfo.content_primary_prediction} process={process} />
                   </Box>
                 </Grid>
                 <Grid item xs={6}>
                   <Box p={3} bgcolor="#FFF">
-                    <Box className={classes.boxTitle}>하위 카테고리 분석 결과</Box>
+                    <Box className={classes.boxTitle}>상위 카테고리 분석 결과</Box>
                     <CategoryPieChart detectData={youtubeInfo.content_second_prediction} process={process} />
                   </Box>
                 </Grid>
