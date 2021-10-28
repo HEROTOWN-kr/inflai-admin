@@ -13,6 +13,7 @@ import Navbar from './navbar/Navbar';
 import Settings from './settings/Settings';
 import Subscription from './subscription/Subscription';
 import Payment from './payment/Payment';
+import YoutubeAnalysis from './ranking/Youtube/YoutubeAnalysis';
 
 function Main(props) {
   const [pageIndicator, setPageIndicator] = useState(0);
@@ -57,6 +58,10 @@ function Main(props) {
           <Route
             path="/Settings"
             render={renderProps => <Settings {...renderProps} setMenuIndicator={setMenuIndicator} />}
+          />
+          <Route
+            path="/YoutubeDialog"
+            render={renderProps => <YoutubeAnalysis {...renderProps} setMenuIndicator={setMenuIndicator} id={93} />}
           />
           <Route
             exact
