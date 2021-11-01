@@ -110,7 +110,6 @@ const green = 'rgba(24, 219, 168, 1)';
 const greenBg = 'rgba(231, 251, 246, 0.6)';
 const violet = 'rgba(144, 71, 255, 1)';
 const violetBg = 'rgba(244, 236, 255, 0.6)';
-const testText = 'test';
 
 function createDataSet(props) {
   const {
@@ -258,8 +257,8 @@ function YoutubeAnalysis(props) {
   }
 
   useEffect(() => {
-    // getYoutubeInfo();
-    // getYoutubeAnalytics();
+    getYoutubeInfo();
+    getYoutubeAnalytics();
   }, []);
 
   return (
@@ -349,20 +348,6 @@ function YoutubeAnalysis(props) {
                 </Box>
               </Grid>
             </Grid>
-            <Box mt={3} p={3} bgcolor="#FFF">
-              <Typography variant="subtitle2">
-                { `${testText}는 ${testText}명의 구독자를 보유하고 있으며 이는 ${testText} 입니다.
-                인플루언서 영향력을 나타내는 인플라이니수는 ${testText}
-                점이며 최근 30일간 ${testText}건의 포스팅으로 진행하였고
-                ${testText}건의 좋아요수와 ${testText}건의 댓글을 받아 공감능력은 ${testText}%(${testText}) 상태입니다.
-                보유팔로워의 ${testText}%가 ${testText}인으로 구성되어있으며
-                ${testText}대 ${testText}걸쳐서 가장 큰 영향력을 발휘하게 됩니다.
-                게시물 인공지능분석 결과 가장 높은 비율인 ${testText}%를 (${testText})가 차지하고 있어서
-                ${testText} 쪽에 영향력 지수가 크다고 보여집니다.
-                (제일 높은 이미지의 %가 30% 이하이면 ... 특별한 카테고리에 영향력이 없다고 보여집니다.)
-                ${testText}님은 ${testText}요일, 오후 ${testText}시 주로 게시물을 업로드 하고 있습니다.` }
-              </Typography>
-            </Box>
             <Box my={3}>
               <Grid container spacing={3}>
                 <Grid item xs={6}>
