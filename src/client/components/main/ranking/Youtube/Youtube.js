@@ -71,6 +71,8 @@ const tableRows = {
   body: ['rownum', 'INF_NAME', 'YOU_SUBS', 'YOU_VIEWS']
 };
 
+const defaultUpdateTime = moment().set({ h: 4, m: 0, s: 0 }).format('YYYY-MM-DD h:mm:ss');
+
 function LoadingComponent() {
   return (
     <Box height={536}>
@@ -87,6 +89,7 @@ function Youtube(props) {
   const { setTab } = props;
   const [youtubeId, setYoutubeId] = useState(null);
   const [influencers, setInfluencers] = useState([]);
+  const [updateTime, setUpdateTime] = useState('');
   const [loading, setLoading] = useState(false);
   const [searchWord, setSearchWord] = useState('');
   const [order, setOrder] = useState({ orderBy: 'YOU_SUBS', direction: 'desc' });
@@ -94,7 +97,6 @@ function Youtube(props) {
   const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
   const classes = useStyles();
-  const updateTime = moment().set({ h: 4, m: 0, s: 0 }).format('YYYY-MM-DD h:mm:ss');
 
   const { register, handleSubmit, errors } = useForm({
     mode: 'onBlur',
@@ -136,6 +138,17 @@ function Youtube(props) {
     });
   }
 
+  function getUpdateTime() {
+    axios.get('/api/TB_YOUTUBE/getUpdateTime', {
+      params: { ...order, searchWord, page }
+    }).then((res) => {
+      const { updateTime } = res.data;
+      setUpdateTime(updateTime);
+    }).catch((e) => {
+      alert(e.response.data.message);
+    });
+  }
+
   function sortTable(id) {
     const isDesc = order.orderBy === id && order.direction === 'desc';
     setOrder({
@@ -145,7 +158,10 @@ function Youtube(props) {
   }
 
 
-  useEffect(() => setTab(1), []);
+  useEffect(() => {
+    getUpdateTime();
+    setTab(1);
+  }, []);
 
   useEffect(() => {
     getInfluencers();
