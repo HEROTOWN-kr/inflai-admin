@@ -410,7 +410,7 @@ function YoutubeAnalysis(props) {
                 { `${youtubeInfo.channel_info.Name}는 ${youtubeInfo.channel_info.Number_of_subscribe}명의 구독자를 보유하고 있으며 이는 ${youtubeInfo.channel_info.influencerType} 입니다.
                 인플루언서 영향력을 나타내는 인플라이지수는 105점이며 최근 30일간 채널 영상 최대 조회수는 ${youtubeAnalytics.timeBasedStats.viewsMax}이고 신규 구독자 수는 ${youtubeAnalytics.timeBasedStats.subscribersGainedSum}입니다.
                 ${youtubeAnalytics.basicStats.likes}건의 좋아요수와 ${youtubeAnalytics.basicStats.comments}건의 댓글을 받아 공감능력은 ${youtubeAnalytics.basicStats.likesToComments}%(${youtubeAnalytics.basicStats.abilityType}) 상태입니다.
-                보유팔로워의 ${youtubeAnalytics.watchTimeByCountry.maxCountry.value}명은 ${youtubeAnalytics.watchTimeByCountry.maxCountry.name}인으로 구성되어있으며
+                보유팔로워의 ${youtubeAnalytics.watchTimeByCountry.maxCountry ? youtubeAnalytics.watchTimeByCountry.maxCountry.value : '0'}명은 ${youtubeAnalytics.watchTimeByCountry.maxCountry ? youtubeAnalytics.watchTimeByCountry.maxCountry.name : ''}인으로 구성되어있으며
                 ${youtubeAnalytics.ageDemographic.maxAgeType}대(${youtubeAnalytics.ageDemographic.maxAgeValue}%) ${youtubeAnalytics.genderDemographic.maxGender}(${youtubeAnalytics.genderDemographic.maxGenderValue}%)걸쳐서 가장 큰 영향력을 발휘하게 됩니다.
                 게시물 인공지능분석 결과 가장 높은 비율인 ${youtubeInfo.maxTypeCategoryValue}%를 ${youtubeInfo.maxTypeCategory}가 차지하고 있어서
                 ${youtubeInfo.maxTypeCategory} 쪽에 영향력 지수가 크다고 보여집니다.
