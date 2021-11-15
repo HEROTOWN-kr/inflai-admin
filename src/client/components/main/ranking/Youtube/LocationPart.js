@@ -54,10 +54,10 @@ const barData = {
 function createDataSet(props) {
   const {
     labels, data, backgroundColor, borderColor
-  } = props;
+  } = props || {};
 
   return {
-    labels,
+    labels: labels || [],
     datasets: [
       {
         label: '조회수',
