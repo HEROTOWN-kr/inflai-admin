@@ -128,8 +128,8 @@ function CampaignCreateNew() {
       return true;
     }),
     picArray: Yup.string()
-      .test('picCheck', '이미지 업러드 해주세요', val => images.length > 0 || dbImages.length > 0)
-      .test('picLength', '이미지 5개만 업러드 가능합니다', val => (images.length + dbImages.length) < 6),
+      .test('picCheck', '이미지 업로드 해주세요', val => images.length > 0 || dbImages.length > 0)
+      .test('picLength', '이미지 5개만 업로드 가능합니다', val => (images.length + dbImages.length) < 6),
     detailInfo: Yup.string()
       .test('detailInfoCheck', '내용은 최대 3,000자까지 입력 가능합니다.', val => val.length < 3000),
   });
