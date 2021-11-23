@@ -72,6 +72,9 @@ const defaultValues = {
   content_second_labels: [],
   content_second_series: [],
   content_second_colors: [],
+  content_second_labels_new: [],
+  content_second_series_new: [],
+  content_second_colors_new: [],
   maxTypeCategory: '',
   maxTypeCategoryValue: 0,
   videos_info: {
@@ -431,7 +434,7 @@ function YoutubeAnalysis(props) {
                   <Box p={3} bgcolor="#FFF">
                     <Box className={classes.boxTitle}>상위 카테고리 분석 결과</Box>
                     {/* <CategoryPieChart detectData={youtubeInfo.content_second_prediction} process={process} /> */}
-                    <PieChartApex series={youtubeInfo.content_second_series} colors={youtubeInfo.content_second_colors} labels={youtubeInfo.content_second_labels} />
+                    <PieChartApex series={youtubeInfo.content_second_series_new} colors={youtubeInfo.content_second_colors_new} labels={youtubeInfo.content_second_labels_new} />
                   </Box>
                 </Grid>
               </Grid>
