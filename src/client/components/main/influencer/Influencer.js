@@ -18,6 +18,7 @@ import InstaIcon from '../../../img/instagram-icon.png';
 import YoutubeIcon from '../../../img/icon_youtube_url.png';
 import BlogIcon from '../../../img/icon_blog_url.png';
 import StyledImage from '../../containers/StyledImage';
+import defaultAccountImage from '../../../img/default_account_image.png';
 
 const snsTypes = [
   {
@@ -60,6 +61,7 @@ function Influencer(props) {
         insta: item.INS_ID || null,
         youtube: item.YOU_ID || null,
         naver: item.NAV_ID || null,
+        photo: item.INF_PHOTO_URL || item.INF_PHOTO
       })
     ));
 
@@ -106,7 +108,17 @@ function Influencer(props) {
               <StyledTableRow hover key={row.id}>
                 <StyledTableCell align="center">{row.rownum}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">
-                  {row.name}
+                  <Grid container spacing={1} alignItems="center">
+                    <Grid item>
+                      <StyledImage
+                        width="100px"
+                        height="100px"
+                        borderRadius="100%"
+                        src={row.photo || defaultAccountImage}
+                      />
+                    </Grid>
+                    <Grid item>{row.name}</Grid>
+                  </Grid>
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.email}</StyledTableCell>
                 <StyledTableCell align="center">{row.phoneNumber}</StyledTableCell>
