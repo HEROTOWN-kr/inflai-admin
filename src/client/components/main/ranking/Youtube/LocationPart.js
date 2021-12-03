@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Box, Grid } from '@material-ui/core';
-import { HorizontalBar } from 'react-chartjs-2';
+import { Bar, HorizontalBar } from 'react-chartjs-2';
 import MapGraph from '../../campaign/Graphs/MapGraph';
+import CategoryPieChart from '../CategoryPieChart';
+
 
 const options = {
   indexAxis: 'y',
@@ -54,10 +56,10 @@ const barData = {
 function createDataSet(props) {
   const {
     labels, data, backgroundColor, borderColor
-  } = props || {};
+  } = props;
 
   return {
-    labels: labels || [],
+    labels,
     datasets: [
       {
         label: '조회수',
@@ -71,22 +73,27 @@ function createDataSet(props) {
 }
 
 function LocationPart(props) {
-  const { classes, data } = props || {};
+  const { classes, data, isMD } = props || {};
   const { countryData, countryLineData } = data || {};
 
   const dataSet = createDataSet(countryLineData);
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={6}>
+    <Grid container spacing={isMD ? 3 : 2}>
+      <Grid item xs={12} md={6}>
         <Box p={3} bgcolor="#FFF">
-          <Box className={classes.boxTitle}>최근 1년 국가별 동영상 조회수</Box>
+          <Box className={classes.boxTitle}>국가별 동영상 조회수</Box>
           <MapGraph mapData={countryData} />
         </Box>
+        <Box p={2} bgcolor="#F2F2F2">
+          <Box className={classes.reportText}>
+              최근 1년 동안 유튜브 채널의 국가 별로 개별된 모두 영상의 조회수를 보실 수 있습니다.
+          </Box>
+        </Box>
       </Grid>
-      <Grid item xs={6} style={{ height: 'inherit' }}>
+      <Grid item xs={12} md={6} style={{ height: 'inherit' }}>
         <Box p={3} bgcolor="#FFF" height="100%" boxSizing="border-box">
-          <HorizontalBar data={dataSet} options={options} />
+          <HorizontalBar height={isMD ? 150 : 250} data={dataSet} options={options} />
         </Box>
       </Grid>
     </Grid>

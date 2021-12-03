@@ -28,7 +28,7 @@ const barOptions = {
 
 function GenderAgePart(props) {
   const {
-    classes, genderDemographic, ageDemographic, process
+    classes, genderDemographic, ageDemographic, process, isMD
   } = props || {};
 
   const subscribersGainedData = {
@@ -43,17 +43,28 @@ function GenderAgePart(props) {
   };
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={6}>
+    <Grid container spacing={isMD ? 3 : 2}>
+      <Grid item xs={12} md={6}>
         <Box p={3} bgcolor="#FFF">
           <Box className={classes.boxTitle}>성별 비율</Box>
           <CategoryPieChart detectData={genderDemographic} process={process} />
         </Box>
+        <Box p={2} bgcolor="#F2F2F2">
+          <Box className={classes.reportText}>
+              최근 1년 동안 유튜브 채널의 시청자 수를 성별 별로 개별된 데이터로 보실수 있습니다.
+          </Box>
+        </Box>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Box p={3} bgcolor="#FFF">
           <Box className={classes.boxTitle}>연령 비율</Box>
-          <BarComponent height={153} data={subscribersGainedData} options={barOptions} />
+          <BarComponent height={isMD ? 150 : 250} data={subscribersGainedData} options={barOptions} />
+        </Box>
+        <Box p={2} bgcolor="#F2F2F2">
+          <Box className={classes.reportText}>
+              최근 1년 동안 유튜브 채널의 시청자 수를 나이 별로 개별된 데이터로 보실수 있습니다.
+            {' '}
+          </Box>
         </Box>
       </Grid>
     </Grid>
