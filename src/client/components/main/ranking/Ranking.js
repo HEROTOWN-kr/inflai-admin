@@ -7,10 +7,10 @@ import {
 import {
   Box, makeStyles, Tab, Tabs, Typography, withStyles
 } from '@material-ui/core';
-import RankingDetail from './Instagram/RankingDetail';
-import Dashboard from '../dashboard/Dashboard';
 import Youtube from './Youtube/Youtube';
 import Instagram from './Instagram/Instagram';
+import StyledTabs from '../../containers/StyledTabs';
+import StyledTab from '../../containers/StyledTab';
 
 const useStyles = makeStyles({
   title: {
@@ -20,31 +20,10 @@ const useStyles = makeStyles({
     marginBottom: '48px'
   },
   tabs: {
-    root: {
-
-    },
+    root: {},
     indicator: {}
   }
 });
-
-const StyledTabs = withStyles({
-  indicator: {
-    backgroundColor: 'rgba(63, 75, 92, 1)',
-  },
-})(Tabs);
-
-const StyledTab = withStyles({
-  root: {
-    color: 'rgba(63, 75, 92, 0.5)',
-    '&:hover': {
-      color: 'rgba(63, 75, 92, 1)',
-    }
-  },
-  selected: {
-    color: 'rgba(63, 75, 92, 1)',
-  },
-
-})(props => <Tab disableRipple {...props} />);
 
 function Ranking(props) {
   const { setMenuIndicator, history, match } = props;
@@ -95,7 +74,6 @@ function Ranking(props) {
           />
         </Switch>
       </Box>
-
     </Fragment>
   );
 }

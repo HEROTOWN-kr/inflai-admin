@@ -9,7 +9,7 @@ import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
 
 function RequestList(props) {
-  const { history, match } = props;
+  const { history, match, setTab } = props;
 
   const [influencers, setInfluencers] = useState([]);
   const [count, setCount] = useState(0);
@@ -51,6 +51,8 @@ function RequestList(props) {
   useEffect(() => {
     getRequests();
   }, [page]);
+
+  useEffect(() => setTab(1), []);
 
   const changePage = (event, value) => {
     setPage(value);

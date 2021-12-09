@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {
-  Box, Grid, Table, TableBody, TableHead, TableRow
+  Box, Grid, Paper, Table, TableContainer, TableBody, TableHead, TableRow
 } from '@material-ui/core';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
@@ -122,104 +122,106 @@ function CampaignParBlog() {
     <Box my={{ xs: 0, sm: 4 }} boxSizing="border-box" maxWidth={1200} css={{ margin: '0 auto' }}>
       {participants.length > 0 ? (
         <React.Fragment>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {tableHeader.map(item => (
-                  <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
-                    {item.colName ? (
-                      <StyledTableSortLabel
-                        color="#66f8ff"
-                        active={order.orderBy === item.colName}
-                        direction={order.orderBy === item.colName ? order.direction : 'desc'}
-                        onClick={() => sortTable(item.colName)}
-                      >
-                        {item.text}
-                      </StyledTableSortLabel>
-                    ) : item.text}
-                  </StyledTableCell>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {tableHeader.map(item => (
+                    <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
+                      {item.colName ? (
+                        <StyledTableSortLabel
+                          color="#66f8ff"
+                          active={order.orderBy === item.colName}
+                          direction={order.orderBy === item.colName ? order.direction : 'desc'}
+                          onClick={() => sortTable(item.colName)}
+                        >
+                          {item.text}
+                        </StyledTableSortLabel>
+                      ) : item.text}
+                    </StyledTableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {participants.map(row => (
+                  <StyledTableRow
+                    hover
+                    key={row.PAR_ID}
+                    onClick={(event) => {}}
+                  >
+                    <StyledTableCell align="center">
+                      <StyledText textAlign="center">
+                        {row.rownum}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <StyledText textAlign="center">
+                        {row.PAR_NAME || '-'}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <StyledText textAlign="center">
+                        {row.NAV_GUEST_AVG || '-'}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <StyledText textAlign="center">
+                        {row.NAV_FLWR || '-'}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <StyledText textAlign="center">
+                        {row.NAV_CONT || '-'}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {row.NAV_BLOG_ID ? (
+                        <StyledButton
+                          background={Colors.green}
+                          hoverBackground={Colors.greenHover}
+                          height="25px"
+                          padding="0px 5px"
+                          onClick={() => window.open(`https://blog.naver.com/${row.NAV_BLOG_ID}`, '_blank')}
+                        >
+                              링크
+                        </StyledButton>
+                      ) : (
+                        <StyledText textAlign="center">-</StyledText>
+                      )}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {row.PAR_STATUS === '1' ? (
+                        <StyledButton
+                          background={Colors.green}
+                          hoverBackground={Colors.greenHover}
+                          height="25px"
+                          padding="0px 5px"
+                          onClick={() => clickSelect(row.PAR_ID)}
+                        >
+                              선정
+                        </StyledButton>
+                      ) : (
+                        <StyledText color={Colors.green}>선정됨</StyledText>
+                      )}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {row.PAR_REVIEW ? (
+                        <StyledButton
+                          background={Colors.green}
+                          hoverBackground={Colors.greenHover}
+                          height="25px"
+                          padding="0px 5px"
+                          onClick={() => window.open(row.PAR_REVIEW, '_blank')}
+                        >
+                              링크
+                        </StyledButton>
+                      ) : null}
+                    </StyledTableCell>
+                  </StyledTableRow>
                 ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {participants.map(row => (
-                <StyledTableRow
-                  hover
-                  key={row.id}
-                  onClick={(event) => {}}
-                >
-                  <StyledTableCell align="center">
-                    <StyledText textAlign="center">
-                      {row.rownum}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <StyledText textAlign="center">
-                      {row.PAR_NAME || '-'}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <StyledText textAlign="center">
-                      {row.NAV_GUEST_AVG || '-'}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <StyledText textAlign="center">
-                      {row.NAV_FLWR || '-'}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <StyledText textAlign="center">
-                      {row.NAV_CONT || '-'}
-                    </StyledText>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.NAV_BLOG_ID ? (
-                      <StyledButton
-                        background={Colors.green}
-                        hoverBackground={Colors.greenHover}
-                        height="25px"
-                        padding="0px 5px"
-                        onClick={() => window.open(`https://blog.naver.com/${row.NAV_BLOG_ID}`, '_blank')}
-                      >
-                            링크
-                      </StyledButton>
-                    ) : (
-                      <StyledText textAlign="center">-</StyledText>
-                    )}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.PAR_STATUS === '1' ? (
-                      <StyledButton
-                        background={Colors.green}
-                        hoverBackground={Colors.greenHover}
-                        height="25px"
-                        padding="0px 5px"
-                        onClick={() => clickSelect(row.PAR_ID)}
-                      >
-                            선정
-                      </StyledButton>
-                    ) : (
-                      <StyledText color={Colors.green}>선정됨</StyledText>
-                    )}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.PAR_REVIEW ? (
-                      <StyledButton
-                        background={Colors.green}
-                        hoverBackground={Colors.greenHover}
-                        height="25px"
-                        padding="0px 5px"
-                        onClick={() => window.open(row.PAR_REVIEW, '_blank')}
-                      >
-                          링크
-                      </StyledButton>
-                    ) : null}
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableBody>
+            </Table>
+          </TableContainer>
           <Box py={4}>
             <Grid container justify="center">
               <Grid item>

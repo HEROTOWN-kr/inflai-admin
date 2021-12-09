@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box, Grid, Table, TableBody, TableHead, TableRow
+  Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -142,120 +142,122 @@ function CampaignParInsta() {
 
   return (
     <Box my={{ xs: 0, sm: 4 }} boxSizing="border-box" maxWidth={1200} css={{ margin: '0 auto' }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {tableHeader.map(item => (
-              <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
-                {item.colName ? (
-                  <StyledTableSortLabel
-                    color="#66f8ff"
-                    active={order.orderBy === item.colName}
-                    direction={order.orderBy === item.colName ? order.direction : 'desc'}
-                    onClick={() => sortTable(item.colName)}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {tableHeader.map(item => (
+                <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
+                  {item.colName ? (
+                    <StyledTableSortLabel
+                      color="#66f8ff"
+                      active={order.orderBy === item.colName}
+                      direction={order.orderBy === item.colName ? order.direction : 'desc'}
+                      onClick={() => sortTable(item.colName)}
+                    >
+                      {item.text}
+                    </StyledTableSortLabel>
+                  ) : item.text}
+                </StyledTableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {participants.map(row => (
+              <StyledTableRow
+                hover
+                key={row.id}
+                onClick={(event) => {}}
+              >
+                <StyledTableCell align="center">
+                  <StyledText textAlign="center">
+                    {row.rownum}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <StyledText textAlign="center">
+                    {row.PAR_NAME || '-'}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.INS_USERNAME ? (
+                    <StyledLink
+                      href={`https://www.instagram.com/${row.INS_USERNAME}/`}
+                      target="_blank"
+                    >
+                      {`@${row.INS_USERNAME}`}
+                    </StyledLink>
+                  ) : (
+                    <StyledText textAlign="center">-</StyledText>
+                  )}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <StyledText textAlign="center">
+                    {row.INS_FLWR || '-'}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <StyledText textAlign="center">
+                    {row.INS_LIKES || '-'}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <StyledText textAlign="center">
+                    {row.INS_CMNT || '-'}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <StyledText textAlign="center">
+                    {row.INS_SCORE || '-'}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <StyledText textAlign="center">
+                    {row.INS_RANK || '-'}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <StyledButton
+                    height="25px"
+                    padding="0px 5px"
+                    onClick={() => clickInfo(row.INF_ID)}
                   >
-                    {item.text}
-                  </StyledTableSortLabel>
-                ) : item.text}
-              </StyledTableCell>
+                     분석
+                  </StyledButton>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.PAR_STATUS === '1' ? (
+                    <StyledButton
+                      background={Colors.green}
+                      hoverBackground={Colors.greenHover}
+                      height="25px"
+                      padding="0px 5px"
+                      onClick={() => clickSelect(row.PAR_ID)}
+                    >
+                         선정
+                    </StyledButton>
+                  ) : (
+                    <StyledText color={Colors.green}>선정됨</StyledText>
+                  )}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.PAR_REVIEW ? (
+                    <StyledButton
+                      background={Colors.green}
+                      hoverBackground={Colors.greenHover}
+                      height="25px"
+                      padding="0px 5px"
+                      onClick={() => window.open(row.PAR_REVIEW, '_blank')}
+                    >
+                         링크
+                    </StyledButton>
+                  ) : null}
+                </StyledTableCell>
+              </StyledTableRow>
             ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {participants.map(row => (
-            <StyledTableRow
-              hover
-              key={row.id}
-              onClick={(event) => {}}
-            >
-              <StyledTableCell align="center">
-                <StyledText textAlign="center">
-                  {row.rownum}
-                </StyledText>
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                <StyledText textAlign="center">
-                  {row.PAR_NAME || '-'}
-                </StyledText>
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                {row.INS_USERNAME ? (
-                  <StyledLink
-                    href={`https://www.instagram.com/${row.INS_USERNAME}/`}
-                    target="_blank"
-                  >
-                    {`@${row.INS_USERNAME}`}
-                  </StyledLink>
-                ) : (
-                  <StyledText textAlign="center">-</StyledText>
-                )}
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                <StyledText textAlign="center">
-                  {row.INS_FLWR || '-'}
-                </StyledText>
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                <StyledText textAlign="center">
-                  {row.INS_LIKES || '-'}
-                </StyledText>
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                <StyledText textAlign="center">
-                  {row.INS_CMNT || '-'}
-                </StyledText>
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                <StyledText textAlign="center">
-                  {row.INS_SCORE || '-'}
-                </StyledText>
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                <StyledText textAlign="center">
-                  {row.INS_RANK || '-'}
-                </StyledText>
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                <StyledButton
-                  height="25px"
-                  padding="0px 5px"
-                  onClick={() => clickInfo(row.INF_ID)}
-                >
-                  분석
-                </StyledButton>
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                {row.PAR_STATUS === '1' ? (
-                  <StyledButton
-                    background={Colors.green}
-                    hoverBackground={Colors.greenHover}
-                    height="25px"
-                    padding="0px 5px"
-                    onClick={() => clickSelect(row.PAR_ID)}
-                  >
-                      선정
-                  </StyledButton>
-                ) : (
-                  <StyledText color={Colors.green}>선정됨</StyledText>
-                )}
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                {row.PAR_REVIEW ? (
-                  <StyledButton
-                    background={Colors.green}
-                    hoverBackground={Colors.greenHover}
-                    height="25px"
-                    padding="0px 5px"
-                    onClick={() => window.open(row.PAR_REVIEW, '_blank')}
-                  >
-                      링크
-                  </StyledButton>
-                ) : null}
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Box py={4}>
         <Grid container justify="center">
           <Grid item>

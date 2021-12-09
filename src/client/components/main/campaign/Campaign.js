@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import React, { Fragment, useEffect, useState } from 'react';
 import {
-  Box, Paper, Tabs, Tab
+  Link, Redirect, Route, Switch, useRouteMatch
+} from 'react-router-dom';
+import {
+  Box, Paper, Tabs, Tab, Typography, makeStyles
 } from '@material-ui/core';
 import CampaignList from './CampaignList';
 import CampaignDetail from './CampaignDetail';
@@ -13,88 +15,100 @@ import CampaignCreateNew from './CampaignCreateNew';
 import CampaignEdit from './CampaignEdit';
 import CampaignParInsta from './CampaignParInsta';
 import CampaignParBlog from './CampaignParBlog';
+import StyledTabs from '../../containers/StyledTabs';
+import StyledTab from '../../containers/StyledTab';
+
+const useStyles = makeStyles({
+  title: {
+    fontFamily: 'Noto Sans KR, sans-serif',
+    fontWeight: 700,
+    marginTop: '96px',
+    marginBottom: '48px'
+  },
+  tabs: {
+    root: {},
+    indicator: {}
+  }
+});
 
 function Campaign(props) {
-  const { setMenuIndicator, history, match } = props;
-  const [value, setValue] = useState(0);
+  const { setMenuIndicator } = props;
+  const [tab, setTab] = useState(0);
+
+  const classes = useStyles();
+  const match = useRouteMatch();
 
   useEffect(() => setMenuIndicator(3), []);
 
-  const handleChange = (event, newValue) => {
-    if (newValue === 0) {
-      history.push(`${match.path}/List`);
-    } else {
-      history.push(`${match.path}/Request`);
-    }
-    setValue(newValue);
-  };
-
-  function goBack() {
-    history.push(match.path);
-  }
-
   return (
-    <React.Fragment>
-      <Box py={6} width={1200} css={{ margin: '0 auto' }}>
-        <Paper>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
+    <Fragment>
+      <Box borderBottom="1px solid #e4dfdf">
+        <Box maxWidth={1276} m="0 auto">
+          <Typography variant="h4" classes={{ root: classes.title }}>캠페인 관리</Typography>
+          <StyledTabs
+            className={classes.tabs}
+            value={tab}
           >
-            <Tab label="등록된 캠페인" />
-            <Tab label="캠페인 요청" />
-          </Tabs>
-        </Paper>
+            <StyledTab
+              label="등록된 캠페인"
+              component={Link}
+              to={`${match.url}/List`}
+            />
+            <StyledTab
+              label="캠페인 요청"
+              component={Link}
+              to={`${match.url}/Request`}
+            />
+          </StyledTabs>
+        </Box>
       </Box>
-      <Switch>
-        <Route
-          exact
-          path={`${match.path}/List`}
-          render={renderProps => (<CampaignList {...props} />)}
-        />
-        <Route
-          exact
-          path={`${match.path}/ParInsta/:id`}
-          render={renderProps => <CampaignParInsta {...renderProps} />}
-        />
-        <Route
-          exact
-          path={`${match.path}/ParBlog/:id`}
-          render={renderProps => <CampaignParBlog {...renderProps} />}
-        />
-        <Route
-          exact
-          path={`${match.path}/Request`}
-          render={renderProps => <RequestList {...renderProps} />}
-        />
-        <Route
-          exact
-          path={`${match.path}/Request/:id`}
-          render={renderProps => <RequestDetail {...renderProps} />}
-        />
-        <Route
-          exact
-          path={`${match.path}/create`}
-          render={renderProps => <CampaignCreateNew {...renderProps} goBack={goBack} />}
-        />
-        <Route
-          exact
-          path={`${match.path}/:id`}
-          render={renderProps => <CampaignEdit {...renderProps} goBack={goBack} />}
-        />
-        <Route
-          exact
-          path={`${match.path}/`}
-          render={() => (
-            <Redirect to={`${match.path}/List`} />
-          )}
-        />
-      </Switch>
-    </React.Fragment>
-
+      <Box py={2} bgcolor="#f4f4f4">
+        <Switch>
+          <Route
+            exact
+            path={`${match.path}/List`}
+            render={renderProps => (<CampaignList {...props} setTab={setTab} />)}
+          />
+          <Route
+            exact
+            path={`${match.path}/ParInsta/:id`}
+            render={renderProps => <CampaignParInsta {...renderProps} />}
+          />
+          <Route
+            exact
+            path={`${match.path}/ParBlog/:id`}
+            render={renderProps => <CampaignParBlog {...renderProps} />}
+          />
+          <Route
+            exact
+            path={`${match.path}/Request`}
+            render={renderProps => <RequestList {...renderProps} setTab={setTab} />}
+          />
+          <Route
+            exact
+            path={`${match.path}/Request/:id`}
+            render={renderProps => <RequestDetail {...renderProps} />}
+          />
+          <Route
+            exact
+            path={`${match.path}/create`}
+            render={renderProps => <CampaignCreateNew {...renderProps} />}
+          />
+          <Route
+            exact
+            path={`${match.path}/:id`}
+            render={renderProps => <CampaignEdit {...renderProps} />}
+          />
+          <Route
+            exact
+            path={`${match.path}/`}
+            render={() => (
+              <Redirect to={`${match.path}/List`} />
+            )}
+          />
+        </Switch>
+      </Box>
+    </Fragment>
   );
 }
 

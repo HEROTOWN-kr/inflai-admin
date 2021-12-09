@@ -109,14 +109,14 @@ function Influencer(props) {
                 <StyledTableCell align="center">{row.rownum}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   <Grid container spacing={1} alignItems="center">
-                    <Grid item>
+                    {/* <Grid item>
                       <StyledImage
                         width="100px"
                         height="100px"
                         borderRadius="100%"
                         src={row.photo || defaultAccountImage}
                       />
-                    </Grid>
+                    </Grid> */}
                     <Grid item>{row.name}</Grid>
                   </Grid>
                 </StyledTableCell>

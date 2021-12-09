@@ -8,10 +8,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  IconButton
+  IconButton, InputAdornment
 } from '@material-ui/core';
-import { Edit, Delete } from '@material-ui/icons/';
+import {
+  Edit, Delete, Description, Create
+} from '@material-ui/icons/';
 import axios from 'axios';
+import SearchIcon from '@material-ui/icons/Search';
+import { useForm } from 'react-hook-form';
+import { makeStyles } from '@material-ui/core/styles';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
@@ -24,6 +29,8 @@ import StyledLink from '../../containers/StyledLink';
 import ConfirmDialog from '../../containers/ConfirmDialog';
 import ParticipantDialog from './ParticipantDialog';
 import StyledImage from '../../containers/StyledImage';
+import ReactFormText from '../../containers/ReactFormText';
+import StyledSelect from '../../containers/StyledSelect';
 
 const tableHeader = [
   {
@@ -32,7 +39,7 @@ const tableHeader = [
     width: '60px'
   },
   {
-    text: '아이디',
+    text: 'id',
     align: 'center',
     width: '50px'
   },
@@ -51,15 +58,44 @@ const tableHeader = [
   }
 ];
 
+const useStyles = makeStyles({
+  root: {
+    background: '#ffffff'
+  },
+  endAdornment: {
+    padding: '0'
+  },
+  tableRowRoot: {
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: '#9199b6'
+    }
+  }
+});
+
 function CampaignList(props) {
-  const { history, match } = props;
+  const { history, match, setTab } = props;
+  const [type, setType] = useState('0');
+  const [searchWord, setSearchWord] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [participantDialog, setParticipantDialog] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(0);
   const [campaigns, setCampaigns] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
+  const classes = useStyles();
   const limit = 5;
+
+  const { register, handleSubmit, errors } = useForm({
+    mode: 'onBlur',
+    defaultValues: { searchValue: '' }
+  });
+
+  function searchFunc(data) {
+    const { searchValue } = data;
+    setPage(1);
+    setSearchWord(searchValue);
+  }
 
   function toggleDialog() {
     setDialogOpen(!dialogOpen);
@@ -69,14 +105,17 @@ function CampaignList(props) {
     setParticipantDialog(!participantDialog);
   }
 
-
   async function getCampaigns() {
     try {
-      const response = await axios.get('/api/TB_AD/getAll', { params: { page, limit } });
+      const params = { page, limit };
+      if (type !== '0') params.type = type;
+      if (searchWord.length > 0) params.searchWord = searchWord;
+
+      const response = await axios.get('/api/TB_AD/getAll', { params });
       const { campaignsRes, countRes } = response.data.data;
       const campaignsArray = campaignsRes.map((item) => {
         const {
-          AD_ID, AD_NAME, AD_CTG, AD_CTG2, AD_DT, TB_PHOTO_ADs, AD_TYPE, rownum
+          AD_ID, AD_NAME, AD_CTG, AD_CTG2, AD_DT, AD_INF_CNT, TB_PHOTO_ADs, AD_TYPE, PAR_SEL_CNT, PAR_REVIEW_CNT, TB_PARTICIPANTs, rownum
         } = item;
         return {
           id: AD_ID,
@@ -86,6 +125,10 @@ function CampaignList(props) {
           subcategory: AD_CTG2,
           createDate: AD_DT,
           photo: TB_PHOTO_ADs,
+          infCnt: AD_INF_CNT,
+          regCnt: TB_PARTICIPANTs.length,
+          reviewCnt: PAR_REVIEW_CNT,
+          selCnt: PAR_SEL_CNT,
           rownum
         };
       });
@@ -119,19 +162,80 @@ function CampaignList(props) {
 
   useEffect(() => {
     getCampaigns();
-  }, [page]);
+  }, [page, type, searchWord]);
+
+  useEffect(() => setTab(0), []);
 
   const changePage = (event, value) => {
     setPage(value);
   };
 
-  return (
-    <Box mt={4} width={1200} css={{ margin: '0 auto' }}>
-      <Grid container justify="space-between" alignItems="center">
-        <Grid item><StyledTitle title="캠페인 리스트" /></Grid>
-        <Grid item><StyledButton background={Colors.blue2} onClick={() => history.push(`${match.path}/create`)}>캠페인 등록</StyledButton></Grid>
-      </Grid>
+  const changeType = (event) => {
+    setType(event.target.value);
+  };
 
+  return (
+    <Box m="0 auto" maxWidth={1276}>
+      <Box mb={1}>
+        <Grid container justify="space-between" alignItems="center" spacing={1}>
+          <Grid item>
+            <StyledSelect
+              classes={{ root: classes.root }}
+              native
+              variant="outlined"
+              fullWidth
+              value={type}
+              onChange={changeType}
+            >
+              <option value="0">전체</option>
+              <option value="1">인스타</option>
+              <option value="2">유튜브</option>
+              <option value="3">블로그</option>
+            </StyledSelect>
+          </Grid>
+
+
+          <Grid item>
+            <Box width={300}>
+              <ReactFormText
+                register={register}
+                errors={errors}
+                name="searchValue"
+                placeholder="검색"
+                InputProps={{
+                  classes: { root: classes.root, adornedEnd: classes.endAdornment },
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSubmit(searchFunc)}>
+                        <SearchIcon fontSize="small" />
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+                onKeyPress={(ev) => {
+                  if (ev.key === 'Enter') {
+                    ev.preventDefault();
+                    handleSubmit(searchFunc)();
+                  }
+                }}
+              />
+            </Box>
+          </Grid>
+
+          <Grid item>
+            <StyledButton
+              height={40}
+              padding="0 20px"
+              background="#0fb359"
+              hoverBackground="#107C41"
+              startIcon={<Create />}
+              onClick={() => history.push(`${match.path}/create`)}
+            >
+              캠페인 등록
+            </StyledButton>
+          </Grid>
+        </Grid>
+      </Box>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
@@ -186,6 +290,15 @@ function CampaignList(props) {
                                 <span style={{ color: Colors.green, fontWeight: '600' }}>Blog</span>
                               ) : null}
                               {` ${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
+                            </StyledText>
+                            <StyledText fontSize="14px" color="#222">
+                              {`${row.regCnt} / ${row.infCnt}`}
+                            </StyledText>
+                            <StyledText fontSize="14px" color="#222">
+                              {`${row.selCnt} / ${row.infCnt}`}
+                            </StyledText>
+                            <StyledText fontSize="14px" color="#222">
+                              {`${row.reviewCnt} / ${row.selCnt}`}
                             </StyledText>
                           </Grid>
                           <Grid item xs={12}>
