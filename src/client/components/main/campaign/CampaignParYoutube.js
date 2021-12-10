@@ -15,6 +15,7 @@ import StyledButton from '../../containers/StyledButton';
 import { Colors } from '../../../lib/Сonstants';
 import InsightDialog from './InsightDialog';
 import ConfirmDialog from '../../containers/ConfirmDialog';
+import AnalysisDialog from '../ranking/Youtube/AnalysisDialog';
 
 const tableHeader = [
   {
@@ -24,37 +25,24 @@ const tableHeader = [
   },
   {
     text: '이름',
-    align: 'center'
+    align: 'left'
   },
   {
-    text: '인스타계정',
-    align: 'center'
+    text: '채널 이름',
+    align: 'left',
+    width: '300px'
   },
   {
-    text: '팔로워수',
+    id: 'YOU_SUBS',
+    text: '구독수',
     align: 'center',
-    colName: 'INS_FLWR'
+    width: '100px'
   },
   {
-    text: '평균좋아요수',
+    id: 'YOU_VIEWS',
+    text: '조회수',
     align: 'center',
-    colName: 'INS_LIKES',
-  },
-  {
-    text: '평균댓글수',
-    align: 'center',
-    colName: 'INS_CMNT',
-  },
-  {
-    text: 'AI 종합 점수',
-    align: 'center',
-    colName: 'INS_SCORE',
-  },
-  {
-    text: '순위',
-    align: 'center',
-    width: '100px',
-    colName: 'INS_RANK',
+    width: '100px'
   },
   {
     text: '분석',
@@ -87,7 +75,7 @@ function CampaignParInsta() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(0);
   const [page, setPage] = useState(1);
-  const [order, setOrder] = useState({ orderBy: 'INS_FLWR', direction: 'desc' });
+  const [order, setOrder] = useState({ orderBy: 'YOU_SUBS', direction: 'desc' });
   const classes = useStyles();
   const params = useParams();
   const adId = params.id;
@@ -107,7 +95,7 @@ function CampaignParInsta() {
     };
     if (selected) resParams.selected = '1';
 
-    axios.get('/api/TB_PARTICIPANT/getListInsta', {
+    axios.get('/api/TB_PARTICIPANT/getListYoutube', {
       params: resParams
     }).then((res) => {
       setParticipants(res.data.data);
@@ -124,8 +112,7 @@ function CampaignParInsta() {
   };
 
   function sortTable(id) {
-    let isDesc = order.orderBy === id && order.direction === 'desc';
-    if (order.orderBy !== 'INS_RANK' && id === 'INS_RANK') isDesc = true;
+    const isDesc = order.orderBy === id && order.direction === 'desc';
     setOrder({
       orderBy: id,
       direction: isDesc ? 'asc' : 'desc'
@@ -142,7 +129,7 @@ function CampaignParInsta() {
     }).catch(err => alert(err.response.data.message));
   }
 
-  function clickInfo(id) {
+  function getAnalysis(id) {
     setSelectedId(id);
     toggleDialog();
   }
@@ -165,7 +152,7 @@ function CampaignParInsta() {
                   name="checkedB"
                   color="secondary"
                 />
-                )}
+                            )}
               label="선정자"
               classes={{ root: classes.checkboxLabel }}
             />
@@ -196,59 +183,27 @@ function CampaignParInsta() {
             {participants.map(row => (
               <StyledTableRow hover key={row.id}>
                 <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.rownum}
-                  </StyledText>
+                  {row.rownum}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {row.PAR_NAME || '-'}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {row.YOU_NAME}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.PAR_NAME || '-'}
-                  </StyledText>
+                  {row.YOU_SUBS}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {row.INS_USERNAME ? (
-                    <StyledLink
-                      href={`https://www.instagram.com/${row.INS_USERNAME}/`}
-                      target="_blank"
-                    >
-                      {`@${row.INS_USERNAME}`}
-                    </StyledLink>
-                  ) : (
-                    <StyledText textAlign="center">-</StyledText>
-                  )}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.INS_FLWR || '-'}
-                  </StyledText>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.INS_LIKES || '-'}
-                  </StyledText>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.INS_CMNT || '-'}
-                  </StyledText>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.INS_SCORE || '-'}
-                  </StyledText>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.INS_RANK || '-'}
-                  </StyledText>
+                  {row.YOU_VIEWS}
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   <StyledButton
                     height="25px"
                     padding="0px 5px"
-                    onClick={() => clickInfo(row.INF_ID)}
+                    onClick={() => getAnalysis(row.YOU_ID)}
                   >
-                     분석
+                    분석
                   </StyledButton>
                 </StyledTableCell>
                 <StyledTableCell align="center">
@@ -260,7 +215,7 @@ function CampaignParInsta() {
                       padding="0px 5px"
                       onClick={() => clickSelect(row.PAR_ID)}
                     >
-                         선정
+                                            선정
                     </StyledButton>
                   ) : (
                     <StyledText color={Colors.green}>선정됨</StyledText>
@@ -275,7 +230,7 @@ function CampaignParInsta() {
                       padding="0px 5px"
                       onClick={() => window.open(row.PAR_REVIEW, '_blank')}
                     >
-                         링크
+                                            링크
                     </StyledButton>
                   ) : null}
                 </StyledTableCell>
@@ -296,7 +251,7 @@ function CampaignParInsta() {
           </Grid>
         </Grid>
       </Box>
-      <InsightDialog open={dialogOpen} closeDialog={toggleDialog} selectedId={selectedId} />
+      <AnalysisDialog open={dialogOpen} closeDialog={toggleDialog} id={selectedId} />
       <ConfirmDialog
         open={confirmDialogOpen}
         closeDialog={toggleConfirmDialog}

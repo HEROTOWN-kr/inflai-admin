@@ -17,6 +17,7 @@ import CampaignParInsta from './CampaignParInsta';
 import CampaignParBlog from './CampaignParBlog';
 import StyledTabs from '../../containers/StyledTabs';
 import StyledTab from '../../containers/StyledTab';
+import CampaignParYoutube from './CampaignParYoutube';
 
 const useStyles = makeStyles({
   title: {
@@ -73,6 +74,11 @@ function Campaign(props) {
             exact
             path={`${match.path}/ParInsta/:id`}
             render={renderProps => <CampaignParInsta {...renderProps} />}
+          />
+          <Route
+            exact
+            path={`${match.path}/ParYoutube/:id`}
+            render={renderProps => <CampaignParYoutube {...renderProps} />}
           />
           <Route
             exact

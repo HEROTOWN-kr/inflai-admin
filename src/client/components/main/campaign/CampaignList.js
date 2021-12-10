@@ -7,12 +7,12 @@ import {
   TableBody,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow, Tooltip,
   IconButton, InputAdornment
 } from '@material-ui/core';
 import {
-  Edit, Delete, Description, Create
-} from '@material-ui/icons/';
+  Edit, Delete, Description, Create, FileCopy
+} from '@material-ui/icons';
 import axios from 'axios';
 import SearchIcon from '@material-ui/icons/Search';
 import { useForm } from 'react-hook-form';
@@ -31,6 +31,7 @@ import ParticipantDialog from './ParticipantDialog';
 import StyledImage from '../../containers/StyledImage';
 import ReactFormText from '../../containers/ReactFormText';
 import StyledSelect from '../../containers/StyledSelect';
+import CopyDialog from './CopyDialog';
 
 const tableHeader = [
   {
@@ -48,13 +49,16 @@ const tableHeader = [
     align: 'center'
   },
   {
+    text: '신청/선정/후기',
+  },
+  {
     text: '등록/옵션기간',
     align: 'center'
   },
   {
     text: '관리자툴',
     align: 'center',
-    width: '120px'
+    width: '150px'
   }
 ];
 
@@ -64,6 +68,9 @@ const useStyles = makeStyles({
   },
   endAdornment: {
     padding: '0'
+  },
+  iconButton: {
+    padding: '8px'
   },
   tableRowRoot: {
     '&:hover': {
@@ -78,7 +85,7 @@ function CampaignList(props) {
   const [type, setType] = useState('0');
   const [searchWord, setSearchWord] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [participantDialog, setParticipantDialog] = useState(false);
+  const [copyDialog, setCopyDialog] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(0);
   const [campaigns, setCampaigns] = useState([]);
   const [count, setCount] = useState(0);
@@ -101,8 +108,8 @@ function CampaignList(props) {
     setDialogOpen(!dialogOpen);
   }
 
-  function toggleParticipantDialog() {
-    setParticipantDialog(!participantDialog);
+  function toggleCopyDialog() {
+    setCopyDialog(!copyDialog);
   }
 
   async function getCampaigns() {
@@ -148,6 +155,11 @@ function CampaignList(props) {
     });
   }
 
+  function copyCampaign(id) {
+    setSelectedCampaign(id);
+    toggleCopyDialog();
+  }
+
   function campaignDetail(event, id) {
     history.push(`${props.match.path}/${id}`);
   }
@@ -155,6 +167,8 @@ function CampaignList(props) {
   function campaignParticipant(id, type) {
     if (type === '1') {
       history.push(`/Campaign/ParInsta/${id}`);
+    } else if (type === '2') {
+      history.push(`/Campaign/ParYoutube/${id}`);
     } else if (type === '3') {
       history.push(`/Campaign/ParBlog/${id}`);
     }
@@ -193,8 +207,6 @@ function CampaignList(props) {
               <option value="3">블로그</option>
             </StyledSelect>
           </Grid>
-
-
           <Grid item>
             <Box width={300}>
               <ReactFormText
@@ -248,7 +260,6 @@ function CampaignList(props) {
           <TableBody>
             {campaigns.map(row => (
               <StyledTableRow
-                hover
                 key={row.id}
                 onClick={(event) => {}}
               >
@@ -291,15 +302,6 @@ function CampaignList(props) {
                               ) : null}
                               {` ${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
                             </StyledText>
-                            <StyledText fontSize="14px" color="#222">
-                              {`${row.regCnt} / ${row.infCnt}`}
-                            </StyledText>
-                            <StyledText fontSize="14px" color="#222">
-                              {`${row.selCnt} / ${row.infCnt}`}
-                            </StyledText>
-                            <StyledText fontSize="14px" color="#222">
-                              {`${row.reviewCnt} / ${row.selCnt}`}
-                            </StyledText>
                           </Grid>
                           <Grid item xs={12}>
                             <Box width="70px">
@@ -318,18 +320,38 @@ function CampaignList(props) {
                     </Grid>
                   </Grid>
                 </StyledTableCell>
+                <StyledTableCell>
+                  <StyledText fontSize="14px" color="#222">
+                    {`신청자 ${row.regCnt} / ${row.infCnt}`}
+                  </StyledText>
+                  <StyledText fontSize="14px" color="#222">
+                    {`선정자 ${row.selCnt} / ${row.infCnt}`}
+                  </StyledText>
+                  <StyledText fontSize="14px" color="#222">
+                    {`후기수 ${row.reviewCnt} / ${row.selCnt}`}
+                  </StyledText>
+                </StyledTableCell>
                 <StyledTableCell align="center">
                   <StyledText fontSize="14px" color="#222" textAlign="center">
                     {row.createDate}
                   </StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <IconButton onClick={event => campaignDetail(event, row.id)}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton onClick={() => { setSelectedCampaign(row.id); setDialogOpen(true); }}>
-                    <Delete />
-                  </IconButton>
+                  <Tooltip title="수정" placement="top">
+                    <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={event => campaignDetail(event, row.id)}>
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="복사" placement="top">
+                    <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={() => copyCampaign(row.id)}>
+                      <FileCopy />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="삭제" placement="top">
+                    <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={() => { setSelectedCampaign(row.id); setDialogOpen(true); }}>
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
@@ -348,9 +370,11 @@ function CampaignList(props) {
           </Grid>
         </Grid>
       </Box>
-      <ParticipantDialog
-        open={participantDialog}
-        closeDialog={toggleParticipantDialog}
+      <CopyDialog
+        open={copyDialog}
+        campaignId={selectedCampaign}
+        closeDialog={toggleCopyDialog}
+        getCampaigns={getCampaigns}
       />
       <ConfirmDialog
         open={dialogOpen}

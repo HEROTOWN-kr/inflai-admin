@@ -6,7 +6,6 @@ import React from 'react';
 const useStyles = makeStyles({
   root: ({ backgroundColor, color }) => ({
     backgroundColor: backgroundColor || 'transparent',
-    cursor: 'pointer',
     '&.Mui-selected': {
       backgroundColor: '#39ca66',
       color: '#fff',
@@ -25,7 +24,6 @@ function StyledTableRow(props) {
 
   return (
     <TableRow
-      hover
       classes={classes}
       {...rest}
     >

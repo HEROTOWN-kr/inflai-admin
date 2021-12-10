@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {
-  Box, Grid, Paper, Table, TableContainer, TableBody, TableHead, TableRow
+  Box, Grid, Paper, Table, TableContainer, TableBody, TableHead, TableRow, FormControlLabel, Checkbox
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
 import StyledTableRow from '../../containers/StyledTableRow';
@@ -18,55 +19,61 @@ const tableHeader = [
   {
     text: '번호',
     align: 'center',
-    width: '40px'
+    width: '60px'
   },
   {
     text: '이름',
-    align: 'center',
-    width: '100px'
   },
   {
     text: '방문자(평균)',
     align: 'center',
-    width: '80px',
+    width: '130px',
     colName: 'NAV_GUEST_AVG'
   },
   {
     text: '이웃',
     align: 'center',
-    width: '80px',
+    width: '100px',
     colName: 'NAV_FLWR'
   },
   {
     text: '게시물',
     align: 'center',
-    width: '80px',
+    width: '100px',
     colName: 'NAV_CONT'
   },
   {
     text: '블로그',
     align: 'center',
-    width: '50px',
+    width: '60px',
   },
   {
     text: '선정',
     align: 'center',
-    width: '50px',
+    width: '60px',
   },
   {
     text: '리뷰',
     align: 'center',
-    width: '50px',
+    width: '60px',
   }
 ];
 
+const useStyles = makeStyles({
+  checkboxLabel: {
+    marginRight: 0
+  }
+});
+
 function CampaignParBlog() {
   const [participants, setParticipants] = useState([]);
+  const [selected, setSelected] = useState(false);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(0);
   const [order, setOrder] = useState({ orderBy: 'NAV_FLWR', direction: 'desc' });
+  const classes = useStyles();
   const params = useParams();
   const adId = params.id;
   const limit = 10;
@@ -76,10 +83,13 @@ function CampaignParBlog() {
   }
 
   function getParticipants() {
+    const resParams = {
+      ...order, adId, limit, page
+    };
+    if (selected) resParams.selected = '1';
+
     axios.get('/api/TB_PARTICIPANT/getListBlog', {
-      params: {
-        ...order, adId, limit, page
-      }
+      params: resParams
     }).then((res) => {
       setParticipants(res.data.data);
       setCount(res.data.count);
@@ -98,7 +108,7 @@ function CampaignParBlog() {
 
   useEffect(() => {
     getParticipants();
-  }, [order, page]);
+  }, [order, page, selected]);
 
   const changePage = (event, value) => {
     setPage(value);
@@ -119,7 +129,25 @@ function CampaignParBlog() {
   }
 
   return (
-    <Box my={{ xs: 0, sm: 4 }} boxSizing="border-box" maxWidth={1200} css={{ margin: '0 auto' }}>
+    <Box mb={1} boxSizing="border-box" maxWidth={1276} css={{ margin: '0 auto' }}>
+      <Box mb={1}>
+        <Grid container justify="flex-end">
+          <Grid item>
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  checked={selected}
+                  onChange={() => setSelected(!selected)}
+                  name="checkedB"
+                  color="secondary"
+                />
+                )}
+              label="선정자"
+              classes={{ root: classes.checkboxLabel }}
+            />
+          </Grid>
+        </Grid>
+      </Box>
       {participants.length > 0 ? (
         <React.Fragment>
           <TableContainer component={Paper}>
@@ -154,8 +182,8 @@ function CampaignParBlog() {
                         {row.rownum}
                       </StyledText>
                     </StyledTableCell>
-                    <StyledTableCell align="center">
-                      <StyledText textAlign="center">
+                    <StyledTableCell>
+                      <StyledText>
                         {row.PAR_NAME || '-'}
                       </StyledText>
                     </StyledTableCell>
