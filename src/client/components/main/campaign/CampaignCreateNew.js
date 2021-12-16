@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import {
-  Box, Grid, Paper, FormControlLabel, RadioGroup, Radio, InputAdornment
+  Box, Grid, Paper, FormControlLabel, RadioGroup, Radio, InputAdornment, Typography
 } from '@material-ui/core';
 import { useForm, Controller, get } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -11,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Clear } from '@material-ui/icons';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
 import ReactFormText from '../../containers/ReactFormText';
@@ -49,6 +50,15 @@ const useStyles = makeStyles({
   },
   positionEnd: {
     margin: '0'
+  },
+  clearRoot: {
+    height: 'auto',
+    marginLeft: '8px',
+    opacity: '30%',
+    cursor: 'pointer',
+    '&:hover': {
+      opacity: '1'
+    }
   }
 });
 
@@ -56,6 +66,7 @@ function CampaignCreateNew() {
   const history = useHistory();
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
+  const [links, setLinks] = useState([]);
   const [savingMode, setSavingMode] = useState(false);
   const classes = useStyles();
 
@@ -90,6 +101,7 @@ function CampaignCreateNew() {
     selectFinish: tomorrow,
     phone: '',
     email: '',
+    linkItem: '',
     provideInfo: '',
     provideMoney: '',
   };
@@ -168,6 +180,12 @@ function CampaignCreateNew() {
     maxDate.setDate(maxDate.getDate() + 13);
     setValue('searchFinish', minDate);
     setPickerDates({ min: minDate, max: maxDate });
+  }
+
+  function addLink() {
+    const newLink = getValues('linkItem');
+    setLinks([...links, newLink]);
+    setValue('linkItem', '');
   }
 
   const onSubmit = async (data) => {
@@ -432,6 +450,54 @@ function CampaignCreateNew() {
           <Box mb={1}><StyledText color="#3f51b5">필수키워드</StyledText></Box>
           <ReactFormText register={register} errors={errors} name="searchKeyword" />
         </Grid>
+
+
+        {links.length > 0 ? (
+          <Grid item xs={12}>
+            <Grid container spacing={1}>
+              { links.map(item => (
+                <Grid item>
+                  <Box
+                    p="2px 10px"
+                    bgcolor="#0000000d"
+                    borderRadius="5px"
+                  >
+                    <Grid style={{ display: 'flex' }}>
+                      <Typography>{item}</Typography>
+                      <Clear fontSize="small" classes={{ root: classes.clearRoot }} />
+                    </Grid>
+
+                    {/* <Grid container alignItems="center" spacing={2}>
+                      <Grid item>
+                        <StyledText fontSize="14px">
+                          {item}
+                        </StyledText>
+                      </Grid>
+                      <Grid item>
+                        <Clear fontSize="small" />
+                      </Grid>
+                    </Grid> */}
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+        ) : null}
+        <Grid item xs={12}>
+          <Box mb={1}><StyledText color="#3f51b5">참조할 링크</StyledText></Box>
+          <ReactFormText
+            register={register}
+            errors={errors}
+            name="linkItem"
+            onKeyPress={(ev) => {
+              if (ev.key === 'Enter') {
+                ev.preventDefault();
+                addLink();
+              }
+            }}
+          />
+        </Grid>
+
         <Grid item xs={12}>
           <Box mb={1}><StyledText color="#3f51b5">포스팅가이드</StyledText></Box>
           <ReactFormText
