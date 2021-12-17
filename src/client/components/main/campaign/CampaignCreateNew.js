@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import {
-  Box, Grid, Paper, FormControlLabel, RadioGroup, Radio, InputAdornment, Typography
+  Box, Grid, Paper, FormControlLabel, RadioGroup, Radio, InputAdornment, Typography, IconButton
 } from '@material-ui/core';
 import { useForm, Controller, get } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -11,7 +11,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Clear } from '@material-ui/icons';
+import { ArrowRightAlt, Clear } from '@material-ui/icons';
+import SearchIcon from '@material-ui/icons/Search';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
 import ReactFormText from '../../containers/ReactFormText';
@@ -41,7 +42,12 @@ const visibleTypes = [
 
 const useStyles = makeStyles({
   endAdornment: {
-    // padding: '0'
+    padding: '0'
+  },
+  linkText: {
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   input: {
     padding: '15px 14px',
@@ -147,7 +153,7 @@ function CampaignCreateNew() {
   });
 
   const {
-    register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues, reset
+    register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues, setError
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
@@ -184,38 +190,87 @@ function CampaignCreateNew() {
 
   function addLink() {
     const newLink = getValues('linkItem');
+    if (!newLink) return;
+
+    if (links.length === 3) {
+      setError('linkItem', {
+        type: 'manual',
+        message: '참초할 링크 최대 3개 까지 업로드 됩니다'
+      });
+      return;
+    }
+
+    if (newLink.indexOf('http://') === -1 && newLink.indexOf('https://') === -1) {
+      setError('linkItem', {
+        type: 'manual',
+        message: '올바른 URL이 아닙니다. URL을 확인해주세요.'
+      });
+      return;
+    }
+
+    if (links.indexOf(newLink) > -1) {
+      setError('linkItem', {
+        type: 'manual',
+        message: '동일한 URL입니다'
+      });
+      return;
+    }
+
     setLinks([...links, newLink]);
     setValue('linkItem', '');
   }
 
-  const onSubmit = async (data) => {
+  function deleteLink(linkName) {
+    const newArray = links.filter(item => item !== linkName);
+    setLinks(newArray);
+  }
+
+  const onSubmit = (data) => {
     setSavingMode(true);
-    axios.post('/api/TB_AD/createAdmin', { ...data }).then((res) => {
-      if (images.length > 0) {
-        const id = res.data.data.AD_ID;
-        const uploaders = images.map((item) => {
-          const formData = new FormData();
-          formData.append('file', item.file);
-          formData.append('id', id);
-          formData.append('isMain', item.isMain);
-          return axios.post('/api/TB_PHOTO_AD/uploadImageAWS', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-          }).then(response => ('sucess')).catch(error => ('error'));
-        });
-        axios.all(uploaders).then(() => {
-          setSavingMode(false);
-          alert('캠페인이 등록되었습니다!!');
-          history.push('/Campaign/List');
-        });
-      } else {
-        setSavingMode(false);
+    const props = data;
+    if (links.length > 0) props.links = JSON.stringify(links);
+
+    axios.post('/api/TB_AD/createAdmin', props).then((res) => {
+      if (images.length === 0) {
         alert('캠페인이 등록되었습니다!!');
         history.push('/Campaign/List');
+        return;
       }
+      const id = res.data.data.AD_ID;
+
+      const promiseArray = images.map(item => new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append('file', item.file);
+        formData.append('id', id);
+        formData.append('isMain', item.isMain);
+        axios.post('/api/TB_PHOTO_AD/uploadImageAWS', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => resolve('sucess')).catch(error => resolve('error'));
+      }));
+
+      Promise.all(promiseArray).then((response) => {
+        console.log(response);
+        alert('캠페인이 등록되었습니다!!');
+        history.push('/Campaign/List');
+      }).catch(err => console.log(err.message));
+
+      /* const uploaders = images.map((item) => {
+       const formData = new FormData();
+       formData.append('file', item.file);
+       formData.append('id', id);
+       formData.append('isMain', item.isMain);
+       return axios.post('/api/TB_PHOTO_AD/uploadImageAWS', formData, {
+         headers: { 'Content-Type': 'multipart/form-data' }
+       }).then(response => ('sucess')).catch(error => ('error'));
+     });
+
+     axios.all(uploaders).then(() => {
+       alert('캠페인이 등록되었습니다!!');
+       history.push('/Campaign/List');
+     }); */
     }).catch((error) => {
-      setSavingMode(false);
       alert(error.response.data);
-    });
+    }).then(() => setSavingMode(false));
   };
 
   return (
@@ -456,15 +511,20 @@ function CampaignCreateNew() {
           <Grid item xs={12}>
             <Grid container spacing={1}>
               { links.map(item => (
-                <Grid item>
+                <Grid item key={item}>
                   <Box
-                    p="2px 10px"
+                    p="2px 5px 2px 10px"
                     bgcolor="#0000000d"
                     borderRadius="5px"
+                    maxWidth={300}
                   >
                     <Grid style={{ display: 'flex' }}>
-                      <Typography>{item}</Typography>
-                      <Clear fontSize="small" classes={{ root: classes.clearRoot }} />
+                      <Typography classes={{ root: classes.linkText }}>{item}</Typography>
+                      <Clear
+                        fontSize="small"
+                        classes={{ root: classes.clearRoot }}
+                        onClick={() => deleteLink(item)}
+                      />
                     </Grid>
 
                     {/* <Grid container alignItems="center" spacing={2}>
@@ -483,12 +543,23 @@ function CampaignCreateNew() {
             </Grid>
           </Grid>
         ) : null}
-        <Grid item xs={12}>
+        <Grid item xs={4}>
           <Box mb={1}><StyledText color="#3f51b5">참조할 링크</StyledText></Box>
           <ReactFormText
             register={register}
             errors={errors}
             name="linkItem"
+            placeholder="예시) https://www.inflai.com"
+            InputProps={{
+              classes: { adornedEnd: classes.endAdornment },
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={addLink}>
+                    <ArrowRightAlt fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
             onKeyPress={(ev) => {
               if (ev.key === 'Enter') {
                 ev.preventDefault();
@@ -531,10 +602,7 @@ function CampaignCreateNew() {
                   placeholder=""
                   InputProps={{
                     endAdornment: <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>원</InputAdornment>,
-                    classes: {
-                      adornedEnd: classes.endAdornment,
-                      input: classes.input
-                    }
+                    classes: { input: classes.input }
                   }}
                 />
               </Box>
