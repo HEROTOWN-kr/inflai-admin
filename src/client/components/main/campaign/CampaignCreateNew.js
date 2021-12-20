@@ -506,7 +506,6 @@ function CampaignCreateNew() {
           <ReactFormText register={register} errors={errors} name="searchKeyword" />
         </Grid>
 
-
         {links.length > 0 ? (
           <Grid item xs={12}>
             <Grid container spacing={1}>
@@ -526,17 +525,6 @@ function CampaignCreateNew() {
                         onClick={() => deleteLink(item)}
                       />
                     </Grid>
-
-                    {/* <Grid container alignItems="center" spacing={2}>
-                      <Grid item>
-                        <StyledText fontSize="14px">
-                          {item}
-                        </StyledText>
-                      </Grid>
-                      <Grid item>
-                        <Clear fontSize="small" />
-                      </Grid>
-                    </Grid> */}
                   </Box>
                 </Grid>
               ))}

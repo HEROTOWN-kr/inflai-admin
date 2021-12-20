@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import {
-  Box, Grid, Paper, FormControlLabel, Checkbox, RadioGroup, Radio, InputAdornment
+  Box, Grid, Paper, FormControlLabel, Checkbox, RadioGroup, Radio, InputAdornment, Typography, IconButton
 } from '@material-ui/core';
 import { useForm, Controller, get } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -11,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory, useParams } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { ArrowRightAlt, Clear } from '@material-ui/icons';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
 import ReactFormText from '../../containers/ReactFormText';
@@ -40,7 +41,12 @@ const visibleTypes = [
 
 const useStyles = makeStyles({
   endAdornment: {
-    // padding: '0'
+    padding: '0'
+  },
+  linkText: {
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   input: {
     padding: '15px 14px',
@@ -49,6 +55,15 @@ const useStyles = makeStyles({
   },
   positionEnd: {
     margin: '0'
+  },
+  clearRoot: {
+    height: 'auto',
+    marginLeft: '8px',
+    opacity: '30%',
+    cursor: 'pointer',
+    '&:hover': {
+      opacity: '1'
+    }
   }
 });
 
@@ -58,6 +73,7 @@ function CampaignEdit() {
   const [dbVisible, setDbVisible] = useState('');
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
+  const [links, setLinks] = useState([]);
   const [savingMode, setSavingMode] = useState(false);
   const classes = useStyles();
 
@@ -137,7 +153,7 @@ function CampaignEdit() {
   });
 
   const {
-    register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues, reset
+    register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues, reset, setError
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
@@ -180,53 +196,91 @@ function CampaignEdit() {
     }).then((res) => {
       if (res.status === 201) {
         history.push('/Campaign/List');
-      } else {
-        const { data } = res.data;
-        const {
-          AD_INF_CNT, AD_SRCH_START, AD_SRCH_END, AD_SEL_START, AD_SEL_END, AD_DELIVERY, AD_CTG,
-          AD_CTG2, AD_TEL, AD_EMAIL, AD_NAME, AD_SHRT_DISC, AD_DISC, AD_SEARCH_KEY,
-          AD_TYPE, AD_DETAIL, AD_PROVIDE, AD_MONEY, AD_POST_CODE, AD_ROAD_ADDR,
-          AD_DETAIL_ADDR, AD_EXTR_ADDR, TB_PHOTO_ADs, AD_VISIBLE
-        } = data;
-
-        const resetObj = {
-          ...defaultValues,
-          visible: AD_VISIBLE,
-          influencerCount: AD_INF_CNT,
-          searchStart: new Date(AD_SRCH_START),
-          searchFinish: new Date(AD_SRCH_END),
-          selectStart: new Date(AD_SEL_START),
-          selectFinish: new Date(AD_SEL_END),
-          delivery: AD_DELIVERY.toString(),
-          type: AD_CTG,
-          subtype: AD_CTG2,
-          phone: AD_TEL,
-          email: AD_EMAIL,
-          campaignName: AD_NAME,
-          shortDisc: AD_SHRT_DISC,
-          discription: AD_DISC,
-          searchKeyword: AD_SEARCH_KEY,
-          sns: AD_TYPE
-        };
-
-        if (AD_DETAIL) resetObj.detailInfo = AD_DETAIL;
-        if (AD_PROVIDE) resetObj.provideInfo = AD_PROVIDE;
-        if (AD_MONEY) resetObj.provideMoney = AD_MONEY;
-        if (AD_POST_CODE) resetObj.postcode = AD_POST_CODE;
-        if (AD_ROAD_ADDR) resetObj.roadAddress = AD_ROAD_ADDR;
-        if (AD_DETAIL_ADDR) resetObj.detailAddress = AD_DETAIL_ADDR;
-        if (AD_EXTR_ADDR) resetObj.extraAddress = AD_EXTR_ADDR;
-        if (TB_PHOTO_ADs && TB_PHOTO_ADs.length > 0) setDbImages(TB_PHOTO_ADs);
-
-        reset(resetObj);
-        setDbVisible(AD_VISIBLE);
+        return;
       }
+      const { data } = res.data;
+      const {
+        AD_INF_CNT, AD_SRCH_START, AD_SRCH_END, AD_SEL_START, AD_SEL_END, AD_DELIVERY, AD_CTG,
+        AD_CTG2, AD_TEL, AD_EMAIL, AD_NAME, AD_SHRT_DISC, AD_DISC, AD_SEARCH_KEY,
+        AD_TYPE, AD_DETAIL, AD_PROVIDE, AD_MONEY, AD_POST_CODE, AD_ROAD_ADDR,
+        AD_DETAIL_ADDR, AD_EXTR_ADDR, TB_PHOTO_ADs, AD_VISIBLE, AD_LINKS
+      } = data;
+
+      const resetObj = {
+        ...defaultValues,
+        visible: AD_VISIBLE,
+        influencerCount: AD_INF_CNT,
+        searchStart: new Date(AD_SRCH_START),
+        searchFinish: new Date(AD_SRCH_END),
+        selectStart: new Date(AD_SEL_START),
+        selectFinish: new Date(AD_SEL_END),
+        delivery: AD_DELIVERY.toString(),
+        type: AD_CTG,
+        subtype: AD_CTG2,
+        phone: AD_TEL,
+        email: AD_EMAIL,
+        campaignName: AD_NAME,
+        shortDisc: AD_SHRT_DISC,
+        discription: AD_DISC,
+        searchKeyword: AD_SEARCH_KEY,
+        sns: AD_TYPE
+      };
+
+      if (AD_DETAIL) resetObj.detailInfo = AD_DETAIL;
+      if (AD_PROVIDE) resetObj.provideInfo = AD_PROVIDE;
+      if (AD_MONEY) resetObj.provideMoney = AD_MONEY;
+      if (AD_POST_CODE) resetObj.postcode = AD_POST_CODE;
+      if (AD_ROAD_ADDR) resetObj.roadAddress = AD_ROAD_ADDR;
+      if (AD_DETAIL_ADDR) resetObj.detailAddress = AD_DETAIL_ADDR;
+      if (AD_EXTR_ADDR) resetObj.extraAddress = AD_EXTR_ADDR;
+      if (TB_PHOTO_ADs && TB_PHOTO_ADs.length > 0) setDbImages(TB_PHOTO_ADs);
+      if (AD_LINKS) setLinks(JSON.parse(AD_LINKS));
+
+      reset(resetObj);
+      setDbVisible(AD_VISIBLE);
     });
+  }
+
+  function addLink() {
+    const newLink = getValues('linkItem');
+    if (!newLink) return;
+
+    if (links.length === 3) {
+      setError('linkItem', {
+        type: 'manual',
+        message: '참초할 링크 최대 3개 까지 업로드 됩니다'
+      });
+      return;
+    }
+
+    if (newLink.indexOf('http://') === -1 && newLink.indexOf('https://') === -1) {
+      setError('linkItem', {
+        type: 'manual',
+        message: '올바른 URL이 아닙니다. URL을 확인해주세요.'
+      });
+      return;
+    }
+
+    if (links.indexOf(newLink) > -1) {
+      setError('linkItem', {
+        type: 'manual',
+        message: '동일한 URL입니다'
+      });
+      return;
+    }
+
+    setLinks([...links, newLink]);
+    setValue('linkItem', '');
+  }
+
+  function deleteLink(linkName) {
+    const newArray = links.filter(item => item !== linkName);
+    setLinks(newArray);
   }
 
   const onSubmit = async (data) => {
     setSavingMode(true);
-    const post = { ...data, adId: params.id };
+    const post = { ...data, adId: params.id, links: JSON.stringify(links) };
     if (dbVisible === '0' && data.visible === '1') post.visibilityChanged = true;
     axios.post('/api/TB_AD/updateAdmin', post).then((res) => {
       if (images.length > 0) {
@@ -311,11 +365,9 @@ function CampaignEdit() {
             name="sns"
             control={control}
           />
-          {
-            errors.sns ? (
-              <div className="error-message">{errors.sns.message}</div>
-            ) : null
-          }
+          {errors.sns ? (
+            <div className="error-message">{errors.sns.message}</div>
+          ) : null}
         </Grid>
         <Grid item xs={12}>
           <Box mb={1}>
@@ -485,6 +537,59 @@ function CampaignEdit() {
           <Box mb={1}><StyledText color="#3f51b5">필수키워드</StyledText></Box>
           <ReactFormText register={register} errors={errors} name="searchKeyword" />
         </Grid>
+
+        {links.length > 0 ? (
+          <Grid item xs={12}>
+            <Grid container spacing={1}>
+              { links.map(item => (
+                <Grid item key={item}>
+                  <Box
+                    p="2px 5px 2px 10px"
+                    bgcolor="#0000000d"
+                    borderRadius="5px"
+                    maxWidth={300}
+                  >
+                    <Grid style={{ display: 'flex' }}>
+                      <Typography classes={{ root: classes.linkText }}>{item}</Typography>
+                      <Clear
+                        fontSize="small"
+                        classes={{ root: classes.clearRoot }}
+                        onClick={() => deleteLink(item)}
+                      />
+                    </Grid>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+        ) : null}
+
+        <Grid item xs={4}>
+          <Box mb={1}><StyledText color="#3f51b5">참조할 링크</StyledText></Box>
+          <ReactFormText
+            register={register}
+            errors={errors}
+            name="linkItem"
+            placeholder="예시) https://www.inflai.com"
+            InputProps={{
+              classes: { adornedEnd: classes.endAdornment },
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={addLink}>
+                    <ArrowRightAlt fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+            onKeyPress={(ev) => {
+              if (ev.key === 'Enter') {
+                ev.preventDefault();
+                addLink();
+              }
+            }}
+          />
+        </Grid>
+
         <Grid item xs={12}>
           <Box mb={1}><StyledText color="#3f51b5">포스팅가이드</StyledText></Box>
           <ReactFormText
@@ -517,10 +622,7 @@ function CampaignEdit() {
                   placeholder=""
                   InputProps={{
                     endAdornment: <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>원</InputAdornment>,
-                    classes: {
-                      adornedEnd: classes.endAdornment,
-                      input: classes.input
-                    }
+                    classes: { input: classes.input }
                   }}
                 />
               </Box>
