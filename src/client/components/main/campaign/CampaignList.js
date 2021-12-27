@@ -83,7 +83,9 @@ const useStyles = makeStyles({
 function CampaignList(props) {
   const { history, match, setTab } = props;
   const [type, setType] = useState('0');
+  const [limit, setLimit] = useState(5);
   const [searchWord, setSearchWord] = useState('');
+  const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [copyDialog, setCopyDialog] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(0);
@@ -91,7 +93,7 @@ function CampaignList(props) {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const classes = useStyles();
-  const limit = 5;
+  // const limit = 5;
 
   const { register, handleSubmit, errors } = useForm({
     mode: 'onBlur',
@@ -113,6 +115,7 @@ function CampaignList(props) {
   }
 
   async function getCampaigns() {
+    setLoading(true);
     try {
       const params = { page, limit };
       if (type !== '0') params.type = type;
@@ -143,6 +146,8 @@ function CampaignList(props) {
       setCount(countRes);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -176,7 +181,7 @@ function CampaignList(props) {
 
   useEffect(() => {
     getCampaigns();
-  }, [page, type, searchWord]);
+  }, [page, type, searchWord, limit]);
 
   useEffect(() => setTab(0), []);
 
@@ -187,6 +192,11 @@ function CampaignList(props) {
   const changeType = (event) => {
     setType(event.target.value);
   };
+
+  const changeLimit = (event) => {
+    setLimit(event.target.value);
+  };
+
 
   return (
     <Box m="0 auto" maxWidth={1276}>
@@ -235,129 +245,154 @@ function CampaignList(props) {
           </Grid>
 
           <Grid item>
-            <StyledButton
-              height={40}
-              padding="0 20px"
-              background="#0fb359"
-              hoverBackground="#107C41"
-              startIcon={<Create />}
-              onClick={() => history.push(`${match.path}/create`)}
-            >
-              캠페인 등록
-            </StyledButton>
+            <Grid container spacing={1}>
+              <Grid item>
+                <StyledSelect
+                  classes={{ root: classes.root }}
+                  native
+                  variant="outlined"
+                  fullWidth
+                  value={limit}
+                  onChange={changeLimit}
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={30}>30</option>
+                  <option value={100}>100</option>
+                </StyledSelect>
+              </Grid>
+              <Grid item>
+                <StyledButton
+                  height={40}
+                  padding="0 20px"
+                  background="#0fb359"
+                  hoverBackground="#107C41"
+                  startIcon={<Create />}
+                  onClick={() => history.push(`${match.path}/create`)}
+                >
+                  캠페인 등록
+                </StyledButton>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Box>
-      <TableContainer component={Paper}>
-        <Table aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              {tableHeader.map(item => (
-                <StyledTableCell key={item.text} align={item.align} width={item.width || null}>{item.text}</StyledTableCell>
+
+      { loading ? (
+        <Box>Loading...</Box>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                {tableHeader.map(item => (
+                  <StyledTableCell key={item.text} align={item.align} width={item.width || null}>{item.text}</StyledTableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {campaigns.map(row => (
+                <StyledTableRow
+                  key={row.id}
+                  onClick={(event) => {}}
+                >
+                  <StyledTableCell align="center">
+                    <StyledText textAlign="center">
+                      {row.rownum}
+                    </StyledText>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <StyledText textAlign="center">
+                      {row.id}
+                    </StyledText>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <Grid container>
+                      <Grid item xs="auto">
+                        <StyledImage
+                          width="80px"
+                          height="80px"
+                          src={row.photo.length > 0 ? row.photo[0].PHO_FILE_URL : defaultAccountImage}
+                          onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Box ml="14px" height="100%">
+                          <Grid container alignContent="space-between" style={{ height: '100%' }}>
+                            <Grid item xs={12}>
+                              <StyledText fontSize="14px" color="#222">
+                                {row.campaignName}
+                              </StyledText>
+                              <StyledText fontSize="14px" color="#222">
+                                {row.type === '1' ? (
+                                  <span style={{ color: Colors.pink, fontWeight: '600' }}>Instagram</span>
+                                ) : null}
+                                {row.type === '2' ? (
+                                  <span style={{ color: Colors.red, fontWeight: '600' }}>Youtube</span>
+                                ) : null}
+                                {row.type === '3' ? (
+                                  <span style={{ color: Colors.green, fontWeight: '600' }}>Blog</span>
+                                ) : null}
+                                {` ${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
+                              </StyledText>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Box width="70px">
+                                <StyledButton
+                                  onClick={() => campaignParticipant(row.id, row.type)}
+                                  padding="0"
+                                  height="26px"
+                                  fontSize="0.790rem"
+                                >
+                                      신청자
+                                </StyledButton>
+                              </Box>
+                            </Grid>
+                          </Grid>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <StyledText fontSize="14px" color="#222">
+                      {`신청자 ${row.regCnt} / ${row.infCnt}`}
+                    </StyledText>
+                    <StyledText fontSize="14px" color="#222">
+                      {`선정자 ${row.selCnt} / ${row.infCnt}`}
+                    </StyledText>
+                    <StyledText fontSize="14px" color="#222">
+                      {`후기수 ${row.reviewCnt} / ${row.selCnt}`}
+                    </StyledText>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <StyledText fontSize="14px" color="#222" textAlign="center">
+                      {row.createDate}
+                    </StyledText>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <Tooltip title="수정" placement="top">
+                      <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={event => campaignDetail(event, row.id)}>
+                        <Edit />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="복사" placement="top">
+                      <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={() => copyCampaign(row.id)}>
+                        <FileCopy />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="삭제" placement="top">
+                      <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={() => { setSelectedCampaign(row.id); setDialogOpen(true); }}>
+                        <Delete />
+                      </IconButton>
+                    </Tooltip>
+                  </StyledTableCell>
+                </StyledTableRow>
               ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {campaigns.map(row => (
-              <StyledTableRow
-                key={row.id}
-                onClick={(event) => {}}
-              >
-                <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.rownum}
-                  </StyledText>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.id}
-                  </StyledText>
-                </StyledTableCell>
-                <StyledTableCell>
-                  <Grid container>
-                    <Grid item xs="auto">
-                      <StyledImage
-                        width="80px"
-                        height="80px"
-                        src={row.photo.length > 0 ? row.photo[0].PHO_FILE_URL : defaultAccountImage}
-                        onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
-                      />
-                    </Grid>
-                    <Grid item xs>
-                      <Box ml="14px" height="100%">
-                        <Grid container alignContent="space-between" style={{ height: '100%' }}>
-                          <Grid item xs={12}>
-                            <StyledText fontSize="14px" color="#222">
-                              {row.campaignName}
-                            </StyledText>
-                            <StyledText fontSize="14px" color="#222">
-                              {row.type === '1' ? (
-                                <span style={{ color: Colors.pink, fontWeight: '600' }}>Instagram</span>
-                              ) : null}
-                              {row.type === '2' ? (
-                                <span style={{ color: Colors.red, fontWeight: '600' }}>Youtube</span>
-                              ) : null}
-                              {row.type === '3' ? (
-                                <span style={{ color: Colors.green, fontWeight: '600' }}>Blog</span>
-                              ) : null}
-                              {` ${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
-                            </StyledText>
-                          </Grid>
-                          <Grid item xs={12}>
-                            <Box width="70px">
-                              <StyledButton
-                                onClick={() => campaignParticipant(row.id, row.type)}
-                                padding="0"
-                                height="26px"
-                                fontSize="0.790rem"
-                              >
-                                신청자
-                              </StyledButton>
-                            </Box>
-                          </Grid>
-                        </Grid>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </StyledTableCell>
-                <StyledTableCell>
-                  <StyledText fontSize="14px" color="#222">
-                    {`신청자 ${row.regCnt} / ${row.infCnt}`}
-                  </StyledText>
-                  <StyledText fontSize="14px" color="#222">
-                    {`선정자 ${row.selCnt} / ${row.infCnt}`}
-                  </StyledText>
-                  <StyledText fontSize="14px" color="#222">
-                    {`후기수 ${row.reviewCnt} / ${row.selCnt}`}
-                  </StyledText>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <StyledText fontSize="14px" color="#222" textAlign="center">
-                    {row.createDate}
-                  </StyledText>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <Tooltip title="수정" placement="top">
-                    <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={event => campaignDetail(event, row.id)}>
-                      <Edit />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="복사" placement="top">
-                    <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={() => copyCampaign(row.id)}>
-                      <FileCopy />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="삭제" placement="top">
-                    <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={() => { setSelectedCampaign(row.id); setDialogOpen(true); }}>
-                      <Delete />
-                    </IconButton>
-                  </Tooltip>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) }
+
       <Box py={4}>
         <Grid container justify="center">
           <Grid item>

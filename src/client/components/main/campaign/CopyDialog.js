@@ -5,6 +5,7 @@ import {
 import { Clear } from '@material-ui/icons';
 import { useTheme } from '@material-ui/core/styles';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import { Colors } from '../../../lib/Сonstants';
 import StyledButton from '../../containers/StyledButton';
 import Instagram from '../../../img/instagram-icon.png';
@@ -38,6 +39,7 @@ function CopyDialog(props) {
   } = props;
 
   const classes = useStyles();
+  const history = useHistory();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -51,7 +53,9 @@ function CopyDialog(props) {
       id: campaignId,
       type
     }).then((res) => {
-      getCampaigns();
+      const { AD_ID } = res.data.data;
+      history.push(`/Campaign/${AD_ID}`);
+      // getCampaigns();
       close();
     }).catch((err) => {
       alert(err.response.data.message);

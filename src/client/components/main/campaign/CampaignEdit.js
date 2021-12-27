@@ -312,6 +312,7 @@ function CampaignEdit() {
 
   useEffect(() => {
     getCampaignData();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   return (
