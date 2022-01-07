@@ -8,7 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow, Tooltip,
-  IconButton, InputAdornment
+  IconButton, InputAdornment, CircularProgress
 } from '@material-ui/core';
 import {
   Edit, Delete, Description, Create, FileCopy
@@ -279,7 +279,13 @@ function CampaignList(props) {
       </Box>
 
       { loading ? (
-        <Box>Loading...</Box>
+        <Box minHeight={500}>
+          <Grid container justify="center" alignItems="center" style={{ minHeight: 'inherit' }}>
+            <Grid item>
+              <CircularProgress />
+            </Grid>
+          </Grid>
+        </Box>
       ) : (
         <TableContainer component={Paper}>
           <Table aria-label="customized table">
