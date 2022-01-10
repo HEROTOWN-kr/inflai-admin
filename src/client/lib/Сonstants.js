@@ -209,3 +209,6 @@ export const AdvertiseTypes = {
 };
 
 export const campaignSteps = [{ value: '1', text: '리뷰어 신청' }, { value: '2', text: '리뷰어 발표' }, { value: '3', text: '리뷰등록' }, { value: '4', text: '베스트발표' }];
+
+export const HOURS = [...Array(24).keys()];
+export const DAY_OF_WEEK = ['일', '월', '화', '수', '목', '금', '토'];
