@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {
-  Box, CircularProgress, Grid, Table, TableBody, TableHead, TableRow
+  Box, CircularProgress, Grid, IconButton, InputAdornment, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 } from '@material-ui/core';
 import { PieChart } from 'react-minimal-pie-chart';
 import axios from 'axios';
 import { Form, Formik } from 'formik';
 import SearchIcon from '@material-ui/icons/Search';
+import { useForm } from 'react-hook-form';
+import { makeStyles } from '@material-ui/core/styles';
 import StyledButton from '../../../containers/StyledButton';
 import StyledTableCell from '../../../containers/StyledTableCell';
 import StyledText from '../../../containers/StyledText';
@@ -16,6 +18,22 @@ import defaultAccountImage from '../../../../img/default_account_image.png';
 import StyledLink from '../../../containers/StyledLink';
 import MyPagination from '../../../containers/MyPagination';
 import StyledTitle from '../../../containers/StyledTitle';
+import ReactFormText from '../../../containers/ReactFormText';
+
+const useStyles = makeStyles({
+  root: {
+    background: '#ffffff'
+  },
+  endAdornment: {
+    padding: '0'
+  },
+  tableRowRoot: {
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: '#9199b6'
+    }
+  }
+});
 
 const tableRows = {
   title: [
@@ -89,9 +107,22 @@ const tableRows = {
   body: ['rownum', 'INF_NAME', 'INS_FLWR']
 };
 
+function LoadingComponent() {
+  return (
+    <Box height={536}>
+      <Grid container justify="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
+        <Grid item>
+          <CircularProgress />
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
 function InstagramList(props) {
   const [searchWord, setSearchWord] = useState('');
   const [updateTime, setUpdateTime] = useState('');
+  const [loading, setLoading] = useState(false);
   const [influencers, setInfluencers] = useState([]);
   const [detectData, setDetectData] = useState([]);
   const [selectedRow, setSelectedRow] = useState('');
@@ -100,9 +131,14 @@ function InstagramList(props) {
 
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const limit = 10;
 
-  const { history, match } = props;
+  const { register, handleSubmit, errors } = useForm({
+    mode: 'onBlur',
+    defaultValues: { searchValue: '' }
+  });
+
+  const limit = 10;
+  const classes = useStyles();
 
   function searchFunc(data) {
     setPage(1);
@@ -112,134 +148,6 @@ function InstagramList(props) {
   const changePage = (event, value) => {
     setPage(value);
   };
-
-  const leftPanel = process ? <CircularProgress /> : (
-    <div>
-      {detectData && detectData.length
-        ? (
-          <Grid container spacing={2}>
-            <Grid item xs={12} container justify="space-between">
-              <Grid item>
-                <StyledButton onClick={() => history.push(`${match.path}/Detail/${selectedRow}`)}>
-                                    상세보기
-                </StyledButton>
-              </Grid>
-              <Grid item><StyledButton onClick={() => getGoogleVisionData(selectedRow, 1)}>라벨 인식</StyledButton></Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Box
-                maxWidth="800px"
-                height="200px"
-                margin="0 auto"
-              >
-                <PieChart
-                  data={detectData}
-                  animate="true"
-                  animationDuration="800"
-                  label={({ dataEntry }) => `${dataEntry.description} : ${dataEntry.value}%`}
-                  labelStyle={index => ({
-                    fill: detectData[index].color,
-                    // fill: 'red',
-                    fontSize: '10px',
-                    fontFamily: 'sans-serif',
-                  })}
-                  radius={35}
-                  labelPosition={120}
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Table aria-label="customized table">
-                <TableHead>
-                  <TableRow>
-                    {
-                                            tableRows.titleDetectInfo.map(item => (
-                                              <StyledTableCell
-                                                key={item.text}
-                                                align={item.align}
-                                                width={item.width || null}
-                                              >
-                                                <StyledText
-                                                  color="#ffffff"
-                                                  textAlign="center"
-                                                >
-                                                  {item.text}
-                                                </StyledText>
-                                              </StyledTableCell>
-                                            ))
-                                        }
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {detectData.map(item => (
-                    <StyledTableRow key={item.description}>
-                      <StyledTableCell align="center">
-                        <Box
-                          width="40px"
-                          height="20px"
-                          bgcolor={item.color}
-                          component="div"
-                        />
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="left"
-                      >
-                        <StyledText
-                          fontWeight="500"
-                          fontSize="16px"
-                          textAlign="center"
-                        >
-                          {item.description}
-                        </StyledText>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="left"
-                      >
-                        <StyledText
-                          fontWeight="500"
-                          fontSize="16px"
-                          textAlign="center"
-                        >
-                          {item.likeCountSum}
-                        </StyledText>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="left"
-                      >
-                        <StyledText
-                          fontWeight="500"
-                          fontSize="16px"
-                          textAlign="center"
-                        >
-                          {item.commentsCountSum}
-                        </StyledText>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="left"
-                      >
-                        <StyledText
-                          fontWeight="500"
-                          fontSize="16px"
-                          textAlign="center"
-                        >
-                          {item.count}
-                        </StyledText>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Grid>
-          </Grid>
-        ) : (
-          <Grid container justify="center">
-            <Grid item>
-                            Google Vision Data
-            </Grid>
-          </Grid>
-        )}
-    </div>
-  );
 
   async function getInfluencers() {
     const InstaData = await axios.get('/api/TB_INSTA/', {
@@ -311,7 +219,175 @@ function InstagramList(props) {
 
   return (
     <Box maxWidth={1276} m="0 auto">
-      <Grid container spacing={2}>
+      <Box mb={1}>
+        <Grid container alignItems="center">
+          <Grid item xs container alignItems="center">
+            <Grid item>
+              <Box width={280}>
+                <ReactFormText
+                  register={register}
+                  errors={errors}
+                  name="searchValue"
+                  placeholder="검색"
+                  InputProps={{
+                    classes: { root: classes.root, adornedEnd: classes.endAdornment },
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleSubmit(searchFunc)}>
+                          <SearchIcon fontSize="small" />
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                  onKeyPress={(ev) => {
+                    if (ev.key === 'Enter') {
+                      ev.preventDefault();
+                      handleSubmit(searchFunc)();
+                    }
+                  }}
+                />
+              </Box>
+            </Grid>
+            { searchWord ? (
+              <Grid item>
+                <Box ml={2} fontSize={24} color="green">
+                  {`(${searchWord}) 검색 결과`}
+                </Box>
+              </Grid>
+            ) : null }
+
+          </Grid>
+          <Grid item>
+            <StyledText color="#b9b9b9" fontSize="14px">
+              {`최근 업데이트: ${updateTime}`}
+            </StyledText>
+          </Grid>
+        </Grid>
+      </Box>
+      {loading ? (
+        <LoadingComponent />
+      ) : (
+        <Fragment>
+          <TableContainer component={Paper}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  { tableRows.title.map(item => (
+                    <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
+                      { item.id ? (
+                        <Grid container justify="center">
+                          <Grid item>
+                            <StyledTableSortLabel
+                              id={item.id}
+                              color="#66f8ff"
+                              active={order.orderBy === item.id}
+                              direction={order.orderBy === item.id ? order.direction : 'desc'}
+                              onClick={() => sortTable(item.id)}
+                            >
+                              {item.text}
+                            </StyledTableSortLabel>
+                          </Grid>
+                        </Grid>
+                      ) : (
+                        <StyledText color="#ffffff" textAlign="center">
+                          {item.text}
+                        </StyledText>
+                      )}
+                    </StyledTableCell>
+                  )) }
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {influencers.map(row => (
+                  <StyledTableRow
+                    key={row.INS_ID}
+                    selected={row.INS_ID === selectedRow}
+                    onClick={() => getGoogleVisionData(row.INS_ID, 2)}
+                  >
+                    <StyledTableCell align="center">
+                      <StyledText fontSize="20px" fontWeight="700" textAlign="center">
+                        {row.rownum}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      <Grid container spacing={2}>
+                        <Grid item>
+                          <Box
+                            width="37px"
+                            height="37px"
+                            borderRadius="100%"
+                            alt="noFoto"
+                            onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
+                            src={row.INS_PROFILE_IMG || defaultAccountImage}
+                            component="img"
+                          />
+                        </Grid>
+                        <Grid item>
+                          <StyledText fontWeight="600" fontSize="14px" color="#222">
+                            {row.INS_NAME ? `${row.INS_NAME} / ${row.TB_INFLUENCER.INF_NAME}` : row.TB_INFLUENCER.INF_NAME}
+                          </StyledText>
+                          <Box paddingTop="3px" fontSize="12px" color="#555">
+                            <StyledLink
+                              href={`https://www.instagram.com/${row.INS_USERNAME || 'instagram'}/`}
+                              target="_blank"
+                            >
+                              {`@${row.INS_USERNAME || 'instagram'}`}
+                            </StyledLink>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                        {row.INS_FLWR}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                        {row.INS_FLW}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                        {row.INS_MEDIA_CNT}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                        {row.INS_LIKES}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                        {row.INS_CMNT}
+                      </StyledText>
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      <StyledText fontWeight="500" fontSize="16px" textAlign="center">
+                        {`${(row.INS_CMNT * 100 / row.INS_LIKES).toFixed(2)}%`}
+                      </StyledText>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Box py={4}>
+            <Grid container justify="center">
+              <Grid item>
+                <MyPagination
+                  itemCount={count}
+                  page={page}
+                  changePage={changePage}
+                  perPage={10}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </Fragment>
+      )}
+
+      {/* <Grid container spacing={2}>
         <Grid item md={7} xl={8}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -488,7 +564,7 @@ function InstagramList(props) {
             {leftPanel}
           </Box>
         </Grid>
-      </Grid>
+      </Grid> */}
     </Box>
   );
 }
