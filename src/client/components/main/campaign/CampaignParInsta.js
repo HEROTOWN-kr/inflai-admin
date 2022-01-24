@@ -16,6 +16,7 @@ import { Colors } from '../../../lib/Сonstants';
 import InsightDialog from './InsightDialog';
 import ConfirmDialog from '../../containers/ConfirmDialog';
 import InstaInsightDialog from './InstaInsightDialog';
+import HistoryDialog from './HistoryDialog';
 
 const tableHeader = [
   {
@@ -58,6 +59,11 @@ const tableHeader = [
     colName: 'INS_RANK',
   },
   {
+    text: 'history',
+    align: 'center',
+    width: '50px',
+  },
+  {
     text: '요약',
     align: 'center',
     width: '50px',
@@ -91,6 +97,7 @@ function CampaignParInsta() {
   const [count, setCount] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [instaDialogOpen, setInstaDialogOpen] = useState(false);
+  const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(0);
   const [page, setPage] = useState(1);
@@ -106,6 +113,10 @@ function CampaignParInsta() {
 
   function toggleInstaDialog() {
     setInstaDialogOpen(!instaDialogOpen);
+  }
+
+  function toggleHistoryDialog() {
+    setHistoryDialogOpen(!historyDialogOpen);
   }
 
   function toggleConfirmDialog() {
@@ -164,9 +175,13 @@ function CampaignParInsta() {
   }
 
   function clickInstaInfo(id) {
-    console.log(id);
     setSelectedId(id);
     toggleInstaDialog();
+  }
+
+  function clickHistory(id) {
+    setSelectedId(id);
+    toggleHistoryDialog();
   }
 
   return (
@@ -263,6 +278,15 @@ function CampaignParInsta() {
                   <StyledButton
                     height="25px"
                     padding="0px 5px"
+                    onClick={() => clickHistory(row.INF_ID)}
+                  >
+                    history
+                  </StyledButton>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <StyledButton
+                    height="25px"
+                    padding="0px 5px"
                     onClick={() => clickInfo(row.INF_ID)}
                   >
                      요약
@@ -324,6 +348,7 @@ function CampaignParInsta() {
       </Box>
       <InsightDialog open={dialogOpen} closeDialog={toggleDialog} selectedId={selectedId} />
       <InstaInsightDialog open={instaDialogOpen} handleClose={toggleInstaDialog} INS_ID={selectedId} />
+      <HistoryDialog open={historyDialogOpen} closeDialog={toggleHistoryDialog} INF_ID={selectedId} />
       <ConfirmDialog
         open={confirmDialogOpen}
         closeDialog={toggleConfirmDialog}
