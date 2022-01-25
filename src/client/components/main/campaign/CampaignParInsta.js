@@ -59,7 +59,12 @@ const tableHeader = [
     colName: 'INS_RANK',
   },
   {
-    text: 'history',
+    text: '소통지수',
+    align: 'center',
+    width: '50px',
+  },
+  {
+    text: '히스토리',
     align: 'center',
     width: '50px',
   },
@@ -90,6 +95,11 @@ const useStyles = makeStyles({
     marginRight: 0
   }
 });
+
+function RoundLikeComment(likeCount, commentsCount) {
+  const likeToComment = (commentsCount / likeCount) * 100;
+  return likeToComment.toFixed(1);
+}
 
 function CampaignParInsta() {
   const [participants, setParticipants] = useState([]);
@@ -275,12 +285,17 @@ function CampaignParInsta() {
                   </StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
+                  <StyledText textAlign="center">
+                    {RoundLikeComment(row.INS_LIKES, row.INS_CMNT)}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell align="center">
                   <StyledButton
                     height="25px"
                     padding="0px 5px"
                     onClick={() => clickHistory(row.INF_ID)}
                   >
-                    history
+                    체크
                   </StyledButton>
                 </StyledTableCell>
                 <StyledTableCell align="center">
