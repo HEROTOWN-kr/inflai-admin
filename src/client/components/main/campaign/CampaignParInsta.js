@@ -33,22 +33,22 @@ const tableHeader = [
     align: 'center'
   },
   {
-    text: '팔로워수',
+    text: '팔로워',
     align: 'center',
     colName: 'INS_FLWR'
   },
   {
-    text: '평균좋아요수',
+    text: '평균좋아요',
     align: 'center',
     colName: 'INS_LIKES',
   },
   {
-    text: '평균댓글수',
+    text: '평균댓글',
     align: 'center',
     colName: 'INS_CMNT',
   },
   {
-    text: 'AI 종합 점수',
+    text: 'AI 종합점수',
     align: 'center',
     colName: 'INS_SCORE',
   },
@@ -59,9 +59,10 @@ const tableHeader = [
     colName: 'INS_RANK',
   },
   {
-    text: '소통지수',
+    text: '소통',
     align: 'center',
     width: '50px',
+    colName: 'INS_COMMUNICATE',
   },
   {
     text: '히스토리',
@@ -286,7 +287,8 @@ function CampaignParInsta() {
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   <StyledText textAlign="center">
-                    {RoundLikeComment(row.INS_LIKES, row.INS_CMNT)}
+                    {/* {RoundLikeComment(row.INS_LIKES, row.INS_CMNT)} */}
+                    {row.INS_COMMUNICATE || '-'}
                   </StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
