@@ -288,7 +288,7 @@ function CampaignParInsta() {
                 <StyledTableCell align="center">
                   <StyledText textAlign="center">
                     {/* {RoundLikeComment(row.INS_LIKES, row.INS_CMNT)} */}
-                    {row.INS_COMMUNICATE || '-'}
+                    {row.INS_COMMUNICATE ? `${row.INS_COMMUNICATE}%` : '-'}
                   </StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
