@@ -1,4 +1,5 @@
 import React, {
+  Fragment,
   useContext, useEffect, useRef, useState
 } from 'react';
 import axios from 'axios';
@@ -23,11 +24,27 @@ import ImageHolder from './ImageHolder';
 import CKEditorComponent from '../../containers/CKEditorComponent';
 import StyledButton from '../../containers/StyledButton';
 import StyledBackDrop from '../../containers/StyledBackDrop';
+import StyledTextField from '../../containers/StyledTextField';
 
 const snsTypes = [
   { value: '1', text: '인스타', dbValue: 'AD_INSTA' },
   { value: '2', text: '유튜브', dbValue: 'AD_YOUTUBE' },
   { value: '3', text: '블로그', dbValue: 'AD_NAVER' },
+];
+
+const editPriceTypes = [
+  { value: '1', text: '20만원' },
+  { value: '2', text: '30만원' },
+  { value: '3', text: '50만원' },
+  { value: '4', text: '기타' },
+];
+
+const videoLengthTypes = [
+  { value: '1', text: '1분미만' },
+  { value: '2', text: '1~3분' },
+  { value: '3', text: '3~5분' },
+  { value: '4', text: '5~10분' },
+  { value: '5', text: '기타' },
 ];
 
 const deliveryTypes = [
@@ -54,6 +71,10 @@ const useStyles = makeStyles({
     textAlign: 'right',
     paddingRight: '2px'
   },
+  textAlignRight: {
+    textAlign: 'right',
+    paddingRight: '2px'
+  },
   positionEnd: {
     margin: '0'
   },
@@ -75,6 +96,8 @@ function CampaignCreateNew() {
   const [links, setLinks] = useState([]);
   const [savingMode, setSavingMode] = useState(false);
   const classes = useStyles();
+  const priceRef = useRef(null);
+  const lengthRef = useRef(null);
 
   function toggleSavingMode() {
     setSavingMode(!savingMode);
@@ -110,6 +133,8 @@ function CampaignCreateNew() {
     linkItem: '',
     provideInfo: '',
     provideMoney: '',
+    editPriceEtc: '',
+    videoLengthEtc: '',
   };
 
   Yup.addMethod(Yup.string, 'integerString', function () {
@@ -120,6 +145,14 @@ function CampaignCreateNew() {
     campaignName: Yup.string().required('캠페인명을 입력해주세요'),
     shortDisc: Yup.string().required('짧은설명을 입력해주세요'),
     sns: Yup.string().required('모집SNS를 선택해주세요'),
+    editPriceEtc: Yup.string().when('editPrice', {
+      is: editPrice => editPrice === '4',
+      then: Yup.string().required('편집비용을 입력해주세요').integerString(),
+    }),
+    videoLengthEtc: Yup.string().when('videoLength', {
+      is: editPrice => editPrice === '5',
+      then: Yup.string().required('원하시는 유튜브영상 길이를 입력해주세요').integerString(),
+    }),
     influencerCount: Yup.string()
       .required('모집인원을 입력해주세요')
       .integerString(),
@@ -160,7 +193,7 @@ function CampaignCreateNew() {
     defaultValues
   });
 
-  const watchObj = watch(['type', 'delivery', 'searchStart', 'searchFinish', 'shortDisc', 'influencerCount', 'sns']);
+  const watchObj = watch(['type', 'delivery', 'searchStart', 'searchFinish', 'shortDisc', 'influencerCount', 'sns', 'editPrice', 'videoLength']);
 
   useEffect(() => {
     if (watchObj.delivery === '1') {
@@ -278,7 +311,7 @@ function CampaignCreateNew() {
       <Box component={isSM ? 'h1' : 'h3'} css={{ textAlign: 'center' }}>캠페인 정보</Box>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Box mb={1}><StyledText color="#3f51b5">캠페인명</StyledText></Box>
+          <Box mb={1}><StyledText color="#3f51b5">캠페인명 (제공물품(서비스) + 시가 등 한 줄로 적어주세요)</StyledText></Box>
           <ReactFormText
             register={register}
             errors={errors}
@@ -294,7 +327,7 @@ function CampaignCreateNew() {
             multiline
             rows={5}
             name="shortDisc"
-            placeholder={'설명이 자세히 되어야지 제품에 대한 이해도가 높아집니다\n자세히 써 주세요'}
+            placeholder="서비스나 제공물품에 대해서 자세히 적어주세요"
           />
         </Grid>
         <Grid item xs={12}>
@@ -325,17 +358,129 @@ function CampaignCreateNew() {
           />
           { watchObj.sns === '2' ? (
             <Box color={Colors.orange}>
-                유튜버 모집 경우 제품체험단 외에 추가로 편집비용이 최소 20만원 이상부터 모집이 가능합니다.
+                유튜버 경우 제공되는 제품(서비스)외에 편집비용이 최소 20만원부터 가능합니다.
               <br />
-                편집비용은 유튜버 개인에게 주시면 되며
+                제공되는 물품(서비스)가 인기가 적거나 편집이 어려운 경우 비용을 올리시는게 빠르게 모집하기 편합니다
               <br />
-                신청자중 선발하여 개별 계약을 하시면 됩니다
+                수정은 1회 무료로 가능하기에 최대한 정확하게 적어주세요
+              <br />
+                영상 업로드 후 비용을 제작자에게 직접 전달하는 방식입니다
+              <br />
+                인플라이는 인공지능분석을 통해 보다 좋은 유튜버를 추천해 드리며 유튜브 영상제작과정에는 참여하지 않습니다
             </Box>
           ) : null }
           { errors.sns ? (
             <div className="error-message">{errors.sns.message}</div>
           ) : null }
         </Grid>
+
+        { watchObj.sns === '2' ? (
+          <Fragment>
+            <Grid item xs={12}>
+              <Box mb={1}>
+                <StyledText color="#3f51b5">
+                    편집비용
+                </StyledText>
+              </Box>
+              <Grid container>
+                <Grid item>
+                  <Controller
+                    as={(
+                      <RadioGroup row aria-label="gender">
+                        {editPriceTypes.map((item, index) => (
+                          <FormControlLabel
+                            key={item.value}
+                            value={item.value}
+                            control={<Radio inputRef={index === 0 ? snsRef : null} />}
+                            label={item.text}
+                          />
+                        ))}
+                      </RadioGroup>
+                        )}
+                    onFocus={() => snsRef.current.focus()}
+                    name="editPrice"
+                    control={control}
+                  />
+                </Grid>
+                <Grid item>
+                  <StyledTextField
+                    fullWidth
+                    disabled={watchObj.editPrice !== '4'}
+                    name="editPriceEtc"
+                    inputRef={register}
+                    error={!!errors.editPriceEtc}
+                    FormHelperTextProps={{
+                      classes: { contained: classes.FormHelperContained }
+                    }}
+                    helperText={errors.editPriceEtc ? (
+                      <span className="error-message">{errors.editPriceEtc?.message}</span>
+                    ) : null}
+                    css={{ transition: 'all 1s ease-out' }}
+                    InputProps={{
+                      endAdornment: <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>만원</InputAdornment>,
+                      classes: { input: classes.textAlignRight }
+                    }}
+                  />
+                </Grid>
+              </Grid>
+              { errors.editPrice ? (
+                <div className="error-message">{errors.editPrice.message}</div>
+              ) : null }
+            </Grid>
+            <Grid item xs={12}>
+              <Box mb={1}>
+                <StyledText color="#3f51b5">
+                    원하시는 유튜브영상 길이
+                </StyledText>
+              </Box>
+              <Grid container>
+                <Grid item>
+                  <Controller
+                    as={(
+                      <RadioGroup row aria-label="gender">
+                        {videoLengthTypes.map((item, index) => (
+                          <FormControlLabel
+                            key={item.value}
+                            value={item.value}
+                            control={<Radio inputRef={index === 0 ? snsRef : null} />}
+                            label={item.text}
+                          />
+                        ))}
+                      </RadioGroup>
+                        )}
+                    onFocus={() => snsRef.current.focus()}
+                    name="videoLength"
+                    control={control}
+                  />
+                </Grid>
+                <Grid item>
+                  <StyledTextField
+                    fullWidth
+                    disabled={watchObj.videoLength !== '5'}
+                    name="videoLengthEtc"
+                    inputRef={register}
+                    error={!!errors.videoLengthEtc}
+                    FormHelperTextProps={{
+                      classes: { contained: classes.FormHelperContained }
+                    }}
+                    helperText={errors.videoLengthEtc ? (
+                      <span className="error-message">{errors.videoLengthEtc?.message}</span>
+                    ) : null}
+                    css={{ transition: 'all 1s ease-out' }}
+                    InputProps={{
+                      endAdornment: <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>분</InputAdornment>,
+                      classes: { input: classes.textAlignRight }
+                    }}
+                  />
+                </Grid>
+              </Grid>
+              { errors.videoLength ? (
+                <div className="error-message">{errors.videoLength.message}</div>
+              ) : null }
+            </Grid>
+          </Fragment>
+        ) : null }
+
         <Grid item xs={12}>
           <Box mb={1}>
             <StyledText color="#3f51b5">
