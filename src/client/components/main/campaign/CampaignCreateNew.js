@@ -133,6 +133,8 @@ function CampaignCreateNew() {
     linkItem: '',
     provideInfo: '',
     provideMoney: '',
+    editPrice: '',
+    videoLength: '',
     editPriceEtc: '',
     videoLengthEtc: '',
   };
@@ -262,6 +264,7 @@ function CampaignCreateNew() {
     setSavingMode(true);
     const props = data;
     if (links.length > 0) props.links = JSON.stringify(links);
+    console.log(props);
 
     axios.post('/api/TB_AD/createAdmin', props).then((res) => {
       if (images.length === 0) {
@@ -755,7 +758,7 @@ function CampaignCreateNew() {
         </Grid>
         <Grid item xs={12}>
           <Box mb={1}>
-            <StyledText color="#3f51b5">이미지 업로드 (5장 까지 업로드 가능합니다)</StyledText>
+            <StyledText color="#3f51b5">이미지 업로드 (5장 까지 업로드 가능합니다, 최소 한 장 이상필수)</StyledText>
             <input
               type="text"
               readOnly
