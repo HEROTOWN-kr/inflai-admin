@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import {
-  Box, Grid, Paper, FormControlLabel, RadioGroup, Radio, InputAdornment, Typography, IconButton
+  Box, Grid, Paper, FormControlLabel, RadioGroup, Radio, InputAdornment, Typography, IconButton, Checkbox
 } from '@material-ui/core';
 import { useForm, Controller, get } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -86,6 +86,9 @@ const useStyles = makeStyles({
     '&:hover': {
       opacity: '1'
     }
+  },
+  checkboxLabel: {
+    marginRight: 0
   }
 });
 
@@ -137,6 +140,7 @@ function CampaignCreateNew() {
     videoLength: '',
     editPriceEtc: '',
     videoLengthEtc: '',
+    report: false
   };
 
   Yup.addMethod(Yup.string, 'integerString', function () {
@@ -337,28 +341,69 @@ function CampaignCreateNew() {
           <Box mb={1}>
             <StyledText color="#3f51b5">
               모집SNS
-              {/* <span style={{ color: Colors.orange }}>
-                {' 1개 캠페인=10명까지 모집이 가능합니다. 추가 모집은 캠페인을 추가생성 해주세요!'}
-              </span> */}
             </StyledText>
           </Box>
-          <Controller
-            as={(
-              <RadioGroup row aria-label="gender">
-                {snsTypes.map((item, index) => (
+
+          <Grid container>
+            <Grid item>
+              <Controller
+                as={(
+                  <RadioGroup row aria-label="gender">
+                    {snsTypes.map((item, index) => (
+                      <FormControlLabel
+                        key={item.value}
+                        value={item.value}
+                        control={<Radio inputRef={index === 0 ? snsRef : null} />}
+                        label={item.text}
+                      />
+                    ))}
+                  </RadioGroup>
+                  )}
+                onFocus={() => snsRef.current.focus()}
+                name="sns"
+                control={control}
+              />
+            </Grid>
+            <Grid item>
+              {/* <Controller
+                render={({ field }) => (
                   <FormControlLabel
-                    key={item.value}
-                    value={item.value}
-                    control={<Radio inputRef={index === 0 ? snsRef : null} />}
-                    label={item.text}
+                    control={(
+                      <Checkbox
+                        checked={field.value}
+                        onChange={e => field.onChange(e.target.checked)}
+                        color="secondary"
+                      />
+                        )}
+                    label="선정자"
+                    classes={{ root: classes.checkboxLabel }}
                   />
-                ))}
-              </RadioGroup>
-              )}
-            onFocus={() => snsRef.current.focus()}
-            name="sns"
-            control={control}
-          />
+                )}
+                name="report"
+                control={control}
+              /> */}
+
+              <Controller
+                as={(
+                  <FormControlLabel
+                    control={(
+                      <Checkbox
+                    /*    checked={field.value}
+                        onChange={e => field.onChange(e.target.checked)} */
+                        color="secondary"
+                      />
+                        )}
+                    label="기자단"
+                    classes={{ root: classes.checkboxLabel }}
+                  />
+                  )}
+                name="report"
+                control={control}
+              />
+            </Grid>
+          </Grid>
+
+
           { watchObj.sns === '2' ? (
             <Box color={Colors.orange}>
                 유튜버 경우 제공되는 제품(서비스)외에 편집비용이 최소 20만원부터 가능합니다.
