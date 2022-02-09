@@ -30,6 +30,7 @@ const snsTypes = [
   { value: '1', text: '인스타', dbValue: 'AD_INSTA' },
   { value: '2', text: '유튜브', dbValue: 'AD_YOUTUBE' },
   { value: '3', text: '블로그', dbValue: 'AD_NAVER' },
+  { value: '4', text: '기자단', dbValue: '' },
 ];
 
 const editPriceTypes = [
@@ -199,7 +200,7 @@ function CampaignCreateNew() {
     defaultValues
   });
 
-  const watchObj = watch(['type', 'delivery', 'searchStart', 'searchFinish', 'shortDisc', 'influencerCount', 'sns', 'editPrice', 'videoLength']);
+  const watchObj = watch(['type', 'delivery', 'searchStart', 'searchFinish', 'shortDisc', 'influencerCount', 'sns', 'editPrice', 'videoLength', 'report']);
 
   useEffect(() => {
     if (watchObj.delivery === '1') {
@@ -313,6 +314,10 @@ function CampaignCreateNew() {
     }).then(() => setSavingMode(false));
   };
 
+  useEffect(() => {
+    console.log(`${watchObj.report} is ${typeof watchObj.report}`);
+  }, [watchObj.report]);
+
   return (
     <Box my={{ xs: 0, sm: 4 }} p={{ xs: 2, sm: 4 }} maxWidth={1200} css={{ margin: '0 auto' }} component={Paper}>
       <Box component={isSM ? 'h1' : 'h3'} css={{ textAlign: 'center' }}>캠페인 정보</Box>
@@ -337,6 +342,24 @@ function CampaignCreateNew() {
             placeholder="서비스나 제공물품에 대해서 자세히 적어주세요"
           />
         </Grid>
+
+        {/* <Controller
+            name="report"
+            control={control}
+            render={({ onChange, value }) => (
+              <FormControlLabel
+                label="기자단"
+                control={(
+                  <Checkbox
+                    onChange={e => onChange(e.target.checked)}
+                    checked={value}
+                    color="secondary"
+                  />
+                    )}
+              />
+            )}
+          /> */}
+
         <Grid item xs={12}>
           <Box mb={1}>
             <StyledText color="#3f51b5">
@@ -353,7 +376,12 @@ function CampaignCreateNew() {
                       <FormControlLabel
                         key={item.value}
                         value={item.value}
-                        control={<Radio inputRef={index === 0 ? snsRef : null} />}
+                        control={(
+                          <Radio
+                            inputRef={index === 0 ? snsRef : null}
+                            // disabled={watchObj.report && item.value === '2'}
+                          />
+                        )}
                         label={item.text}
                       />
                     ))}
@@ -361,43 +389,6 @@ function CampaignCreateNew() {
                   )}
                 onFocus={() => snsRef.current.focus()}
                 name="sns"
-                control={control}
-              />
-            </Grid>
-            <Grid item>
-              {/* <Controller
-                render={({ field }) => (
-                  <FormControlLabel
-                    control={(
-                      <Checkbox
-                        checked={field.value}
-                        onChange={e => field.onChange(e.target.checked)}
-                        color="secondary"
-                      />
-                        )}
-                    label="선정자"
-                    classes={{ root: classes.checkboxLabel }}
-                  />
-                )}
-                name="report"
-                control={control}
-              /> */}
-
-              <Controller
-                as={(
-                  <FormControlLabel
-                    control={(
-                      <Checkbox
-                    /*    checked={field.value}
-                        onChange={e => field.onChange(e.target.checked)} */
-                        color="secondary"
-                      />
-                        )}
-                    label="기자단"
-                    classes={{ root: classes.checkboxLabel }}
-                  />
-                  )}
-                name="report"
                 control={control}
               />
             </Grid>
@@ -419,6 +410,22 @@ function CampaignCreateNew() {
           ) : null }
           { errors.sns ? (
             <div className="error-message">{errors.sns.message}</div>
+          ) : null }
+
+          { watchObj.sns === '4' ? (
+            <Box color={Colors.orange}>
+                  기자단은 물건등을 제공하거나 방문하지 않고 사장님이 주신 사진 및 자료(스토리보드) 만으로 만드는 인스타그램이나 블로그에 업로드 하는 것 입니다
+              <br />
+                  인스타그램기자단 최소비용 : 5000원 부터
+              <br />
+                  블로그기자단 최소비용 : 2만원 부터
+              <br />
+                  각 비용은 인플루언서가 해당내용을 주신 자료대로 잘 포스팅하고 난 다음에 리뷰통해서 확인한 뒤에 직접 광고주님이 입금해주시면 됩니다
+              <br />
+                  자료를 추가하여 수정요청은 안됩니다 (추가 비용을 요구함) 따라서 처음에 자료를 잘 작성해 주세요
+              <br />
+                  자료대로 안 올라갔을 경우 수정은 1회 가능하며 직접 요청하시면 됩니다
+            </Box>
           ) : null }
         </Grid>
 
