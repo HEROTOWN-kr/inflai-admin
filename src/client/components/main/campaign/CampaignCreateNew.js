@@ -6,14 +6,13 @@ import axios from 'axios';
 import {
   Box, Grid, Paper, FormControlLabel, RadioGroup, Radio, InputAdornment, Typography, IconButton, Checkbox
 } from '@material-ui/core';
-import { useForm, Controller, get } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { ArrowRightAlt, Clear } from '@material-ui/icons';
-import SearchIcon from '@material-ui/icons/Search';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
 import ReactFormText from '../../containers/ReactFormText';
@@ -58,6 +57,19 @@ const visibleTypes = [
   { value: '1', text: '노출상태' },
 ];
 
+const reportTypes = [
+  {
+    name: 'instagram',
+    checked: false,
+    label: '인스타'
+  },
+  {
+    name: 'blog',
+    checked: false,
+    label: '블로그'
+  }
+];
+
 const useStyles = makeStyles({
   endAdornment: {
     padding: '0'
@@ -93,6 +105,11 @@ const useStyles = makeStyles({
   }
 });
 
+function checkReportArray(arr) {
+  const filteredArray = arr.filter(item => item.checked);
+  return filteredArray.length > 0;
+}
+
 function CampaignCreateNew() {
   const history = useHistory();
   const [images, setImages] = useState([]);
@@ -100,8 +117,6 @@ function CampaignCreateNew() {
   const [links, setLinks] = useState([]);
   const [savingMode, setSavingMode] = useState(false);
   const classes = useStyles();
-  const priceRef = useRef(null);
-  const lengthRef = useRef(null);
 
   function toggleSavingMode() {
     setSavingMode(!savingMode);
@@ -141,7 +156,7 @@ function CampaignCreateNew() {
     videoLength: '',
     editPriceEtc: '',
     videoLengthEtc: '',
-    report: false
+    reportTypes
   };
 
   Yup.addMethod(Yup.string, 'integerString', function () {
@@ -190,6 +205,10 @@ function CampaignCreateNew() {
       .test('picLength', '이미지 5개만 업로드 가능합니다', val => (images.length + dbImages.length) < 6),
     detailInfo: Yup.string()
       .test('detailInfoCheck', '내용은 최대 3,000자까지 입력 가능합니다.', val => val.length < 3000),
+    reportTypes: Yup.array().when('sns', {
+      is: sns => sns === '4',
+      then: Yup.array().test('isChecked', '기자단 모집 SNS를 선택해주세요', val => checkReportArray(val))
+    })
   });
 
   const {
@@ -200,24 +219,7 @@ function CampaignCreateNew() {
     defaultValues
   });
 
-  const watchObj = watch(['type', 'delivery', 'searchStart', 'searchFinish', 'shortDisc', 'influencerCount', 'sns', 'editPrice', 'videoLength', 'report']);
-
-  useEffect(() => {
-    if (watchObj.delivery === '1') {
-      setValue('type', 1);
-    } else {
-      setValue('type', 0);
-    }
-  }, [watchObj.delivery]);
-
-  useEffect(() => {
-    const selectStart = new Date(watchObj.searchFinish);
-    selectStart.setDate(selectStart.getDate() + 1);
-    const selectFinish = new Date(selectStart);
-    selectFinish.setDate(selectFinish.getDate() + 7);
-    setValue('selectStart', selectStart);
-    setValue('selectFinish', selectFinish);
-  }, [watchObj.searchFinish]);
+  const watchObj = watch(['type', 'delivery', 'searchStart', 'searchFinish', 'shortDisc', 'influencerCount', 'sns', 'editPrice', 'videoLength', 'reportTypes']);
 
   function onSearchStartChange(date) {
     const minDate = new Date(date);
@@ -269,7 +271,6 @@ function CampaignCreateNew() {
     setSavingMode(true);
     const props = data;
     if (links.length > 0) props.links = JSON.stringify(links);
-    console.log(props);
 
     axios.post('/api/TB_AD/createAdmin', props).then((res) => {
       if (images.length === 0) {
@@ -294,29 +295,31 @@ function CampaignCreateNew() {
         alert('캠페인이 등록되었습니다!!');
         history.push('/Campaign/List');
       }).catch(err => console.log(err.message));
-
-      /* const uploaders = images.map((item) => {
-       const formData = new FormData();
-       formData.append('file', item.file);
-       formData.append('id', id);
-       formData.append('isMain', item.isMain);
-       return axios.post('/api/TB_PHOTO_AD/uploadImageAWS', formData, {
-         headers: { 'Content-Type': 'multipart/form-data' }
-       }).then(response => ('sucess')).catch(error => ('error'));
-     });
-
-     axios.all(uploaders).then(() => {
-       alert('캠페인이 등록되었습니다!!');
-       history.push('/Campaign/List');
-     }); */
     }).catch((error) => {
       alert(error.response.data);
     }).then(() => setSavingMode(false));
   };
 
+  // hooks
+
   useEffect(() => {
-    console.log(`${watchObj.report} is ${typeof watchObj.report}`);
-  }, [watchObj.report]);
+    if (watchObj.delivery === '1') {
+      setValue('type', 1);
+    } else {
+      setValue('type', 0);
+    }
+  }, [watchObj.delivery]);
+
+  useEffect(() => {
+    const selectStart = new Date(watchObj.searchFinish);
+    selectStart.setDate(selectStart.getDate() + 1);
+    const selectFinish = new Date(selectStart);
+    selectFinish.setDate(selectFinish.getDate() + 7);
+    setValue('selectStart', selectStart);
+    setValue('selectFinish', selectFinish);
+  }, [watchObj.searchFinish]);
+
+  // view
 
   return (
     <Box my={{ xs: 0, sm: 4 }} p={{ xs: 2, sm: 4 }} maxWidth={1200} css={{ margin: '0 auto' }} component={Paper}>
@@ -342,23 +345,6 @@ function CampaignCreateNew() {
             placeholder="서비스나 제공물품에 대해서 자세히 적어주세요"
           />
         </Grid>
-
-        {/* <Controller
-            name="report"
-            control={control}
-            render={({ onChange, value }) => (
-              <FormControlLabel
-                label="기자단"
-                control={(
-                  <Checkbox
-                    onChange={e => onChange(e.target.checked)}
-                    checked={value}
-                    color="secondary"
-                  />
-                    )}
-              />
-            )}
-          /> */}
 
         <Grid item xs={12}>
           <Box mb={1}>
@@ -393,7 +379,9 @@ function CampaignCreateNew() {
               />
             </Grid>
           </Grid>
-
+          { errors.sns ? (
+            <div className="error-message">{errors.sns.message}</div>
+          ) : null }
 
           { watchObj.sns === '2' ? (
             <Box color={Colors.orange}>
@@ -408,27 +396,59 @@ function CampaignCreateNew() {
                 인플라이는 인공지능분석을 통해 보다 좋은 유튜버를 추천해 드리며 유튜브 영상제작과정에는 참여하지 않습니다
             </Box>
           ) : null }
-          { errors.sns ? (
-            <div className="error-message">{errors.sns.message}</div>
-          ) : null }
 
           { watchObj.sns === '4' ? (
-            <Box color={Colors.orange}>
+            <Grid item xs={12}>
+              <Box mb={2} fontSize={14} color={Colors.orange}>
                   기자단은 물건등을 제공하거나 방문하지 않고 사장님이 주신 사진 및 자료(스토리보드) 만으로 만드는 인스타그램이나 블로그에 업로드 하는 것 입니다
-              <br />
+                <br />
                   인스타그램기자단 최소비용 : 5000원 부터
-              <br />
+                <br />
                   블로그기자단 최소비용 : 2만원 부터
-              <br />
+                <br />
                   각 비용은 인플루언서가 해당내용을 주신 자료대로 잘 포스팅하고 난 다음에 리뷰통해서 확인한 뒤에 직접 광고주님이 입금해주시면 됩니다
-              <br />
+                <br />
                   자료를 추가하여 수정요청은 안됩니다 (추가 비용을 요구함) 따라서 처음에 자료를 잘 작성해 주세요
-              <br />
+                <br />
                   자료대로 안 올라갔을 경우 수정은 1회 가능하며 직접 요청하시면 됩니다
-            </Box>
+              </Box>
+
+              <Box mb={1}>
+                <StyledText color="#3f51b5">
+                      기자단 모집 SNS
+                </StyledText>
+              </Box>
+              <Grid container>
+                {reportTypes.map((type, idx) => (
+                  <Grid item key={type.name}>
+                    <Controller
+                      control={control}
+                      name={`reportTypes[${idx}]`}
+                      render={({ onChange, value }) => (
+                        <FormControlLabel
+                          label={type.label}
+                          control={(
+                            <Checkbox
+                              onChange={e => onChange(
+                                e.target.checked
+                                  ? { ...reportTypes[idx], checked: true }
+                                  : { ...reportTypes[idx], checked: false }
+                              )}
+                              checked={value.checked}
+                            />
+                          )}
+                        />
+                      )}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+              { errors.reportTypes ? (
+                <div className="error-message">{errors.reportTypes.message}</div>
+              ) : null }
+            </Grid>
           ) : null }
         </Grid>
-
         { watchObj.sns === '2' ? (
           <Fragment>
             <Grid item xs={12}>
