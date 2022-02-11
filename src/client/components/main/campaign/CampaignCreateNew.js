@@ -269,8 +269,10 @@ function CampaignCreateNew() {
 
   const onSubmit = (data) => {
     setSavingMode(true);
+
     const props = data;
     if (links.length > 0) props.links = JSON.stringify(links);
+    if (data.sns !== '4') props.reportTypes = null;
 
     axios.post('/api/TB_AD/createAdmin', props).then((res) => {
       if (images.length === 0) {

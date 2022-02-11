@@ -6,7 +6,7 @@ import axios from 'axios';
 import {
   Box, Grid, Paper, FormControlLabel, Checkbox, RadioGroup, Radio, InputAdornment, Typography, IconButton
 } from '@material-ui/core';
-import { useForm, Controller, get } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory, useParams } from 'react-router-dom';
@@ -29,6 +29,7 @@ const snsTypes = [
   { value: '1', text: '인스타', dbValue: 'AD_INSTA' },
   { value: '2', text: '유튜브', dbValue: 'AD_YOUTUBE' },
   { value: '3', text: '블로그', dbValue: 'AD_NAVER' },
+  { value: '4', text: '기자단', dbValue: '' },
 ];
 
 const editPriceTypes = [
@@ -54,6 +55,19 @@ const deliveryTypes = [
 const visibleTypes = [
   { value: '0', text: '대기상태' },
   { value: '1', text: '노출상태' },
+];
+
+const reportTypes = [
+  {
+    name: 'instagram',
+    checked: false,
+    label: '인스타'
+  },
+  {
+    name: 'blog',
+    checked: false,
+    label: '블로그'
+  }
 ];
 
 const useStyles = makeStyles({
@@ -85,8 +99,16 @@ const useStyles = makeStyles({
     '&:hover': {
       opacity: '1'
     }
+  },
+  checkboxLabel: {
+    marginRight: 0
   }
 });
+
+function checkReportArray(arr) {
+  const filteredArray = arr.filter(item => item.checked);
+  return filteredArray.length > 0;
+}
 
 function CampaignEdit() {
   const history = useHistory();
@@ -133,6 +155,7 @@ function CampaignEdit() {
     provideMoney: '',
     editPriceEtc: '',
     videoLengthEtc: '',
+    reportTypes
   };
 
   Yup.addMethod(Yup.string, 'integerString', function () {
@@ -181,6 +204,10 @@ function CampaignEdit() {
       .test('picLength', '이미지 5개만 업러드 가능합니다', val => (images.length + dbImages.length) < 6),
     detailInfo: Yup.string()
       .test('detailInfoCheck', '내용은 최대 3,000자까지 입력 가능합니다.', val => val.length < 3000),
+    reportTypes: Yup.array().when('sns', {
+      is: sns => sns === '4',
+      then: Yup.array().test('isChecked', '기자단 모집 SNS를 선택해주세요', val => checkReportArray(val))
+    })
   });
 
   const {
@@ -191,24 +218,7 @@ function CampaignEdit() {
     defaultValues
   });
 
-  const watchObj = watch(['type', 'delivery', 'searchStart', 'searchFinish', 'shortDisc', 'influencerCount', 'sns', 'editPrice', 'videoLength']);
-
-  useEffect(() => {
-    if (watchObj.delivery === '1') {
-      setValue('type', 1);
-    } else {
-      setValue('type', 0);
-    }
-  }, [watchObj.delivery]);
-
-  useEffect(() => {
-    const selectStart = new Date(watchObj.searchFinish);
-    selectStart.setDate(selectStart.getDate() + 1);
-    const selectFinish = new Date(selectStart);
-    selectFinish.setDate(selectFinish.getDate() + 6);
-    setValue('selectStart', selectStart);
-    setValue('selectFinish', selectFinish);
-  }, [watchObj.searchFinish]);
+  const watchObj = watch(['type', 'delivery', 'searchStart', 'searchFinish', 'shortDisc', 'influencerCount', 'sns', 'editPrice', 'videoLength', 'reportTypes']);
 
   function onSearchStartChange(date) {
     const minDate = new Date(date);
@@ -235,7 +245,7 @@ function CampaignEdit() {
         AD_CTG2, AD_TEL, AD_EMAIL, AD_NAME, AD_SHRT_DISC, AD_DISC, AD_SEARCH_KEY,
         AD_TYPE, AD_DETAIL, AD_PROVIDE, AD_MONEY, AD_POST_CODE, AD_ROAD_ADDR,
         AD_DETAIL_ADDR, AD_EXTR_ADDR, TB_PHOTO_ADs, AD_VISIBLE, AD_LINKS,
-        AD_EDIT_PRICE, AD_EDIT_PRICE_ETC, AD_VIDEO_LEN, AD_VIDEO_LEN_ETC
+        AD_EDIT_PRICE, AD_EDIT_PRICE_ETC, AD_VIDEO_LEN, AD_VIDEO_LEN_ETC, AD_REPORT_TYPES
       } = data;
 
       const resetObj = {
@@ -255,7 +265,7 @@ function CampaignEdit() {
         shortDisc: AD_SHRT_DISC,
         discription: AD_DISC,
         searchKeyword: AD_SEARCH_KEY,
-        sns: AD_TYPE
+        sns: AD_TYPE,
       };
 
       if (AD_DETAIL) resetObj.detailInfo = AD_DETAIL;
@@ -269,6 +279,7 @@ function CampaignEdit() {
       if (AD_EDIT_PRICE_ETC) resetObj.editPriceEtc = AD_EDIT_PRICE_ETC;
       if (AD_VIDEO_LEN) resetObj.videoLength = AD_VIDEO_LEN;
       if (AD_VIDEO_LEN_ETC) resetObj.videoLengthEtc = AD_VIDEO_LEN_ETC;
+      if (AD_REPORT_TYPES) resetObj.reportTypes = JSON.parse(AD_REPORT_TYPES);
       if (TB_PHOTO_ADs && TB_PHOTO_ADs.length > 0) setDbImages(TB_PHOTO_ADs);
       if (AD_LINKS) setLinks(JSON.parse(AD_LINKS));
 
@@ -316,8 +327,11 @@ function CampaignEdit() {
 
   const onSubmit = async (data) => {
     setSavingMode(true);
+
     const post = { ...data, adId: params.id, links: JSON.stringify(links) };
+    if (data.sns !== '4') post.reportTypes = null;
     if (dbVisible === '0' && data.visible === '1') post.visibilityChanged = true;
+
     axios.post('/api/TB_AD/updateAdmin', post).then((res) => {
       if (images.length > 0) {
         const { id } = params;
@@ -346,10 +360,29 @@ function CampaignEdit() {
     });
   };
 
+  // hooks
+
   useEffect(() => {
     getCampaignData();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  useEffect(() => {
+    if (watchObj.delivery === '1') {
+      setValue('type', 1);
+    } else {
+      setValue('type', 0);
+    }
+  }, [watchObj.delivery]);
+
+  useEffect(() => {
+    const selectStart = new Date(watchObj.searchFinish);
+    selectStart.setDate(selectStart.getDate() + 1);
+    const selectFinish = new Date(selectStart);
+    selectFinish.setDate(selectFinish.getDate() + 6);
+    setValue('selectStart', selectStart);
+    setValue('selectFinish', selectFinish);
+  }, [watchObj.searchFinish]);
 
   return (
     <Box my={{ xs: 0, sm: 4 }} p={{ xs: 2, sm: 4 }} maxWidth={1200} css={{ margin: '0 auto' }} component={Paper}>
@@ -380,9 +413,6 @@ function CampaignEdit() {
           <Box mb={1}>
             <StyledText color="#3f51b5">
               모집SNS
-              {/* <span style={{ color: Colors.orange }}>
-                {' 1개 캠페인=10명까지 모집이 가능합니다. 추가 모집은 캠페인을 추가생성 해주세요!'}
-              </span> */}
             </StyledText>
           </Box>
           <Controller
@@ -402,6 +432,11 @@ function CampaignEdit() {
             name="sns"
             control={control}
           />
+
+          {errors.sns ? (
+            <div className="error-message">{errors.sns.message}</div>
+          ) : null}
+
           { watchObj.sns === '2' ? (
             <Box color={Colors.orange}>
                 유튜버 경우 제공되는 제품(서비스)외에 편집비용이 최소 20만원부터 가능합니다.
@@ -415,9 +450,58 @@ function CampaignEdit() {
                 인플라이는 인공지능분석을 통해 보다 좋은 유튜버를 추천해 드리며 유튜브 영상제작과정에는 참여하지 않습니다
             </Box>
           ) : null }
-          {errors.sns ? (
-            <div className="error-message">{errors.sns.message}</div>
-          ) : null}
+
+          { watchObj.sns === '4' ? (
+            <Grid item xs={12}>
+              <Box mb={2} fontSize={14} color={Colors.orange}>
+                  기자단은 물건등을 제공하거나 방문하지 않고 사장님이 주신 사진 및 자료(스토리보드) 만으로 만드는 인스타그램이나 블로그에 업로드 하는 것 입니다
+                <br />
+                  인스타그램기자단 최소비용 : 5000원 부터
+                <br />
+                  블로그기자단 최소비용 : 2만원 부터
+                <br />
+                  각 비용은 인플루언서가 해당내용을 주신 자료대로 잘 포스팅하고 난 다음에 리뷰통해서 확인한 뒤에 직접 광고주님이 입금해주시면 됩니다
+                <br />
+                  자료를 추가하여 수정요청은 안됩니다 (추가 비용을 요구함) 따라서 처음에 자료를 잘 작성해 주세요
+                <br />
+                  자료대로 안 올라갔을 경우 수정은 1회 가능하며 직접 요청하시면 됩니다
+              </Box>
+
+              <Box mb={1}>
+                <StyledText color="#3f51b5">
+                    기자단 모집 SNS
+                </StyledText>
+              </Box>
+              <Grid container>
+                {reportTypes.map((type, idx) => (
+                  <Grid item key={type.name}>
+                    <Controller
+                      control={control}
+                      name={`reportTypes[${idx}]`}
+                      render={({ onChange, value }) => (
+                        <FormControlLabel
+                          label={type.label}
+                          control={(
+                            <Checkbox
+                              onChange={e => onChange(
+                                e.target.checked
+                                  ? { ...reportTypes[idx], checked: true }
+                                  : { ...reportTypes[idx], checked: false }
+                              )}
+                              checked={value.checked}
+                            />
+                                    )}
+                        />
+                      )}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+              { errors.reportTypes ? (
+                <div className="error-message">{errors.reportTypes.message}</div>
+              ) : null }
+            </Grid>
+          ) : null }
         </Grid>
 
         { watchObj.sns === '2' ? (
