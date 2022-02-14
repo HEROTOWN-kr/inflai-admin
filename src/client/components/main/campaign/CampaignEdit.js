@@ -61,12 +61,14 @@ const reportTypes = [
   {
     name: 'instagram',
     checked: false,
-    label: '인스타'
+    label: '인스타',
+    value: '1'
   },
   {
     name: 'blog',
     checked: false,
-    label: '블로그'
+    label: '블로그',
+    value: '3'
   }
 ];
 
@@ -155,7 +157,8 @@ function CampaignEdit() {
     provideMoney: '',
     editPriceEtc: '',
     videoLengthEtc: '',
-    reportTypes
+    reportTypes,
+    reportSns: ''
   };
 
   Yup.addMethod(Yup.string, 'integerString', function () {
@@ -204,10 +207,14 @@ function CampaignEdit() {
       .test('picLength', '이미지 5개만 업러드 가능합니다', val => (images.length + dbImages.length) < 6),
     detailInfo: Yup.string()
       .test('detailInfoCheck', '내용은 최대 3,000자까지 입력 가능합니다.', val => val.length < 3000),
-    reportTypes: Yup.array().when('sns', {
+    reportSns: Yup.string().when('sns', {
+      is: sns => sns === '4',
+      then: Yup.string().required('기자단 모집 SNS를 선택해주세요')
+    }),
+    /* reportTypes: Yup.array().when('sns', {
       is: sns => sns === '4',
       then: Yup.array().test('isChecked', '기자단 모집 SNS를 선택해주세요', val => checkReportArray(val))
-    })
+    }) */
   });
 
   const {
@@ -245,7 +252,8 @@ function CampaignEdit() {
         AD_CTG2, AD_TEL, AD_EMAIL, AD_NAME, AD_SHRT_DISC, AD_DISC, AD_SEARCH_KEY,
         AD_TYPE, AD_DETAIL, AD_PROVIDE, AD_MONEY, AD_POST_CODE, AD_ROAD_ADDR,
         AD_DETAIL_ADDR, AD_EXTR_ADDR, TB_PHOTO_ADs, AD_VISIBLE, AD_LINKS,
-        AD_EDIT_PRICE, AD_EDIT_PRICE_ETC, AD_VIDEO_LEN, AD_VIDEO_LEN_ETC, AD_REPORT_TYPES
+        AD_EDIT_PRICE, AD_EDIT_PRICE_ETC, AD_VIDEO_LEN, AD_VIDEO_LEN_ETC, AD_REPORT_TYPES,
+        AD_REPORT
       } = data;
 
       const resetObj = {
@@ -282,6 +290,10 @@ function CampaignEdit() {
       if (AD_REPORT_TYPES) resetObj.reportTypes = JSON.parse(AD_REPORT_TYPES);
       if (TB_PHOTO_ADs && TB_PHOTO_ADs.length > 0) setDbImages(TB_PHOTO_ADs);
       if (AD_LINKS) setLinks(JSON.parse(AD_LINKS));
+      if (AD_REPORT === '1') {
+        resetObj.sns = '4';
+        resetObj.reportSns = AD_TYPE;
+      }
 
       reset(resetObj);
       setDbVisible(AD_VISIBLE);
@@ -329,7 +341,13 @@ function CampaignEdit() {
     setSavingMode(true);
 
     const post = { ...data, adId: params.id, links: JSON.stringify(links) };
-    if (data.sns !== '4') post.reportTypes = null;
+    // if (data.sns !== '4') post.reportTypes = null;
+
+    if (data.sns === '4') {
+      post.sns = data.reportSns;
+      post.report = '1';
+    }
+
     if (dbVisible === '0' && data.visible === '1') post.visibilityChanged = true;
 
     axios.post('/api/TB_AD/updateAdmin', post).then((res) => {
@@ -472,7 +490,38 @@ function CampaignEdit() {
                     기자단 모집 SNS
                 </StyledText>
               </Box>
+
               <Grid container>
+                <Grid item>
+                  <Controller
+                    as={(
+                      <RadioGroup row aria-label="gender">
+                        {reportTypes.map((item, index) => (
+                          <FormControlLabel
+                            key={item.value}
+                            value={item.value}
+                            control={(
+                              <Radio
+                                inputRef={index === 0 ? snsRef : null}
+                              />
+                            )}
+                            label={item.label}
+                          />
+                        ))}
+                      </RadioGroup>
+                      )}
+                    onFocus={() => snsRef.current.focus()}
+                    name="reportSns"
+                    control={control}
+                  />
+                </Grid>
+              </Grid>
+
+              { errors.reportSns ? (
+                <div className="error-message">{errors.reportSns.message}</div>
+              ) : null }
+
+              {/* <Grid container>
                 {reportTypes.map((type, idx) => (
                   <Grid item key={type.name}>
                     <Controller
@@ -499,7 +548,7 @@ function CampaignEdit() {
               </Grid>
               { errors.reportTypes ? (
                 <div className="error-message">{errors.reportTypes.message}</div>
-              ) : null }
+              ) : null } */}
             </Grid>
           ) : null }
         </Grid>

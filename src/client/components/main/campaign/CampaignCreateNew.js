@@ -61,12 +61,14 @@ const reportTypes = [
   {
     name: 'instagram',
     checked: false,
-    label: '인스타'
+    label: '인스타',
+    value: '1'
   },
   {
     name: 'blog',
     checked: false,
-    label: '블로그'
+    label: '블로그',
+    value: '3'
   }
 ];
 
@@ -156,7 +158,8 @@ function CampaignCreateNew() {
     videoLength: '',
     editPriceEtc: '',
     videoLengthEtc: '',
-    reportTypes
+    reportTypes,
+    reportSns: ''
   };
 
   Yup.addMethod(Yup.string, 'integerString', function () {
@@ -205,10 +208,14 @@ function CampaignCreateNew() {
       .test('picLength', '이미지 5개만 업로드 가능합니다', val => (images.length + dbImages.length) < 6),
     detailInfo: Yup.string()
       .test('detailInfoCheck', '내용은 최대 3,000자까지 입력 가능합니다.', val => val.length < 3000),
-    reportTypes: Yup.array().when('sns', {
+    reportSns: Yup.string().when('sns', {
+      is: sns => sns === '4',
+      then: Yup.string().required('기자단 모집 SNS를 선택해주세요')
+    }),
+    /* reportTypes: Yup.array().when('sns', {
       is: sns => sns === '4',
       then: Yup.array().test('isChecked', '기자단 모집 SNS를 선택해주세요', val => checkReportArray(val))
-    })
+    }) */
   });
 
   const {
@@ -272,7 +279,12 @@ function CampaignCreateNew() {
 
     const props = data;
     if (links.length > 0) props.links = JSON.stringify(links);
-    if (data.sns !== '4') props.reportTypes = null;
+
+    // if (data.sns !== '4') props.reportTypes = null;
+    if (data.sns === '4') {
+      props.sns = data.reportSns;
+      props.report = '1';
+    }
 
     axios.post('/api/TB_AD/createAdmin', props).then((res) => {
       if (images.length === 0) {
@@ -381,6 +393,8 @@ function CampaignCreateNew() {
               />
             </Grid>
           </Grid>
+
+
           { errors.sns ? (
             <div className="error-message">{errors.sns.message}</div>
           ) : null }
@@ -420,7 +434,38 @@ function CampaignCreateNew() {
                       기자단 모집 SNS
                 </StyledText>
               </Box>
+
               <Grid container>
+                <Grid item>
+                  <Controller
+                    as={(
+                      <RadioGroup row aria-label="gender">
+                        {reportTypes.map((item, index) => (
+                          <FormControlLabel
+                            key={item.value}
+                            value={item.value}
+                            control={(
+                              <Radio
+                                inputRef={index === 0 ? snsRef : null}
+                              />
+                                    )}
+                            label={item.label}
+                          />
+                        ))}
+                      </RadioGroup>
+                      )}
+                    onFocus={() => snsRef.current.focus()}
+                    name="reportSns"
+                    control={control}
+                  />
+                </Grid>
+              </Grid>
+
+              { errors.reportSns ? (
+                <div className="error-message">{errors.reportSns.message}</div>
+              ) : null }
+
+              {/* <Grid container>
                 {reportTypes.map((type, idx) => (
                   <Grid item key={type.name}>
                     <Controller
@@ -444,10 +489,12 @@ function CampaignCreateNew() {
                     />
                   </Grid>
                 ))}
-              </Grid>
-              { errors.reportTypes ? (
+              </Grid> */}
+
+
+              {/* { errors.reportTypes ? (
                 <div className="error-message">{errors.reportTypes.message}</div>
-              ) : null }
+              ) : null } */}
             </Grid>
           ) : null }
         </Grid>

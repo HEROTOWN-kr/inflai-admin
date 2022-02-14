@@ -62,6 +62,22 @@ const tableHeader = [
   }
 ];
 
+const snsTypes = {
+  1: {
+    text: 'Instagram',
+    color: Colors.pink
+  },
+  2: {
+    text: 'Youtube',
+    color: Colors.red
+  },
+  3: {
+    text: 'Blog',
+    color: Colors.green
+  }
+};
+
+
 const useStyles = makeStyles({
   root: {
     background: '#ffffff'
@@ -125,9 +141,12 @@ function CampaignList(props) {
       const { campaignsRes, countRes } = response.data.data;
       const campaignsArray = campaignsRes.map((item) => {
         const {
-          AD_ID, AD_NAME, AD_CTG, AD_CTG2, AD_DT, AD_INF_CNT, TB_PHOTO_ADs, AD_TYPE, PAR_SEL_CNT, PAR_REVIEW_CNT, TB_PARTICIPANTs, rownum
+          AD_ID, AD_NAME, AD_CTG, AD_CTG2, AD_DT, AD_INF_CNT,
+          TB_PHOTO_ADs, AD_TYPE, AD_REPORT, PAR_SEL_CNT, PAR_REVIEW_CNT,
+          TB_PARTICIPANTs, rownum
         } = item;
-        return {
+
+        const returnObj = {
           id: AD_ID,
           type: AD_TYPE,
           campaignName: AD_NAME,
@@ -141,6 +160,9 @@ function CampaignList(props) {
           selCnt: PAR_SEL_CNT,
           rownum
         };
+        if (AD_REPORT === '1') returnObj.report = true;
+
+        return returnObj;
       });
       setCampaigns(campaignsArray);
       setCount(countRes);
@@ -330,16 +352,21 @@ function CampaignList(props) {
                                 {row.campaignName}
                               </StyledText>
                               <StyledText fontSize="14px" color="#222">
-                                {row.type === '1' ? (
-                                  <span style={{ color: Colors.pink, fontWeight: '600' }}>Instagram</span>
-                                ) : null}
-                                {row.type === '2' ? (
-                                  <span style={{ color: Colors.red, fontWeight: '600' }}>Youtube</span>
-                                ) : null}
-                                {row.type === '3' ? (
-                                  <span style={{ color: Colors.green, fontWeight: '600' }}>Blog</span>
-                                ) : null}
-                                {` ${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
+                                <Grid container spacing={1}>
+                                  { row.report ? (
+                                    <Grid item>
+                                      <Box style={{ color: '#0027ff', fontWeight: '600' }}>(기자단)</Box>
+                                    </Grid>
+                                  ) : null}
+                                  <Grid item>
+                                    <Box style={{ color: snsTypes[row.type].color, fontWeight: '600' }}>{snsTypes[row.type].text}</Box>
+                                  </Grid>
+                                  <Grid item>
+                                    <Box>
+                                      {` ${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
+                                    </Box>
+                                  </Grid>
+                                </Grid>
                               </StyledText>
                             </Grid>
                             <Grid item xs={12}>
