@@ -370,16 +370,34 @@ function CampaignList(props) {
                               </StyledText>
                             </Grid>
                             <Grid item xs={12}>
-                              <Box width="70px">
-                                <StyledButton
-                                  onClick={() => campaignParticipant(row.id, row.type)}
-                                  padding="0"
-                                  height="26px"
-                                  fontSize="0.790rem"
-                                >
+                              <Grid container spacing={1}>
+                                <Grid item>
+                                  <Box width="70px">
+                                    <StyledButton
+                                      onClick={() => campaignParticipant(row.id, row.type)}
+                                      padding="0"
+                                      height="26px"
+                                      fontSize="0.790rem"
+                                    >
                                       신청자
-                                </StyledButton>
-                              </Box>
+                                    </StyledButton>
+                                  </Box>
+                                </Grid>
+                                <Grid item>
+                                  <Box width="70px">
+                                    <StyledButton
+                                      onClick={() => history.push(`${match.path}/Question/${row.id}`)}
+                                      background="#0fb359"
+                                      hoverBackground="#107C41"
+                                      padding="0"
+                                      height="26px"
+                                      fontSize="0.790rem"
+                                    >
+                                      문의
+                                    </StyledButton>
+                                  </Box>
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
                         </Box>

@@ -1,19 +1,31 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
-import { textAlign } from '@material-ui/system';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Colors } from '../../lib/Сonstants';
+
+const useStyles = makeStyles({
+  common: ({
+    fontSize, lineHeight, color, fontWeight, textAlign, overflowHidden, cursor
+  }) => ({
+    fontSize: fontSize || '14px',
+    overflow: overflowHidden ? 'hidden' : 'visible',
+    whiteSpace: overflowHidden ? 'nowrap' : 'normal',
+    textOverflow: overflowHidden ? 'ellipsis' : 'clip',
+  }),
+});
 
 function StyledText(props) {
   const {
     className, fontFamily, fontSize, children, ...rest
   } = props;
+  const classes = useStyles(props);
 
   return (
     <Box
+      classes={{ root: classes.common }}
       fontFamily={fontFamily || 'Noto Sans KR, sans-serif'}
-      fontSize={fontSize || '14px'}
       letterSpacing="0"
       component="div"
-      // color={color || '#222'}
       {...rest}
     >
       {children}

@@ -6,7 +6,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import Influencer from './influencer/Influencer';
 import Advertiser from './advertiser/Advertiser';
 import Ranking from './ranking/Ranking';
-import Request from './request/Request';
 import Dashboard from './dashboard/Dashboard';
 import Campaign from './campaign/Campaign';
 import Navbar from './navbar/Navbar';
