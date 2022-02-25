@@ -32,6 +32,11 @@ const snsTypes = [
   { value: '4', text: '기자단', dbValue: '' },
 ];
 
+const campaignTypes = [
+  { value: '1', text: '체험단' },
+  { value: '2', text: '공동구매' },
+];
+
 const editPriceTypes = [
   { value: '1', text: '20만원' },
   { value: '2', text: '30만원' },
@@ -159,7 +164,8 @@ function CampaignCreateNew() {
     editPriceEtc: '',
     videoLengthEtc: '',
     reportTypes,
-    reportSns: ''
+    reportSns: '',
+    campaignType: '1'
   };
 
   Yup.addMethod(Yup.string, 'integerString', function () {
@@ -359,6 +365,40 @@ function CampaignCreateNew() {
             placeholder="서비스나 제공물품에 대해서 자세히 적어주세요"
           />
         </Grid>
+
+        <Grid item xs={12}>
+          <Box mb={1}>
+            <StyledText color="#3f51b5">
+              캠페인 종류
+            </StyledText>
+          </Box>
+          <Grid container>
+            <Grid item>
+              <Controller
+                as={(
+                  <RadioGroup row aria-label="gender">
+                    {campaignTypes.map((item, index) => (
+                      <FormControlLabel
+                        key={item.value}
+                        value={item.value}
+                        control={(
+                          <Radio
+                            inputRef={index === 0 ? snsRef : null}
+                          />
+                        )}
+                        label={item.text}
+                      />
+                    ))}
+                  </RadioGroup>
+                  )}
+                onFocus={() => snsRef.current.focus()}
+                name="campaignType"
+                control={control}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+
 
         <Grid item xs={12}>
           <Box mb={1}>
