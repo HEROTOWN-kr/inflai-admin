@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { ArrowRightAlt, Clear } from '@material-ui/icons';
+import moment from 'moment';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
 import ReactFormText from '../../containers/ReactFormText';
@@ -35,6 +36,11 @@ const snsTypes = [
 const campaignTypes = [
   { value: '1', text: '체험단' },
   { value: '2', text: '공동구매' },
+];
+
+const productSellTypes = [
+  { value: '1', text: '사이트통해' },
+  { value: '2', text: '직접판매' },
 ];
 
 const editPriceTypes = [
@@ -135,11 +141,11 @@ function CampaignCreateNew() {
   const theme = useTheme();
   const isSM = useMediaQuery(theme.breakpoints.up('sm'));
 
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 7);
-  const tomorrowMax = new Date(tomorrow);
-  tomorrowMax.setDate(tomorrow.getDate() + 13);
+  // setDates
+
+  const today = moment();
+  const tomorrow = moment().add(7, 'days');
+  const tomorrowMax = moment().add(13, 'days');
 
   const [pickerDates, setPickerDates] = useState({ min: tomorrow, max: tomorrowMax });
 
@@ -154,6 +160,14 @@ function CampaignCreateNew() {
     searchFinish: tomorrow,
     selectStart: today,
     selectFinish: tomorrow,
+
+    productSellStart: today,
+    productSellFinish: tomorrow,
+    productSellType: '',
+    productSellPrice: '',
+    productSellDiscount: '',
+    productSellInfo: '',
+
     phone: '',
     email: '',
     linkItem: '',
@@ -232,7 +246,11 @@ function CampaignCreateNew() {
     defaultValues
   });
 
-  const watchObj = watch(['type', 'delivery', 'searchStart', 'searchFinish', 'shortDisc', 'influencerCount', 'sns', 'editPrice', 'videoLength', 'reportTypes']);
+  const watchObj = watch([
+    'type', 'delivery', 'searchStart', 'searchFinish',
+    'shortDisc', 'influencerCount', 'sns', 'editPrice', 'videoLength',
+    'reportTypes', 'campaignType'
+  ]);
 
   function onSearchStartChange(date) {
     const minDate = new Date(date);
@@ -331,10 +349,8 @@ function CampaignCreateNew() {
   }, [watchObj.delivery]);
 
   useEffect(() => {
-    const selectStart = new Date(watchObj.searchFinish);
-    selectStart.setDate(selectStart.getDate() + 1);
-    const selectFinish = new Date(selectStart);
-    selectFinish.setDate(selectFinish.getDate() + 7);
+    const selectStart = moment(watchObj.searchFinish).add(1, 'days');
+    const selectFinish = moment(selectStart).add(7, 'days');
     setValue('selectStart', selectStart);
     setValue('selectFinish', selectFinish);
   }, [watchObj.searchFinish]);
@@ -711,6 +727,126 @@ function CampaignCreateNew() {
             </Grid>
           </Grid>
         </Grid>
+
+        { watchObj.campaignType === '2' ? (
+          <Fragment>
+            <Grid item xs={12}>
+              <Box mb={1}>
+                <StyledText color="#3f51b5">
+                    공동 구매기간
+                </StyledText>
+              </Box>
+              <Grid container spacing={isSM ? 3 : 1} alignItems="center">
+                <Grid item xs sm="auto">
+                  <Box width={isSM ? '250px' : '100%'}>
+                    <ReactFormDatePicker
+                      name="productSellStart"
+                      control={control}
+                      onAccept={onSearchStartChange}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={1} sm="auto"><Box textAlign="center">~</Box></Grid>
+                <Grid item xs sm="auto">
+                  <Box width={isSM ? '250px' : '100%'}>
+                    <ReactFormDatePicker
+                      name="productSellFinish"
+                      control={control}
+                      minDate={pickerDates.min}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box mb={1}>
+                <StyledText color="#3f51b5">
+                    판매 방식
+                </StyledText>
+              </Box>
+              <Grid container>
+                <Grid item>
+                  <Controller
+                    as={(
+                      <RadioGroup row aria-label="gender">
+                        {productSellTypes.map((item, index) => (
+                          <FormControlLabel
+                            key={item.value}
+                            value={item.value}
+                            control={(
+                              <Radio
+                                inputRef={index === 0 ? snsRef : null}
+                              />
+                                      )}
+                            label={item.text}
+                          />
+                        ))}
+                      </RadioGroup>
+                        )}
+                    onFocus={() => snsRef.current.focus()}
+                    name="productSellType"
+                    control={control}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box mb={1}><StyledText color="#3f51b5">제품 가격</StyledText></Box>
+              <Grid container spacing={1} alignItems="center">
+                <Grid item xs={12} md="auto">
+                  <Box width={{ xs: '100%', md: '200px' }}>
+                    <ReactFormText
+                      register={register}
+                      errors={errors}
+                      name="productSellPrice"
+                      placeholder=""
+                      InputProps={{
+                        endAdornment: <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>원</InputAdornment>,
+                        classes: { input: classes.input }
+                      }}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box mb={1}><StyledText color="#3f51b5">수수료</StyledText></Box>
+              <Grid container spacing={1} alignItems="center">
+                <Grid item xs={12} md="auto">
+                  <Box width={{ xs: '100%', md: '200px' }}>
+                    <ReactFormText
+                      register={register}
+                      errors={errors}
+                      name="productSellDiscount"
+                      placeholder=""
+                      InputProps={{
+                        endAdornment: <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>원</InputAdornment>,
+                        classes: { input: classes.input }
+                      }}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box mb={1}><StyledText color="#3f51b5">판매 정보</StyledText></Box>
+              <ReactFormText
+                register={register}
+                errors={errors}
+                multiline
+                rows={5}
+                name="productSellInfo"
+                placeholder="공동 구매 판매 정보를 자세히 적어주세요"
+              />
+            </Grid>
+          </Fragment>
+        ) : null}
+
+
         <Grid item xs={12}>
           <Box mb={1}><StyledText color="#3f51b5">캠페인 출력상태</StyledText></Box>
           <Controller
