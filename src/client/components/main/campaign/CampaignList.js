@@ -141,7 +141,7 @@ function CampaignList(props) {
       const { campaignsRes, countRes } = response.data.data;
       const campaignsArray = campaignsRes.map((item) => {
         const {
-          AD_ID, AD_NAME, AD_CTG, AD_CTG2, AD_DT, AD_INF_CNT,
+          AD_ID, AD_NAME, AD_CTG, AD_CTG2, AD_DT, AD_INF_CNT, AD_CAM_TYPE,
           TB_PHOTO_ADs, AD_TYPE, AD_REPORT, PAR_SEL_CNT, PAR_REVIEW_CNT,
           TB_PARTICIPANTs, rownum
         } = item;
@@ -150,6 +150,7 @@ function CampaignList(props) {
           id: AD_ID,
           type: AD_TYPE,
           campaignName: AD_NAME,
+          campaignType: AD_CAM_TYPE,
           category: AD_CTG,
           subcategory: AD_CTG2,
           createDate: AD_DT,
@@ -355,7 +356,12 @@ function CampaignList(props) {
                                 <Grid container spacing={1}>
                                   { row.report ? (
                                     <Grid item>
-                                      <Box style={{ color: '#0027ff', fontWeight: '600' }}>(기자단)</Box>
+                                      <Box color="#0027ff" fontWeight={600}>(기자단)</Box>
+                                    </Grid>
+                                  ) : null}
+                                  { row.campaignType === '2' ? (
+                                    <Grid item>
+                                      <Box color="#00b605" fontWeight={600}>[공동구매]</Box>
                                     </Grid>
                                   ) : null}
                                   <Grid item>

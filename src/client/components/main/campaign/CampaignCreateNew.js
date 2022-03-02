@@ -232,6 +232,24 @@ function CampaignCreateNew() {
       is: sns => sns === '4',
       then: Yup.string().required('기자단 모집 SNS를 선택해주세요')
     }),
+
+
+    productSellType: Yup.string().when('campaignType', {
+      is: campaignType => campaignType === '2',
+      then: Yup.string().required('판매 방식을 선택해주세요')
+    }),
+    productSellPrice: Yup.string().when('campaignType', {
+      is: campaignType => campaignType === '2',
+      then: Yup.string().required('제품 가격을 선택해주세요')
+    }),
+    productSellDiscount: Yup.string().when('campaignType', {
+      is: campaignType => campaignType === '2',
+      then: Yup.string().required('수수료를 선택해주세요')
+    }),
+    productSellInfo: Yup.string().when('campaignType', {
+      is: campaignType => campaignType === '2',
+      then: Yup.string().required('판매 정보를 선택해주세요')
+    }),
     /* reportTypes: Yup.array().when('sns', {
       is: sns => sns === '4',
       then: Yup.array().test('isChecked', '기자단 모집 SNS를 선택해주세요', val => checkReportArray(val))
@@ -790,6 +808,9 @@ function CampaignCreateNew() {
                   />
                 </Grid>
               </Grid>
+              { errors.productSellType ? (
+                <div className="error-message">{errors.productSellType.message}</div>
+              ) : null }
             </Grid>
 
             <Grid item xs={12}>
