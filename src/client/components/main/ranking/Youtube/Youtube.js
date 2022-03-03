@@ -159,7 +159,7 @@ function Youtube(props) {
 
 
   useEffect(() => {
-    getUpdateTime();
+    // getUpdateTime();
     setTab(1);
   }, []);
 
