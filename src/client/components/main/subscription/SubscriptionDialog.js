@@ -5,6 +5,7 @@ import {
 import { useTheme } from '@material-ui/core/styles';
 import { Controller, useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import StyledButton from '../../containers/StyledButton';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
@@ -23,14 +24,15 @@ const defaultValues = {
 
 function SubscriptionDialog(props) {
   const {
-    open, handleClose, getSubData, setMessage, subData, selectedId
+    open, handleClose, getSubData, subData, selectedId
   } = props;
   const [dialogData, setDialogData] = useState({});
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const {
-    reset, handleSubmit, handleBlur, watch, errors, setValue, control, getValues
+    reset, handleSubmit, handleBlur, watch, setValue, control, getValues
   } = useForm({ defaultValues });
+  const { enqueueSnackbar } = useSnackbar();
 
   const watchStart = watch('startDate');
 
@@ -59,7 +61,7 @@ function SubscriptionDialog(props) {
       // endDate: endDate.replace(/\//g, '-')
     };
     axios.post('/api/TB_SUBSCRIPTION/update', post).then((res) => {
-      setMessage({ type: 'success', open: true, text: '저장되었습니다' });
+      enqueueSnackbar('저장되었습니다', { variant: 'success' });
       getSubData();
       dialogClose();
     }).catch((err) => {

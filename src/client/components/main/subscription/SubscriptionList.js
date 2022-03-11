@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Box, Grid, IconButton, Snackbar, Table, TableBody, TableHead, TableRow
+  Box, Grid, IconButton, Table, TableBody, TableHead, TableRow
 } from '@material-ui/core';
 import { Edit, Delete } from '@material-ui/icons';
 import StyledTitle from '../../containers/StyledTitle';
@@ -71,23 +71,10 @@ function SubscriptionList(props) {
   const [selectedId, setSelectedId] = useState(null);
   const [dialogData, setDialogData] = useState({});
   const [editDialog, setEditDialog] = useState(false);
-  const [message, setMessage] = useState({
-    open: false,
-    text: '',
-    type: 'success'
-  });
-  const messageClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setMessage({ ...message, open: false });
-  };
 
   function toggleEditDialog() {
     setEditDialog(!editDialog);
   }
-
 
   function getSubscribtions() {
     axios.get('/api/TB_SUBSCRIPTION/list', {
@@ -231,18 +218,7 @@ function SubscriptionList(props) {
         getSubData={getSubscribtions}
         selectedId={selectedId}
         setSelectedId={setSelectedId}
-        setMessage={setMessage}
       />
-      <Snackbar
-        open={message.open}
-        autoHideDuration={4000}
-        onClose={messageClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={messageClose} severity={message.type}>
-          {message.text}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }

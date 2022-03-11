@@ -14,6 +14,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { ArrowRightAlt, Clear } from '@material-ui/icons';
 import moment from 'moment';
+import { useSnackbar } from 'notistack';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
 import ReactFormText from '../../containers/ReactFormText';
@@ -132,6 +133,7 @@ function CampaignEdit() {
   const [links, setLinks] = useState([]);
   const [savingMode, setSavingMode] = useState(false);
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
   function toggleSavingMode() {
     setSavingMode(!savingMode);
@@ -403,27 +405,28 @@ function CampaignEdit() {
     if (dbVisible === '0' && data.visible === '1') post.visibilityChanged = true;
 
     axios.post('/api/TB_AD/updateAdmin', post).then((res) => {
-      if (images.length > 0) {
-        const { id } = params;
-        const uploaders = images.map((item) => {
-          const formData = new FormData();
-          formData.append('file', item.file);
-          formData.append('id', id);
-          formData.append('isMain', item.isMain);
-          return axios.post('/api/TB_PHOTO_AD/uploadImageAWS', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-          }).then(response => ('sucess')).catch(error => ('error'));
-        });
-        axios.all(uploaders).then(() => {
-          setSavingMode(false);
-          alert('수정되었습니다!');
-          history.push('/Campaign/List');
-        });
-      } else {
+      if (images.length === 0) {
         setSavingMode(false);
-        alert('수정되었습니다!');
+        enqueueSnackbar('수정되었습니다', { variant: 'success' });
         history.push('/Campaign/List');
+        return;
       }
+
+      const { id } = params;
+      const uploaders = images.map((item) => {
+        const formData = new FormData();
+        formData.append('file', item.file);
+        formData.append('id', id);
+        formData.append('isMain', item.isMain);
+        return axios.post('/api/TB_PHOTO_AD/uploadImageAWS', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => ('sucess')).catch(error => ('error'));
+      });
+      axios.all(uploaders).then(() => {
+        setSavingMode(false);
+        enqueueSnackbar('수정되었습니다', { variant: 'success' });
+        history.push('/Campaign/List');
+      });
     }).catch((error) => {
       setSavingMode(false);
       alert(error.response.data.message);
