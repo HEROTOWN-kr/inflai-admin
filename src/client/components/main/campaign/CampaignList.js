@@ -403,6 +403,25 @@ function CampaignList(props) {
                                     </StyledButton>
                                   </Box>
                                 </Grid>
+                                { row.campaignType === '2' ? (
+                                  <Grid item>
+                                    <Box width="70px">
+                                      <StyledButton
+                                        onClick={() => history.push({
+                                          pathname: `${match.path}/Seller/${row.id}`,
+                                          state: { type: row.type }
+                                        })}
+                                        background="#0fb359"
+                                        hoverBackground="#107C41"
+                                        padding="0"
+                                        height="26px"
+                                        fontSize="0.790rem"
+                                      >
+                                          판매링크
+                                      </StyledButton>
+                                    </Box>
+                                  </Grid>
+                                ) : null}
                               </Grid>
                             </Grid>
                           </Grid>
