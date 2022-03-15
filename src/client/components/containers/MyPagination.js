@@ -2,7 +2,9 @@ import React from 'react';
 import { Pagination } from '@material-ui/lab';
 
 function MyPagination(props) {
-  const { page, changePage, perPage, itemCount } = props;
+  const {
+    page, changePage, perPage, itemCount
+  } = props;
   const getPageCount = () => Math.ceil(itemCount / perPage);
   return (
     <Pagination

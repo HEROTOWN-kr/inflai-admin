@@ -16,7 +16,6 @@ const useStyles = makeStyles({
     fontSize: fontSize || '0.875rem',
     '&:hover': {
       background: hoverBackground || Colors.blue2Hover,
-
     }
   }),
 });
