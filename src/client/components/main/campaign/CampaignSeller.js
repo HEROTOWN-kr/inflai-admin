@@ -75,8 +75,8 @@ function CampaignSeller(props) {
 
   }
 
-  function uploadExcel(item) {
-
+  function uploadExcel(e) {
+    console.log(e.target.files);
   }
 
   function clickSellUrl(item) {
@@ -116,9 +116,15 @@ function CampaignSeller(props) {
               background="#0fb359"
               hoverBackground="#107C41"
               startIcon={<Publish />}
-              onClick={uploadExcel}
+              component="label"
+              // onClick={uploadExcel}
             >
               Upload
+              <input
+                type="file"
+                hidden
+                onChange={uploadExcel}
+              />
             </StyledButton>
           </Grid>
         </Grid>
