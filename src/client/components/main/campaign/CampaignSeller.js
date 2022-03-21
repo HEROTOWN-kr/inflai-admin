@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import * as PropTypes from 'prop-types';
 import { Description, GetApp, Publish } from '@material-ui/icons';
+import { useSnackbar } from 'notistack';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledText from '../../containers/StyledText';
 import StyledTableRow from '../../containers/StyledTableRow';
@@ -48,6 +49,7 @@ function CampaignSeller(props) {
   const history = useHistory();
   const params = useParams();
   const location = useLocation();
+  const { enqueueSnackbar } = useSnackbar();
   const adId = params.id;
 
   const { type } = location.state || {};
@@ -72,11 +74,28 @@ function CampaignSeller(props) {
   }
 
   function downloadExcel(item) {
-
+    axios.get('/api/TB_PARTICIPANT/downloadExcel', {
+      params: { adId }
+    }).then((res) => {
+      console.log(res);
+      const { url } = res.data;
+      window.open(window.location.origin + url, '_blank');
+    }).catch(err => alert(err.response.data.message));
   }
 
   function uploadExcel(e) {
-    console.log(e.target.files);
+    const { files } = e.target || {};
+    const formData = new FormData();
+    formData.append('file', files[0]);
+    e.target.value = null;
+
+    axios.post('/api/TB_PARTICIPANT/uploadExcel', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }).then((response) => {
+      enqueueSnackbar('업로드되었습니다', { variant: 'success' });
+    }).catch((error) => {
+      enqueueSnackbar('에러가 발생났습니다', { variant: 'error' });
+    });
   }
 
   function clickSellUrl(item) {
@@ -117,11 +136,11 @@ function CampaignSeller(props) {
               hoverBackground="#107C41"
               startIcon={<Publish />}
               component="label"
-              // onClick={uploadExcel}
             >
               Upload
               <input
                 type="file"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 hidden
                 onChange={uploadExcel}
               />
