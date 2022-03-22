@@ -169,6 +169,7 @@ function CampaignCreateNew() {
     productSellPrice: '',
     productSellDiscount: '',
     productSellInfo: '',
+    productSellUrl: '',
 
     phone: '',
     email: '',
@@ -251,6 +252,12 @@ function CampaignCreateNew() {
     productSellInfo: Yup.string().when('campaignType', {
       is: campaignType => campaignType === '2',
       then: Yup.string().required('판매 정보를 선택해주세요')
+    }),
+    productSellUrl: Yup.string().when('campaignType', {
+      is: campaignType => campaignType === '2',
+      then: Yup.string().required('판매 사이트 URL를 입력해주세요').test('snsTypeCheck', '올바른 URL이 아닙니다. URL을 확인해주세요.', val => (
+        val.indexOf('http://') === 0 || val.indexOf('https://') === 0
+      )),
     }),
     /* reportTypes: Yup.array().when('sns', {
       is: sns => sns === '4',
@@ -866,6 +873,17 @@ function CampaignCreateNew() {
                 rows={5}
                 name="productSellInfo"
                 placeholder="공동 구매 판매 정보를 자세히 적어주세요"
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box mb={1}><StyledText color="#3f51b5">판매 사이트 URL</StyledText></Box>
+              <ReactFormText
+                register={register}
+                errors={errors}
+                rows={5}
+                name="productSellUrl"
+                placeholder="https://farmforyou.co.kr/"
               />
             </Grid>
           </Fragment>

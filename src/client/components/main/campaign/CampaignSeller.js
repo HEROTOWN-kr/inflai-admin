@@ -22,6 +22,11 @@ const tableHeader = [
     width: '60px'
   },
   {
+    text: 'id',
+    align: 'center',
+    width: '100px'
+  },
+  {
     text: '이름',
     align: 'center',
     width: '150px'
@@ -29,6 +34,11 @@ const tableHeader = [
   {
     text: '메세지',
     align: 'center',
+  },
+  {
+    text: '판매코드',
+    align: 'center',
+    width: '150px'
   },
   {
     text: '판매링크',
@@ -92,7 +102,12 @@ function CampaignSeller(props) {
     axios.post('/api/TB_PARTICIPANT/uploadExcel', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     }).then((response) => {
-      enqueueSnackbar('업로드되었습니다', { variant: 'success' });
+      if (response.status === 201) {
+        enqueueSnackbar(response.data.message, { variant: 'warning' });
+      } else {
+        getParticipants();
+        enqueueSnackbar('업로드되었습니다', { variant: 'success' });
+      }
     }).catch((error) => {
       enqueueSnackbar('에러가 발생났습니다', { variant: 'error' });
     });
@@ -170,12 +185,22 @@ function CampaignSeller(props) {
                 </StyledTableCell>
                 <StyledTableCell>
                   <StyledText textAlign="center">
+                    {`id${row.INF_ID}`}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <StyledText textAlign="center">
                     {row.PAR_NAME}
                   </StyledText>
                 </StyledTableCell>
                 <StyledTableCell>
                   <StyledText textAlign="left">
                     {row.PAR_MESSAGE}
+                  </StyledText>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <StyledText textAlign="center">
+                    {row.TB_INFLUENCER.INF_SELL_CODE || '-'}
                   </StyledText>
                 </StyledTableCell>
                 <StyledTableCell>

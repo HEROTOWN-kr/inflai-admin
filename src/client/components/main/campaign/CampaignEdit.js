@@ -171,6 +171,7 @@ function CampaignEdit() {
     productSellPrice: '',
     productSellDiscount: '',
     productSellInfo: '',
+    productSellUrl: '',
 
     phone: '',
     email: '',
@@ -250,7 +251,12 @@ function CampaignEdit() {
       is: campaignType => campaignType === '2',
       then: Yup.string().required('판매 정보를 선택해주세요')
     }),
-
+    productSellUrl: Yup.string().when('campaignType', {
+      is: campaignType => campaignType === '2',
+      then: Yup.string().required('판매 사이트 URL를 입력해주세요').test('snsTypeCheck', '올바른 URL이 아닙니다. URL을 확인해주세요.', val => (
+        val.indexOf('http://') === 0 || val.indexOf('https://') === 0
+      )),
+    }),
     /* reportTypes: Yup.array().when('sns', {
       is: sns => sns === '4',
       then: Yup.array().test('isChecked', '기자단 모집 SNS를 선택해주세요', val => checkReportArray(val))
@@ -298,7 +304,7 @@ function CampaignEdit() {
         AD_DETAIL_ADDR, AD_EXTR_ADDR, TB_PHOTO_ADs, AD_VISIBLE, AD_LINKS,
         AD_EDIT_PRICE, AD_EDIT_PRICE_ETC, AD_VIDEO_LEN, AD_VIDEO_LEN_ETC, AD_REPORT_TYPES,
         AD_REPORT, AD_CAM_TYPE, AD_SELL_TYPE, AD_PROD_PRICE, AD_PROD_DISCOUNT, AD_PROD_INFO,
-        AD_PROD_SELL_START, AD_PROD_SELL_END
+        AD_PROD_SELL_START, AD_PROD_SELL_END, AD_PROD_URL
       } = data;
 
       const resetObj = {
@@ -340,6 +346,7 @@ function CampaignEdit() {
       if (AD_PROD_INFO) resetObj.productSellInfo = AD_PROD_INFO;
       if (AD_PROD_SELL_START) resetObj.productSellStart = AD_PROD_SELL_START;
       if (AD_PROD_SELL_END) resetObj.productSellFinish = AD_PROD_SELL_END;
+      if (AD_PROD_URL) resetObj.productSellUrl = AD_PROD_URL;
 
       if (AD_REPORT_TYPES) resetObj.reportTypes = JSON.parse(AD_REPORT_TYPES);
       if (TB_PHOTO_ADs && TB_PHOTO_ADs.length > 0) setDbImages(TB_PHOTO_ADs);
@@ -837,7 +844,6 @@ function CampaignEdit() {
                     <ReactFormDatePicker
                       name="productSellFinish"
                       control={control}
-                      minDate={pickerDates.min}
                     />
                   </Box>
                 </Grid>
@@ -929,6 +935,17 @@ function CampaignEdit() {
                 rows={5}
                 name="productSellInfo"
                 placeholder="공동 구매 판매 정보를 자세히 적어주세요"
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box mb={1}><StyledText color="#3f51b5">판매 사이트 URL</StyledText></Box>
+              <ReactFormText
+                register={register}
+                errors={errors}
+                rows={5}
+                name="productSellUrl"
+                placeholder="https://farmforyou.co.kr/"
               />
             </Grid>
           </Fragment>
