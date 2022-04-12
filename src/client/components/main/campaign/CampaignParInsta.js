@@ -88,6 +88,11 @@ const tableHeader = [
     text: '리뷰',
     align: 'center',
     width: '60px',
+  },
+  {
+    text: '상태',
+    align: 'center',
+    width: '60px',
   }
 ];
 
@@ -346,6 +351,7 @@ function CampaignParInsta() {
                     </StyledButton>
                   ) : null}
                 </StyledTableCell>
+                <StyledTableCell align="center">{row.INS_STATUS}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
