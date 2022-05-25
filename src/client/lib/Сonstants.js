@@ -196,6 +196,7 @@ export const Colors = {
   green: '#24d024',
   greenHover: '#3bb13b',
   pink: '#eb128c',
+  pink3: '#f971b8',
   disabled: 'rgba(0, 0, 0, 0.26)'
 };
 export const AdvertiseTypes = {
