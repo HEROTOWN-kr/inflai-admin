@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Box, Grid, Paper, TableBody, TableHead, TableRow, Checkbox, Table
 } from '@material-ui/core';
@@ -11,6 +11,7 @@ import StyledTableRow from '../../../containers/StyledTableRow';
 import { Colors } from '../../../../lib/Сonstants';
 import StyledButton from '../../../containers/StyledButton';
 import StyledBackDrop from '../../../containers/StyledBackDrop';
+import AuthContext from '../../../../context/AuthContext';
 
 const tableHeader = [
   {
@@ -39,11 +40,12 @@ const tableHeader = [
 
 function KakaoNotify() {
   const [campaigns, setCampaigns] = useState([]);
-  const [savingMode, setSavingMode] = useState(false);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [selectedItems, setSelectedItems] = useState([]);
   const limit = 10;
+
+  const { setLoading } = useContext(AuthContext);
 
   function getCampaigns() {
     axios.get('/api/TB_AD/getAll', { params: { page, limit } }).then((res) => {
@@ -84,14 +86,14 @@ function KakaoNotify() {
   }
 
   function sendMessage() {
-    setSavingMode(true);
+    setLoading(true);
     axios.get('/api/TB_AD/notify', {
       params: { ids: selectedItems }
     }).then((res) => {
-      setSavingMode(false);
+      setLoading(false);
     }).catch((error) => {
       alert(error.response.data.message);
-      setSavingMode(false);
+      setLoading(false);
     });
   }
 
@@ -182,7 +184,6 @@ function KakaoNotify() {
           </Grid>
         </Grid>
       </Grid>
-      <StyledBackDrop open={savingMode} />
     </Box>
   );
 }

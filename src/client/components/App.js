@@ -10,6 +10,9 @@ import { makeStyles } from '@material-ui/core';
 import Main from './main/Main';
 import Login from './login/Login';
 import Common from '../lib/common';
+import AuthContext from '../context/AuthContext';
+import useLoading from './hooks/useLoading';
+import StyledBackDrop from './containers/StyledBackDrop';
 
 const useStyles = makeStyles({
   snackbarCloseIcon: {
@@ -23,6 +26,7 @@ function App(props) {
   const [user, setUser] = useState(Common.getUserInfo());
   const classes = useStyles();
 
+  const { isLoading, setLoading } = useLoading();
   const snackbarRef = createRef();
   const onClickDismiss = key => () => {
     snackbarRef.current.closeSnackbar(key);
@@ -46,7 +50,7 @@ function App(props) {
 
 
   return (
-    <Fragment>
+    <AuthContext.Provider value={{ isLoading, setLoading }}>
       <SnackbarProvider
         ref={snackbarRef}
         action={key => (
@@ -73,9 +77,9 @@ function App(props) {
             )}
           />
         </Switch>
+        <StyledBackDrop open={isLoading} />
       </SnackbarProvider>
-    </Fragment>
-
+    </AuthContext.Provider>
   );
 }
 

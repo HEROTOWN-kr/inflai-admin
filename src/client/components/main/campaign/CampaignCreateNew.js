@@ -24,8 +24,8 @@ import DaumPostCode from '../../containers/DaumPostCode';
 import ImageHolder from './ImageHolder';
 import CKEditorComponent from '../../containers/CKEditorComponent';
 import StyledButton from '../../containers/StyledButton';
-import StyledBackDrop from '../../containers/StyledBackDrop';
 import StyledTextField from '../../containers/StyledTextField';
+import AuthContext from '../../../context/AuthContext';
 
 const snsTypes = [
   { value: '1', text: '인스타', dbValue: 'AD_INSTA' },
@@ -129,14 +129,11 @@ function CampaignCreateNew() {
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
   const [links, setLinks] = useState([]);
-  const [savingMode, setSavingMode] = useState(false);
   const classes = useStyles();
 
-  function toggleSavingMode() {
-    setSavingMode(!savingMode);
-  }
-
   const { enqueueSnackbar } = useSnackbar();
+  const { setLoading } = useContext(AuthContext);
+
   const deliveryRef = useRef();
   const snsRef = useRef();
 
@@ -247,7 +244,7 @@ function CampaignCreateNew() {
     }),
     productSellDiscount: Yup.string().when('campaignType', {
       is: campaignType => campaignType === '2',
-      then: Yup.string().required('수수료를 입력해주세요')
+      then: Yup.string().required('판매 수익을 입력해주세요')
     }),
     productSellInfo: Yup.string().when('campaignType', {
       is: campaignType => campaignType === '2',
@@ -326,7 +323,7 @@ function CampaignCreateNew() {
   }
 
   const onSubmit = (data) => {
-    setSavingMode(true);
+    setLoading(true);
 
     const props = data;
     if (links.length > 0) props.links = JSON.stringify(links);
@@ -337,12 +334,9 @@ function CampaignCreateNew() {
       props.report = '1';
     }
 
-    console.log(data);
-    setSavingMode(false);
-
-    /* axios.post('/api/TB_AD/createAdmin', props).then((res) => {
+    axios.post('/api/TB_AD/createAdmin', props).then((res) => {
       if (images.length === 0) {
-        setSavingMode(false);
+        setLoading(false);
         enqueueSnackbar('캠페인이 등록되었습니다!!', { variant: 'success' });
         history.push('/Campaign/List');
         return;
@@ -360,14 +354,14 @@ function CampaignCreateNew() {
       }));
 
       Promise.all(promiseArray).then((response) => {
-        setSavingMode(false);
+        setLoading(false);
         enqueueSnackbar('캠페인이 등록되었습니다!!', { variant: 'success' });
         history.push('/Campaign/List');
       }).catch(err => console.log(err.message));
     }).catch((error) => {
-      setSavingMode(false);
+      setLoading(false);
       alert(error.response.data);
-    }); */
+    });
   };
 
   // hooks
@@ -1154,7 +1148,6 @@ function CampaignCreateNew() {
             </Box>
           </Grid>
         </Grid>
-        <StyledBackDrop open={savingMode} handleClose={toggleSavingMode} />
       </Box>
       <Box mb={8}>
         <Grid container justify="center" spacing={3}>
