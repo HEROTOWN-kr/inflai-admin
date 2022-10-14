@@ -69,6 +69,11 @@ const visibleTypes = [
   { value: '1', text: '노출상태' },
 ];
 
+const selectedViewTypes = [
+  { value: '0', text: '숨김' },
+  { value: '1', text: '노출' },
+];
+
 const reportTypes = [
   {
     name: 'instagram',
@@ -151,6 +156,7 @@ function CampaignCreateNew() {
   const defaultValues = {
     sns: '',
     visible: '0',
+    selView: '1',
     delivery: '',
     detailInfo: '',
     type: 0,
@@ -919,6 +925,27 @@ function CampaignCreateNew() {
               control={control}
             />
           </Grid>
+
+          <Grid item xs={12}>
+            <Box mb={1}><StyledText color="#3f51b5">선정자 출력 여뷰</StyledText></Box>
+            <Controller
+              as={(
+                <RadioGroup row aria-label="gender">
+                  {selectedViewTypes.map((item, index) => (
+                    <FormControlLabel
+                      key={item.value}
+                      value={item.value}
+                      control={<Radio />}
+                      label={item.text}
+                    />
+                  ))}
+                </RadioGroup>
+                )}
+              name="selView"
+              control={control}
+            />
+          </Grid>
+
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">제공상품 배송여부</StyledText></Box>
             <Controller
