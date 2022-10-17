@@ -331,6 +331,8 @@ function CampaignCreateNew() {
   const onSubmit = (data) => {
     setLoading(true);
 
+    console.log(data);
+
     const props = data;
     if (links.length > 0) props.links = JSON.stringify(links);
 

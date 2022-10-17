@@ -69,6 +69,11 @@ const visibleTypes = [
   { value: '1', text: '노출상태' },
 ];
 
+const selectedViewTypes = [
+  { value: '0', text: '숨김' },
+  { value: '1', text: '노출' },
+];
+
 const reportTypes = [
   {
     name: 'instagram',
@@ -152,6 +157,7 @@ function CampaignEdit() {
   const defaultValues = {
     sns: '',
     visible: '0',
+    selView: '1',
     delivery: '',
     detailInfo: '',
     type: 0,
@@ -300,7 +306,7 @@ function CampaignEdit() {
         AD_DETAIL_ADDR, AD_EXTR_ADDR, TB_PHOTO_ADs, AD_VISIBLE, AD_LINKS,
         AD_EDIT_PRICE, AD_EDIT_PRICE_ETC, AD_VIDEO_LEN, AD_VIDEO_LEN_ETC, AD_REPORT_TYPES,
         AD_REPORT, AD_CAM_TYPE, AD_SELL_TYPE, AD_PROD_PRICE, AD_PROD_DISCOUNT, AD_PROD_INFO,
-        AD_PROD_SELL_START, AD_PROD_SELL_END, AD_PROD_URL
+        AD_PROD_SELL_START, AD_PROD_SELL_END, AD_PROD_URL, AD_SEL_VIEW
       } = data;
 
       const resetObj = {
@@ -343,6 +349,7 @@ function CampaignEdit() {
       if (AD_PROD_SELL_START) resetObj.productSellStart = AD_PROD_SELL_START;
       if (AD_PROD_SELL_END) resetObj.productSellFinish = AD_PROD_SELL_END;
       if (AD_PROD_URL) resetObj.productSellUrl = AD_PROD_URL;
+      if (AD_SEL_VIEW) resetObj.selView = AD_SEL_VIEW;
 
       if (AD_REPORT_TYPES) resetObj.reportTypes = JSON.parse(AD_REPORT_TYPES);
       if (TB_PHOTO_ADs && TB_PHOTO_ADs.length > 0) setDbImages(TB_PHOTO_ADs);
@@ -977,6 +984,27 @@ function CampaignEdit() {
               control={control}
             />
           </Grid>
+
+          <Grid item xs={12}>
+            <Box mb={1}><StyledText color="#3f51b5">선정자 출력 여뷰</StyledText></Box>
+            <Controller
+              as={(
+                <RadioGroup row aria-label="gender">
+                  {selectedViewTypes.map((item, index) => (
+                    <FormControlLabel
+                      key={item.value}
+                      value={item.value}
+                      control={<Radio />}
+                      label={item.text}
+                    />
+                  ))}
+                </RadioGroup>
+                )}
+              name="selView"
+              control={control}
+            />
+          </Grid>
+
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">제공상품 배송여부</StyledText></Box>
             <Controller
