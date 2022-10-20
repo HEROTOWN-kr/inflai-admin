@@ -74,7 +74,7 @@ const snsTypes = {
   3: {
     text: 'Blog',
     color: Colors.green
-  }
+  },
 };
 
 

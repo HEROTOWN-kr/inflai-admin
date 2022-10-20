@@ -28,147 +28,7 @@ export const testData = [
     requests_count: '5',
     tags: '#inflai #advertise',
     INF_ID: 4,
-  },
-  {
-    picture_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-    title: '[인스타방문형] 연남 카세트',
-    text: '취미발레는 인어스발레스튜디오에서!',
-    influencers_count: '1566',
-    requests_count: '5',
-    tags: '#inflai #advertise',
-    INF_ID: 22,
-  },
-  {
-    picture_url: 'https://images.unsplash.com/photo-1542728498-09c6a1af7cb9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
-    title: '[인스타방문형] 연남 카세트',
-    text: '취미발레는 인어스발레스튜디오에서!',
-    influencers_count: '2653',
-    requests_count: '5',
-    tags: '#inflai #advertise',
-    INF_ID: 23,
-  },
-  {
-    picture_url: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=633&q=80',
-    title: '[인스타방문형] 연남 카세트',
-    text: '취미발레는 인어스발레스튜디오에서!',
-    influencers_count: '9666',
-    requests_count: '5',
-    tags: '#inflai #advertise',
-    INF_ID: 48,
-  },
-  {
-    picture_url: 'https://images.unsplash.com/photo-1549068106-b024baf5062d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-    title: '[인스타방문형] 연남 카세트',
-    text: '취미발레는 인어스발레스튜디오에서!',
-    influencers_count: '9666',
-    requests_count: '5',
-    tags: '#inflai #advertise',
-    INF_ID: 48,
-  },
-  {
-    picture_url: 'https://images.unsplash.com/photo-1545996124-0501ebae84d0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80',
-    title: '[인스타방문형] 연남 카세트',
-    text: '취미발레는 인어스발레스튜디오에서!',
-    influencers_count: '9666',
-    requests_count: '5',
-    tags: '#inflai #advertise',
-    INF_ID: 48,
-  },
-  {
-    picture_url: 'https://images.unsplash.com/photo-1545912453-db258ca9b7b7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-    title: '[인스타방문형] 연남 카세트',
-    text: '취미발레는 인어스발레스튜디오에서!',
-    influencers_count: '9666',
-    requests_count: '5',
-    tags: '#inflai #advertise',
-    INF_ID: 48,
-  },
-  {
-    picture_url: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=633&q=80',
-    title: '[인스타방문형] 연남 카세트',
-    text: '취미발레는 인어스발레스튜디오에서!',
-    influencers_count: '9666',
-    requests_count: '5',
-    tags: '#inflai #advertise',
-    INF_ID: 48,
-  },
-  /* {
-      profile_picture_url: 'https://images.unsplash.com/photo-1549068106-b024baf5062d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-      username: 'Lucas',
-      name: '박이솔',
-      followers_count: '15254',
-      INF_ID: 49,
-    },
-    {
-      profile_picture_url: 'https://images.unsplash.com/photo-1545996124-0501ebae84d0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80',
-      username: 'Amir',
-      name: '김진후',
-      followers_count: '26325',
-      INF_ID: 54,
-    },
-    {
-      profile_picture_url: 'https://images.unsplash.com/photo-1545912453-db258ca9b7b7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-      username: 'Valerie',
-      name: '유서후',
-      followers_count: '36235',
-      INF_ID: 1,
-    },
-    {
-      profile_picture_url: 'https://images.unsplash.com/photo-1569124589354-615739ae007b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
-      username: 'Ilinerwise',
-      name: '문희원',
-      followers_count: '750',
-      INF_ID: 2,
-    },
-    {
-      profile_picture_url: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=656&q=80',
-      username: 'Reza Biazar',
-      name: '황찬세',
-      followers_count: '150213',
-      INF_ID: 3,
-    },
-    {
-      profile_picture_url: 'https://images.unsplash.com/photo-1541647376583-8934aaf3448a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-      username: 'Harishan Kobalasingam',
-      name: '김예준',
-      followers_count: '3533',
-      INF_ID: 6,
-    },
-    {
-      profile_picture_url: 'https://images.unsplash.com/photo-1565260524775-7e9b536fba2f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
-      username: 'Pantian Punpuang',
-      name: '박현우',
-      followers_count: '65235',
-      INF_ID: 5,
-    },
-    {
-      profile_picture_url: 'https://images.unsplash.com/photo-1547624643-3bf761b09502?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-      username: 'Sebastian Hemetsberger',
-      name: '김지호',
-      followers_count: '23633',
-      INF_ID: 7,
-    },
-    {
-      profile_picture_url: 'https://images.unsplash.com/photo-1546820389-44d77e1f3b31?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80',
-      username: 'Jake_Fagan',
-      name: '최준우',
-      followers_count: '12856',
-      INF_ID: 8,
-    },
-    {
-      profile_picture_url: 'https://images.unsplash.com/photo-1548946526-f69e2424cf45?ixlib=rb-1.2.1&auto=format&fit=crop&w=564&q=80',
-      username: 'Arshd_Khad',
-      name: '문시우',
-      followers_count: '19652',
-      INF_ID: 9,
-    },
-    {
-      profile_picture_url: 'https://images.unsplash.com/photo-1530512728528-123933595874?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-      username: 'Roberto_Delgado',
-      name: '김민준',
-      followers_count: '26542',
-      INF_ID: 10,
-    }, */
+  }
 ];
 export const classification = [{ value: '1', text: '국내사업자' }, { value: '2', text: '해외사업자' }];
 export const jobType = [{ value: '1', text: '일반' }, { value: '2', text: '에이전시' }, { value: '3', text: '소상공인' }];
@@ -208,6 +68,70 @@ export const AdvertiseTypes = {
     []
   ],
 };
+
+export const snsTypes = [
+  { value: '1', text: '인스타', dbValue: 'AD_INSTA' },
+  { value: '2', text: '유튜브', dbValue: 'AD_YOUTUBE' },
+  { value: '3', text: '블로그', dbValue: 'AD_NAVER' },
+  { value: '4', text: '기자단', dbValue: '' },
+  { value: '5', text: '리뷰어', dbValue: '' },
+];
+
+export const campaignTypes = [
+  { value: '1', text: '체험단' },
+  { value: '2', text: '공동구매' },
+];
+
+export const productSellTypes = [
+  { value: '1', text: '사이트통해' },
+  { value: '2', text: '직접판매' },
+];
+
+export const editPriceTypes = [
+  { value: '1', text: '20만원' },
+  { value: '2', text: '30만원' },
+  { value: '3', text: '50만원' },
+  { value: '4', text: '기타' },
+];
+
+export const videoLengthTypes = [
+  { value: '1', text: '1분미만' },
+  { value: '2', text: '1~3분' },
+  { value: '3', text: '3~5분' },
+  { value: '4', text: '5~10분' },
+  { value: '5', text: '기타' },
+];
+
+export const deliveryTypes = [
+  { value: '0', text: '매장 방문' },
+  { value: '1', text: '배송상품' },
+];
+
+export const visibleTypes = [
+  { value: '0', text: '대기상태' },
+  { value: '1', text: '노출상태' },
+];
+
+export const selectedViewTypes = [
+  { value: '0', text: '숨김' },
+  { value: '1', text: '노출' },
+];
+
+export const reportTypes = [
+  {
+    name: 'instagram',
+    checked: false,
+    label: '인스타',
+    value: '1'
+  },
+  {
+    name: 'blog',
+    checked: false,
+    label: '블로그',
+    value: '3'
+  }
+];
+
 
 export const campaignSteps = [{ value: '1', text: '리뷰어 신청' }, { value: '2', text: '리뷰어 발표' }, { value: '3', text: '리뷰등록' }, { value: '4', text: '베스트발표' }];
 
