@@ -75,6 +75,10 @@ const snsTypes = {
     text: 'Blog',
     color: Colors.green
   },
+  5: {
+    text: '리뷰어',
+    color: Colors.aqua
+  }
 };
 
 
@@ -199,6 +203,8 @@ function CampaignList(props) {
       history.push(`/Campaign/ParYoutube/${id}`);
     } else if (type === '3') {
       history.push(`/Campaign/ParBlog/${id}`);
+    } else if (type === '5') {
+      history.push(`/Campaign/ParReview/${id}`);
     }
   }
 

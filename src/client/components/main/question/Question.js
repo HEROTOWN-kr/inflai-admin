@@ -57,6 +57,10 @@ const adTypes = {
   4: {
     text: '기자단',
     color: '#0027ff'
+  },
+  5: {
+    text: '리뷰어',
+    color: Colors.aqua
   }
 };
 

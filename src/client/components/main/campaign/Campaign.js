@@ -17,6 +17,7 @@ import StyledTab from '../../containers/StyledTab';
 import CampaignParYoutube from './CampaignParYoutube';
 import Question from '../question/Question';
 import CampaignSeller from './CampaignSeller';
+import CampaignParReview from './CampaignParReview';
 
 const useStyles = makeStyles({
   title: {
@@ -83,6 +84,11 @@ function Campaign(props) {
             exact
             path={`${match.path}/ParBlog/:id`}
             render={renderProps => <CampaignParBlog {...renderProps} />}
+          />
+          <Route
+            exact
+            path={`${match.path}/ParReview/:id`}
+            render={renderProps => <CampaignParReview {...renderProps} />}
           />
           <Route
             exact
