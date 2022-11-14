@@ -360,7 +360,7 @@ function CampaignList(props) {
                               </StyledText>
                               <StyledText fontSize="14px" color="#222">
                                 <Grid container spacing={1}>
-                                  { row.report ? (
+                                  { row.report || row.campaignType === '3' ? (
                                     <Grid item>
                                       <Box color="#0027ff" fontWeight={600}>(기자단)</Box>
                                     </Grid>
