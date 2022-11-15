@@ -546,7 +546,7 @@ function CampaignEdit() {
 
           { watchObj.campaignType === '1' ? (
             <Grid item xs={12}>
-              <Box mb={1}><StyledText color="#3f51b5">제공하는 제품(서비스) 시가</StyledText></Box>
+              <Box mb={1}><StyledText color="#3f51b5">제공하는 제품(서비스) 판매가</StyledText></Box>
               <Box width={{ xs: '100%', md: '200px' }}>
                 <ReactFormText
                   register={register}

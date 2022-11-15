@@ -228,7 +228,7 @@ function CampaignCreateNew() {
   const watchObj = watch([
     'type', 'delivery', 'searchStart', 'searchFinish',
     'shortDisc', 'influencerCount', 'sns', 'editPrice', 'videoLength',
-    'reportTypes', 'campaignType', 'productSellType'
+    'reportTypes', 'campaignType', 'productSellType', 'priceSum'
   ]);
 
   function onSearchStartChange(date) {
@@ -337,6 +337,16 @@ function CampaignCreateNew() {
     setValue('selectFinish', selectFinish);
   }, [watchObj.searchFinish]);
 
+  function addPriceToName() {
+    const priceSum = getValues('priceSum');
+    const campaignName = getValues('campaignName');
+
+    if (priceSum === '') {
+      setValue('campaignName', campaignName);
+      return;
+    }
+    setValue('campaignName', `[시가 ${priceSum}원] ${campaignName}`);
+  }
   // view
 
   return (
@@ -486,7 +496,7 @@ function CampaignCreateNew() {
 
           { watchObj.campaignType === '1' ? (
             <Grid item xs={12}>
-              <Box mb={1}><StyledText color="#3f51b5">제공하는 제품(서비스) 시가</StyledText></Box>
+              <Box mb={1}><StyledText color="#3f51b5">제공하는 제품(서비스) 판매가</StyledText></Box>
               <Box width={{ xs: '100%', md: '200px' }}>
                 <ReactFormText
                   register={register}
