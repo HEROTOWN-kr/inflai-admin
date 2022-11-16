@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {
-  Box,
-  Grid,
+  Box, Button,
+  Grid, makeStyles,
   Paper,
   Table,
   TableBody,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow, Typography,
 } from '@material-ui/core';
 import axios from 'axios';
 import { Formik } from 'formik';
+import { Link } from 'react-router-dom';
+import { Description } from '@material-ui/icons';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
@@ -19,6 +21,23 @@ import YoutubeIcon from '../../../img/icon_youtube_url.png';
 import BlogIcon from '../../../img/icon_blog_url.png';
 import StyledImage from '../../containers/StyledImage';
 import defaultAccountImage from '../../../img/default_account_image.png';
+import StyledTabs from '../../containers/StyledTabs';
+import StyledTab from '../../containers/StyledTab';
+import StyledButton from '../../containers/StyledButton';
+import { Colors } from '../../../lib/Сonstants';
+
+const useStyles = makeStyles({
+  title: {
+    fontFamily: 'Noto Sans KR, sans-serif',
+    fontWeight: 700,
+    marginTop: '96px',
+    marginBottom: '48px'
+  },
+  tabs: {
+    root: {},
+    indicator: {}
+  }
+});
 
 const snsTypes = [
   {
@@ -44,6 +63,8 @@ function Influencer(props) {
   const [page, setPage] = useState(1);
   const { setMenuIndicator } = props;
   const limit = 10;
+  const classes = useStyles();
+
   useEffect(() => setMenuIndicator(2), []);
 
   function createInfluencers(data) {
@@ -80,6 +101,10 @@ function Influencer(props) {
     });
   }
 
+  function getExcel() {
+    console.log('test');
+  }
+
   useEffect(() => {
     getInfluencers();
   }, [page]);
@@ -89,27 +114,50 @@ function Influencer(props) {
   };
 
   return (
-    <Box py={6} width={1200} css={{ margin: '0 auto' }}>
-      <TableContainer component={Paper}>
-        <Table aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="center" width="90px">번호</StyledTableCell>
-              <StyledTableCell>이름</StyledTableCell>
-              <StyledTableCell align="center">이메일</StyledTableCell>
-              <StyledTableCell align="center">전화번호</StyledTableCell>
-              <StyledTableCell align="center">가입방식</StyledTableCell>
-              <StyledTableCell align="center">SNS</StyledTableCell>
-              <StyledTableCell align="right">가입일차</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {influencers.map(row => (
-              <StyledTableRow hover key={row.id}>
-                <StyledTableCell align="center">{row.rownum}</StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  <Grid container spacing={1} alignItems="center">
-                    {/* <Grid item>
+    <Fragment>
+      <Box borderBottom="1px solid #e4dfdf">
+        <Box maxWidth={1276} m="0 auto">
+          <Typography variant="h4" classes={{ root: classes.title }}>인플루언서 관리</Typography>
+        </Box>
+      </Box>
+      <Box bgcolor="#f4f4f4" minHeight={800}>
+        <Box py={6} maxWidth={1276} m="0 auto">
+          <Box pb={2}>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <StyledButton
+                  height={40}
+                  padding="0 20px"
+                  background="#0fb359"
+                  hoverBackground="#107C41"
+                  startIcon={<Description />}
+                  onClick={getExcel}
+                >
+            엑셀다운
+                </StyledButton>
+              </Grid>
+            </Grid>
+          </Box>
+          <TableContainer component={Paper}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center" width="90px">번호</StyledTableCell>
+                  <StyledTableCell>이름</StyledTableCell>
+                  <StyledTableCell align="center">이메일</StyledTableCell>
+                  <StyledTableCell align="center">전화번호</StyledTableCell>
+                  <StyledTableCell align="center">가입방식</StyledTableCell>
+                  <StyledTableCell align="center">SNS</StyledTableCell>
+                  <StyledTableCell align="right">가입일차</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {influencers.map(row => (
+                  <StyledTableRow hover key={row.id}>
+                    <StyledTableCell align="center">{row.rownum}</StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      <Grid container spacing={1} alignItems="center">
+                        {/* <Grid item>
                       <StyledImage
                         width="100px"
                         height="100px"
@@ -117,46 +165,48 @@ function Influencer(props) {
                         src={row.photo || defaultAccountImage}
                       />
                     </Grid> */}
-                    <Grid item>{row.name}</Grid>
-                  </Grid>
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.email}</StyledTableCell>
-                <StyledTableCell align="center">{row.phoneNumber}</StyledTableCell>
-                <StyledTableCell align="center">{row.social}</StyledTableCell>
-                <StyledTableCell align="center">
-                  <Grid container spacing={1} justify="center">
-                    {snsTypes.map(item => (
-                      row[item.name] ? (
-                        <Grid key={item.id} item>
-                          <StyledImage
-                            cursor="pointer"
-                            width="20px"
-                            height="20px"
-                            src={item.icon}
-                          />
-                        </Grid>
-                      ) : null))}
-                  </Grid>
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.registerDate}</StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Box py={4}>
-        <Grid container justify="center">
-          <Grid item>
-            <MyPagination
-              itemCount={count}
-              page={page}
-              changePage={changePage}
-              perPage={10}
-            />
-          </Grid>
-        </Grid>
+                        <Grid item>{row.name}</Grid>
+                      </Grid>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">{row.email}</StyledTableCell>
+                    <StyledTableCell align="center">{row.phoneNumber}</StyledTableCell>
+                    <StyledTableCell align="center">{row.social}</StyledTableCell>
+                    <StyledTableCell align="center">
+                      <Grid container spacing={1} justify="center">
+                        {snsTypes.map(item => (
+                          row[item.name] ? (
+                            <Grid key={item.id} item>
+                              <StyledImage
+                                cursor="pointer"
+                                width="20px"
+                                height="20px"
+                                src={item.icon}
+                              />
+                            </Grid>
+                          ) : null))}
+                      </Grid>
+                    </StyledTableCell>
+                    <StyledTableCell align="right">{row.registerDate}</StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Box py={4}>
+            <Grid container justify="center">
+              <Grid item>
+                <MyPagination
+                  itemCount={count}
+                  page={page}
+                  changePage={changePage}
+                  perPage={10}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
       </Box>
-    </Box>
+    </Fragment>
   );
 }
 
