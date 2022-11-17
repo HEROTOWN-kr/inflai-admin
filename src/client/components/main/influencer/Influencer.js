@@ -102,7 +102,10 @@ function Influencer(props) {
   }
 
   function getExcel() {
-    console.log('test');
+    axios.get('/api/testRoute/downExcel').then((res) => {
+      const { url } = res.data;
+      window.open(window.location.origin + url, '_blank');
+    });
   }
 
   useEffect(() => {
