@@ -1,4 +1,6 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, {
+  Fragment, useContext, useEffect, useState
+} from 'react';
 import {
   Box, Button,
   Grid, makeStyles,
@@ -25,6 +27,7 @@ import StyledTabs from '../../containers/StyledTabs';
 import StyledTab from '../../containers/StyledTab';
 import StyledButton from '../../containers/StyledButton';
 import { Colors } from '../../../lib/Сonstants';
+import AuthContext from '../../../context/AuthContext';
 
 const useStyles = makeStyles({
   title: {
@@ -64,6 +67,7 @@ function Influencer(props) {
   const { setMenuIndicator } = props;
   const limit = 10;
   const classes = useStyles();
+  const { setLoading } = useContext(AuthContext);
 
   useEffect(() => setMenuIndicator(2), []);
 
@@ -102,9 +106,14 @@ function Influencer(props) {
   }
 
   function getExcel() {
-    axios.get('/api/testRoute/downExcel').then((res) => {
+    setLoading(true);
+    axios.get('/api/TB_INFLUENCER/downExcel').then((res) => {
       const { url } = res.data;
+      setLoading(false);
       window.open(window.location.origin + url, '_blank');
+    }).catch((error) => {
+      setLoading(false);
+      alert(error.response.data);
     });
   }
 
