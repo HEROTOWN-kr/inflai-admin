@@ -14,7 +14,7 @@ import {
 import axios from 'axios';
 import { Formik } from 'formik';
 import { Link } from 'react-router-dom';
-import { Description } from '@material-ui/icons';
+import { Description, Instagram, YouTube } from '@material-ui/icons';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
@@ -64,6 +64,7 @@ function Influencer(props) {
   const [influencers, setInfluencers] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState({ instagram: '0', youtube: '0', blog: '0' });
   const { setMenuIndicator } = props;
   const limit = 10;
   const classes = useStyles();
@@ -135,7 +136,48 @@ function Influencer(props) {
       <Box bgcolor="#f4f4f4" minHeight={800}>
         <Box py={6} maxWidth={1276} m="0 auto">
           <Box pb={2}>
-            <Grid container justify="flex-end">
+            <Grid container justify="space-between">
+              <Grid item>
+                <Grid container spacing={1}>
+                  <Grid item>
+                    <StyledButton
+                      height={40}
+                      padding="0 20px"
+                      background={filters.instagram === '1' ? '#0fb359' : '#fff'}
+                      color={filters.instagram === '1' ? '#fff' : '#222'}
+                      hoverBackground={filters.instagram === '1' ? '#fff' : '#107C41'}
+                      startIcon={<Instagram />}
+                      onClick={() => {}}
+                    >
+                      인스타그램
+                    </StyledButton>
+                  </Grid>
+                  <Grid item>
+                    <StyledButton
+                      height={40}
+                      padding="0 20px"
+                      background="#0fb359"
+                      hoverBackground="#107C41"
+                      startIcon={<YouTube />}
+                      onClick={() => {}}
+                    >
+                      유튜브
+                    </StyledButton>
+                  </Grid>
+                  <Grid item>
+                    <StyledButton
+                      height={40}
+                      padding="0 20px"
+                      background="#0fb359"
+                      hoverBackground="#107C41"
+                      startIcon={<Description />}
+                      onClick={() => {}}
+                    >
+                      블로그
+                    </StyledButton>
+                  </Grid>
+                </Grid>
+              </Grid>
               <Grid item>
                 <StyledButton
                   height={40}
@@ -145,7 +187,7 @@ function Influencer(props) {
                   startIcon={<Description />}
                   onClick={getExcel}
                 >
-            엑셀다운
+            블로그
                 </StyledButton>
               </Grid>
             </Grid>
