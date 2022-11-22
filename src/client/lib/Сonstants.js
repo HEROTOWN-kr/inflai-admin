@@ -39,6 +39,7 @@ export const Colors = {
   blue2: '#409CFF',
   blue2Back: '#DDEFFF',
   blue2Hover: '#467fbd',
+  darkBlue: '#3f4b5c',
   orange: '#FF835D',
   orangeBack: '#FFEAE6',
   skyBlue: '#4376e8',

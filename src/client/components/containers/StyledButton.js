@@ -4,7 +4,7 @@ import { Colors } from '../../lib/Сonstants';
 
 const useStyles = makeStyles({
   root: ({
-    background, border, borderRadius, boxShadow, color, height, padding, hoverBackground, fontSize
+    background, border, borderRadius, boxShadow, color, height, padding, hoverBackground, hoverColor, fontSize
   }) => ({
     background: background || Colors.blue2,
     border: border || 0,
@@ -16,6 +16,7 @@ const useStyles = makeStyles({
     fontSize: fontSize || '0.875rem',
     '&:hover': {
       background: hoverBackground || Colors.blue2Hover,
+      color: hoverColor || Colors.white
     }
   }),
 });
@@ -25,7 +26,7 @@ const useStyles = makeStyles({
 
 function StyledButton(props) {
   const {
-    background, border, borderRadius, boxShadow, color, height, padding, hoverBackground, fontSize,
+    background, border, borderRadius, boxShadow, color, height, padding, hoverColor, hoverBackground, fontSize,
     className,
     children,
     ...rest

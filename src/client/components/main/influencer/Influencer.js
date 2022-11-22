@@ -4,7 +4,7 @@ import React, {
 import {
   Box, Button,
   Grid, makeStyles,
-  Paper,
+  Paper, SvgIcon,
   Table,
   TableBody,
   TableContainer,
@@ -12,8 +12,6 @@ import {
   TableRow, Typography,
 } from '@material-ui/core';
 import axios from 'axios';
-import { Formik } from 'formik';
-import { Link } from 'react-router-dom';
 import { Description, Instagram, YouTube } from '@material-ui/icons';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
@@ -23,40 +21,56 @@ import YoutubeIcon from '../../../img/icon_youtube_url.png';
 import BlogIcon from '../../../img/icon_blog_url.png';
 import StyledImage from '../../containers/StyledImage';
 import defaultAccountImage from '../../../img/default_account_image.png';
-import StyledTabs from '../../containers/StyledTabs';
-import StyledTab from '../../containers/StyledTab';
 import StyledButton from '../../containers/StyledButton';
-import { Colors } from '../../../lib/Сonstants';
 import AuthContext from '../../../context/AuthContext';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   title: {
     fontFamily: 'Noto Sans KR, sans-serif',
     fontWeight: 700,
     marginTop: '96px',
-    marginBottom: '48px'
+    marginBottom: '48px',
+    [theme.breakpoints.down('xs')]: {
+      textAlign: 'center',
+      marginTop: '30px',
+      marginBottom: '30px',
+    },
   },
   tabs: {
     root: {},
     indicator: {}
+  },
+  startIcon: {
+    [theme.breakpoints.down('xs')]: {
+      margin: 0,
+    },
   }
-});
+}));
 
 const snsTypes = [
   {
     id: 1,
     icon: InstaIcon,
-    name: 'insta'
+    name: 'insta',
+    filterName: 'instagram',
+    startIcon: Instagram,
+    nameKr: '인스타그램'
   },
   {
     id: 2,
     icon: YoutubeIcon,
-    name: 'youtube'
+    name: 'youtube',
+    filterName: 'youtube',
+    startIcon: YouTube,
+    nameKr: '유튜브'
   },
   {
     id: 3,
     icon: BlogIcon,
-    name: 'naver'
+    name: 'naver',
+    filterName: 'blog',
+    startIcon: Description,
+    nameKr: '블로그'
   }
 ];
 
@@ -96,9 +110,7 @@ function Influencer(props) {
 
   function getInfluencers() {
     axios.get('/api/TB_INFLUENCER/getInfluencers', {
-      params: {
-        page, limit
-      }
+      params: { page, limit, ...filters }
     }).then((res) => {
       const { data, InfluencerCount } = res.data;
       createInfluencers(data);
@@ -118,13 +130,19 @@ function Influencer(props) {
     });
   }
 
-  useEffect(() => {
-    getInfluencers();
-  }, [page]);
-
   const changePage = (event, value) => {
     setPage(value);
   };
+
+  const selectFilter = (name) => {
+    setPage(1);
+    setFilters({ ...filters, [name]: filters[name] === '1' ? '0' : '1' });
+  };
+
+
+  useEffect(() => {
+    getInfluencers();
+  }, [page, filters]);
 
   return (
     <Fragment>
@@ -134,48 +152,27 @@ function Influencer(props) {
         </Box>
       </Box>
       <Box bgcolor="#f4f4f4" minHeight={800}>
-        <Box py={6} maxWidth={1276} m="0 auto">
+        <Box py={6} px={2} maxWidth={1276} m="0 auto">
           <Box pb={2}>
             <Grid container justify="space-between">
               <Grid item>
                 <Grid container spacing={1}>
-                  <Grid item>
-                    <StyledButton
-                      height={40}
-                      padding="0 20px"
-                      background={filters.instagram === '1' ? '#0fb359' : '#fff'}
-                      color={filters.instagram === '1' ? '#fff' : '#222'}
-                      hoverBackground={filters.instagram === '1' ? '#fff' : '#107C41'}
-                      startIcon={<Instagram />}
-                      onClick={() => {}}
-                    >
-                      인스타그램
-                    </StyledButton>
-                  </Grid>
-                  <Grid item>
-                    <StyledButton
-                      height={40}
-                      padding="0 20px"
-                      background="#0fb359"
-                      hoverBackground="#107C41"
-                      startIcon={<YouTube />}
-                      onClick={() => {}}
-                    >
-                      유튜브
-                    </StyledButton>
-                  </Grid>
-                  <Grid item>
-                    <StyledButton
-                      height={40}
-                      padding="0 20px"
-                      background="#0fb359"
-                      hoverBackground="#107C41"
-                      startIcon={<Description />}
-                      onClick={() => {}}
-                    >
-                      블로그
-                    </StyledButton>
-                  </Grid>
+                  {snsTypes.map(item => (
+                    <Grid item key={item.id}>
+                      <StyledButton
+                        height={40}
+                        padding="0 20px"
+                        background={filters[item.filterName] === '1' ? '#0fb359' : '#fff'}
+                        color={filters[item.filterName] === '1' ? '#fff' : '#222'}
+                        hoverBackground={filters[item.filterName] === '1' ? '#0fb359' : '#107C41'}
+                        startIcon={<SvgIcon component={item.startIcon} />}
+                        onClick={() => { selectFilter(item.filterName); }}
+                        classes={{ startIcon: classes.startIcon }}
+                      >
+                        <Box display={{ xs: 'none', md: 'block' }}>{item.nameKr}</Box>
+                      </StyledButton>
+                    </Grid>
+                  ))}
                 </Grid>
               </Grid>
               <Grid item>
@@ -187,7 +184,7 @@ function Influencer(props) {
                   startIcon={<Description />}
                   onClick={getExcel}
                 >
-            블로그
+           엑셀다운
                 </StyledButton>
               </Grid>
             </Grid>
@@ -196,13 +193,13 @@ function Influencer(props) {
             <Table aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell align="center" width="90px">번호</StyledTableCell>
-                  <StyledTableCell>이름</StyledTableCell>
-                  <StyledTableCell align="center">이메일</StyledTableCell>
-                  <StyledTableCell align="center">전화번호</StyledTableCell>
-                  <StyledTableCell align="center">가입방식</StyledTableCell>
-                  <StyledTableCell align="center">SNS</StyledTableCell>
-                  <StyledTableCell align="right">가입일차</StyledTableCell>
+                  <StyledTableCell align="center" width="90px"><Box minWidth={{ xs: '40px', md: 'auto' }}>번호</Box></StyledTableCell>
+                  <StyledTableCell><Box minWidth={{ xs: '60px', md: 'auto' }}>이름</Box></StyledTableCell>
+                  <StyledTableCell align="center"><Box minWidth={{ xs: '60px', md: 'auto' }}>이메일</Box></StyledTableCell>
+                  <StyledTableCell align="center"><Box minWidth={{ xs: '60px', md: 'auto' }}>전화번호</Box></StyledTableCell>
+                  <StyledTableCell align="center"><Box minWidth={{ xs: '60px', md: 'auto' }}>가입방식</Box></StyledTableCell>
+                  <StyledTableCell align="center"><Box minWidth={{ xs: '60px', md: 'auto' }}>SNS</Box></StyledTableCell>
+                  <StyledTableCell align="right"><Box minWidth={{ xs: '90px', md: 'auto' }}>가입일차</Box></StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
