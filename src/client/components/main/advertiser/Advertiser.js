@@ -72,7 +72,7 @@ function Advertiser(props) {
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center" width="40px">번호</StyledTableCell>
+              <StyledTableCell align="center" width="60px">번호</StyledTableCell>
               <StyledTableCell>정보</StyledTableCell>
               <StyledTableCell align="right">이메일</StyledTableCell>
               <StyledTableCell align="right">전화번호</StyledTableCell>

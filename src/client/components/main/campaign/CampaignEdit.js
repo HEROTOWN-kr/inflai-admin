@@ -302,7 +302,7 @@ function CampaignEdit() {
       if (TB_PHOTO_ADs && TB_PHOTO_ADs.length > 0) setDbImages(TB_PHOTO_ADs);
       if (AD_LINKS) setLinks(JSON.parse(AD_LINKS));
       if (AD_REPORT === '1') {
-        resetObj.sns = '4';
+        // resetObj.sns = '4';
         resetObj.reportSns = AD_TYPE;
       }
 
@@ -468,6 +468,7 @@ function CampaignEdit() {
                           control={(
                             <Radio
                               inputRef={index === 0 ? snsRef : null}
+                              disabled={item.disabled}
                             />
                                     )}
                           label={item.text}
@@ -514,7 +515,12 @@ function CampaignEdit() {
                     <FormControlLabel
                       key={item.value}
                       value={item.value}
-                      control={<Radio inputRef={index === 0 ? snsRef : null} />}
+                      control={(
+                        <Radio
+                          inputRef={index === 0 ? snsRef : null}
+                          disabled={item.disabled}
+                        />
+)}
                       label={item.text}
                     />
                   ))}
