@@ -9,10 +9,10 @@ import { Close } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core';
 import Main from './main/Main';
 import Login from './login/Login';
-import Common from '../lib/common';
 import AuthContext from '../context/AuthContext';
 import useLoading from './hooks/useLoading';
 import StyledBackDrop from './containers/StyledBackDrop';
+import { getUserInfo, saveUserInfo } from '../lib/common';
 
 const useStyles = makeStyles({
   snackbarCloseIcon: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 
 function App(props) {
   const { history } = props;
-  const [user, setUser] = useState(Common.getUserInfo());
+  const [user, setUser] = useState(getUserInfo);
   const classes = useStyles();
 
   const { isLoading, setLoading } = useLoading();
@@ -39,7 +39,7 @@ function App(props) {
   function changeUser(data) {
     const newUser = { ...data };
     setUser(newUser);
-    Common.saveUserInfo(newUser);
+    saveUserInfo(newUser);
   }
 
   useEffect(() => {

@@ -22,6 +22,7 @@ import CKEditorComponent from '../../containers/CKEditorComponent';
 import DaumPostCode from '../../containers/DaumPostCode';
 import StyledButton from '../../containers/StyledButton';
 import ImageHolder from './ImageHolder';
+import { fileChangedHandler } from '../../../lib/common';
 
 function compareDates(date1, date2) {
   const day1 = date1.getDate();
@@ -63,6 +64,8 @@ function CampaignCreate(props) {
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
   const [savingMode, setSavingMode] = useState(false);
+
+  const [img, setImg] = useState('');
 
   function toggleSavingMode() {
     setSavingMode(!savingMode);
@@ -209,6 +212,11 @@ function CampaignCreate(props) {
     }
   }
 
+  function changeImage(e) {
+    const newImg = fileChangedHandler(e);
+    setImg(newImg);
+  }
+
   /* useEffect(() => {
     setValue('RadioGroup', '1');
   }, [campaignData]); */
@@ -242,6 +250,10 @@ function CampaignCreate(props) {
       css={{ margin: '0 auto', boxSizing: 'border-box' }}
       component={Paper}
     >
+
+      <input type="file" onChange={e => changeImage(e)} />
+      <img src={img} alt="" />
+
       <Box component="h1" css={{ textAlign: 'center' }}>캠페인 정보</Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>

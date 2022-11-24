@@ -1,31 +1,44 @@
+import Resizer from 'react-image-file-resizer';
 
-class Common {
-  static getUserInfo() {
-    return (localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo'))
-      : {
-        token: '',
-        name: '',
-        social_type: '',
-        regState: ''
-      });
-  }
-
-  static getUserType() {
-    return localStorage.getItem('userType') ? localStorage.getItem('userType') : '';
-  }
-
-  static getToken() {
-    return localStorage.getItem('token') ? localStorage.getItem('token') : '';
-  }
-
-  static saveUserInfo(data) {
-    const dataObj = JSON.stringify(data);
-    localStorage.setItem('userInfo', dataObj);
-  }
-
-  static saveUserToken(data) {
-    localStorage.setItem('token', data);
-  }
+export function getUserInfo() {
+  return (localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo'))
+    : {
+      token: '',
+      name: '',
+      social_type: '',
+      regState: ''
+    });
 }
 
-export default Common;
+export function saveUserInfo(data) {
+  const dataObj = JSON.stringify(data);
+  localStorage.setItem('userInfo', dataObj);
+}
+
+export function fileChangedHandler(e) {
+  let fileInput = false;
+  if (e.target.files[0]) {
+    console.log(e.target.files[0]);
+    fileInput = true;
+  }
+  if (fileInput) {
+    try {
+      Resizer.imageFileResizer(
+        e.target.files[0],
+        300,
+        300,
+        'JPEG',
+        100,
+        0,
+        (uri) => {
+          console.log(uri);
+          return uri;
+        },
+        'base64',
+      );
+    } catch (err) {
+      return null;
+    }
+  }
+  return null;
+}
