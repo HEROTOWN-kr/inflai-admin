@@ -15,30 +15,44 @@ export function saveUserInfo(data) {
   localStorage.setItem('userInfo', dataObj);
 }
 
-export function fileChangedHandler(e) {
-  let fileInput = false;
-  if (e.target.files[0]) {
-    console.log(e.target.files[0]);
-    fileInput = true;
-  }
-  if (fileInput) {
+function resizeImage(file) {
+  return new Promise((resolve, reject) => {
     try {
       Resizer.imageFileResizer(
-        e.target.files[0],
-        300,
-        300,
+        file,
+        820,
+        648,
         'JPEG',
         100,
         0,
         (uri) => {
-          console.log(uri);
-          return uri;
+          resolve(uri);
         },
-        'base64',
+        'file',
+        0,
+        648,
       );
     } catch (err) {
-      return null;
+      reject(new Error('fail'));
     }
+  });
+}
+
+
+export async function fileChangedHandler(e) {
+  const { files } = e.target;
+
+  if (files.length > 0) {
+    const filesArray = Array.from(files).map(async (item) => {
+      try {
+        return await resizeImage(item);
+      } catch (err) {
+        return new Promise.reject(new Error(err));
+      }
+    });
+
+    const allPromises = Promise.all(filesArray);
+    return allPromises;
   }
-  return null;
+  return new Error('no file');
 }

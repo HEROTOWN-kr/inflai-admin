@@ -36,6 +36,7 @@ import CKEditorComponent from '../../containers/CKEditorComponent';
 import StyledButton from '../../containers/StyledButton';
 import StyledTextField from '../../containers/StyledTextField';
 import AuthContext from '../../../context/AuthContext';
+import { fileChangedHandler } from '../../../lib/common';
 
 const useStyles = makeStyles({
   endAdornment: {
@@ -82,6 +83,9 @@ function CampaignCreateNew() {
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
   const [links, setLinks] = useState([]);
+
+  const [img, setImg] = useState([]);
+
   const classes = useStyles();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -347,10 +351,41 @@ function CampaignCreateNew() {
     }
     setValue('campaignName', `[시가 ${priceSum}원] ${campaignName}`);
   }
+
+
+  function changeImage(e) {
+    fileChangedHandler(e).then((imgArray) => {
+      const myArray = imgArray.map((item) => {
+        const picUrl = URL.createObjectURL(item);
+        return picUrl;
+      });
+      setImg(myArray);
+      /* const picUrl = URL.createObjectURL(newImg);
+      setImg(picUrl); */
+    }).catch(error => alert(error));
+  }
+
   // view
 
   return (
     <Fragment>
+      {/* <input
+        type="file"
+        onChange={e => changeImage(e)}
+        multiple
+        accept="image/*"
+      />
+
+      <Grid container>
+        {img.map(i => (
+          <Grid item>
+            <img src={i} alt="" />
+          </Grid>
+        ))}
+
+      </Grid> */}
+
+
       <Box mt="26px" color="#000" fontSize="40px" fontWeight={700} textAlign="center">
           캠페인 정보
       </Box>

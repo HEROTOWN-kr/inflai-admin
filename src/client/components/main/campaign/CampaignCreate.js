@@ -65,8 +65,6 @@ function CampaignCreate(props) {
   const [dbImages, setDbImages] = useState([]);
   const [savingMode, setSavingMode] = useState(false);
 
-  const [img, setImg] = useState('');
-
   function toggleSavingMode() {
     setSavingMode(!savingMode);
   }
@@ -212,11 +210,6 @@ function CampaignCreate(props) {
     }
   }
 
-  function changeImage(e) {
-    const newImg = fileChangedHandler(e);
-    setImg(newImg);
-  }
-
   /* useEffect(() => {
     setValue('RadioGroup', '1');
   }, [campaignData]); */
@@ -250,10 +243,6 @@ function CampaignCreate(props) {
       css={{ margin: '0 auto', boxSizing: 'border-box' }}
       component={Paper}
     >
-
-      <input type="file" onChange={e => changeImage(e)} />
-      <img src={img} alt="" />
-
       <Box component="h1" css={{ textAlign: 'center' }}>캠페인 정보</Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
