@@ -1,6 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  Fragment, useContext, useEffect, useState
+} from 'react';
 import {
-  Box, Grid, Paper, TableBody, TableHead, TableRow, Checkbox, Table
+  Box, Grid, Paper, TableBody, TableHead, TableRow, Checkbox, Table, Typography, TableContainer, makeStyles
 } from '@material-ui/core';
 import axios from 'axios';
 import { all } from 'async';
@@ -22,7 +24,7 @@ const tableHeader = [
   {
     text: '번호',
     align: 'center',
-    width: '60px'
+    width: '80px'
   },
   {
     text: '캠페인이름',
@@ -30,13 +32,41 @@ const tableHeader = [
   },
   {
     text: '시잘일',
-    align: 'center'
+    align: 'center',
+    width: '100px'
   },
   {
     text: '마감일',
-    align: 'center'
+    align: 'center',
+    width: '100px'
   }
 ];
+
+const useStyles = makeStyles(theme => ({
+  title: {
+    fontFamily: 'Noto Sans KR, sans-serif',
+    fontWeight: 700,
+    marginTop: '96px',
+    marginBottom: '48px',
+    [theme.breakpoints.down('xs')]: {
+      textAlign: 'center',
+      marginTop: '30px',
+      marginBottom: '30px',
+    },
+  },
+  tabs: {
+    root: {},
+    indicator: {}
+  },
+  startIcon: {
+    [theme.breakpoints.down('xs')]: {
+      margin: 0,
+    },
+  },
+  checkbox: {
+    padding: '3px'
+  }
+}));
 
 function KakaoNotify() {
   const [campaigns, setCampaigns] = useState([]);
@@ -46,6 +76,7 @@ function KakaoNotify() {
   const limit = 10;
 
   const { setLoading } = useContext(AuthContext);
+  const classes = useStyles();
 
   function getCampaigns() {
     axios.get('/api/TB_AD/getAll', { params: { page, limit } }).then((res) => {
@@ -98,7 +129,81 @@ function KakaoNotify() {
   }
 
   return (
-    <Box py="20px" px="30px" maxWidth={1200} css={{ margin: '0 auto', boxSizing: 'border-box' }}>
+    <Fragment>
+      <Box borderBottom="1px solid #e4dfdf">
+        <Box maxWidth={1276} m="0 auto">
+          <Typography variant="h4" classes={{ root: classes.title }}>알림 관리</Typography>
+        </Box>
+      </Box>
+      <Box bgcolor="#f4f4f4" minHeight={800}>
+        <Box py={6} px={2} maxWidth={1276} m="0 auto">
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {tableHeader.map(item => (
+                    <StyledTableCell key={item.text} align={item.align} width={item.width || null}>{item.text}</StyledTableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {campaigns.map((row) => {
+                  const isExist = selectedItems.indexOf(row.id) !== -1;
+                  const disabled = !isExist && selectedItems.length >= 3;
+                  return (
+                    <StyledTableRow
+                      hover
+                      key={row.id}
+                      onClick={event => (disabled ? null : selectCampaign(row.id))}
+                    >
+                      <StyledTableCell>
+                        <Checkbox
+                          checked={isExist}
+                          disabled={disabled}
+                          classes={{ root: classes.checkbox }}
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
+                          {row.rownum}
+                        </StyledText>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <StyledText color={disabled ? Colors.disabled : null}>
+                          {row.campaignName}
+                        </StyledText>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
+                          {row.startDate}
+                        </StyledText>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
+                          {row.endDate}
+                        </StyledText>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+        <Grid container justify="center">
+          <Grid item>
+            <MyPagination
+              itemCount={count}
+              page={page}
+              changePage={changePage}
+              perPage={limit}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    </Fragment>
+
+  /* <Box maxWidth={1200} py="20px" px="30px" m="0 auto" boxSizing="border-box">
       <Grid container>
         <Grid item xs="auto">
           <Box width="300px">
@@ -184,7 +289,7 @@ function KakaoNotify() {
           </Grid>
         </Grid>
       </Grid>
-    </Box>
+    </Box> */
   );
 }
 
