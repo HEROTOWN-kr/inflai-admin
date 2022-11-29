@@ -2,10 +2,25 @@ import React, {
   Fragment, useContext, useEffect, useState
 } from 'react';
 import {
-  Box, Grid, Paper, TableBody, TableHead, TableRow, Checkbox, Table, Typography, TableContainer, makeStyles
+  Box,
+  Grid,
+  Paper,
+  TableBody,
+  TableHead,
+  TableRow,
+  Checkbox,
+  Table,
+  Typography,
+  TableContainer,
+  makeStyles,
+  RadioGroup,
+  FormControlLabel, Radio, Divider
 } from '@material-ui/core';
 import axios from 'axios';
 import { all } from 'async';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Clear, Notifications } from '@material-ui/icons';
 import StyledText from '../../../containers/StyledText';
 import MyPagination from '../../../containers/MyPagination';
 import StyledTableCell from '../../../containers/StyledTableCell';
@@ -42,6 +57,22 @@ const tableHeader = [
   }
 ];
 
+const notificationTypes = [
+  { value: '1', text: '알림톡' },
+  { value: '2', text: '친구톡' },
+  { value: '3', text: '푸시메세지' }
+];
+
+const receiverTypes = [
+  { value: '0', text: '전체' },
+  { value: '1', text: '테스터' },
+];
+
+const defaultValues = {
+  type: '1',
+  receiver: '0',
+};
+
 const useStyles = makeStyles(theme => ({
   title: {
     fontFamily: 'Noto Sans KR, sans-serif',
@@ -65,7 +96,24 @@ const useStyles = makeStyles(theme => ({
   },
   checkbox: {
     padding: '3px'
-  }
+  },
+  lastItem: {
+    marginRight: '0'
+  },
+  linkText: {
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+  },
+  clearRoot: {
+    height: 'auto',
+    marginLeft: '8px',
+    opacity: '30%',
+    cursor: 'pointer',
+    '&:hover': {
+      opacity: '1'
+    }
+  },
 }));
 
 function KakaoNotify() {
@@ -73,10 +121,17 @@ function KakaoNotify() {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
   const limit = 10;
 
   const { setLoading } = useContext(AuthContext);
   const classes = useStyles();
+
+  const { control, getValues, watch } = useForm({
+    mode: 'onBlur',
+    defaultValues
+  });
+
 
   function getCampaigns() {
     axios.get('/api/TB_AD/getAll', { params: { page, limit } }).then((res) => {
@@ -106,20 +161,40 @@ function KakaoNotify() {
     setPage(value);
   };
 
-  function selectCampaign(id) {
-    const isExist = selectedItems.indexOf(id) !== -1;
+  const showButton = () => {
+    const type = getValues('type');
+    if (type === '1') {
+      return selectedItems.length === 3;
+    }
+    return selectedItems.length === 1;
+  };
+
+  const isCampaignExist = (id) => {
+    const filtered = selectedItems.filter(item => item.id === id);
+    return filtered.length > 0;
+  };
+
+  function selectCampaign({ id, name }) {
+    const isExist = isCampaignExist(id);
+
     if (isExist) {
-      const newItems = selectedItems.filter(item => item !== id);
+      const newItems = selectedItems.filter(item => item.id !== id);
       setSelectedItems(newItems);
     } else {
-      setSelectedItems([...selectedItems, id]);
+      setSelectedItems([...selectedItems, { id, name }]);
     }
   }
 
-  function sendMessage() {
+  function sendKakaoNotification() {
     setLoading(true);
-    axios.get('/api/TB_AD/notify', {
-      params: { ids: selectedItems }
+    const ids = selectedItems.map(item => item.id);
+
+    const params = { ids: JSON.stringify(ids), all: '1', test: getValues('receiver') };
+    console.log('Kakao Notification: ');
+    console.log(params);
+
+    axios.get('/api/TB_NOTIFICATION/sendKakaoToNotFriend', {
+      params
     }).then((res) => {
       setLoading(false);
     }).catch((error) => {
@@ -128,6 +203,69 @@ function KakaoNotify() {
     });
   }
 
+  function sendKakaoImageNotification() {
+    const params = { AD_ID: selectedItems[0].id, test: getValues('receiver') };
+    console.log('Kakao Image Notification: ');
+    console.log(params);
+    // setLoading(true);
+    /* axios.get('/api/TB_NOTIFICATION/sendKakaoToNotFriend', {
+      params
+    }).then((res) => {
+      setLoading(false);
+    }).catch((error) => {
+      alert(error.response.data.message);
+      setLoading(false);
+    }); */
+  }
+
+  function sendPushNotification() {
+    const params = { id: selectedItems[0].id };
+    console.log('Push Notification: ');
+    console.log(params);
+    // setLoading(true);
+    /* axios.get('/api/TB_NOTIFICATION/sendKakaoToNotFriend', {
+      params
+    }).then((res) => {
+      setLoading(false);
+    }).catch((error) => {
+      alert(error.response.data.message);
+      setLoading(false);
+    }); */
+  }
+
+  function clickSend() {
+    const notificationType = getValues('type');
+    switch (notificationType) {
+      case '1':
+        sendKakaoNotification();
+        break;
+      case '2':
+        sendKakaoImageNotification();
+        break;
+      case '3':
+        sendPushNotification();
+        break;
+      default:
+        break;
+    }
+  }
+
+  const watchObj = watch(['type']);
+
+  useEffect(() => {
+    const visible = showButton();
+    if (visible) {
+      setButtonDisabled(false);
+      return;
+    }
+    setButtonDisabled(true);
+  }, [selectedItems]);
+
+  useEffect(() => {
+    setSelectedItems([]);
+    setPage(1);
+  }, [watchObj.type]);
+
   return (
     <Fragment>
       <Box borderBottom="1px solid #e4dfdf">
@@ -135,8 +273,97 @@ function KakaoNotify() {
           <Typography variant="h4" classes={{ root: classes.title }}>알림 관리</Typography>
         </Box>
       </Box>
-      <Box bgcolor="#f4f4f4" minHeight={800}>
+      <Box pb={4} bgcolor="#f4f4f4" minHeight={800}>
         <Box py={6} px={2} maxWidth={1276} m="0 auto">
+          <Box p={2} mb={2} bgcolor="#fff" borderRadius="4px">
+            <Grid container spacing={4}>
+              <Grid item>
+                <Box mb="2px"><StyledText color="#3f51b5">알림 종류</StyledText></Box>
+                <Controller
+                  as={(
+                    <RadioGroup row aria-label="gender">
+                      {notificationTypes.map((item, index) => (
+                        <FormControlLabel
+                          key={item.value}
+                          value={item.value}
+                          control={<Radio />}
+                          label={item.text}
+                          classes={index === notificationTypes.length - 1 ? { root: classes.lastItem } : null}
+                        />
+                      ))}
+                    </RadioGroup>
+                    )}
+                  name="type"
+                  control={control}
+                />
+              </Grid>
+              <Grid item>
+                <Divider orientation="vertical" />
+              </Grid>
+              <Grid item>
+                <Box mb="2px"><StyledText color="#3f51b5">수신자 종류</StyledText></Box>
+                <Controller
+                  as={(
+                    <RadioGroup row aria-label="gender">
+                      {receiverTypes.map((item, index) => (
+                        <FormControlLabel
+                          key={item.value}
+                          value={item.value}
+                          control={<Radio />}
+                          label={item.text}
+                          classes={index === receiverTypes.length - 1 ? { root: classes.lastItem } : null}
+                        />
+                      ))}
+                    </RadioGroup>
+                    )}
+                  name="receiver"
+                  control={control}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Box mb={2}>
+            <Grid container justify="space-between" alignItems="center">
+              <Grid item>
+                <Grid container spacing={1}>
+                  { selectedItems.map(item => (
+                    <Grid item key={item.id}>
+                      <Box
+                        p={1}
+                        bgcolor="#fff"
+                        borderRadius="5px"
+                        maxWidth={300}
+                      >
+                        <Grid style={{ display: 'flex' }}>
+                          <Typography classes={{ root: classes.linkText }}>{item.name}</Typography>
+                          <Clear
+                            fontSize="small"
+                            classes={{ root: classes.clearRoot }}
+                            onClick={() => selectCampaign(item)}
+                          />
+                        </Grid>
+                      </Box>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+              <Grid item>
+                <StyledButton
+                  height={40}
+                  padding="0 20px"
+                  background="#0fb359"
+                  hoverBackground="#107C41"
+                  disabled={buttonDisabled}
+                  startIcon={<Notifications />}
+                  onClick={clickSend}
+                >
+                  알림 보내기
+                </StyledButton>
+              </Grid>
+            </Grid>
+          </Box>
+
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -148,13 +375,13 @@ function KakaoNotify() {
               </TableHead>
               <TableBody>
                 {campaigns.map((row) => {
-                  const isExist = selectedItems.indexOf(row.id) !== -1;
-                  const disabled = !isExist && selectedItems.length >= 3;
+                  const isExist = isCampaignExist(row.id);
+                  const disabled = !isExist && !buttonDisabled;
                   return (
                     <StyledTableRow
                       hover
                       key={row.id}
-                      onClick={event => (disabled ? null : selectCampaign(row.id))}
+                      onClick={event => (disabled ? null : selectCampaign({ id: row.id, name: row.campaignName }))}
                     >
                       <StyledTableCell>
                         <Checkbox

@@ -167,7 +167,7 @@ function Influencer(props) {
                         hoverBackground={filters[item.filterName] === '1' ? '#0fb359' : '#107C41'}
                         startIcon={<SvgIcon component={item.startIcon} />}
                         onClick={() => { selectFilter(item.filterName); }}
-                        classes={{ startIcon: classes.startIcon }}
+                        classes={{ root: classes.startIcon }}
                       >
                         <Box display={{ xs: 'none', md: 'block' }}>{item.nameKr}</Box>
                       </StyledButton>
