@@ -21,6 +21,7 @@ import { all } from 'async';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Clear, Notifications } from '@material-ui/icons';
+import { useSnackbar } from 'notistack';
 import StyledText from '../../../containers/StyledText';
 import MyPagination from '../../../containers/MyPagination';
 import StyledTableCell from '../../../containers/StyledTableCell';
@@ -124,6 +125,7 @@ function KakaoNotify() {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const limit = 10;
 
+  const { enqueueSnackbar } = useSnackbar();
   const { setLoading } = useContext(AuthContext);
   const classes = useStyles();
 
@@ -190,13 +192,12 @@ function KakaoNotify() {
     const ids = selectedItems.map(item => item.id);
 
     const params = { ids: JSON.stringify(ids), all: '1', test: getValues('receiver') };
-    console.log('Kakao Notification: ');
-    console.log(params);
 
     axios.get('/api/TB_NOTIFICATION/sendKakaoToNotFriend', {
       params
     }).then((res) => {
       setLoading(false);
+      enqueueSnackbar('알림 발송되었습니다', { variant: 'success' });
     }).catch((error) => {
       alert(error.response.data.message);
       setLoading(false);
@@ -204,33 +205,35 @@ function KakaoNotify() {
   }
 
   function sendKakaoImageNotification() {
+    setLoading(true);
+
     const params = { AD_ID: selectedItems[0].id, test: getValues('receiver') };
-    console.log('Kakao Image Notification: ');
-    console.log(params);
-    // setLoading(true);
-    /* axios.get('/api/TB_NOTIFICATION/sendKakaoToNotFriend', {
+
+    axios.get('/api/TB_NOTIFICATION/kakaoImageMessage', {
       params
     }).then((res) => {
       setLoading(false);
+      enqueueSnackbar('알림 발송되었습니다', { variant: 'success' });
     }).catch((error) => {
       alert(error.response.data.message);
       setLoading(false);
-    }); */
+    });
   }
 
   function sendPushNotification() {
+    setLoading(true);
+
     const params = { id: selectedItems[0].id };
-    console.log('Push Notification: ');
-    console.log(params);
-    // setLoading(true);
-    /* axios.get('/api/TB_NOTIFICATION/sendKakaoToNotFriend', {
+
+    axios.get('/api/TB_NOTIFICATION/sendFcmTopic', {
       params
     }).then((res) => {
       setLoading(false);
+      enqueueSnackbar('알림 발송되었습니다', { variant: 'success' });
     }).catch((error) => {
       alert(error.response.data.message);
       setLoading(false);
-    }); */
+    });
   }
 
   function clickSend() {
