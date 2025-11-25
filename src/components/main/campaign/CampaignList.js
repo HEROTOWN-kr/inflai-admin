@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box,
   Grid, Icon,
@@ -16,7 +17,6 @@ import {
 import axios from 'axios';
 import SearchIcon from '@mui/icons-material/Search';
 import { useForm } from 'react-hook-form';
-import makeStyles from '@mui/styles/makeStyles';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
@@ -32,6 +32,33 @@ import StyledImage from '../../containers/StyledImage';
 import ReactFormText from '../../containers/ReactFormText';
 import StyledSelect from '../../containers/StyledSelect';
 import CopyDialog from './CopyDialog';
+
+const PREFIX = 'CampaignList';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  endAdornment: `${PREFIX}-endAdornment`,
+  iconButton: `${PREFIX}-iconButton`,
+  tableRowRoot: `${PREFIX}-tableRowRoot`
+};
+
+const StyledBox = styled(Box)({
+  [`& .${classes.root}`]: {
+    background: '#ffffff'
+  },
+  [`& .${classes.endAdornment}`]: {
+    padding: '0'
+  },
+  [`& .${classes.iconButton}`]: {
+    padding: '8px'
+  },
+  [`& .${classes.tableRowRoot}`]: {
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: '#9199b6'
+    }
+  }
+});
 
 const tableHeader = [
   {
@@ -82,24 +109,6 @@ const snsTypes = {
 };
 
 
-const useStyles = makeStyles({
-  root: {
-    background: '#ffffff'
-  },
-  endAdornment: {
-    padding: '0'
-  },
-  iconButton: {
-    padding: '8px'
-  },
-  tableRowRoot: {
-    '&:hover': {
-      cursor: 'pointer',
-      backgroundColor: '#9199b6'
-    }
-  }
-});
-
 function CampaignList(props) {
   const { history, match, setTab } = props;
   const [type, setType] = useState('0');
@@ -112,7 +121,7 @@ function CampaignList(props) {
   const [campaigns, setCampaigns] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const classes = useStyles();
+
   // const limit = 5;
 
   const { register, handleSubmit, errors } = useForm({
@@ -228,7 +237,7 @@ function CampaignList(props) {
 
 
   return (
-    <Box m="0 auto" maxWidth={1276}>
+    <StyledBox m="0 auto" maxWidth={1276}>
       <Box mb={1}>
         <Grid container justifyContent="space-between" alignItems="center" spacing={1}>
           <Grid item>
@@ -509,7 +518,7 @@ function CampaignList(props) {
         onConfirm={deleteDbPicture}
         dialogText="삭제하시겠습니까?"
       />
-    </Box>
+    </StyledBox>
   );
 }
 

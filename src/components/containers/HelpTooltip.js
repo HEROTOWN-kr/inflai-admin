@@ -1,13 +1,19 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { HelpOutline } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+const PREFIX = 'HelpTooltip';
 
-const useStyles = makeStyles({
-  tooltip: {
+const classes = {
+  tooltip: `${PREFIX}-tooltip`,
+  tooltipIcon: `${PREFIX}-tooltipIcon`
+};
+
+const StyledTooltip = styled(Tooltip)({
+  [`& .${classes.tooltip}`]: {
     fontSize: 12
   },
-  tooltipIcon: {
+  [`& .${classes.tooltipIcon}`]: {
     color: '#8C3FFF',
     marginLeft: '5px'
   },
@@ -15,12 +21,12 @@ const useStyles = makeStyles({
 
 function HelpTooltip(props) {
   const { title } = props;
-  const classes = useStyles();
+
 
   return (
-    <Tooltip title={title} placement="top-start" classes={{ tooltip: classes.tooltip }}>
+    <StyledTooltip title={title} placement="top-start" classes={{ tooltip: classes.tooltip }}>
       <HelpOutline fontSize="small" classes={{ root: classes.tooltipIcon }} />
-    </Tooltip>
+    </StyledTooltip>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Box, CircularProgress, Grid, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -11,21 +11,36 @@ import { DAY_OF_WEEK, HOURS } from '../../../../lib/Сonstants';
 import CategoryPieChart from '../CategoryPieChart';
 import PieChartApex from '../PieChartApex';
 
-const useStyles = makeStyles(theme => ({
-  multiLineEllipsis: {
+const PREFIX = 'PostPart';
+
+const classes = {
+  multiLineEllipsis: `${PREFIX}-multiLineEllipsis`,
+  imgFile: `${PREFIX}-imgFile`,
+  imgFileMedia: `${PREFIX}-imgFileMedia`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.multiLineEllipsis}`]: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     display: '-webkit-box',
     '-webkit-line-clamp': 3,
     '-webkit-box-orient': 'vertical'
   },
-  imgFile: {
+
+  [`& .${classes.imgFile}`]: {
     width: '100%',
     height: '210px',
     objectFit: 'cover',
     objectPosition: '50% 50%',
   },
-  imgFileMedia: {
+
+  [`& .${classes.imgFileMedia}`]: {
     width: '200px',
     height: '200px',
     borderRadius: '7px',
@@ -35,7 +50,7 @@ const useStyles = makeStyles(theme => ({
       width: '100%',
       height: 'auto',
     }
-  },
+  }
 }));
 
 const hourData = {
@@ -131,7 +146,7 @@ const settings = {
 
 function MediaCard(props) {
   const { post } = props;
-  const classes = useStyles();
+
 
   return (
     <Grid container>
@@ -195,7 +210,7 @@ function PostPart(props) {
   const {
     hourStats, dayStats, dayMaxIdx, hourMaxIdx, dayAvg, weekAvg
   } = postStats;
-  const classes = useStyles();
+
 
   hourData.datasets[0].data = hourStats;
   hourData.datasets[0].backgroundColor = Array(hourStats.length).fill('#EAEAEA');
@@ -249,7 +264,7 @@ function PostPart(props) {
   }, [INS_ID]);
 
   return (
-    <React.Fragment>
+    <Root>
       <Box mt={{ xs: '25px', md: '80px' }} mb="24px" pl="10px" borderLeft="4px solid #6E0FFF">
         <Typography variant="h6">
 포스팅 분석
@@ -376,7 +391,7 @@ function PostPart(props) {
           </Grid>
         </Grid>
       </Grid>
-    </React.Fragment>
+    </Root>
   );
 }
 

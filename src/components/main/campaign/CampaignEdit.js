@@ -2,6 +2,7 @@ import React, {
   Fragment,
   useContext, useEffect, useRef, useState
 } from 'react';
+import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import {
   Box, Grid, Paper, FormControlLabel, Checkbox, RadioGroup, Radio, InputAdornment, Typography, IconButton
@@ -12,7 +13,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import { ArrowRightAlt, Clear } from '@mui/icons-material';
 import moment from 'moment';
 import { useSnackbar } from 'notistack';
@@ -35,28 +35,41 @@ import StyledButton from '../../containers/StyledButton';
 import StyledTextField from '../../containers/StyledTextField';
 import AuthContext from '../../../context/AuthContext';
 
-const useStyles = makeStyles({
-  endAdornment: {
+const PREFIX = 'CampaignEdit';
+
+const classes = {
+  endAdornment: `${PREFIX}-endAdornment`,
+  linkText: `${PREFIX}-linkText`,
+  input: `${PREFIX}-input`,
+  textAlignRight: `${PREFIX}-textAlignRight`,
+  positionEnd: `${PREFIX}-positionEnd`,
+  clearRoot: `${PREFIX}-clearRoot`,
+  checkboxLabel: `${PREFIX}-checkboxLabel`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')({
+  [`& .${classes.endAdornment}`]: {
     padding: '0'
   },
-  linkText: {
+  [`& .${classes.linkText}`]: {
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
   },
-  input: {
+  [`& .${classes.input}`]: {
     padding: '15px 14px',
     textAlign: 'right',
     paddingRight: '2px'
   },
-  textAlignRight: {
+  [`& .${classes.textAlignRight}`]: {
     textAlign: 'right',
     paddingRight: '2px'
   },
-  positionEnd: {
+  [`& .${classes.positionEnd}`]: {
     margin: '0'
   },
-  clearRoot: {
+  [`& .${classes.clearRoot}`]: {
     height: 'auto',
     marginLeft: '8px',
     opacity: '30%',
@@ -65,7 +78,7 @@ const useStyles = makeStyles({
       opacity: '1'
     }
   },
-  checkboxLabel: {
+  [`& .${classes.checkboxLabel}`]: {
     marginRight: 0
   }
 });
@@ -82,7 +95,7 @@ function CampaignEdit() {
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
   const [links, setLinks] = useState([]);
-  const classes = useStyles();
+
   const { enqueueSnackbar } = useSnackbar();
   const { setLoading } = useContext(AuthContext);
 
@@ -414,7 +427,7 @@ function CampaignEdit() {
   }, [watchObj.searchFinish]);
 
   return (
-    <Fragment>
+    <Root>
       <Box mt="26px" color="#000" fontSize="40px" fontWeight={700} textAlign="center">
         캠페인 정보
       </Box>
@@ -1147,7 +1160,7 @@ function CampaignEdit() {
           </Grid>
         </Grid>
       </Box>
-    </Fragment>
+    </Root>
   );
 }
 export default CampaignEdit;

@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box,
   Button,
@@ -12,7 +13,6 @@ import {
   ListItemText,
   SvgIcon,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   AccountBalanceWallet, Settings, Dashboard, Help,
@@ -22,17 +22,26 @@ import AntTabs from './StyledTabs';
 import AntTab from './StyledTab';
 import StyledButton from '../../containers/StyledButton';
 
-const useStyles = makeStyles({
-  menuButton: {
+const PREFIX = 'NavbarLinks';
+
+const classes = {
+  menuButton: `${PREFIX}-menuButton`,
+  list: `${PREFIX}-list`,
+  icon: `${PREFIX}-icon`,
+  logout: `${PREFIX}-logout`
+};
+
+const StyledBox = styled(Box)({
+  [`& .${classes.menuButton}`]: {
     color: '#fff'
   },
-  list: {
+  [`& .${classes.list}`]: {
     width: 250,
   },
-  icon: {
+  [`& .${classes.icon}`]: {
     minWidth: '35px'
   },
-  logout: {
+  [`& .${classes.logout}`]: {
     marginTop: '10px'
   }
 });
@@ -92,7 +101,7 @@ function NavbarLinks(props) {
   const [sideBarOpen, setSideBarOpen] = useState(false);
 
   const navigate = useNavigate();
-  const classes = useStyles();
+
 
   const handleChange = (event, newValue) => {
     setMenuIndicator(newValue);
@@ -106,7 +115,7 @@ function NavbarLinks(props) {
   };
 
   return (
-    <Box className="navbar-links">
+    <StyledBox className="navbar-links">
       {isMD ? (
         <AntTabs
           value={pageIndicator}
@@ -157,7 +166,7 @@ function NavbarLinks(props) {
           </Drawer>
         </Fragment>
       )}
-    </Box>
+    </StyledBox>
   );
 }
 

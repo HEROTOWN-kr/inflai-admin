@@ -1,10 +1,16 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Colors } from '../../lib/Сonstants';
 
-const useStyles = makeStyles({
-  common: ({
+const PREFIX = 'StyledText';
+
+const classes = {
+  common: `${PREFIX}-common`
+};
+
+const StyledBox = styled(Box)({
+  [`& .${classes.common}`]: ({
     fontSize, lineHeight, color, fontWeight, textAlign, overflowHidden, cursor
   }) => ({
     fontSize: fontSize || '14px',
@@ -18,10 +24,10 @@ function StyledText(props) {
   const {
     className, fontFamily, fontSize, children, ...rest
   } = props;
-  const classes = useStyles(props);
+
 
   return (
-    <Box
+    <StyledBox
       classes={{ root: classes.common }}
       fontFamily={fontFamily || 'Noto Sans KR, sans-serif'}
       letterSpacing="0"
@@ -29,7 +35,7 @@ function StyledText(props) {
       {...rest}
     >
       {children}
-    </Box>
+    </StyledBox>
   );
 }
 

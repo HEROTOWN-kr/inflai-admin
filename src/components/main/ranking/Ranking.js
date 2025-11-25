@@ -1,26 +1,34 @@
 import React, { Fragment, useEffect, useState } from 'react';
 
+import { styled } from '@mui/material/styles';
+
 import {
   Link
 } from 'react-router-dom';
 import { Routes, Route, Navigate, useMatch } from 'react-router-dom';
 
 import { Box, Tab, Tabs, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
 import Youtube from './Youtube/Youtube';
 import Instagram from './Instagram/Instagram';
 import StyledTabs from '../../containers/StyledTabs';
 import StyledTab from '../../containers/StyledTab';
 
-const useStyles = makeStyles({
-  title: {
+const PREFIX = 'Ranking';
+
+const classes = {
+  title: `${PREFIX}-title`,
+  tabs: `${PREFIX}-tabs`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')({
+  [`& .${classes.title}`]: {
     fontFamily: 'Noto Sans KR, sans-serif',
     fontWeight: 700,
     marginTop: '96px',
     marginBottom: '48px'
   },
-  tabs: {
+  [`& .${classes.tabs}`]: {
     root: {},
     indicator: {}
   }
@@ -30,7 +38,7 @@ function Ranking(props) {
   const { setMenuIndicator, history } = props;
   const [tab, setTab] = useState(0);
 
-  const classes = useStyles();
+
 
   useEffect(() => setMenuIndicator(4), [setMenuIndicator]);
 
@@ -39,7 +47,7 @@ function Ranking(props) {
   const basePath = match ? '/Ranking' : '';
 
   return (
-    <Fragment>
+    <Root>
       <Box borderBottom="1px solid #e4dfdf">
         <Box maxWidth={1276} m="0 auto">
           <Typography variant="h4" classes={{ root: classes.title }}>인플루언서 랭킹</Typography>
@@ -67,7 +75,7 @@ function Ranking(props) {
           <Route path="/" element={<Navigate to={basePath ? '/Ranking/Youtube' : 'Youtube'} replace />} />
         </Routes>
       </Box>
-    </Fragment>
+    </Root>
   );
 }
 

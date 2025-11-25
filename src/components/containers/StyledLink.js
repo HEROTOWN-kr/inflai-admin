@@ -1,27 +1,31 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { Link } from '@mui/material';
 
-import makeStyles from '@mui/styles/makeStyles';
+const PREFIX = 'StyledLink';
 
-const useStyles = makeStyles({
-  colorPrimary: ({ color }) => ({
+const classes = {
+  colorPrimary: `${PREFIX}-colorPrimary`
+};
+
+const StyledLinkComponent = styled(Link)({
+  [`& .${classes.colorPrimary}`]: ({ color }) => ({
     color: color || '#555'
   }),
 });
 
 function StyledLink(props) {
   const { children, color, ...rest } = props;
-  const classes = useStyles(props);
+
 
   return (
-    <Link
+    <StyledLinkComponent
       rel="noopener"
       underline="none"
-      TypographyClasses={{ ...classes }}
       {...rest}
     >
       {children}
-    </Link>
+    </StyledLinkComponent>
   );
 }
 

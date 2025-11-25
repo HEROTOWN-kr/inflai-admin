@@ -1,11 +1,12 @@
 import { IconButton } from '@mui/material';
 
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
 const StyledIconButton = withStyles({
+    IconButton,
   root: {
     padding: '10px'
   },
-})(IconButton);
+});
 
 export default StyledIconButton;

@@ -1,11 +1,12 @@
 import { Checkbox } from '@mui/material';
 
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
-const StyledCheckBox = withStyles(theme => ({
+const StyledCheckBox = withStyles({
+    Checkbox,
   root: {
     padding: '0'
   },
-}))(Checkbox);
+});
 
 export default StyledCheckBox;

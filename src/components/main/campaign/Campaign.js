@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Link
 } from 'react-router-dom';
 import { Routes, Route, Navigate, useMatch } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import CampaignList from './CampaignList';
 import RequestList from '../request/RequestList';
 import RequestDetail from '../request/RequestDetail';
@@ -19,14 +19,22 @@ import Question from '../question/Question';
 import CampaignSeller from './CampaignSeller';
 import CampaignParReview from './CampaignParReview';
 
-const useStyles = makeStyles({
-  title: {
+const PREFIX = 'Campaign';
+
+const classes = {
+  title: `${PREFIX}-title`,
+  tabs: `${PREFIX}-tabs`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')({
+  [`& .${classes.title}`]: {
     fontFamily: 'Noto Sans KR, sans-serif',
     fontWeight: 700,
     marginTop: '96px',
     marginBottom: '48px'
   },
-  tabs: {
+  [`& .${classes.tabs}`]: {
     root: {},
     indicator: {}
   }
@@ -36,7 +44,7 @@ function Campaign(props) {
   const { setMenuIndicator } = props;
   const [tab, setTab] = useState(0);
 
-  const classes = useStyles();
+
   // match for base path; assumes parent route mounts this component at "/Campaign/*"
   const match = useMatch('/Campaign/*');
   const basePath = match ? '/Campaign' : '';
@@ -44,7 +52,7 @@ function Campaign(props) {
   useEffect(() => setMenuIndicator(3), [setMenuIndicator]);
 
   return (
-    <Fragment>
+    <Root>
       <Box borderBottom="1px solid #e4dfdf">
         <Box maxWidth={1276} m="0 auto">
           <Typography variant="h4" classes={{ root: classes.title }}>캠페인 관리</Typography>
@@ -117,7 +125,7 @@ function Campaign(props) {
           />
         </Routes>
       </Box>
-    </Fragment>
+    </Root>
   );
 }
 

@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box, CircularProgress, Grid, IconButton, InputAdornment, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 } from '@mui/material';
@@ -7,7 +8,6 @@ import axios from 'axios';
 import { Form, Formik } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
 import { useForm } from 'react-hook-form';
-import makeStyles from '@mui/styles/makeStyles';
 import StyledButton from '../../../containers/StyledButton';
 import StyledTableCell from '../../../containers/StyledTableCell';
 import StyledText from '../../../containers/StyledText';
@@ -20,14 +20,22 @@ import MyPagination from '../../../containers/MyPagination';
 import StyledTitle from '../../../containers/StyledTitle';
 import ReactFormText from '../../../containers/ReactFormText';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'InstagramList';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  endAdornment: `${PREFIX}-endAdornment`,
+  tableRowRoot: `${PREFIX}-tableRowRoot`
+};
+
+const StyledBox = styled(Box)({
+  [`& .${classes.root}`]: {
     background: '#ffffff'
   },
-  endAdornment: {
+  [`& .${classes.endAdornment}`]: {
     padding: '0'
   },
-  tableRowRoot: {
+  [`& .${classes.tableRowRoot}`]: {
     '&:hover': {
       cursor: 'pointer',
       backgroundColor: '#9199b6'
@@ -109,13 +117,13 @@ const tableRows = {
 
 function LoadingComponent() {
   return (
-    <Box height={536}>
+    <StyledBox height={536}>
       <Grid container justifyContent="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
         <Grid item>
           <CircularProgress />
         </Grid>
       </Grid>
-    </Box>
+    </StyledBox>
   );
 }
 
@@ -138,7 +146,7 @@ function InstagramList(props) {
   });
 
   const limit = 10;
-  const classes = useStyles();
+
 
   function searchFunc(data) {
     setPage(1);

@@ -1,23 +1,37 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { Box, Dialog, IconButton } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Cancel, Clear } from '@mui/icons-material';
 import YoutubeAnalysis from './YoutubeAnalysis';
 
-const useStyles = makeStyles(theme => ({
-  root: {
+const PREFIX = 'AnalysisDialog';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`,
+  paperScrollBody: `${PREFIX}-paperScrollBody`
+};
+
+const StyledDialog = styled(Dialog)((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.root}`]: {
     position: 'absolute',
     top: '15px',
     right: '14px',
     fontSize: '28px',
     color: '#b9b9b9de'
   },
-  paper: {
+
+  [`& .${classes.paper}`]: {
     margin: '12px',
     width: '100%',
     borderRadius: '2px',
   },
-  paperScrollBody: {
+
+  [`& .${classes.paperScrollBody}`]: {
     maxWidth: '1500px',
   }
 }));
@@ -25,9 +39,9 @@ const useStyles = makeStyles(theme => ({
 function AnalysisDialog(props) {
   const { open, closeDialog, id } = props;
 
-  const classes = useStyles();
+
   return (
-    <Dialog
+    <StyledDialog
       scroll="body"
       classes={{
         paper: classes.paper,
@@ -37,7 +51,7 @@ function AnalysisDialog(props) {
       aria-labelledby="simple-dialog-title"
       open={open}>
       <YoutubeAnalysis id={id} closeDialog={closeDialog} />
-    </Dialog>
+    </StyledDialog>
   );
 }
 

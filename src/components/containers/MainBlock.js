@@ -1,8 +1,13 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/material/styles';
+const PREFIX = 'MainBlock';
 
-const useStyles = makeStyles({
-  common: ({ width }) => ({
+const classes = {
+  common: `${PREFIX}-common`
+};
+
+const Root = styled('div')({
+  [`& .${classes.common}`]: ({ width }) => ({
     maxWidth: `${width}px` || '300px',
     margin: '0 auto'
   }),
@@ -10,12 +15,12 @@ const useStyles = makeStyles({
 
 function MainBlock(props) {
   const { className, children } = props;
-  const classes = useStyles(props);
+
 
   return (
-    <div className={`${classes.common} ${className}`}>
+    <Root className={`${classes.common} ${className}`}>
       {children}
-    </div>
+    </Root>
   );
 }
 

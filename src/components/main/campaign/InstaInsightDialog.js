@@ -1,27 +1,36 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Box, Dialog, IconButton, useMediaQuery } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Clear } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { Colors } from '../../../lib/Сonstants';
 import AnalysisComponent from '../Analysis/AnalysisComponent';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'InstaInsightDialog';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`,
+  paperScrollBody: `${PREFIX}-paperScrollBody`,
+  button: `${PREFIX}-button`
+};
+
+const StyledDialog = styled(Dialog)({
+  [`& .${classes.root}`]: {
     position: 'absolute',
     top: '0',
     right: '0',
     color: '#b9b9b9de'
   },
-  paper: {
+  [`& .${classes.paper}`]: {
     margin: '12px',
     width: '100%',
     borderRadius: '2px'
   },
-  paperScrollBody: {
+  [`& .${classes.paperScrollBody}`]: {
     maxWidth: '1500px',
   },
-  button: {
+  [`& .${classes.button}`]: {
     padding: 0,
     minWidth: 0
   },
@@ -29,12 +38,12 @@ const useStyles = makeStyles({
 
 const InstaInsightDialog = (props) => {
   const { INS_ID, open, handleClose } = props;
-  const classes = useStyles();
+
   const theme = useTheme();
   const isMD = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
-    <Dialog
+    <StyledDialog
       /* classes={{ paper: classes.paper }} */
       fullScreen={!isMD}
       scroll="body"
@@ -54,7 +63,7 @@ const InstaInsightDialog = (props) => {
       <Box>
         <AnalysisComponent INS_ID={INS_ID} closeDialog={handleClose} />
       </Box>
-    </Dialog>
+    </StyledDialog>
   );
 };
 

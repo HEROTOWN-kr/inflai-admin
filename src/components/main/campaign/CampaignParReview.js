@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {
   Box, Grid, Paper, Table, TableContainer, TableBody, TableHead, TableRow, FormControlLabel, Checkbox
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
 import StyledTableRow from '../../containers/StyledTableRow';
@@ -14,6 +14,18 @@ import MyPagination from '../../containers/MyPagination';
 import { Colors } from '../../../lib/Сonstants';
 import StyledButton from '../../containers/StyledButton';
 import ConfirmDialog from '../../containers/ConfirmDialog';
+
+const PREFIX = 'CampaignParReview';
+
+const classes = {
+  checkboxLabel: `${PREFIX}-checkboxLabel`
+};
+
+const StyledBox = styled(Box)({
+  [`& .${classes.checkboxLabel}`]: {
+    marginRight: 0
+  }
+});
 
 const tableHeader = [
   {
@@ -41,12 +53,6 @@ const tableHeader = [
   }
 ];
 
-const useStyles = makeStyles({
-  checkboxLabel: {
-    marginRight: 0
-  }
-});
-
 function CampaignParReview() {
   const [participants, setParticipants] = useState([]);
   const [selected, setSelected] = useState(false);
@@ -55,7 +61,7 @@ function CampaignParReview() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(0);
   const [order, setOrder] = useState({ orderBy: 'NAV_FLWR', direction: 'desc' });
-  const classes = useStyles();
+
   const params = useParams();
   const adId = params.id;
   const limit = 10;
@@ -111,7 +117,7 @@ function CampaignParReview() {
   }
 
   return (
-    <Box mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
+    <StyledBox mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
       <Box mb={1}>
         <Grid container justifyContent="flex-end">
           <Grid item>
@@ -229,7 +235,7 @@ function CampaignParReview() {
         dialogText="선정하시겠습니까?"
         onConfirm={selectParticipant}
       />
-    </Box>
+    </StyledBox>
   );
 }
 

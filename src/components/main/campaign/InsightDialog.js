@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import { Box, Dialog, useMediaQuery, IconButton, Typography, Grid, useTheme } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import {
   CalendarToday, ChangeHistory,
   ChatBubble, Clear, Details, Favorite, Image, ImportExportOutlined, Room
@@ -19,8 +19,15 @@ import GenderGraph from './Graphs/GenderGraph';
 import MapGraph2 from './Graphs/MapGraph2';
 
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'InsightDialog';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`
+};
+
+const StyledDialog = styled(Dialog)({
+  [`& .${classes.root}`]: {
     position: 'absolute',
     top: '15px',
     right: '14px',
@@ -28,7 +35,7 @@ const useStyles = makeStyles({
     color: '#b9b9b9de',
     cursor: 'pointer'
   },
-  paper: {
+  [`& .${classes.paper}`]: {
     margin: '12px',
     width: '100%',
     borderRadius: '2px'
@@ -42,7 +49,7 @@ function InsightDialog(props) {
   const [maxLocVal, setMaxLocVal] = useState(null);
   const [maxStatVal, setMaxStatVal] = useState(null);
   const [maxGenderVal, setMaxGenderVal] = useState(null);
-  const classes = useStyles();
+
 
   const theme = useTheme();
   const isMD = useMediaQuery(theme.breakpoints.up('md'));
@@ -74,7 +81,7 @@ function InsightDialog(props) {
   }
 
   return (
-    <Dialog
+    <StyledDialog
       classes={{ paper: classes.paper }}
       maxWidth="lg"
       onClose={onDialogClose}
@@ -330,7 +337,7 @@ function InsightDialog(props) {
           </Grid>
         </Grid>
       </Box>
-    </Dialog>
+    </StyledDialog>
   );
 }
 

@@ -1,12 +1,10 @@
-import React from 'react';
-import { TextField, InputAdornment } from '@mui/material';
-import withStyles from '@mui/styles/withStyles';
+import {TextField} from '@mui/material';
+import { withStyles } from 'tss-react/mui';
 import '../../css/sub.scss';
-import { useField } from 'formik';
-import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 
 
 const StyledTextField = withStyles({
+    TextField,
   root: {
     '& .MuiOutlinedInput-input': {
       padding: '10.5px 14px',
@@ -15,6 +13,6 @@ const StyledTextField = withStyles({
       padding: '0',
     },
   },
-})(TextField);
+});
 
 export default StyledTextField;

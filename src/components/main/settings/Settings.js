@@ -1,14 +1,33 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Routes, Route, Navigate, useMatch, useNavigate
 } from 'react-router-dom';
 import { Box, Grid, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Drafts, Inbox, Notifications } from '@mui/icons-material';
 import KakaoNotify from './pages/KakaoNotify';
 import NotFound from '../NotFound';
 import Coupon from './pages/Coupon';
 import { Colors } from '../../../lib/Сonstants';
+
+const PREFIX = 'Settings';
+
+const classes = {
+  selectedItem: `${PREFIX}-selectedItem`
+};
+
+const StyledGrid = styled(Grid)((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.selectedItem}`]: {
+    backgroundColor: Colors.darkBlue,
+    '&:hover': {
+      backgroundColor: Colors.darkBlue,
+    }
+  }
+}));
 
 const Menu = [
   {
@@ -26,22 +45,13 @@ const Menu = [
 
 ];
 
-const useStyles = makeStyles(theme => ({
-  selectedItem: {
-    backgroundColor: Colors.darkBlue,
-    '&:hover': {
-      backgroundColor: Colors.darkBlue,
-    }
-  }
-}));
-
 
 function Settings(props) {
   const { setMenuIndicator } = props;
   const [selectedMenu, setSelectedMenu] = useState(1);
   const match = useMatch('/Settings/*');
   const navigate = useNavigate();
-  const classes = useStyles();
+
 
   useEffect(() => setMenuIndicator(7), []);
 
@@ -53,7 +63,7 @@ function Settings(props) {
   };
 
   return (
-    <Grid container>
+    <StyledGrid container>
       <Grid item>
         <Box width={250} minHeight="100vh" borderRight="1px solid black">
           <List component="nav" disablePadding aria-label="main mailbox folders">
@@ -79,7 +89,7 @@ function Settings(props) {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Grid>
-    </Grid>
+    </StyledGrid>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Box, Button, Dialog, Grid, IconButton, useMediaQuery } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Clear } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
@@ -16,23 +16,32 @@ import StyledImage from '../../containers/StyledImage';
 import StyledText from '../../containers/StyledText';
 
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'HistoryDialog';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`,
+  button: `${PREFIX}-button`,
+  header: `${PREFIX}-header`
+};
+
+const StyledDialog = styled(Dialog)({
+  [`& .${classes.root}`]: {
     position: 'absolute',
     top: '0',
     right: '0',
     color: '#b9b9b9de'
   },
-  paper: {
+  [`& .${classes.paper}`]: {
     margin: '12px',
     width: '100%',
     borderRadius: '2px'
   },
-  button: {
+  [`& .${classes.button}`]: {
     padding: 0,
     minWidth: 0
   },
-  header: {
+  [`& .${classes.header}`]: {
     padding: '15px',
     fontSize: '16px',
     fontWeight: '400',
@@ -111,7 +120,7 @@ function HistoryDialog(props) {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const classes = useStyles();
+
   const theme = useTheme();
   const isMD = useMediaQuery(theme.breakpoints.up('md'));
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -132,7 +141,7 @@ function HistoryDialog(props) {
   }
 
   return (
-    <Dialog
+    <StyledDialog
       classes={{ paper: classes.paper }}
       fullScreen={fullScreen}
       // maxWidth="md"
@@ -167,7 +176,7 @@ function HistoryDialog(props) {
           </Box>
         </Box>
       </Box>
-    </Dialog>
+    </StyledDialog>
   );
 }
 

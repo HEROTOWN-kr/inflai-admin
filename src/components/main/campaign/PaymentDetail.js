@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Grid,
   Paper,
@@ -11,10 +12,27 @@ import {
   TableFooter,
   Button,
 } from '@mui/material';
-import withStyles from '@mui/styles/withStyles';
 import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
+
+const PREFIX = 'PaymentDetail';
+
+const classes = {
+  root: `${PREFIX}-root`
+};
+
+const StyledGrid = styled(Grid)((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.root}`]: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: '#b8b9f5',
+    },
+  }
+}));
 
 function PaymentDetail(props) {
   const [statistic, setStatistic] = useState({});
@@ -48,13 +66,7 @@ function PaymentDetail(props) {
     },
   ];
 
-  const StyledTableFooter = withStyles(theme => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: '#b8b9f5',
-      },
-    },
-  }))(TableRow);
+  const StyledTableFooter = TableRow;
 
   function MyTableRow({
     title,
@@ -141,7 +153,7 @@ function PaymentDetail(props) {
   }, []);
 
   return (
-    <Grid container justifyContent="center">
+    <StyledGrid container justifyContent="center">
       <Grid item md={10}>
         <Grid container spacing={3}>
           <Grid item md={12}>
@@ -162,7 +174,10 @@ function PaymentDetail(props) {
                   <MyTableRow title="셀럽" type="celebrity" count={statistic.celebrity} paymentOne="200000" paymentAll={statistic.celebritySum} />
                 </TableBody>
                 <TableFooter>
-                  <StyledTableFooter>
+                  <StyledTableFooter
+                    classes={{
+                      root: classes.root
+                    }}>
                     <StyledTableCell component="th" scope="row">TOTAL</StyledTableCell>
                     <StyledTableCell align="right" />
                     <StyledTableCell align="right" />
@@ -184,7 +199,7 @@ function PaymentDetail(props) {
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </StyledGrid>
   );
 }
 

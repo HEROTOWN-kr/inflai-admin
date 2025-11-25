@@ -1,14 +1,15 @@
 import { Select } from '@mui/material';
 
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
-const StyledSelect = withStyles(theme => ({
+const StyledSelect = withStyles({
+    Select,
   root: {
     '&.MuiOutlinedInput-input': {
       padding: '10px 14px',
       paddingRight: '32px'
     },
   },
-}))(Select);
+});
 
 export default StyledSelect;

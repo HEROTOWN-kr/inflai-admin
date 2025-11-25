@@ -6,7 +6,6 @@ import {
 } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import { Close } from '@mui/icons-material';
-import makeStyles from '@mui/styles/makeStyles';
 import Main from './main/Main';
 import Login from './login/Login';
 import AuthContext from '../context/AuthContext';
@@ -16,23 +15,29 @@ import { getUserInfo, saveUserInfo } from '../lib/common';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
 
+const PREFIX = 'App';
+
+const classes = {
+  snackbarCloseIcon: `${PREFIX}-snackbarCloseIcon`
+};
+
+const StyledAuthContextProvider = styled(AuthContext.Provider)({
+  [`& .${classes.snackbarCloseIcon}`]: {
+    cursor: 'pointer'
+  }
+});
+
 const theme = createTheme({
     status: {
         danger: orange[500],
     },
 });
 
-const useStyles = makeStyles({
-  snackbarCloseIcon: {
-    cursor: 'pointer'
-  }
-});
-
 
 function App() {
   const navigate = useNavigate(); // replace history from withRouter
   const [user, setUser] = useState(getUserInfo);
-  const classes = useStyles();
+
 
   const { isLoading, setLoading } = useLoading();
   const snackbarRef = createRef();
@@ -54,7 +59,7 @@ function App() {
 
 
   return (
-    <AuthContext.Provider value={{ isLoading, setLoading }}>
+    <StyledAuthContextProvider value={{ isLoading, setLoading }}>
       <SnackbarProvider
         ref={snackbarRef}
         action={key => (
@@ -69,7 +74,7 @@ function App() {
             element={<Login user={user} changeUser={changeUser} />}
           />
           <Route
-            path="/"
+            path="/*"
             element={<Main changeUser={changeUser} />}
           />
           {/* Optional explicit root redirect: if you prefer a route that chooses by auth state */}
@@ -82,7 +87,7 @@ function App() {
         </ThemeProvider>
 
       </SnackbarProvider>
-    </AuthContext.Provider>
+    </StyledAuthContextProvider>
   );
 }
 

@@ -1,20 +1,27 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { Box, Dialog, useMediaQuery, IconButton, Typography, Grid } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
 import { Clear } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Colors } from '../../../lib/Сonstants';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'ParticipantDialog';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`
+};
+
+const StyledDialog = styled(Dialog)({
+  [`& .${classes.root}`]: {
     position: 'absolute',
     top: '15px',
     right: '14px',
     fontSize: '28px',
     color: '#b9b9b9de'
   },
-  paper: {
+  [`& .${classes.paper}`]: {
     margin: '12px',
     width: '100%',
     borderRadius: '2px'
@@ -26,7 +33,7 @@ function ParticipantDialog(props) {
   const navigate = useNavigate();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const classes = useStyles();
+
 
   function clickCategory(url) {
     navigate(url);
@@ -34,7 +41,7 @@ function ParticipantDialog(props) {
   }
 
   return (
-    <Dialog
+    <StyledDialog
       classes={{ paper: classes.paper }}
             // maxWidth="sm"
       onClose={closeDialog}
@@ -48,7 +55,7 @@ function ParticipantDialog(props) {
       <Box px={2} py={2}>
             테스트
       </Box>
-    </Dialog>
+    </StyledDialog>
   );
 }
 

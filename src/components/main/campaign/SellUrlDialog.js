@@ -1,8 +1,8 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Dialog, Grid } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Clear } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
@@ -11,8 +11,15 @@ import { Colors } from '../../../lib/Сonstants';
 import StyledText from '../../containers/StyledText';
 import ReactFormText from '../../containers/ReactFormText';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'SellUrlDialog';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`
+};
+
+const StyledDialog = styled(Dialog)({
+  [`& .${classes.root}`]: {
     position: 'absolute',
     top: '15px',
     right: '14px',
@@ -20,7 +27,7 @@ const useStyles = makeStyles({
     color: '#b9b9b9de',
     cursor: 'pointer'
   },
-  paper: {
+  [`& .${classes.paper}`]: {
     margin: '12px',
     width: '100%',
     borderRadius: '2px'
@@ -43,7 +50,7 @@ export default function SellUrlDialog(props) {
   const {
     open, closeDialog, selected, getParticipants
   } = props;
-  const classes = useStyles();
+
 
 
   const {
@@ -76,7 +83,7 @@ export default function SellUrlDialog(props) {
   }
 
   return (
-    <Dialog
+    <StyledDialog
       // fullScreen={fullScreen}
       classes={{ paper: classes.paper }}
       open={open}
@@ -117,6 +124,6 @@ export default function SellUrlDialog(props) {
           </Grid>
         </Grid>
       </Box>
-    </Dialog>
+    </StyledDialog>
   );
 }

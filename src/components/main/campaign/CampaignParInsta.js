@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box, Checkbox, FormControlLabel, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import makeStyles from '@mui/styles/makeStyles';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import StyledText from '../../containers/StyledText';
@@ -17,6 +17,18 @@ import InsightDialog from './InsightDialog';
 import ConfirmDialog from '../../containers/ConfirmDialog';
 import InstaInsightDialog from './InstaInsightDialog';
 import HistoryDialog from './HistoryDialog';
+
+const PREFIX = 'CampaignParInsta';
+
+const classes = {
+  checkboxLabel: `${PREFIX}-checkboxLabel`
+};
+
+const StyledBox = styled(Box)({
+  [`& .${classes.checkboxLabel}`]: {
+    marginRight: 0
+  }
+});
 
 const tableHeader = [
   {
@@ -96,12 +108,6 @@ const tableHeader = [
   } */
 ];
 
-const useStyles = makeStyles({
-  checkboxLabel: {
-    marginRight: 0
-  }
-});
-
 function RoundLikeComment(likeCount, commentsCount) {
   const likeToComment = (commentsCount / likeCount) * 100;
   return likeToComment.toFixed(1);
@@ -118,7 +124,7 @@ function CampaignParInsta() {
   const [selectedId, setSelectedId] = useState(0);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState({ orderBy: 'INS_FLWR', direction: 'desc' });
-  const classes = useStyles();
+
   const params = useParams();
   const adId = params.id;
   const limit = 10;
@@ -201,7 +207,7 @@ function CampaignParInsta() {
   }
 
   return (
-    <Box mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
+    <StyledBox mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
       <Box mb={1}>
         <Grid container justifyContent="flex-end">
           <Grid item>
@@ -378,7 +384,7 @@ function CampaignParInsta() {
         dialogText="선정하시겠습니까?"
         onConfirm={selectParticipant}
       />
-    </Box>
+    </StyledBox>
   );
 }
 

@@ -1,10 +1,15 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { SvgIcon } from '@mui/material';
 
-import makeStyles from '@mui/styles/makeStyles';
+const PREFIX = 'StyledSvg';
 
-const useStyles = makeStyles({
-  root: ({
+const classes = {
+  root: `${PREFIX}-root`
+};
+
+const StyledSvgIcon = styled(SvgIcon)({
+  [`& .${classes.root}`]: ({
     padding, borderRadius, border, color, background, fontSize
   }) => ({
     fontSize: fontSize || 'medium',
@@ -20,11 +25,9 @@ function StyledSvg(props) {
   const {
     className, component
   } = props;
-  const classes = useStyles(props);
 
-  return (
-    <SvgIcon classes={classes} component={component} />
-  );
+
+  return (<StyledSvgIcon classes={classes} component={component} />);
 }
 
 export default StyledSvg;

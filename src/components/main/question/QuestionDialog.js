@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Box, Button, Dialog, Grid, IconButton } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Clear } from '@mui/icons-material';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
@@ -10,23 +10,33 @@ import { Colors } from '../../../lib/Сonstants';
 import ReactFormText from '../../containers/ReactFormText';
 import StyledText from '../../containers/StyledText';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'QuestionDialog';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`,
+  button: `${PREFIX}-button`,
+  header: `${PREFIX}-header`,
+  hr: `${PREFIX}-hr`
+};
+
+const StyledDialog = styled(Dialog)({
+  [`& .${classes.root}`]: {
     position: 'absolute',
     top: '0',
     right: '0',
     color: '#b9b9b9de'
   },
-  paper: {
+  [`& .${classes.paper}`]: {
     margin: '12px',
     width: '100%',
     borderRadius: '2px'
   },
-  button: {
+  [`& .${classes.button}`]: {
     padding: 0,
     minWidth: 0
   },
-  header: {
+  [`& .${classes.header}`]: {
     padding: '15px',
     fontSize: '16px',
     fontWeight: '400',
@@ -35,7 +45,7 @@ const useStyles = makeStyles({
     position: 'relative',
     borderBottom: `1px solid ${Colors.grey8}`,
   },
-  hr: {
+  [`& .${classes.hr}`]: {
     boxSizing: 'content-box',
     height: 0,
     overflow: 'visible',
@@ -66,7 +76,7 @@ function QuestionDialog(props) {
   } = props;
   const [questionData, setQuestionData] = useState(defaultQuestionData);
 
-  const classes = useStyles();
+
 
   const {
     register, handleSubmit, errors, reset
@@ -107,7 +117,7 @@ function QuestionDialog(props) {
   }
 
   return (
-    <Dialog
+    <StyledDialog
       classes={{ paper: classes.paper }}
             // fullScreen={fullScreen}
       open={open}
@@ -179,7 +189,7 @@ function QuestionDialog(props) {
 
         </Box>
       </Box>
-    </Dialog>
+    </StyledDialog>
   );
 }
 

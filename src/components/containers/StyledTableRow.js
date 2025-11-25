@@ -1,10 +1,15 @@
 import { TableCell, TableRow } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import withStyles from '@mui/styles/withStyles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-const useStyles = makeStyles({
-  root: ({ backgroundColor, color }) => ({
+const PREFIX = 'StyledTableRow';
+
+const classes = {
+  root: `${PREFIX}-root`
+};
+
+const StyledTableRow = styled(TableRow)({
+  [`& .${classes.root}`]: ({ backgroundColor, color }) => ({
     backgroundColor: backgroundColor || 'transparent',
     '&.Mui-selected': {
       backgroundColor: '#39ca66',
@@ -20,15 +25,15 @@ function StyledTableRow(props) {
   const {
     children, ...rest
   } = props;
-  const classes = useStyles(props);
+
 
   return (
-    <TableRow
+    <StyledTableRow
       classes={classes}
       {...rest}
     >
       {children}
-    </TableRow>
+    </StyledTableRow>
   );
 }
 

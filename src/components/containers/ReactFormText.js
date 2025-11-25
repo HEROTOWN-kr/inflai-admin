@@ -1,9 +1,15 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/material/styles';
 import StyledTextField from './StyledTextField';
 
-const useStyles = makeStyles({
-  FormHelperContained: {
+const PREFIX = 'ReactFormText';
+
+const classes = {
+  FormHelperContained: `${PREFIX}-FormHelperContained`
+};
+
+const Root = styled('span')({
+  [`& .${classes.FormHelperContained}`]: {
     marginLeft: '0'
   },
 });
@@ -16,7 +22,7 @@ function ReactFormText(props) {
     ...rest
   } = props;
 
-  const classes = useStyles();
+
 
   return (
     <StyledTextField
@@ -29,7 +35,7 @@ function ReactFormText(props) {
         classes: { contained: classes.FormHelperContained }
       }}
       helperText={errors[name] ? (
-        <span className="error-message">{errors[name]?.message}</span>
+        <Root className="error-message">{errors[name]?.message}</Root>
       ) : null}
       css={{ transition: 'all 1s ease-out' }}
       {...rest}

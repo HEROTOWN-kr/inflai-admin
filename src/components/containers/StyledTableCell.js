@@ -1,18 +1,26 @@
 import { TableCell } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-const useStyles = makeStyles({
-  root: ({ padding }) => ({
+const PREFIX = 'StyledTableCell';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  head: `${PREFIX}-head`,
+  body: `${PREFIX}-body`
+};
+
+const StyledTableCell = styled(TableCell)({
+  [`& .${classes.root}`]: ({ padding }) => ({
     boxSizing: 'border-box',
     padding: padding || '10px'
   }),
-  head: ({ backgroundColor, color, width }) => ({
+  [`& .${classes.head}`]: ({ backgroundColor, color, width }) => ({
     backgroundColor: backgroundColor || '#3f4b5c',
     color: color || 'white',
     width: width || 'auto'
   }),
-  body: ({ fontSize }) => ({
+  [`& .${classes.body}`]: ({ fontSize }) => ({
     fontSize: fontSize || '14px',
   }),
 });
@@ -21,12 +29,12 @@ function StyledTableCell(props) {
   const {
     className, children, align
   } = props;
-  const classes = useStyles(props);
+
 
   return (
-    <TableCell classes={classes} className={className} align={align} alt="noImage">
+    <StyledTableCell classes={classes} className={className} align={align} alt="noImage">
       {children}
-    </TableCell>
+    </StyledTableCell>
   );
 }
 

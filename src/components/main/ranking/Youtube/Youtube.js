@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box, Grid, IconButton,
   Paper, Table, TableBody,
@@ -7,7 +8,6 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { AssessmentRounded } from '@mui/icons-material';
-import makeStyles from '@mui/styles/makeStyles';
 import { useForm } from 'react-hook-form';
 import SearchIcon from '@mui/icons-material/Search';
 import moment from 'moment';
@@ -19,14 +19,22 @@ import StyledTableSortLabel from '../../../containers/StyledTableSortLabel';
 import ReactFormText from '../../../containers/ReactFormText';
 import StyledText from '../../../containers/StyledText';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'Youtube';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  endAdornment: `${PREFIX}-endAdornment`,
+  tableRowRoot: `${PREFIX}-tableRowRoot`
+};
+
+const StyledBox = styled(Box)({
+  [`& .${classes.root}`]: {
     background: '#ffffff'
   },
-  endAdornment: {
+  [`& .${classes.endAdornment}`]: {
     padding: '0'
   },
-  tableRowRoot: {
+  [`& .${classes.tableRowRoot}`]: {
     '&:hover': {
       cursor: 'pointer',
       backgroundColor: '#9199b6'
@@ -75,13 +83,13 @@ const defaultUpdateTime = moment().set({ h: 4, m: 0, s: 0 }).format('YYYY-MM-DD 
 
 function LoadingComponent() {
   return (
-    <Box height={536}>
+    <StyledBox height={536}>
       <Grid container justifyContent="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
         <Grid item>
           <CircularProgress />
         </Grid>
       </Grid>
-    </Box>
+    </StyledBox>
   );
 }
 
@@ -96,7 +104,7 @@ function Youtube(props) {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const classes = useStyles();
+
 
   const { register, handleSubmit, errors } = useForm({
     mode: 'onBlur',

@@ -1,4 +1,5 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import {
   IconButton,
   Dialog,
@@ -9,27 +10,34 @@ import {
   useMediaQuery,
   Grid,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
 import { Clear } from '@mui/icons-material';
 import StyledButton from './StyledButton';
 import StyledText from './StyledText';
 import { Colors } from '../../lib/Сonstants';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'ConfirmDialog';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`,
+  button: `${PREFIX}-button`
+};
+
+const StyledDialog = styled(Dialog)({
+  [`& .${classes.root}`]: {
     position: 'absolute',
     top: '0',
     right: '0',
     color: '#b9b9b9de'
   },
-  paper: {
+  [`& .${classes.paper}`]: {
     margin: '12px',
     maxWidth: '300px',
     width: '100%',
     borderRadius: '2px'
   },
-  button: {
+  [`& .${classes.button}`]: {
     padding: 0,
     minWidth: 0
   },
@@ -39,7 +47,7 @@ export default function ConfirmDialog(props) {
   const {
     open, closeDialog, onConfirm, dialogText
   } = props;
-  const classes = useStyles();
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -49,7 +57,7 @@ export default function ConfirmDialog(props) {
   };
 
   return (
-    <Dialog
+    <StyledDialog
       classes={{ paper: classes.paper }}
       fullScreen={fullScreen}
       open={open}
@@ -83,6 +91,6 @@ export default function ConfirmDialog(props) {
           </Grid>
         </Box>
       </Box>
-    </Dialog>
+    </StyledDialog>
   );
 }

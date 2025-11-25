@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box, colors, Grid, LinearProgress, Typography, useMediaQuery, useTheme
 } from '@mui/material';
 import { FiberManualRecord } from '@mui/icons-material';
-import makeStyles from '@mui/styles/makeStyles';
 import axios from 'axios';
 import { PieChart } from 'react-minimal-pie-chart';
 import DoughnutComponent from '../DoughnutComponent';
@@ -11,6 +11,39 @@ import BarComponent from '../BarComponent';
 import analysisStyles from '../AnalysisStyle';
 import MapGraph from '../../campaign/Graphs/MapGraph';
 import PieChartApex from '../PieChartApex';
+
+
+const PREFIX = 'AudiencePart';
+
+const classes = {
+  orange: `${PREFIX}-orange`,
+  lemon: `${PREFIX}-lemon`,
+  purple: `${PREFIX}-purple`,
+  lightGreen: `${PREFIX}-lightGreen`,
+  yellow: `${PREFIX}-yellow`,
+  grey: `${PREFIX}-grey`
+};
+
+const StyledGrid = styled(Grid)({
+  [`& .${classes.orange}`]: {
+    backgroundColor: colors.orange[500]
+  },
+  [`& .${classes.lemon}`]: {
+    backgroundColor: 'rgb(180, 240, 70)'
+  },
+  [`& .${classes.purple}`]: {
+    backgroundColor: '#6E0FFF'
+  },
+  [`& .${classes.lightGreen}`]: {
+    backgroundColor: '#18DBA8'
+  },
+  [`& .${classes.yellow}`]: {
+    backgroundColor: '#FFE600'
+  },
+  [`& .${classes.grey}`]: {
+    backgroundColor: '#00000017'
+  }
+});
 
 
 const sex = {
@@ -30,22 +63,22 @@ const sex = {
 const bgColors = ['purple', 'lightGreen', 'yellow', 'grey'];
 
 const barStyles = makeStyles({
-  orange: {
+  [`& .${classes.orange}`]: {
     backgroundColor: colors.orange[500]
   },
-  lemon: {
+  [`& .${classes.lemon}`]: {
     backgroundColor: 'rgb(180, 240, 70)'
   },
-  purple: {
+  [`& .${classes.purple}`]: {
     backgroundColor: '#6E0FFF'
   },
-  lightGreen: {
+  [`& .${classes.lightGreen}`]: {
     backgroundColor: '#18DBA8'
   },
-  yellow: {
+  [`& .${classes.yellow}`]: {
     backgroundColor: '#FFE600'
   },
-  grey: {
+  [`& .${classes.grey}`]: {
     backgroundColor: '#00000017'
   }
 });
@@ -105,7 +138,7 @@ function AudiencePart(props) {
 
   return (
     <Box mt="80px" mb="24px">
-      <Grid container spacing={2}>
+      <StyledGrid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Box pl="10px" borderLeft="4px solid #6E0FFF">
             <Typography variant="h6" paragraph>팔로워 충성도 분석</Typography>
@@ -228,7 +261,7 @@ function AudiencePart(props) {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </StyledGrid>
       <Box mt="50px">
         <Typography variant="subtitle2" paragraph>팔로워의 지도</Typography>
       </Box>

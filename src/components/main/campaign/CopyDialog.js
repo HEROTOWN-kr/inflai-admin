@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Box, Button, Dialog, Grid, IconButton, useMediaQuery } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Clear } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
@@ -12,20 +12,28 @@ import Naver from '../../../img/icon_blog_url.png';
 import Youtube from '../../../img/youtube-square.png';
 import StyledImage from '../../containers/StyledImage';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'CopyDialog';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  paper: `${PREFIX}-paper`,
+  button: `${PREFIX}-button`
+};
+
+const StyledDialog = styled(Dialog)({
+  [`& .${classes.root}`]: {
     position: 'absolute',
     top: '0',
     right: '0',
     color: '#b9b9b9de'
   },
-  paper: {
+  [`& .${classes.paper}`]: {
     margin: '12px',
     maxWidth: '300px',
     width: '100%',
     borderRadius: '2px'
   },
-  button: {
+  [`& .${classes.button}`]: {
     padding: 0,
     minWidth: 0
   },
@@ -37,7 +45,7 @@ function CopyDialog(props) {
     open, closeDialog, campaignId, getCampaigns
   } = props;
 
-  const classes = useStyles();
+
   const navigate = useNavigate();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -62,7 +70,7 @@ function CopyDialog(props) {
   }
 
   return (
-    <Dialog
+    <StyledDialog
       classes={{ paper: classes.paper }}
       fullScreen={fullScreen}
       open={open}
@@ -122,7 +130,7 @@ function CopyDialog(props) {
           </Box>
         </Box>
       </Box>
-    </Dialog>
+    </StyledDialog>
   );
 }
 

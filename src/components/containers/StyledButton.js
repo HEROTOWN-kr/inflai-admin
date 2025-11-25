@@ -1,10 +1,16 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { Button } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Colors } from '../../lib/Сonstants';
 
-const useStyles = makeStyles({
-  root: ({
+const PREFIX = 'StyledButton';
+
+const classes = {
+  root: `${PREFIX}-root`
+};
+
+const StyledButtonComponent = styled(Button)({
+  [`& .${classes.root}`]: ({
     background, border, borderRadius, boxShadow, color, height, padding, hoverBackground, hoverColor, fontSize
   }) => ({
     background: background || Colors.blue2,
@@ -32,17 +38,17 @@ function StyledButton(props) {
     children,
     ...rest
   } = props;
-  const classes = useStyles(props);
+
 
   return (
-    <Button
+    <StyledButtonComponent
       variant="contained"
       fullWidth
       className={`${classes.root} ${className}`}
       {...rest}
     >
       {children}
-    </Button>
+    </StyledButtonComponent>
   );
 }
 

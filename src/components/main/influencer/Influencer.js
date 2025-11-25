@@ -1,6 +1,7 @@
 import React, {
   Fragment, useContext, useEffect, useState
 } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box,
   Button,
@@ -14,7 +15,6 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import axios from 'axios';
 import { Description, Instagram, YouTube } from '@mui/icons-material';
 import StyledTableCell from '../../containers/StyledTableCell';
@@ -28,8 +28,21 @@ import defaultAccountImage from '../../../img/default_account_image.png';
 import StyledButton from '../../containers/StyledButton';
 import AuthContext from '../../../context/AuthContext';
 
-const useStyles = makeStyles(theme => ({
-  title: {
+const PREFIX = 'Influencer';
+
+const classes = {
+  title: `${PREFIX}-title`,
+  tabs: `${PREFIX}-tabs`,
+  startIcon: `${PREFIX}-startIcon`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.title}`]: {
     fontFamily: 'Noto Sans KR, sans-serif',
     fontWeight: 700,
     marginTop: '96px',
@@ -40,11 +53,13 @@ const useStyles = makeStyles(theme => ({
       marginBottom: '30px',
     },
   },
-  tabs: {
+
+  [`& .${classes.tabs}`]: {
     root: {},
     indicator: {}
   },
-  startIcon: {
+
+  [`& .${classes.startIcon}`]: {
     [theme.breakpoints.down('sm')]: {
       margin: 0,
     },
@@ -85,7 +100,7 @@ function Influencer(props) {
   const [filters, setFilters] = useState({ instagram: '0', youtube: '0', blog: '0' });
   const { setMenuIndicator } = props;
   const limit = 10;
-  const classes = useStyles();
+
   const { setLoading } = useContext(AuthContext);
 
   useEffect(() => setMenuIndicator(2), []);
@@ -149,7 +164,7 @@ function Influencer(props) {
   }, [page, filters]);
 
   return (
-    <Fragment>
+    <Root>
       <Box borderBottom="1px solid #e4dfdf">
         <Box maxWidth={1276} m="0 auto">
           <Typography variant="h4" classes={{ root: classes.title }}>인플루언서 관리</Typography>
@@ -261,7 +276,7 @@ function Influencer(props) {
           </Box>
         </Box>
       </Box>
-    </Fragment>
+    </Root>
   );
 }
 

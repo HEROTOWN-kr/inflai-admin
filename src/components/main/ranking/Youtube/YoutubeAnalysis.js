@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box, CircularProgress, Grid, IconButton, Tooltip, useMediaQuery, useTheme
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import {
   Cancel, HelpOutline, NotificationsNone, RemoveRedEyeOutlined, ThumbUpOutlined
 } from '@mui/icons-material';
@@ -14,8 +14,31 @@ import LocationPart from './LocationPart';
 import GenderAgePart from './GenderAgePart';
 import PieChartApex from '../PieChartApex';
 
-const useStyles = makeStyles(theme => ({
-  box: {
+const PREFIX = 'YoutubeAnalysis';
+
+const classes = {
+  box: `${PREFIX}-box`,
+  boxTitle: `${PREFIX}-boxTitle`,
+  circular: `${PREFIX}-circular`,
+  youtubeLink: `${PREFIX}-youtubeLink`,
+  bgBlue: `${PREFIX}-bgBlue`,
+  bgGreen: `${PREFIX}-bgGreen`,
+  bgOrange: `${PREFIX}-bgOrange`,
+  bgRed: `${PREFIX}-bgRed`,
+  avatar: `${PREFIX}-avatar`,
+  reportText: `${PREFIX}-reportText`,
+  textAndIcon: `${PREFIX}-textAndIcon`,
+  tooltipIcon: `${PREFIX}-tooltipIcon`,
+  tooltip: `${PREFIX}-tooltip`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.box}`]: {
     padding: '15px 25px',
     color: '#fff',
     borderRadius: '5px',
@@ -29,7 +52,8 @@ const useStyles = makeStyles(theme => ({
       padding: '12px 16px',
     }
   },
-  boxTitle: {
+
+  [`& .${classes.boxTitle}`]: {
     fontSize: '20px',
     fontWeight: '600',
     marginBottom: '25px'
@@ -37,39 +61,46 @@ const useStyles = makeStyles(theme => ({
     // whiteSpace: 'nowrap',
     // textOverflow: 'ellipsis',
   },
-  circular: {
+
+  [`& .${classes.circular}`]: {
     color: '#fff',
   },
-  youtubeLink: {
+
+  [`& .${classes.youtubeLink}`]: {
     cursor: 'pointer'
   },
-  bgBlue: { background: 'linear-gradient(45deg, #4099ff, #73b4ff)' },
-  bgGreen: { background: 'linear-gradient(45deg, #2ed8b6, #59e0c5)' },
-  bgOrange: { background: 'linear-gradient(45deg, #FFB64D, #ffcb80)' },
-  bgRed: { background: 'linear-gradient(45deg, #FF5370, #ff869a)' },
-  avatar: { borderRadius: '50%' },
-  reportText: {
+
+  [`& .${classes.bgBlue}`]: { background: 'linear-gradient(45deg, #4099ff, #73b4ff)' },
+  [`& .${classes.bgGreen}`]: { background: 'linear-gradient(45deg, #2ed8b6, #59e0c5)' },
+  [`& .${classes.bgOrange}`]: { background: 'linear-gradient(45deg, #FFB64D, #ffcb80)' },
+  [`& .${classes.bgRed}`]: { background: 'linear-gradient(45deg, #FF5370, #ff869a)' },
+  [`& .${classes.avatar}`]: { borderRadius: '50%' },
+
+  [`& .${classes.reportText}`]: {
     color: '#000',
     fontSize: '16px',
     fontFamily: 'Noto Sans KR, sans-serif',
     fontWeight: 500,
     lineHeight: 1.57
   },
-  textAndIcon: {
+
+  [`& .${classes.textAndIcon}`]: {
     display: 'flex',
     // alignItems: 'center',
     flexWrap: 'wrap',
     fontSize: '14px',
     color: '#000'
   },
-  tooltipIcon: {
+
+  [`& .${classes.tooltipIcon}`]: {
     color: '#8C3FFF',
     marginLeft: '5px',
     marginTop: '5px'
   },
-  tooltip: {
+
+  [`& .${classes.tooltip}`]: {
     fontSize: 12
-  },
+  }
 }));
 
 const tooltipContent = {
@@ -228,7 +259,7 @@ const barOptions = {
 };
 
 function LoadingPage() {
-  const classes = useStyles();
+
   return (
     <Box bgcolor="#3CBFFC" height="calc(100vh - 32px)">
       <Grid container justifyContent="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
@@ -245,7 +276,7 @@ function YoutubeAnalysis(props) {
   const [process, setProcess] = useState(false);
   const [youtubeInfo, setYoutubeInfo] = useState(defaultValues);
   const [youtubeAnalytics, setYoutubeAnalytics] = useState(defaultAnalyticsValues);
-  const classes = useStyles();
+
   const theme = useTheme();
   const isMD = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -331,7 +362,7 @@ function YoutubeAnalysis(props) {
   }, []);
 
   return (
-    <Fragment>
+    <Root>
       { process ? (
         <LoadingPage />
       ) : (
@@ -550,7 +581,7 @@ function YoutubeAnalysis(props) {
           </Box>
         </Box>
       )}
-    </Fragment>
+    </Root>
   );
 }
 

@@ -1,8 +1,13 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/material/styles';
+const PREFIX = 'StyledImage';
 
-const useStyles = makeStyles({
-  common: ({
+const classes = {
+  common: `${PREFIX}-common`
+};
+
+const Root = styled('img')({
+  [`& .${classes.common}`]: ({
     width, margin, height, borderRadius
   }) => ({
     display: 'block',
@@ -18,11 +23,9 @@ function StyledImage(props) {
     width, margin, height, borderRadius,
     className, ...rest
   } = props;
-  const classes = useStyles(props);
 
-  return (
-    <img className={`${classes.common} ${className}`} alt="noImage" {...rest} />
-  );
+
+  return (<Root className={`${classes.common} ${className}`} alt="noImage" {...rest} />);
 }
 
 export default StyledImage;

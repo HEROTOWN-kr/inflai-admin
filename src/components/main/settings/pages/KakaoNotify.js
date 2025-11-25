@@ -1,6 +1,7 @@
 import React, {
   Fragment, useContext, useEffect, useState
 } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box,
   Grid,
@@ -17,7 +18,6 @@ import {
   Radio,
   Divider,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import axios from 'axios';
 import { all } from 'async';
 import { Controller, useForm } from 'react-hook-form';
@@ -32,6 +32,71 @@ import { Colors } from '../../../../lib/Сonstants';
 import StyledButton from '../../../containers/StyledButton';
 import StyledBackDrop from '../../../containers/StyledBackDrop';
 import AuthContext from '../../../../context/AuthContext';
+
+const PREFIX = 'KakaoNotify';
+
+const classes = {
+  title: `${PREFIX}-title`,
+  tabs: `${PREFIX}-tabs`,
+  startIcon: `${PREFIX}-startIcon`,
+  checkbox: `${PREFIX}-checkbox`,
+  lastItem: `${PREFIX}-lastItem`,
+  linkText: `${PREFIX}-linkText`,
+  clearRoot: `${PREFIX}-clearRoot`
+};
+
+const StyledBox = styled(Box)((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.title}`]: {
+    fontFamily: 'Noto Sans KR, sans-serif',
+    fontWeight: 700,
+    marginTop: '96px',
+    marginBottom: '48px',
+    [theme.breakpoints.down('sm')]: {
+      textAlign: 'center',
+      marginTop: '30px',
+      marginBottom: '30px',
+    },
+  },
+
+  [`& .${classes.tabs}`]: {
+    root: {},
+    indicator: {}
+  },
+
+  [`& .${classes.startIcon}`]: {
+    [theme.breakpoints.down('sm')]: {
+      margin: 0,
+    },
+  },
+
+  [`& .${classes.checkbox}`]: {
+    padding: '3px'
+  },
+
+  [`& .${classes.lastItem}`]: {
+    marginRight: '0'
+  },
+
+  [`& .${classes.linkText}`]: {
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+  },
+
+  [`& .${classes.clearRoot}`]: {
+    height: 'auto',
+    marginLeft: '8px',
+    opacity: '30%',
+    cursor: 'pointer',
+    '&:hover': {
+      opacity: '1'
+    }
+  }
+}));
 
 const tableHeader = [
   {
@@ -76,49 +141,6 @@ const defaultValues = {
   receiver: '0',
 };
 
-const useStyles = makeStyles(theme => ({
-  title: {
-    fontFamily: 'Noto Sans KR, sans-serif',
-    fontWeight: 700,
-    marginTop: '96px',
-    marginBottom: '48px',
-    [theme.breakpoints.down('sm')]: {
-      textAlign: 'center',
-      marginTop: '30px',
-      marginBottom: '30px',
-    },
-  },
-  tabs: {
-    root: {},
-    indicator: {}
-  },
-  startIcon: {
-    [theme.breakpoints.down('sm')]: {
-      margin: 0,
-    },
-  },
-  checkbox: {
-    padding: '3px'
-  },
-  lastItem: {
-    marginRight: '0'
-  },
-  linkText: {
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-  },
-  clearRoot: {
-    height: 'auto',
-    marginLeft: '8px',
-    opacity: '30%',
-    cursor: 'pointer',
-    '&:hover': {
-      opacity: '1'
-    }
-  },
-}));
-
 function KakaoNotify() {
   const [campaigns, setCampaigns] = useState([]);
   const [count, setCount] = useState(0);
@@ -129,7 +151,7 @@ function KakaoNotify() {
 
   const { enqueueSnackbar } = useSnackbar();
   const { setLoading } = useContext(AuthContext);
-  const classes = useStyles();
+
 
   const { control, getValues, watch } = useForm({
     mode: 'onBlur',
@@ -273,11 +295,11 @@ function KakaoNotify() {
 
   return (
     <Fragment>
-      <Box borderBottom="1px solid #e4dfdf">
+      <StyledBox borderBottom="1px solid #e4dfdf">
         <Box maxWidth={1276} m="0 auto">
           <Typography variant="h4" classes={{ root: classes.title }}>알림 관리</Typography>
         </Box>
-      </Box>
+      </StyledBox>
       <Box pb={4} bgcolor="#f4f4f4" minHeight={800}>
         <Box py={6} px={2} maxWidth={1276} m="0 auto">
           <Box p={2} mb={2} bgcolor="#fff" borderRadius="4px">

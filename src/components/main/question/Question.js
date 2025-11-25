@@ -1,6 +1,7 @@
 import React, {
   Fragment, useContext, useEffect, useState
 } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box,
   Grid,
@@ -13,7 +14,6 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import StyledImage from '../../containers/StyledImage';
@@ -23,6 +23,40 @@ import noImage from '../../../img/noImage.png';
 import { Colors } from '../../../lib/Сonstants';
 import QuestionDialog from './QuestionDialog';
 import MyPagination from '../../containers/MyPagination';
+
+const PREFIX = 'Question';
+
+const classes = {
+  campaignCard: `${PREFIX}-campaignCard`,
+  tooltipIcon: `${PREFIX}-tooltipIcon`,
+  image: `${PREFIX}-image`
+};
+
+const StyledBox = styled(Box)((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.campaignCard}`]: {
+    padding: '12px'
+  },
+
+  [`& .${classes.tooltipIcon}`]: {
+    color: '#8C3FFF',
+    marginLeft: '5px',
+  },
+
+  [`& .${classes.image}`]: {
+    width: '100%',
+    height: '276px',
+    objectFit: 'cover',
+    objectPosition: '50% 50%',
+    [theme.breakpoints.down('md')]: {
+      width: '60px',
+      height: '60px',
+    }
+  }
+}));
 
 const tableHeader = [
   {
@@ -81,26 +115,6 @@ const defaultCampaignInfo = {
   AD_TYPE: '1',
 };
 
-const useStyles = makeStyles(theme => ({
-  campaignCard: {
-    padding: '12px'
-  },
-  tooltipIcon: {
-    color: '#8C3FFF',
-    marginLeft: '5px',
-  },
-  image: {
-    width: '100%',
-    height: '276px',
-    objectFit: 'cover',
-    objectPosition: '50% 50%',
-    [theme.breakpoints.down('md')]: {
-      width: '60px',
-      height: '60px',
-    }
-  }
-}));
-
 function Question(props) {
   const [questions, setQuestions] = useState([]);
   const [campaignInfo, setCampaignInfo] = useState(defaultCampaignInfo);
@@ -113,7 +127,7 @@ function Question(props) {
   const theme = useTheme();
   const isMD = useMediaQuery(theme.breakpoints.up('md'));
   const adId = params.id;
-  const classes = useStyles();
+
 
   function toggleDetailDialog() {
     setDetailDialog(!detailDialog);
@@ -146,7 +160,7 @@ function Question(props) {
   }, []);
 
   return (
-    <Box py="50px" bgcolor="#f5f5f5" minHeight="calc(100vh - 445px);">
+    <StyledBox py="50px" bgcolor="#f5f5f5" minHeight="calc(100vh - 445px);">
       <Box px={2} maxWidth={1276} m="0 auto">
         <Grid container spacing={2}>
           <Grid item xs={12} md="auto">
@@ -235,7 +249,7 @@ function Question(props) {
         </Grid>
       </Box>
       <QuestionDialog open={detailDialog} closeDialog={toggleDetailDialog} getQuestions={getQuestions} questionId={selected} />
-    </Box>
+    </StyledBox>
   );
 }
 

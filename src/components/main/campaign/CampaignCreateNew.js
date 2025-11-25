@@ -1,4 +1,5 @@
 import React, {Fragment, useContext, useEffect, useRef, useState} from 'react';
+import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import {Box, FormControlLabel, Grid, InputAdornment, Radio, RadioGroup} from '@mui/material';
 import {Controller, useForm} from 'react-hook-form';
@@ -7,7 +8,6 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {useNavigate} from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import moment from 'moment';
 import {useSnackbar} from 'notistack';
 import StyledText from '../../containers/StyledText';
@@ -28,28 +28,41 @@ import StyledTextField from '../../containers/StyledTextField';
 import AuthContext from '../../../context/AuthContext';
 import {fileChangedHandler} from '../../../lib/common';
 
-const useStyles = makeStyles({
-  endAdornment: {
+const PREFIX = 'CampaignCreateNew';
+
+const classes = {
+  endAdornment: `${PREFIX}-endAdornment`,
+  linkText: `${PREFIX}-linkText`,
+  input: `${PREFIX}-input`,
+  textAlignRight: `${PREFIX}-textAlignRight`,
+  positionEnd: `${PREFIX}-positionEnd`,
+  clearRoot: `${PREFIX}-clearRoot`,
+  checkboxLabel: `${PREFIX}-checkboxLabel`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')({
+  [`& .${classes.endAdornment}`]: {
     padding: '0'
   },
-  linkText: {
+  [`& .${classes.linkText}`]: {
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
   },
-  input: {
+  [`& .${classes.input}`]: {
     padding: '15px 14px',
     textAlign: 'right',
     paddingRight: '2px'
   },
-  textAlignRight: {
+  [`& .${classes.textAlignRight}`]: {
     textAlign: 'right',
     paddingRight: '2px'
   },
-  positionEnd: {
+  [`& .${classes.positionEnd}`]: {
     margin: '0'
   },
-  clearRoot: {
+  [`& .${classes.clearRoot}`]: {
     height: 'auto',
     marginLeft: '8px',
     opacity: '30%',
@@ -58,7 +71,7 @@ const useStyles = makeStyles({
       opacity: '1'
     }
   },
-  checkboxLabel: {
+  [`& .${classes.checkboxLabel}`]: {
     marginRight: 0
   }
 });
@@ -76,7 +89,7 @@ function CampaignCreateNew() {
 
   const [img, setImg] = useState([]);
 
-  const classes = useStyles();
+
 
   const { enqueueSnackbar } = useSnackbar();
   const { setLoading } = useContext(AuthContext);
@@ -358,7 +371,7 @@ function CampaignCreateNew() {
   // view
 
   return (
-    <Fragment>
+    <Root>
       {/* <input
         type="file"
         onChange={e => changeImage(e)}
@@ -1130,7 +1143,7 @@ function CampaignCreateNew() {
           </Grid>
         </Grid>
       </Box>
-    </Fragment>
+    </Root>
   );
 }
 
