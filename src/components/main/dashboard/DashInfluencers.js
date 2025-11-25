@@ -51,7 +51,7 @@ function DashInfluencers(props) {
         <Grid container justifyContent="space-between">
           <Grid item>신규가입인플루언서</Grid>
           <Grid item>
-            <button onClick={() => history.push('/Influencer')}>
+            <button onClick={() => navigate('/Influencer')}>
               전체보기
             </button>
           </Grid>

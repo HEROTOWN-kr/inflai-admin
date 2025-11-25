@@ -4,7 +4,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Clear } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Colors } from '../../../lib/Сonstants';
 import StyledButton from '../../containers/StyledButton';
 import Instagram from '../../../img/instagram-icon.png';
@@ -38,7 +38,7 @@ function CopyDialog(props) {
   } = props;
 
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -53,7 +53,7 @@ function CopyDialog(props) {
       type
     }).then((res) => {
       const { AD_ID } = res.data.data;
-      history.push(`/Campaign/${AD_ID}`);
+      navigate(`/Campaign/${AD_ID}`);
       // getCampaigns();
       close();
     }).catch((err) => {

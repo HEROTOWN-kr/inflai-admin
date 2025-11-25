@@ -48,7 +48,7 @@ function DashAdvertisers(props) {
         <Grid container justifyContent="space-between">
           <Grid item>신규가입광고주</Grid>
           <Grid item>
-            <button onClick={() => history.push('/Advertiser')}>
+            <button onClick={() => navigate('/Advertiser')}>
                 전체보기
             </button>
           </Grid>

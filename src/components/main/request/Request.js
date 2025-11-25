@@ -10,11 +10,11 @@ function Request(props) {
 
 
   function goBack() {
-    history.push(match.path);
+    navigate(match.path);
   }
 
   function goToCreate(id) {
-    history.push(`${match.path}/create/${id}`);
+    navigate(`${match.path}/create/${id}`);
   }
 
   return (

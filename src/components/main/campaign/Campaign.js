@@ -1,7 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {
-  Link, Redirect, Route, Switch, useRouteMatch
+  Link
 } from 'react-router-dom';
+import { Routes, Route, Navigate, useMatch } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CampaignList from './CampaignList';
@@ -36,9 +37,11 @@ function Campaign(props) {
   const [tab, setTab] = useState(0);
 
   const classes = useStyles();
-  const match = useRouteMatch();
+  // match for base path; assumes parent route mounts this component at "/Campaign/*"
+  const match = useMatch('/Campaign/*');
+  const basePath = match ? '/Campaign' : '';
 
-  useEffect(() => setMenuIndicator(3), []);
+  useEffect(() => setMenuIndicator(3), [setMenuIndicator]);
 
   return (
     <Fragment>
@@ -52,81 +55,67 @@ function Campaign(props) {
             <StyledTab
               label="등록된 캠페인"
               component={Link}
-              to={`${match.url}/List`}
+              to={`${basePath}/List`}
             />
             <StyledTab
               label="캠페인 요청"
               component={Link}
-              to={`${match.url}/Request`}
+              to={`${basePath}/Request`}
             />
           </StyledTabs>
         </Box>
       </Box>
       <Box py={2} bgcolor="#f4f4f4">
-        <Switch>
+        <Routes>
           <Route
-            exact
-            path={`${match.path}/List`}
-            render={renderProps => (<CampaignList {...props} setTab={setTab} />)}
+            path="List"
+            element={<CampaignList {...props} setTab={setTab} />}
           />
           <Route
-            exact
-            path={`${match.path}/ParInsta/:id`}
-            render={renderProps => <CampaignParInsta {...renderProps} />}
+            path="ParInsta/:id"
+            element={<CampaignParInsta />}
           />
           <Route
-            exact
-            path={`${match.path}/ParYoutube/:id`}
-            render={renderProps => <CampaignParYoutube {...renderProps} />}
+            path="ParYoutube/:id"
+            element={<CampaignParYoutube />}
           />
           <Route
-            exact
-            path={`${match.path}/ParBlog/:id`}
-            render={renderProps => <CampaignParBlog {...renderProps} />}
+            path="ParBlog/:id"
+            element={<CampaignParBlog />}
           />
           <Route
-            exact
-            path={`${match.path}/ParReview/:id`}
-            render={renderProps => <CampaignParReview {...renderProps} />}
+            path="ParReview/:id"
+            element={<CampaignParReview />}
           />
           <Route
-            exact
-            path={`${match.path}/Seller/:id`}
-            render={renderProps => <CampaignSeller {...renderProps} />}
+            path="Seller/:id"
+            element={<CampaignSeller />}
           />
           <Route
-            exact
-            path={`${match.path}/Request`}
-            render={renderProps => <RequestList {...renderProps} setTab={setTab} />}
+            path="Request"
+            element={<RequestList {...props} setTab={setTab} />}
           />
           <Route
-            exact
-            path={`${match.path}/Request/:id`}
-            render={renderProps => <RequestDetail {...renderProps} />}
+            path="Request/:id"
+            element={<RequestDetail />}
           />
           <Route
-            exact
-            path={`${match.path}/create`}
-            render={renderProps => <CampaignCreateNew {...renderProps} />}
+            path="create"
+            element={<CampaignCreateNew />}
           />
           <Route
-            exact
-            path={`${match.path}/:id`}
-            render={renderProps => <CampaignEdit {...renderProps} />}
+            path=":id"
+            element={<CampaignEdit />}
           />
           <Route
-            exact
-            path={`${match.path}/Question/:id`}
-            render={renderProps => <Question {...renderProps} />}
+            path="Question/:id"
+            element={<Question />}
           />
           <Route
-            exact
-            path={`${match.path}/`}
-            render={() => (
-              <Redirect to={`${match.path}/List`} />
-            )}
+            path="/"
+            element={<Navigate to={`${basePath}/List`} replace />}
           />
-        </Switch>
+        </Routes>
       </Box>
     </Fragment>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {
   Box, Grid, Paper, Table, TableContainer, TableBody, TableHead, TableRow, FormControlLabel, Checkbox

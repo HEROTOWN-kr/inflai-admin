@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Route, Switch, Redirect, useRouteMatch, useHistory
+  Routes, Route, Navigate, useMatch, useNavigate
 } from 'react-router-dom';
 import { Box, Grid, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
@@ -39,15 +39,17 @@ const useStyles = makeStyles(theme => ({
 function Settings(props) {
   const { setMenuIndicator } = props;
   const [selectedMenu, setSelectedMenu] = useState(1);
-  const match = useRouteMatch();
-  const history = useHistory();
+  const match = useMatch('/Settings/*');
+  const navigate = useNavigate();
   const classes = useStyles();
 
   useEffect(() => setMenuIndicator(7), []);
 
   const handleListItemClick = (item) => {
     setSelectedMenu(item.id);
-    history.push(match.url + item.url);
+    // build target using base path when available; fallback to absolute path
+    const base = match ? '/Settings' : '';
+    navigate(`${base}${item.url}`);
   };
 
   return (
@@ -70,26 +72,12 @@ function Settings(props) {
         </Box>
       </Grid>
       <Grid item xs>
-        <Switch>
-          <Route
-            path={`${match.url}/KakaoNotify`}
-            render={renderProps => <KakaoNotify {...props} />}
-          />
-          <Route
-            path={`${match.url}/Coupon`}
-            render={renderProps => <Coupon {...props} />}
-          />
-          <Route
-            exact
-            path={`${match.url}/`}
-            render={() => (
-              <Redirect to={`${match.url}/KakaoNotify`} />
-            )}
-          />
-          <Route
-            component={NotFound}
-          />
-        </Switch>
+        <Routes>
+          <Route path="KakaoNotify" element={<KakaoNotify {...props} />} />
+          <Route path="Coupon" element={<Coupon {...props} />} />
+          <Route path="/" element={<Navigate to={match ? '/Settings/KakaoNotify' : '/KakaoNotify'} replace />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Grid>
     </Grid>
   );

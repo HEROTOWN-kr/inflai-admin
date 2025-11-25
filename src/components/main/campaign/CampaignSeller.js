@@ -3,7 +3,7 @@ import {
   Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 } from '@mui/material';
 import axios from 'axios';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import * as PropTypes from 'prop-types';
 import { Description, GetApp, Publish } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
@@ -56,7 +56,7 @@ function CampaignSeller(props) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const history = useHistory();
+  const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
@@ -71,7 +71,7 @@ function CampaignSeller(props) {
 
   function getParticipants() {
     if (!type) {
-      history.push('/Campaign/List');
+      navigate('/Campaign/List');
       return;
     }
     axios.get('/api/TB_PARTICIPANT/getListSeller', {

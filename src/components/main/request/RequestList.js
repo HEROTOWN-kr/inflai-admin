@@ -59,7 +59,7 @@ function RequestList(props) {
   };
 
   function requestDetail(event, id) {
-    history.push(`${match.path}/${id}`);
+    navigate(`${match.path}/${id}`);
   }
 
   return (

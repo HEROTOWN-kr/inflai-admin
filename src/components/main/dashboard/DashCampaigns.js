@@ -47,7 +47,7 @@ function DashCampaigns(props) {
         <Grid container justifyContent="space-between">
           <Grid item>최근캠페인</Grid>
           <Grid item>
-            <button onClick={() => history.push('/Campaign')}>
+            <button onClick={() => navigate('/Campaign')}>
                 전체보기
             </button>
           </Grid>

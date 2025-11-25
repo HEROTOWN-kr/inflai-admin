@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react';
 
 import {
-  Link, Redirect, Route, Switch
+  Link
 } from 'react-router-dom';
+import { Routes, Route, Navigate, useMatch } from 'react-router-dom';
 
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
@@ -26,12 +27,16 @@ const useStyles = makeStyles({
 });
 
 function Ranking(props) {
-  const { setMenuIndicator, history, match } = props;
+  const { setMenuIndicator, history } = props;
   const [tab, setTab] = useState(0);
 
   const classes = useStyles();
 
-  useEffect(() => setMenuIndicator(4), []);
+  useEffect(() => setMenuIndicator(4), [setMenuIndicator]);
+
+  // useMatch to derive base path when this component is mounted under a parent route
+  const match = useMatch('/Ranking/*');
+  const basePath = match ? '/Ranking' : '';
 
   return (
     <Fragment>
@@ -45,34 +50,22 @@ function Ranking(props) {
             <StyledTab
               label="instagram"
               component={Link}
-              to={`${match.url}/Instagram`}
+              to={`${basePath}/Instagram`}
             />
             <StyledTab
               label="youtube"
               component={Link}
-              to={`${match.url}/Youtube`}
+              to={`${basePath}/Youtube`}
             />
           </StyledTabs>
         </Box>
       </Box>
       <Box pt={6} bgcolor="#f4f4f4">
-        <Switch>
-          <Route
-            path={`${match.url}/Instagram`}
-            render={renderProps => <Instagram {...props} setTab={setTab} />}
-          />
-          <Route
-            path={`${match.url}/Youtube`}
-            render={renderProps => <Youtube {...renderProps} setTab={setTab} />}
-          />
-          <Route
-            exact
-            path={`${match.url}/`}
-            render={() => (
-              <Redirect to={`${match.url}/Youtube`} />
-            )}
-          />
-        </Switch>
+        <Routes>
+          <Route path="Instagram/*" element={<Instagram {...props} setTab={setTab} />} />
+          <Route path="Youtube/*" element={<Youtube {...props} setTab={setTab} />} />
+          <Route path="/" element={<Navigate to={basePath ? '/Ranking/Youtube' : 'Youtube'} replace />} />
+        </Routes>
       </Box>
     </Fragment>
   );

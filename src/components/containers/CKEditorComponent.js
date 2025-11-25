@@ -1,5 +1,5 @@
 import React from 'react';
-import CKEditor from '@ckeditor/ckeditor5-react';
+import {CKEditor} from '@ckeditor/ckeditor5-react';
 // import Image from '@ckeditor/ckeditor5-image/src/image';
 // import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
 import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';

@@ -1,43 +1,32 @@
-import React, {
-  Fragment,
-  useContext, useEffect, useRef, useState
-} from 'react';
+import React, {Fragment, useContext, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {
-  Box, Grid, Paper, FormControlLabel, RadioGroup, Radio, InputAdornment, Typography, IconButton, Checkbox
-} from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
+import {Box, FormControlLabel, Grid, InputAdornment, Radio, RadioGroup} from '@mui/material';
+import {Controller, useForm} from 'react-hook-form';
 import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useHistory } from 'react-router-dom';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {useNavigate} from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
+import {useTheme} from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { ArrowRightAlt, Clear } from '@mui/icons-material';
 import moment from 'moment';
-import { useSnackbar } from 'notistack';
+import {useSnackbar} from 'notistack';
 import StyledText from '../../containers/StyledText';
 import ReactFormDatePicker from '../../containers/ReactFormDatePicker';
 import ReactFormText from '../../containers/ReactFormText';
-import StyledSelect from '../../containers/StyledSelect';
 import {
-  AdvertiseTypes,
-  campaignTypes,
-  Colors,
-  deliveryTypes,
-  editPriceTypes,
-  productSellTypes, reportTypes,
-  selectedViewTypes,
-  snsTypes,
-  videoLengthTypes, visibleTypes
+    campaignTypes,
+    Colors,
+    editPriceTypes,
+    productSellTypes,
+    reportTypes,
+    selectedViewTypes,
+    snsTypes,
+    videoLengthTypes,
+    visibleTypes
 } from '../../../lib/Сonstants';
-import DaumPostCode from '../../containers/DaumPostCode';
-import ImageHolder from './ImageHolder';
-import CKEditorComponent from '../../containers/CKEditorComponent';
-import StyledButton from '../../containers/StyledButton';
 import StyledTextField from '../../containers/StyledTextField';
 import AuthContext from '../../../context/AuthContext';
-import { fileChangedHandler } from '../../../lib/common';
+import {fileChangedHandler} from '../../../lib/common';
 
 const useStyles = makeStyles({
   endAdornment: {
@@ -80,7 +69,7 @@ function checkReportArray(arr) {
 }
 
 function CampaignCreateNew() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [dbImages, setDbImages] = useState([]);
   const [links, setLinks] = useState([]);
@@ -299,7 +288,7 @@ function CampaignCreateNew() {
       if (images.length === 0) {
         setLoading(false);
         enqueueSnackbar('캠페인이 등록되었습니다!!', { variant: 'success' });
-        history.push('/Campaign/List');
+        navigate('/Campaign/List');
         return;
       }
       const id = res.data.data.AD_ID;
@@ -317,7 +306,7 @@ function CampaignCreateNew() {
       Promise.all(promiseArray).then((response) => {
         setLoading(false);
         enqueueSnackbar('캠페인이 등록되었습니다!!', { variant: 'success' });
-        history.push('/Campaign/List');
+        navigate('/Campaign/List');
       }).catch(err => console.log(err.message));
     }).catch((error) => {
       setLoading(false);
@@ -1131,7 +1120,7 @@ function CampaignCreateNew() {
         <Grid container justifyContent="center" spacing={3}>
           <Grid item xs={6} sm="auto">
             <Box width={isSM ? '200px' : '100%'}>
-              <StyledButton background={Colors.pink3} hoverBackground={Colors.pink} onClick={() => history.push('/')}>취소</StyledButton>
+              <StyledButton background={Colors.pink3} hoverBackground={Colors.pink} onClick={() => navigate('/')}>취소</StyledButton>
             </Box>
           </Grid>
           <Grid item xs={6} sm="auto">

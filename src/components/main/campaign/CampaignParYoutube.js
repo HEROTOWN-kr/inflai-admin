@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Box, Checkbox, FormControlLabel, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 } from '@mui/material';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import makeStyles from '@mui/styles/makeStyles';
 import StyledTableCell from '../../containers/StyledTableCell';

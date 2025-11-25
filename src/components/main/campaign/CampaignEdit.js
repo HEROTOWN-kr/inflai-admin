@@ -9,7 +9,7 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
@@ -76,7 +76,7 @@ function checkReportArray(arr) {
 }
 
 function CampaignEdit() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const params = useParams();
   const [dbVisible, setDbVisible] = useState('');
   const [images, setImages] = useState([]);
@@ -242,7 +242,7 @@ function CampaignEdit() {
       }
     }).then((res) => {
       if (res.status === 201) {
-        history.push('/Campaign/List');
+        navigate('/Campaign/List');
         return;
       }
       const { data } = res.data;
@@ -366,7 +366,7 @@ function CampaignEdit() {
       if (images.length === 0) {
         setLoading(false);
         enqueueSnackbar('수정되었습니다', { variant: 'success' });
-        history.push('/Campaign/List');
+        navigate('/Campaign/List');
         return;
       }
 
@@ -383,7 +383,7 @@ function CampaignEdit() {
       axios.all(uploaders).then(() => {
         setLoading(false);
         enqueueSnackbar('수정되었습니다', { variant: 'success' });
-        history.push('/Campaign/List');
+        navigate('/Campaign/List');
       });
     }).catch((error) => {
       setLoading(false);
@@ -1137,7 +1137,7 @@ function CampaignEdit() {
         <Grid container justifyContent="center" spacing={3}>
           <Grid item xs={6} sm="auto">
             <Box width={isSM ? '200px' : '100%'}>
-              <StyledButton background={Colors.pink3} hoverBackground={Colors.pink} onClick={() => history.push('/')}>취소</StyledButton>
+              <StyledButton background={Colors.pink3} hoverBackground={Colors.pink} onClick={() => navigate('/')}>취소</StyledButton>
             </Box>
           </Grid>
           <Grid item xs={6} sm="auto">

@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Box, Grid } from '@mui/material';
-import { Bar, HorizontalBar } from 'react-chartjs-2';
+// replaced HorizontalBar import with Bar only (chartjs v3 + react-chartjs-2 v3 use Bar with indexAxis:'y')
+import { Bar } from 'react-chartjs-2';
 import MapGraph from '../../campaign/Graphs/MapGraph';
 import CategoryPieChart from '../CategoryPieChart';
 
@@ -93,7 +94,9 @@ function LocationPart(props) {
       </Grid>
       <Grid item xs={12} md={6} style={{ height: 'inherit' }}>
         <Box p={3} bgcolor="#FFF" height="100%" boxSizing="border-box">
-          <HorizontalBar height={isMD ? 150 : 250} data={dataSet} options={options} />
+-          <HorizontalBar height={isMD ? 150 : 250} data={dataSet} options={options} />
++          {/* use Bar with indexAxis:'y' to render horizontal bars (chart.js v3 compatible) */}
++          <Bar height={isMD ? 150 : 250} data={dataSet} options={options} />
         </Box>
       </Grid>
     </Grid>

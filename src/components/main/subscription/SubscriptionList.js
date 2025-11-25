@@ -129,7 +129,7 @@ function SubscriptionList(props) {
   };
 
   function editRow(event, id) {
-    history.push(`${props.match.path}/${id}`);
+    navigate(`${props.match.path}/${id}`);
   }
 
   return (

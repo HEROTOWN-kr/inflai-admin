@@ -4,7 +4,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Clear } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { AdvertiseTypes, Colors } from '../../../lib/Сonstants';
 import StyledButton from '../../containers/StyledButton';

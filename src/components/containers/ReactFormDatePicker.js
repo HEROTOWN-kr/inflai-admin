@@ -1,7 +1,8 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
-import DateFnsUtils from '@date-io/date-fns';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 function ReactFormDatePicker(props) {
   const {
@@ -9,30 +10,29 @@ function ReactFormDatePicker(props) {
   } = props;
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Controller
         name={name}
         control={control}
-        render={({ ref, ...rest }) => (
-          <KeyboardDatePicker
-            autoOk
-            disableToolbar
-                    // disablePast
-            margin="normal"
-            id={name}
-            variant="inline"
-            format="yyyy/MM/dd"
-            KeyboardButtonProps={{
-              'aria-label': 'change date'
-            }}
-            {...rest}
+        render={({ field }) => (
+          <DatePicker
+            {...field}
+            onChange={(value) => field.onChange(value)}
+            // keep similar behaviour/props to previous KeyboardDatePicker
+            disableFuture={datePickerProps.disableFuture}
+            disablePast={datePickerProps.disablePast}
+            inputFormat={datePickerProps.format || 'yyyy/MM/dd'}
+            renderInput={(params) => (
+              // DatePicker requires a renderInput prop that returns a TextField.
+              // We pass through any wrapper props via datePickerProps.
+              <input style={{ display: 'none' }} {...params.inputProps} />
+            )}
             {...datePickerProps}
           />
         )}
       />
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   );
 }
-
 
 export default ReactFormDatePicker;

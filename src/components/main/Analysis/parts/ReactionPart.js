@@ -1,96 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
-import { Line } from 'react-chartjs-2';
-import ReactWordcloud from 'react-wordcloud';
+import React from 'react';
+import {Box, Grid, Typography} from '@mui/material';
+import {Line} from 'react-chartjs-2';
+// import ReactWordcloud from '@cyberblast/react-wordcloud';
 import BarComponent from '../BarComponent';
 import HelpTooltip from '../HelpTooltip';
 import analysisStyles from '../AnalysisStyle';
-import WordCloud from '../WordCloud';
-
-
-const words = [
-  {
-    text: '기대',
-    value: 50,
-  },
-  {
-    text: '이거',
-    value: 11
-  },
-  {
-    text: '기분',
-    value: 16
-  },
-  {
-    text: '감사',
-    value: 17
-  },
-  {
-    text: '완료',
-    value: 10
-  },
-  {
-    text: '사용',
-    value: 54
-  },
-  {
-    text: '행주',
-    value: 12
-  },
-  {
-    text: '궁리',
-    value: 40
-  },
-  {
-    text: '거품',
-    value: 45
-  },
-  {
-    text: '주방',
-    value: 19
-  },
-  {
-    text: '주말',
-    value: 13
-  },
-  {
-    text: '이번',
-    value: 32
-  },
-  {
-    text: '세탁',
-    value: 22
-  },
-  {
-    text: '수세미',
-    value: 35
-  },
-  {
-    text: '아워',
-    value: 24
-  },
-  {
-    text: '주문',
-    value: 38
-  },
-  {
-    text: '구매',
-    value: 70,
-    main: 1
-  },
-  {
-    text: '세제',
-    value: 26
-  },
-  {
-    text: '오늘',
-    value: 14
-  },
-  {
-    text: '공구',
-    value: 29
-  },
-];
 
 const callbacks = {
   getWordColor: word => (word.main ? '#8C3FFF' : '#00000073'),
@@ -423,8 +337,7 @@ function ReactionPart(props) {
           <Grid item xs={12} md={6}>
             <Typography variant="subtitle2" paragraph>해시태그 주요 키워드</Typography>
             <Box height="250px" p="20px" bgcolor="#FFF" borderRadius="7px">
-               <ReactWordcloud options={options} words={instaData.hashTags} callbacks={callbacks} />
-              {/*<WordCloud />*/}
+               {/*<ReactWordcloud options={options} words={instaData.hashTags} callbacks={callbacks} />*/}
             </Box>
           </Grid>
         </Grid>

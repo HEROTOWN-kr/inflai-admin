@@ -3,7 +3,7 @@ import { Box, Dialog, useMediaQuery, IconButton, Typography, Grid } from '@mui/m
 import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
 import { Clear } from '@mui/icons-material';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Colors } from '../../../lib/Сonstants';
 
 const useStyles = makeStyles({
@@ -23,13 +23,13 @@ const useStyles = makeStyles({
 
 function ParticipantDialog(props) {
   const { open, closeDialog } = props;
-  const history = useHistory();
+  const navigate = useNavigate();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const classes = useStyles();
 
   function clickCategory(url) {
-    history.push(url);
+    navigate(url);
     closeDialog();
   }
 

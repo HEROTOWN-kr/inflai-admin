@@ -13,7 +13,7 @@ import {
   SvgIcon,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   AccountBalanceWallet, Settings, Dashboard, Help,
   Equalizer, MonetizationOn, YouTube, AccessibilityNew, Menu
@@ -91,7 +91,7 @@ function NavbarLinks(props) {
   } = props;
   const [sideBarOpen, setSideBarOpen] = useState(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const classes = useStyles();
 
   const handleChange = (event, newValue) => {
@@ -145,7 +145,7 @@ function NavbarLinks(props) {
             >
               <List>
                 {menuLinks.map(item => (
-                  <ListItem button onClick={() => history.push(item.link)} key={item.name}>
+                  <ListItem button onClick={() => navigate(item.link)} key={item.name}>
                     <ListItemIcon className={classes.icon}><SvgIcon component={item.icon} /></ListItemIcon>
                     <ListItemText primary={item.name} />
                   </ListItem>

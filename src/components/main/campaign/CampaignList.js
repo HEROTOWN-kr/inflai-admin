@@ -193,18 +193,18 @@ function CampaignList(props) {
   }
 
   function campaignDetail(event, id) {
-    history.push(`${props.match.path}/${id}`);
+    navigate(`${props.match.path}/${id}`);
   }
 
   function campaignParticipant(id, type) {
     if (type === '1') {
-      history.push(`/Campaign/ParInsta/${id}`);
+      navigate(`/Campaign/ParInsta/${id}`);
     } else if (type === '2') {
-      history.push(`/Campaign/ParYoutube/${id}`);
+      navigate(`/Campaign/ParYoutube/${id}`);
     } else if (type === '3') {
-      history.push(`/Campaign/ParBlog/${id}`);
+      navigate(`/Campaign/ParBlog/${id}`);
     } else if (type === '5') {
-      history.push(`/Campaign/ParReview/${id}`);
+      navigate(`/Campaign/ParReview/${id}`);
     }
   }
 
@@ -297,7 +297,7 @@ function CampaignList(props) {
                   background="#0fb359"
                   hoverBackground="#107C41"
                   startIcon={<Create />}
-                  onClick={() => history.push(`${match.path}/create`)}
+                  onClick={() => navigate(`${match.path}/create`)}
                 >
                   캠페인 등록
                 </StyledButton>
@@ -397,7 +397,7 @@ function CampaignList(props) {
                                 <Grid item>
                                   <Box width="70px">
                                     <StyledButton
-                                      onClick={() => history.push(`${match.path}/Question/${row.id}`)}
+                                      onClick={() => navigate(`${match.path}/Question/${row.id}`)}
                                       background="#0fb359"
                                       hoverBackground="#107C41"
                                       padding="0"
@@ -412,7 +412,7 @@ function CampaignList(props) {
                                   <Grid item>
                                     <Box width="70px">
                                       <StyledButton
-                                        onClick={() => history.push({
+                                        onClick={() => navigate({
                                           pathname: `${match.path}/Seller/${row.id}`,
                                           state: { type: row.type }
                                         })}

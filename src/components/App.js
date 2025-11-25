@@ -2,7 +2,7 @@ import React, {
   createRef, Fragment, useEffect, useState
 } from 'react';
 import {
-  withRouter, Switch, Route, Redirect
+  useNavigate, Routes, Route, Navigate
 } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import { Close } from '@mui/icons-material';
@@ -13,6 +13,14 @@ import AuthContext from '../context/AuthContext';
 import useLoading from './hooks/useLoading';
 import StyledBackDrop from './containers/StyledBackDrop';
 import { getUserInfo, saveUserInfo } from '../lib/common';
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+
+const theme = createTheme({
+    status: {
+        danger: orange[500],
+    },
+});
 
 const useStyles = makeStyles({
   snackbarCloseIcon: {
@@ -21,8 +29,8 @@ const useStyles = makeStyles({
 });
 
 
-function App(props) {
-  const { history } = props;
+function App() {
+  const navigate = useNavigate(); // replace history from withRouter
   const [user, setUser] = useState(getUserInfo);
   const classes = useStyles();
 
@@ -32,10 +40,6 @@ function App(props) {
     snackbarRef.current.closeSnackbar(key);
   };
 
-  /* useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]); */
-
   function changeUser(data) {
     const newUser = { ...data };
     setUser(newUser);
@@ -44,9 +48,9 @@ function App(props) {
 
   useEffect(() => {
     if (!user.token) {
-      history.push('/Login');
+      navigate('/Login'); // useNavigate instead of navigate
     }
-  }, [user]);
+  }, [user, navigate]);
 
 
   return (
@@ -57,30 +61,29 @@ function App(props) {
           <Close className={classes.snackbarCloseIcon} onClick={onClickDismiss(key)} />
         )}
       >
-        <Switch>
+          <ThemeProvider theme={theme}>
+
+          <Routes>
           <Route
-            exact
             path="/Login"
-            render={renderProps => <Login {...renderProps} user={user} changeUser={changeUser} />}
+            element={<Login user={user} changeUser={changeUser} />}
           />
           <Route
             path="/"
-            render={renderProps => <Main {...renderProps} changeUser={changeUser} />}
+            element={<Main changeUser={changeUser} />}
           />
+          {/* Optional explicit root redirect: if you prefer a route that chooses by auth state */}
           <Route
-            exact
-            path="/"
-            render={() => (
-              user.token
-                ? <Redirect to="/" />
-                : <Redirect to="/Login" />
-            )}
+            path="/home"
+            element={user.token ? <Navigate to="/" /> : <Navigate to="/Login" />}
           />
-        </Switch>
+        </Routes>
         <StyledBackDrop open={isLoading} />
+        </ThemeProvider>
+
       </SnackbarProvider>
     </AuthContext.Provider>
   );
 }
 
-export default withRouter(App);
+export default App;

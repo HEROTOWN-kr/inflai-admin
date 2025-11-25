@@ -22,9 +22,9 @@ function Login({
 
   useEffect(() => {
     if (!user.token) {
-      history.push('/Login');
+      navigate('/Login');
     } else {
-      history.push('/Dashboard');
+      navigate('/Dashboard');
     }
   }, [user]);
 

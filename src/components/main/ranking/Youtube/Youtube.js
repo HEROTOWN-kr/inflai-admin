@@ -6,8 +6,7 @@ import {
   InputAdornment, CircularProgress
 } from '@mui/material';
 import axios from 'axios';
-import { AssessmentRounded } from '@mui/icons-material/';
-import { createTheme } from '@mui/material/styles';
+import { AssessmentRounded } from '@mui/icons-material';
 import makeStyles from '@mui/styles/makeStyles';
 import { useForm } from 'react-hook-form';
 import SearchIcon from '@mui/icons-material/Search';

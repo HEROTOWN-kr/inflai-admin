@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import axios from 'axios';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import StyledImage from '../../containers/StyledImage';
 import StyledText from '../../containers/StyledText';
 import StyledTableCell from '../../containers/StyledTableCell';
