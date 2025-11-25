@@ -3,8 +3,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {
   Box, Grid, Paper, Table, TableContainer, TableBody, TableHead, TableRow, FormControlLabel, Checkbox
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
 import StyledTableRow from '../../containers/StyledTableRow';
@@ -111,9 +111,9 @@ function CampaignParReview() {
   }
 
   return (
-    <Box mb={1} boxSizing="border-box" maxWidth={1276} css={{ margin: '0 auto' }}>
+    <Box mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
       <Box mb={1}>
-        <Grid container justify="flex-end">
+        <Grid container justifyContent="flex-end">
           <Grid item>
             <FormControlLabel
               control={(
@@ -208,7 +208,7 @@ function CampaignParReview() {
             </Table>
           </TableContainer>
           <Box py={4}>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
               <Grid item>
                 <MyPagination
                   itemCount={count}

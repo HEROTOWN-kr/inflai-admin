@@ -1,9 +1,17 @@
 import React from 'react';
 import {
-  IconButton, Dialog, DialogActions, DialogContent, Box, DialogTitle, useMediaQuery, makeStyles, Grid
-} from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
-import { Clear } from '@material-ui/icons';
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Box,
+  DialogTitle,
+  useMediaQuery,
+  Grid,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { useTheme } from '@mui/material/styles';
+import { Clear } from '@mui/icons-material';
 import StyledButton from './StyledButton';
 import StyledText from './StyledText';
 import { Colors } from '../../lib/Сonstants';
@@ -33,7 +41,7 @@ export default function ConfirmDialog(props) {
   } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const onConfirmFunc = () => {
     onConfirm();
@@ -57,7 +65,7 @@ export default function ConfirmDialog(props) {
       <Box px={2} py={2} textAlign="center" boxSizing="border-box">
         {dialogText}
         <Box mt={4}>
-          <Grid container justify="space-between">
+          <Grid container justifyContent="space-between">
             <Grid item>
               <Box width="110px">
                 <StyledButton padding="0 15px" height="38px" onClick={closeDialog}>

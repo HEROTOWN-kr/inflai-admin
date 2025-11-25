@@ -1,7 +1,7 @@
 import React, {
   useEffect, useRef, useState, useLayoutEffect
 } from 'react';
-import { Box, CircularProgress } from '@material-ui/core';
+import { Box, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4maps from '@amcharts/amcharts4/maps';

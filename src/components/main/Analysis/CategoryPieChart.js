@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CircularProgress, Grid } from '@material-ui/core';
+import { Box, CircularProgress, Grid } from '@mui/material';
 import { PieChart } from 'react-minimal-pie-chart';
 
 function CategoryPieChart(props) {
@@ -8,7 +8,7 @@ function CategoryPieChart(props) {
   return (
     <React.Fragment>
       {process ? (
-        <Grid container alignItems="center" justify="center">
+        <Grid container alignItems="center" justifyContent="center">
           <Grid item>
             <CircularProgress />
           </Grid>
@@ -33,7 +33,7 @@ function CategoryPieChart(props) {
               />
             </Box>
           ) : (
-            <Grid container alignItems="center" justify="center" style={{ height: '100%' }}>
+            <Grid container alignItems="center" justifyContent="center" style={{ height: '100%' }}>
               <Grid item>
                 로딩 중...
               </Grid>

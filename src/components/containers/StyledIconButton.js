@@ -1,6 +1,6 @@
-import {
-  withStyles, IconButton
-} from '@material-ui/core';
+import { IconButton } from '@mui/material';
+
+import withStyles from '@mui/styles/withStyles';
 
 const StyledIconButton = withStyles({
   root: {

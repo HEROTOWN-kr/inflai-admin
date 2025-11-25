@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box, CircularProgress, Grid, makeStyles, Typography
-} from '@material-ui/core';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -32,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '7px',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       width: '100%',
       height: 'auto',
     }
@@ -150,7 +149,7 @@ function MediaCard(props) {
             </Grid>
             <Grid item xs={12}>
               <Box bgcolor="#fafafa" p="14px" borderRadius="7px">
-                <Grid container justify="space-between">
+                <Grid container justifyContent="space-between">
                   <Grid item xs={12} md={6}>
                     <Typography variant="body1" style={{ textAlign: 'center' }}>
                       {'좋아요수: '}
@@ -287,7 +286,7 @@ function PostPart(props) {
              </Box> */}
             <Box boxSizing="border-box" width="100%" p="20px" bgcolor="#FFF" borderRadius="7px" height={process ? '358px' : 'auto'}>
               {process ? (
-                <Grid container height="100%" alignItems="center" justify="center">
+                <Grid container height="100%" alignItems="center" justifyContent="center">
                   <Grid item>
                     <CircularProgress />
                   </Grid>
@@ -303,7 +302,7 @@ function PostPart(props) {
             <Box boxSizing="border-box" width="100%" p="20px" bgcolor="#FFF" borderRadius="7px" height={process ? '358px' : 'auto'}>
               {/* <CategoryPieChart detectData={objectData} process={process} /> */}
               {process ? (
-                <Grid container height="100%" alignItems="center" justify="center">
+                <Grid container height="100%" alignItems="center" justifyContent="center">
                   <Grid item>
                     <CircularProgress />
                   </Grid>
@@ -337,7 +336,6 @@ function PostPart(props) {
           ))}
         </Grid>
       </Box>
-
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
           <Typography variant="subtitle2" paragraph>요일별 포스팅 성향</Typography>

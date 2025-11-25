@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import {
-  Box, Dialog, IconButton, makeStyles, useMediaQuery
-} from '@material-ui/core';
-import { Clear } from '@material-ui/icons';
-import { useTheme } from '@material-ui/core/styles';
+import { Box, Dialog, IconButton, useMediaQuery } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Clear } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
 import { Colors } from '../../../lib/Сonstants';
 import AnalysisComponent from '../Analysis/AnalysisComponent';
 
@@ -38,7 +37,6 @@ const InstaInsightDialog = (props) => {
     <Dialog
       /* classes={{ paper: classes.paper }} */
       fullScreen={!isMD}
-      disableBackdropClick
       scroll="body"
       classes={{
         paper: classes.paper,
@@ -46,8 +44,7 @@ const InstaInsightDialog = (props) => {
       }}
       aria-labelledby="simple-dialog-title"
       open={open}
-      onClose={handleClose}
-    >
+      onClose={handleClose}>
       <Box p="15px" fontSize="21px" fontWeight="400" lineHeight="18px" textAlign="center" position="relative" borderBottom={`1px solid ${Colors.grey8}`}>
               인플라이
         <IconButton size="medium" classes={{ root: classes.root }} onClick={handleClose}>

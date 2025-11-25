@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress } from '@material-ui/core';
+import { Box, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { Colors } from '../../../../lib/Сonstants';

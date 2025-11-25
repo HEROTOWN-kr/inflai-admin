@@ -1,8 +1,7 @@
 import React from 'react';
-import {
-  Box, Dialog, IconButton, makeStyles
-} from '@material-ui/core';
-import { Cancel, Clear } from '@material-ui/icons';
+import { Box, Dialog, IconButton } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Cancel, Clear } from '@mui/icons-material';
 import YoutubeAnalysis from './YoutubeAnalysis';
 
 const useStyles = makeStyles(theme => ({
@@ -29,7 +28,6 @@ function AnalysisDialog(props) {
   const classes = useStyles();
   return (
     <Dialog
-      disableBackdropClick
       scroll="body"
       classes={{
         paper: classes.paper,
@@ -37,8 +35,7 @@ function AnalysisDialog(props) {
       }}
       onClose={closeDialog}
       aria-labelledby="simple-dialog-title"
-      open={open}
-    >
+      open={open}>
       <YoutubeAnalysis id={id} closeDialog={closeDialog} />
     </Dialog>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
-import {
-  withStyles, Tabs
-} from '@material-ui/core';
+import { Tabs } from '@mui/material';
+
+import withStyles from '@mui/styles/withStyles';
 
 const AntTabs = withStyles({
   root: {

@@ -8,7 +8,7 @@ import {
   DialogActions,
   MenuItem,
   Select
-} from '@material-ui/core';
+} from '@mui/material';
 import axios from 'axios';
 
 function RequestDialog(props) {

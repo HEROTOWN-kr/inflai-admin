@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {
-  Box, Dialog, useMediaQuery, IconButton, makeStyles, Typography, Grid, useTheme
-} from '@material-ui/core';
+import { Box, Dialog, useMediaQuery, IconButton, Typography, Grid, useTheme } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   CalendarToday, ChangeHistory,
   ChatBubble, Clear, Details, Favorite, Image, ImportExportOutlined, Room
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 import { Colors } from '../../../lib/Сonstants';
 import WhiteBlock from '../../containers/WhiteBlock';
 import StyledImage from '../../containers/StyledImage';
@@ -81,8 +80,9 @@ function InsightDialog(props) {
       onClose={onDialogClose}
       aria-labelledby="simple-dialog-title"
       open={open}
-      onEntered={onDialogEntered}
-    >
+      TransitionProps={{
+        onEntered: onDialogEntered
+      }}>
       <Box padding="20px" fontSize="18px" fontWeight="400" lineHeight="18px" textAlign="center" position="relative" borderBottom={`1px solid ${Colors.grey8}`}>
                 SNS 정보
         <Clear onClick={onDialogClose} classes={{ root: classes.root }} />
@@ -104,7 +104,7 @@ function InsightDialog(props) {
                             <StyledText textAlign={isSM ? 'inherit' : 'center'} fontSize="20px" fontWeight="bold">{instaData.INS_NAME || instaData.INS_USERNAME}</StyledText>
                           </Grid>
                           <Grid item>
-                            <Grid container justify="space-between">
+                            <Grid container justifyContent="space-between">
                               <Grid item>
                                 <Grid container direction="column" alignItems="center" spacing={1}>
                                   <Grid item><StyledText fontWeight="bold">{instaData.INS_MEDIA_CNT}</StyledText></Grid>
@@ -150,7 +150,7 @@ function InsightDialog(props) {
                 <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
                   <Box px={2} pt={2} pb={{ xs: 3, md: 5 }}>
                     <Grid container direction="column" spacing={2} alignItems="center">
-                      <Grid item container justify="space-between" alignItems="center">
+                      <Grid item container justifyContent="space-between" alignItems="center">
                         <Grid item><StyledText fontSize="14px">좋아요 수</StyledText></Grid>
                         <StyledSvg
                           component={Favorite}
@@ -170,7 +170,7 @@ function InsightDialog(props) {
                 <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
                   <Box px={2} pt={2} pb={{ xs: 3, md: 5 }}>
                     <Grid container direction="column" spacing={2} alignItems="center">
-                      <Grid item container justify="space-between" alignItems="center">
+                      <Grid item container justifyContent="space-between" alignItems="center">
                         <Grid item><StyledText fontSize="14px">댓글 수</StyledText></Grid>
                         <StyledSvg
                           component={ChatBubble}
@@ -191,8 +191,8 @@ function InsightDialog(props) {
           <Grid item xs={12} sm={6}>
             <WhiteBlock borderRadius={isMD ? '25px' : '0'} height="100%">
               <Box px={2} py={2}>
-                <Grid container justify="space-between" spacing={4}>
-                  <Grid item xs={12} container justify="space-between" alignItems="center">
+                <Grid container justifyContent="space-between" spacing={4}>
+                  <Grid item xs={12} container justifyContent="space-between" alignItems="center">
                     <Grid item><StyledText fontSize="14px">콘텐츠 카테고리</StyledText></Grid>
                     <StyledSvg
                       component={Image}
@@ -213,7 +213,7 @@ function InsightDialog(props) {
           <Grid item xs={12} sm={6}>
             <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
               <Box p={2}>
-                <Grid container spacing={2} justify="center">
+                <Grid container spacing={2} justifyContent="center">
                   <Grid item xs={12}>
                     <Grid container>
                       <Grid item xs><StyledText fontSize="14px">인플루언서 계정의 각 게시물마다 (좋아요, 댓글) 수 비교</StyledText></Grid>
@@ -239,7 +239,7 @@ function InsightDialog(props) {
           <Grid item xs={12} sm={6}>
             <WhiteBlock borderRadius={isMD ? '25px' : '0'} height="100%">
               <Box p={2}>
-                <Grid container spacing={2} justify="center">
+                <Grid container spacing={2} justifyContent="center">
                   <Grid item xs={12}>
                     <Grid container>
                       <Grid item xs><StyledText fontSize="14px">팔로워의 나이</StyledText></Grid>
@@ -266,7 +266,7 @@ function InsightDialog(props) {
             <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
               <Box px={2} py={2}>
                 <Grid container spacing={4}>
-                  <Grid item xs={12} container justify="space-between" alignItems="center">
+                  <Grid item xs={12} container justifyContent="space-between" alignItems="center">
                     <StyledSvg
                       component={Details}
                       color={Colors.orange}
@@ -309,7 +309,7 @@ function InsightDialog(props) {
             <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
               <Box px={2} py={2}>
                 <Grid container spacing={4}>
-                  <Grid item xs={12} container justify="space-between" alignItems="center">
+                  <Grid item xs={12} container justifyContent="space-between" alignItems="center">
                     <Grid item><StyledText fontSize="14px">팔로워의 지도</StyledText></Grid>
                     <StyledSvg
                       component={Room}

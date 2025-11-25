@@ -1,4 +1,6 @@
-import { Checkbox, withStyles } from '@material-ui/core';
+import { Checkbox } from '@mui/material';
+
+import withStyles from '@mui/styles/withStyles';
 
 const StyledCheckBox = withStyles(theme => ({
   root: {

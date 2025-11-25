@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Box
-} from '@material-ui/core';
+} from '@mui/material';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Influencer from './influencer/Influencer';
 import Advertiser from './advertiser/Advertiser';

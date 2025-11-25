@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
   Dialog, useMediaQuery, Grid, Box, Divider
-} from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { Controller, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
@@ -28,7 +28,7 @@ function SubscriptionDialog(props) {
   } = props;
   const [dialogData, setDialogData] = useState({});
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const {
     reset, handleSubmit, handleBlur, watch, setValue, control, getValues
   } = useForm({ defaultValues });
@@ -89,10 +89,11 @@ function SubscriptionDialog(props) {
       fullWidth
       maxWidth="xs"
       open={open}
-      onEnter={onDialogOpen}
       onClose={dialogClose}
       aria-labelledby="responsive-dialog-title"
-    >
+      TransitionProps={{
+        onEnter: onDialogOpen
+      }}>
       <Box p={4}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -147,7 +148,7 @@ function SubscriptionDialog(props) {
           </Grid>
           <Grid item xs={12}><Divider /></Grid>
           <Grid item xs={12}>
-            <Grid container justify="center" spacing={2}>
+            <Grid container justifyContent="center" spacing={2}>
               <Grid item>
                 <StyledButton
                   background="#ff005b"

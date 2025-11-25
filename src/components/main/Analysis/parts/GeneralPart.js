@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@mui/material';
 import DoughnutComponent from '../DoughnutComponent';
 import analysisStyles from '../AnalysisStyle';
 

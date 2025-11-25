@@ -2,17 +2,21 @@ import React, {
   Fragment, useContext, useEffect, useState
 } from 'react';
 import {
-  Box, Button,
-  Grid, makeStyles,
-  Paper, SvgIcon,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  SvgIcon,
   Table,
   TableBody,
   TableContainer,
   TableHead,
-  TableRow, Typography,
-} from '@material-ui/core';
+  TableRow,
+  Typography,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import axios from 'axios';
-import { Description, Instagram, YouTube } from '@material-ui/icons';
+import { Description, Instagram, YouTube } from '@mui/icons-material';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
@@ -30,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 700,
     marginTop: '96px',
     marginBottom: '48px',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       textAlign: 'center',
       marginTop: '30px',
       marginBottom: '30px',
@@ -41,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     indicator: {}
   },
   startIcon: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       margin: 0,
     },
   }
@@ -154,7 +158,7 @@ function Influencer(props) {
       <Box bgcolor="#f4f4f4" minHeight={800}>
         <Box py={6} px={2} maxWidth={1276} m="0 auto">
           <Box pb={2}>
-            <Grid container justify="space-between">
+            <Grid container justifyContent="space-between">
               <Grid item>
                 <Grid container spacing={1}>
                   {snsTypes.map(item => (
@@ -223,7 +227,7 @@ function Influencer(props) {
                     <StyledTableCell align="center">{row.phoneNumber}</StyledTableCell>
                     <StyledTableCell align="center">{row.social}</StyledTableCell>
                     <StyledTableCell align="center">
-                      <Grid container spacing={1} justify="center">
+                      <Grid container spacing={1} justifyContent="center">
                         {snsTypes.map(item => (
                           row[item.name] ? (
                             <Grid key={item.id} item>
@@ -244,7 +248,7 @@ function Influencer(props) {
             </Table>
           </TableContainer>
           <Box py={4}>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
               <Grid item>
                 <MyPagination
                   itemCount={count}

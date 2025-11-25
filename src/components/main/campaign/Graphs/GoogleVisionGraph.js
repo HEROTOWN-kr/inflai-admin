@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Grid } from '@material-ui/core';
+import { Box, CircularProgress, Grid } from '@mui/material';
 import { PieChart } from 'react-minimal-pie-chart';
 import axios from 'axios';
 
@@ -49,7 +49,7 @@ function GoogleVisionGraph(props) {
               />
             </Box>
           ) : (
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
               <Grid item>
                 Google Vision Data
               </Grid>

@@ -12,15 +12,17 @@ import {
   Table,
   Typography,
   TableContainer,
-  makeStyles,
   RadioGroup,
-  FormControlLabel, Radio, Divider
-} from '@material-ui/core';
+  FormControlLabel,
+  Radio,
+  Divider,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import axios from 'axios';
 import { all } from 'async';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Clear, Notifications } from '@material-ui/icons';
+import { Clear, Notifications } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
 import StyledText from '../../../containers/StyledText';
 import MyPagination from '../../../containers/MyPagination';
@@ -80,7 +82,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 700,
     marginTop: '96px',
     marginBottom: '48px',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       textAlign: 'center',
       marginTop: '30px',
       marginBottom: '30px',
@@ -91,7 +93,7 @@ const useStyles = makeStyles(theme => ({
     indicator: {}
   },
   startIcon: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       margin: 0,
     },
   },
@@ -327,7 +329,7 @@ function KakaoNotify() {
           </Box>
 
           <Box mb={2}>
-            <Grid container justify="space-between" alignItems="center">
+            <Grid container justifyContent="space-between" alignItems="center">
               <Grid item>
                 <Grid container spacing={1}>
                   { selectedItems.map(item => (
@@ -420,7 +422,7 @@ function KakaoNotify() {
             </Table>
           </TableContainer>
         </Box>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Grid item>
             <MyPagination
               itemCount={count}
@@ -433,93 +435,93 @@ function KakaoNotify() {
       </Box>
     </Fragment>
 
-  /* <Box maxWidth={1200} py="20px" px="30px" m="0 auto" boxSizing="border-box">
-      <Grid container>
-        <Grid item xs="auto">
-          <Box width="300px">
-            <StyledText mb="30px" fontSize="16px">카카오 알림톡 메세지</StyledText>
-            {selectedItems.map(item => (
-              <StyledText mb={1}>{`Campaign #${item}`}</StyledText>
-            ))}
-            <Box width="150px" mt={2}>
-              <StyledButton
-                padding="0"
-                height={40}
-                disabled={selectedItems.length < 3}
-                onClick={sendMessage}
-              >
-카카오 알림 보내기
-              </StyledButton>
+    /* <Box maxWidth={1200} py="20px" px="30px" m="0 auto" boxSizing="border-box">
+        <Grid container>
+          <Grid item xs="auto">
+            <Box width="300px">
+              <StyledText mb="30px" fontSize="16px">카카오 알림톡 메세지</StyledText>
+              {selectedItems.map(item => (
+                <StyledText mb={1}>{`Campaign #${item}`}</StyledText>
+              ))}
+              <Box width="150px" mt={2}>
+                <StyledButton
+                  padding="0"
+                  height={40}
+                  disabled={selectedItems.length < 3}
+                  onClick={sendMessage}
+                >
+  카카오 알림 보내기
+                </StyledButton>
+              </Box>
             </Box>
-          </Box>
-        </Grid>
-        <Grid item xs>
-          <StyledText fontSize="16px">캠페인 리스트</StyledText>
-          <Box my="30px">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {tableHeader.map(item => (
-                    <StyledTableCell key={item.text} align={item.align} width={item.width || null}>{item.text}</StyledTableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {campaigns.map((row) => {
-                  const isExist = selectedItems.indexOf(row.id) !== -1;
-                  const disabled = !isExist && selectedItems.length >= 3;
-                  return (
-                    <StyledTableRow
-                      hover
-                      key={row.id}
-                      onClick={event => (disabled ? null : selectCampaign(row.id))}
-                    >
-                      <StyledTableCell>
-                        <Checkbox
-                          checked={isExist}
-                          disabled={disabled}
-                        />
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
-                          {row.rownum}
-                        </StyledText>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
-                          {row.campaignName}
-                        </StyledText>
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
-                          {row.startDate}
-                        </StyledText>
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
-                          {row.endDate}
-                        </StyledText>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+          </Grid>
+          <Grid item xs>
+            <StyledText fontSize="16px">캠페인 리스트</StyledText>
+            <Box my="30px">
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {tableHeader.map(item => (
+                      <StyledTableCell key={item.text} align={item.align} width={item.width || null}>{item.text}</StyledTableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {campaigns.map((row) => {
+                    const isExist = selectedItems.indexOf(row.id) !== -1;
+                    const disabled = !isExist && selectedItems.length >= 3;
+                    return (
+                      <StyledTableRow
+                        hover
+                        key={row.id}
+                        onClick={event => (disabled ? null : selectCampaign(row.id))}
+                      >
+                        <StyledTableCell>
+                          <Checkbox
+                            checked={isExist}
+                            disabled={disabled}
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
+                            {row.rownum}
+                          </StyledText>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
+                            {row.campaignName}
+                          </StyledText>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
+                            {row.startDate}
+                          </StyledText>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
+                            {row.endDate}
+                          </StyledText>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
 
-          </Box>
-          <Grid container justify="center">
-            <Grid item>
-              <MyPagination
-                itemCount={count}
-                page={page}
-                changePage={changePage}
-                perPage={limit}
-              />
+            </Box>
+            <Grid container justify="center">
+              <Grid item>
+                <MyPagination
+                  itemCount={count}
+                  page={page}
+                  changePage={changePage}
+                  perPage={limit}
+                />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Box> */
+      </Box> */
   );
 }
 

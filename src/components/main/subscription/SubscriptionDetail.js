@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid, Paper } from '@material-ui/core';
+import { Box, Grid, Paper } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
@@ -95,10 +95,10 @@ function SubscriptionDetail(props) {
     <Box
       p={4}
       width={1200}
-      css={{ margin: '0 auto' }}
+      sx={{ margin: '0 auto' }}
       component={Paper}
     >
-      <Box component="h1" css={{ textAlign: 'center' }}>서브스크립션 정보</Box>
+      <Box component="h1" sx={{ textAlign: 'center' }}>서브스크립션 정보</Box>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Box mb={1}><StyledText color="#3f51b5">플랜</StyledText></Box>

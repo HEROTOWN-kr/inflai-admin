@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button, Box
-} from '@material-ui/core';
+} from '@mui/material';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import DashInfluencers from './DashInfluencers';
@@ -14,7 +14,7 @@ function Dashboard(props) {
   useEffect(() => setMenuIndicator(0), []);
 
   return (
-    <Box py={6} width={1200} css={{ margin: '0 auto' }}>
+    <Box py={6} width={1200} sx={{ margin: '0 auto' }}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <DashInfluencers {...props} />

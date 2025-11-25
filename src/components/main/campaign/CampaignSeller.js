@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@material-ui/core';
+} from '@mui/material';
 import axios from 'axios';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import * as PropTypes from 'prop-types';
-import { Description, GetApp, Publish } from '@material-ui/icons';
+import { Description, GetApp, Publish } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledText from '../../containers/StyledText';
@@ -128,9 +128,9 @@ function CampaignSeller(props) {
   }, [page]);
 
   return (
-    <Box mb={1} boxSizing="border-box" maxWidth={1276} css={{ margin: '0 auto' }}>
+    <Box mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
       <Box mb={1}>
-        <Grid container spacing={1} justify="flex-end">
+        <Grid container spacing={1} justifyContent="flex-end">
           <Grid item>
             <StyledButton
               height={40}
@@ -163,7 +163,6 @@ function CampaignSeller(props) {
           </Grid>
         </Grid>
       </Box>
-
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -220,7 +219,7 @@ function CampaignSeller(props) {
         </Table>
       </TableContainer>
       <Box py={4}>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Grid item>
             <MyPagination
               itemCount={count}

@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {
   Box, CircularProgress, Grid, IconButton, InputAdornment, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@material-ui/core';
+} from '@mui/material';
 import { PieChart } from 'react-minimal-pie-chart';
 import axios from 'axios';
 import { Form, Formik } from 'formik';
-import SearchIcon from '@material-ui/icons/Search';
+import SearchIcon from '@mui/icons-material/Search';
 import { useForm } from 'react-hook-form';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import StyledButton from '../../../containers/StyledButton';
 import StyledTableCell from '../../../containers/StyledTableCell';
 import StyledText from '../../../containers/StyledText';
@@ -110,7 +110,7 @@ const tableRows = {
 function LoadingComponent() {
   return (
     <Box height={536}>
-      <Grid container justify="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
+      <Grid container justifyContent="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
         <Grid item>
           <CircularProgress />
         </Grid>
@@ -233,7 +233,7 @@ function InstagramList(props) {
                     classes: { root: classes.root, adornedEnd: classes.endAdornment },
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton onClick={handleSubmit(searchFunc)}>
+                        <IconButton onClick={handleSubmit(searchFunc)} size="large">
                           <SearchIcon fontSize="small" />
                         </IconButton>
                       </InputAdornment>
@@ -275,7 +275,7 @@ function InstagramList(props) {
                   { tableRows.title.map(item => (
                     <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
                       { item.id ? (
-                        <Grid container justify="center">
+                        <Grid container justifyContent="center">
                           <Grid item>
                             <StyledTableSortLabel
                               id={item.id}
@@ -373,7 +373,7 @@ function InstagramList(props) {
             </Table>
           </TableContainer>
           <Box py={4}>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
               <Grid item>
                 <MyPagination
                   itemCount={count}
@@ -386,7 +386,6 @@ function InstagramList(props) {
           </Box>
         </Fragment>
       )}
-
       {/* <Grid container spacing={2}>
         <Grid item md={7} xl={8}>
           <Grid container spacing={2}>

@@ -5,8 +5,8 @@ import {
   withRouter, Switch, Route, Redirect
 } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
-import { Close } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core';
+import { Close } from '@mui/icons-material';
+import makeStyles from '@mui/styles/makeStyles';
 import Main from './main/Main';
 import Login from './login/Login';
 import AuthContext from '../context/AuthContext';

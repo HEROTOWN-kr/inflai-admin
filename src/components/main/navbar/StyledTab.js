@@ -1,4 +1,5 @@
-import { Tab, withStyles } from '@material-ui/core';
+import { Tab } from '@mui/material';
+import withStyles from '@mui/styles/withStyles';
 import React from 'react';
 
 const AntTab = withStyles(theme => ({

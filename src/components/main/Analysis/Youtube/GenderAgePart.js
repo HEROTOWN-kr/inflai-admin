@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid } from '@mui/material';
 import CategoryPieChart from '../CategoryPieChart';
 import BarComponent from '../BarComponent';
 

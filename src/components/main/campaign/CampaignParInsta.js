@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box, Checkbox, FormControlLabel, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@material-ui/core';
+} from '@mui/material';
 import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import StyledText from '../../containers/StyledText';
@@ -201,9 +201,9 @@ function CampaignParInsta() {
   }
 
   return (
-    <Box mb={1} boxSizing="border-box" maxWidth={1276} css={{ margin: '0 auto' }}>
+    <Box mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
       <Box mb={1}>
-        <Grid container justify="flex-end">
+        <Grid container justifyContent="flex-end">
           <Grid item>
             <FormControlLabel
               control={(
@@ -358,7 +358,7 @@ function CampaignParInsta() {
         </Table>
       </TableContainer>
       <Box py={4}>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Grid item>
             <MyPagination
               itemCount={count}

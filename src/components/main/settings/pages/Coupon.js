@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box, IconButton, Table, TableBody, TableHead, TableRow, Typography, Grid
-} from '@material-ui/core';
+} from '@mui/material';
 import axios from 'axios';
-import { Delete, Edit } from '@material-ui/icons';
+import { Delete, Edit } from '@mui/icons-material';
 import StyledTableCell from '../../../containers/StyledTableCell';
 import StyledText from '../../../containers/StyledText';
 import StyledTableRow from '../../../containers/StyledTableRow';
@@ -104,7 +104,7 @@ function Coupon(props) {
           </TableBody>
         </Table>
         <Box pt={4}>
-          <Grid container justify="center">
+          <Grid container justifyContent="center">
             <Grid item>
               <MyPagination
                 itemCount={couponsCount}

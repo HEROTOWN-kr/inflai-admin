@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
   Box,
   Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@material-ui/core';
+} from '@mui/material';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
@@ -63,7 +63,7 @@ function RequestList(props) {
   }
 
   return (
-    <Box mt={4} width={1200} css={{ margin: '0 auto' }}>
+    <Box mt={4} width={1200} sx={{ margin: '0 auto' }}>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
@@ -99,7 +99,7 @@ function RequestList(props) {
         </Table>
       </TableContainer>
       <Box py={4}>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Grid item>
             <MyPagination
               itemCount={count}

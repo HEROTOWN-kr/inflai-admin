@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@material-ui/core';
+} from '@mui/material';
 import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
@@ -48,7 +48,7 @@ function DashInfluencers(props) {
   return (
     <React.Fragment>
       <Box className="category-label">
-        <Grid container justify="space-between">
+        <Grid container justifyContent="space-between">
           <Grid item>신규가입인플루언서</Grid>
           <Grid item>
             <button onClick={() => history.push('/Influencer')}>

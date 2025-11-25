@@ -1,11 +1,11 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {
   Box, CircularProgress, Grid, IconButton, Tooltip, useMediaQuery, useTheme
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Cancel, HelpOutline, NotificationsNone, RemoveRedEyeOutlined, ThumbUpOutlined
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import defaultAccountImage from '../../../../img/default_account_image.png';
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       boxShadow: '0 0 25px -5px #9e9c9e',
     },
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       padding: '12px 16px',
     }
   },
@@ -231,7 +231,7 @@ function LoadingPage() {
   const classes = useStyles();
   return (
     <Box bgcolor="#3CBFFC" height="calc(100vh - 32px)">
-      <Grid container justify="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
+      <Grid container justifyContent="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
         <Grid item>
           <CircularProgress classes={{ colorPrimary: classes.circular }} />
         </Grid>
@@ -337,7 +337,10 @@ function YoutubeAnalysis(props) {
       ) : (
         <Box bgcolor="#f6f7fb" p={2} position="relative">
           <Box position="absolute" top="0" right="0">
-            <IconButton style={{ position: 'fixed', color: '#fff' }} onClick={closeDialog}>
+            <IconButton
+              style={{ position: 'fixed', color: '#fff' }}
+              onClick={closeDialog}
+              size="large">
               <Cancel />
             </IconButton>
           </Box>
@@ -370,7 +373,7 @@ function YoutubeAnalysis(props) {
                   <Box mb={{ xs: '2px', md: 1 }}>
                         구독자수
                   </Box>
-                  <Grid container justify="space-between" alignItems="center">
+                  <Grid container justifyContent="space-between" alignItems="center">
                     {isMD ? (
                       <Grid item>
                         <NotificationsNone fontSize="large" />
@@ -389,7 +392,7 @@ function YoutubeAnalysis(props) {
                   <Box mb={{ xs: '2px', md: 1 }}>
                         최근 조회수(누적)
                   </Box>
-                  <Grid container justify="space-between" alignItems="center">
+                  <Grid container justifyContent="space-between" alignItems="center">
                     {isMD ? (
                       <Grid item>
                         <RemoveRedEyeOutlined fontSize="large" />
@@ -408,7 +411,7 @@ function YoutubeAnalysis(props) {
                   <Box mb={{ xs: '2px', md: 1 }}>
                         최근 좋아요 수(누적)
                   </Box>
-                  <Grid container justify="space-between" alignItems="center">
+                  <Grid container justifyContent="space-between" alignItems="center">
                     {isMD ? (
                       <Grid item>
                         <ThumbUpOutlined fontSize="large" />

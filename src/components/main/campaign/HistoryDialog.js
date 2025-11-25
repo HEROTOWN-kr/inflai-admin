@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import {
-  Box, Button, Dialog, Grid, IconButton, makeStyles, useMediaQuery
-} from '@material-ui/core';
-import { Clear } from '@material-ui/icons';
-import { useTheme } from '@material-ui/core/styles';
+import { Box, Button, Dialog, Grid, IconButton, useMediaQuery } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Clear } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
@@ -115,7 +114,7 @@ function HistoryDialog(props) {
   const classes = useStyles();
   const theme = useTheme();
   const isMD = useMediaQuery(theme.breakpoints.up('md'));
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   function getHistory() {
     axios.get('/api/TB_PARTICIPANT/getHistory', { params: { INF_ID } }).then((res) => {

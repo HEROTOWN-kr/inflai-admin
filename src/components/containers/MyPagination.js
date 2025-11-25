@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pagination } from '@material-ui/lab';
+import { Pagination } from '@mui/material';
 
 function MyPagination(props) {
   const {

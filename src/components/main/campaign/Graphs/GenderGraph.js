@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Grid } from '@material-ui/core';
+import { Box, CircularProgress, Grid } from '@mui/material';
 import axios from 'axios';
 import { Colors } from '../../../../lib/Сonstants';
 import StyledText from '../../../containers/StyledText';
@@ -33,14 +33,14 @@ function GenderGraph(props) {
         <React.Fragment>
           { statistics ? (
             <Grid container spacing={1}>
-              <Grid item xs={12} container justify="space-between">
+              <Grid item xs={12} container justifyContent="space-between">
                 <Grid item>
                   <Grid container spacing={1} alignItems="center">
                     <Grid item>
                       <Box
                         width="10px"
                         height="10px"
-                        css={{
+                        sx={{
                           backgroundColor: Colors.orange,
                           borderRadius: '100%'
                         }}
@@ -59,7 +59,7 @@ function GenderGraph(props) {
                       <Box
                         width="10px"
                         height="10px"
-                        css={{
+                        sx={{
                           backgroundColor: Colors.blue2,
                           borderRadius: '100%'
                         }}
@@ -76,7 +76,7 @@ function GenderGraph(props) {
               <Grid item xs={12}>
                 <Box
                   height="24px"
-                  css={{
+                  sx={{
                     borderRadius: '12px',
                     overflow: 'hidden',
                     backgroundColor: Colors.blue2
@@ -85,7 +85,7 @@ function GenderGraph(props) {
                   <Box
                     height="inherit"
                     width={`${statistics}%`}
-                    css={{
+                    sx={{
                       backgroundColor: Colors.orange,
                       overflow: 'hidden'
                     }}

@@ -1,12 +1,23 @@
 import React, { Fragment, useState } from 'react';
 import {
-  Box, Button, Divider, Drawer, Icon, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, SvgIcon
-} from '@material-ui/core';
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  Icon,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  SvgIcon,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { Link, useHistory } from 'react-router-dom';
 import {
   AccountBalanceWallet, Settings, Dashboard, Help,
   Equalizer, MonetizationOn, YouTube, AccessibilityNew, Menu
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 import AntTabs from './StyledTabs';
 import AntTab from './StyledTab';
 import StyledButton from '../../containers/StyledButton';
@@ -117,7 +128,12 @@ function NavbarLinks(props) {
         </AntTabs>
       ) : (
         <Fragment>
-          <IconButton edge="start" className={classes.menuButton} aria-label="menu" onClick={toggleDrawer}>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            aria-label="menu"
+            onClick={toggleDrawer}
+            size="large">
             <Menu />
           </IconButton>
           <Drawer anchor="right" open={sideBarOpen} onClose={toggleDrawer}>

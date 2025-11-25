@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { colors } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { colors } from '@mui/material';
 
 const analysisStyles = makeStyles(theme => ({
   colorViolet: {
@@ -70,7 +70,7 @@ const analysisStyles = makeStyles(theme => ({
     '&:hover': {
       boxShadow: '0 0 25px -5px #9e9c9e',
     },
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       padding: '12px 16px',
     }
   },

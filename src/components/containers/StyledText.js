@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Box } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { Colors } from '../../lib/Сonstants';
 
 const useStyles = makeStyles({

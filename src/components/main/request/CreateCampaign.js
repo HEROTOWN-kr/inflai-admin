@@ -11,7 +11,7 @@ import {
   Button,
   FormHelperText,
   FormControl
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   Field, Form, Formik, FormikProps, getIn, FieldProps, ErrorMessage, useField, FieldArray
 } from 'formik';
@@ -185,7 +185,7 @@ function CreateCampaign(props) {
   }) {
     return (
       <Grid item md={12}>
-        <Grid container justify="space-between" alignItems="center">
+        <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>
             <span className="result-text">{text}</span>
           </Grid>
@@ -240,7 +240,7 @@ function CreateCampaign(props) {
   return (
     <div className="request-create data-form">
       {process ? (
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <CircularProgress />
         </Grid>
       ) : (
@@ -651,7 +651,7 @@ function CreateCampaign(props) {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid container justify="center" item md={12}>
+                <Grid container justifyContent="center" item md={12}>
                   <Grid item md={3}>
                     <Button fullWidth onClick={submitForm} variant="contained" color="primary">
                       등록

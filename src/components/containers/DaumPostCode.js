@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import ReactFormText from './ReactFormText';
 import StyledButton from './StyledButton';
 

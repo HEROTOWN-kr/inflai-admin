@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   Box, Grid, IconButton, Table, TableBody, TableHead, TableRow
-} from '@material-ui/core';
-import { Edit, Delete } from '@material-ui/icons';
+} from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
 import StyledTitle from '../../containers/StyledTitle';
 import StyledText from '../../containers/StyledText';
 import StyledTableCell from '../../containers/StyledTableCell';
@@ -133,7 +133,7 @@ function SubscriptionList(props) {
   }
 
   return (
-    <Box py={6} width={1200} css={{ margin: '0 auto' }}>
+    <Box py={6} width={1200} sx={{ margin: '0 auto' }}>
       <StyledTitle title="서브스크립션 리스트" />
       <Table aria-label="customized table">
         <TableHead>
@@ -188,10 +188,10 @@ function SubscriptionList(props) {
                 </StyledText>
               </StyledTableCell>
               <StyledTableCell align="center">
-                <IconButton onClick={event => openDialog(item.id)}>
+                <IconButton onClick={event => openDialog(item.id)} size="large">
                   <Edit />
                 </IconButton>
-                <IconButton>
+                <IconButton size="large">
                   <Delete />
                 </IconButton>
               </StyledTableCell>
@@ -200,7 +200,7 @@ function SubscriptionList(props) {
         </TableBody>
       </Table>
       <Box py={4}>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Grid item>
             <MyPagination
               itemCount={count}

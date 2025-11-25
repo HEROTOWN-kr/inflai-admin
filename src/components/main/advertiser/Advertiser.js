@@ -9,7 +9,7 @@ import {
   Paper,
   Grid,
   Box
-} from '@material-ui/core';
+} from '@mui/material';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
@@ -67,7 +67,7 @@ function Advertiser(props) {
   };
 
   return (
-    <Box py={6} width={1200} css={{ margin: '0 auto' }}>
+    <Box py={6} width={1200} sx={{ margin: '0 auto' }}>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
@@ -109,7 +109,7 @@ function Advertiser(props) {
         </Table>
       </TableContainer>
       <Box py={4}>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Grid item>
             <MyPagination
               itemCount={count}

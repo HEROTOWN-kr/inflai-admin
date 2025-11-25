@@ -1,7 +1,7 @@
 import React from 'react';
-import { HelpOutline } from '@material-ui/icons';
-import { Tooltip } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { HelpOutline } from '@mui/icons-material';
+import { Tooltip } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import analysisStyles from './AnalysisStyle';
 
 const useStyles = makeStyles({

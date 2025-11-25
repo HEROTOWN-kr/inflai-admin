@@ -4,9 +4,9 @@ import {
   Link, Redirect, Route, Switch
 } from 'react-router-dom';
 
-import {
-  Box, makeStyles, Tab, Tabs, Typography, withStyles
-} from '@material-ui/core';
+import { Box, Tab, Tabs, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
 import Youtube from './Youtube/Youtube';
 import Instagram from './Instagram/Instagram';
 import StyledTabs from '../../containers/StyledTabs';

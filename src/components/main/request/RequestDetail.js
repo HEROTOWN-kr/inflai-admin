@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button, Grid, Divider, CircularProgress, Box, Paper
-} from '@material-ui/core';
+} from '@mui/material';
 import axios from 'axios';
 import nameArray from '../../../lib/nameArray';
 
@@ -39,10 +39,10 @@ function RequestDetail(props) {
   }
 
   return (
-    <Box mt={4} p={4} component={Paper} width={780} css={{ margin: '0 auto', boxSizing: 'border-box' }}>
+    <Box mt={4} p={4} component={Paper} width={780} sx={{ margin: '0 auto', boxSizing: 'border-box' }}>
       <div className="request-detail data-form">
         {process ? (
-          <Grid container justify="center">
+          <Grid container justifyContent="center">
             <CircularProgress />
           </Grid>
         ) : (
@@ -171,7 +171,6 @@ function RequestDetail(props) {
         )}
       </div>
     </Box>
-
   );
 }
 

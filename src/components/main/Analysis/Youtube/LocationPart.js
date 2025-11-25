@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid } from '@mui/material';
 import { Bar, HorizontalBar } from 'react-chartjs-2';
 import MapGraph from '../../campaign/Graphs/MapGraph';
 import CategoryPieChart from '../CategoryPieChart';

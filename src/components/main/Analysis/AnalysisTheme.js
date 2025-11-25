@@ -1,6 +1,6 @@
-import { colors, createMuiTheme } from '@material-ui/core';
+import { colors, createTheme, adaptV4Theme } from '@mui/material';
 
-const styleTheme = createMuiTheme({
+const styleTheme = createTheme(adaptV4Theme({
   palette: {
     orange: {
       main: colors.orange[500]
@@ -46,6 +46,6 @@ const styleTheme = createMuiTheme({
     }
   }
 
-});
+}));
 
 export default styleTheme;

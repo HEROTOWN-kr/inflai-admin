@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import {
   Route, Switch, Redirect, useRouteMatch, useHistory
 } from 'react-router-dom';
-import {
-  Box, Grid, List, ListItem, ListItemIcon, ListItemText, makeStyles
-} from '@material-ui/core';
-import { Drafts, Inbox, Notifications } from '@material-ui/icons';
+import { Box, Grid, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Drafts, Inbox, Notifications } from '@mui/icons-material';
 import KakaoNotify from './pages/KakaoNotify';
 import NotFound from '../NotFound';
 import Coupon from './pages/Coupon';

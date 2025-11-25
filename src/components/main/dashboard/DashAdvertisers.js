@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@material-ui/core';
+} from '@mui/material';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 
@@ -45,7 +45,7 @@ function DashAdvertisers(props) {
   return (
     <React.Fragment>
       <Box className="category-label">
-        <Grid container justify="space-between">
+        <Grid container justifyContent="space-between">
           <Grid item>신규가입광고주</Grid>
           <Grid item>
             <button onClick={() => history.push('/Advertiser')}>

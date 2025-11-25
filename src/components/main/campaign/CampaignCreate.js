@@ -8,7 +8,7 @@ import {
   Radio,
   RadioGroup,
   TextareaAutosize,
-} from '@material-ui/core';
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -240,10 +240,10 @@ function CampaignCreate(props) {
       mt={4}
       p={4}
       width={1200}
-      css={{ margin: '0 auto', boxSizing: 'border-box' }}
+      sx={{ margin: '0 auto', boxSizing: 'border-box' }}
       component={Paper}
     >
-      <Box component="h1" css={{ textAlign: 'center' }}>캠페인 정보</Box>
+      <Box component="h1" sx={{ textAlign: 'center' }}>캠페인 정보</Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -404,7 +404,7 @@ function CampaignCreate(props) {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">짧은설명</StyledText></Box>
-            <TextareaAutosize ref={register} rowsMin={8} style={{ width: '99%' }} placeholder="짧은설명" name="shortDisc" />
+            <TextareaAutosize ref={register} minRows={8} style={{ width: '99%' }} placeholder="짧은설명" name="shortDisc" />
             {
               errors.shortDisc ? (
                 <div className="error-message">{errors.shortDisc.message}</div>
@@ -417,7 +417,7 @@ function CampaignCreate(props) {
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}><StyledText color="#3f51b5">참여 안내 사항</StyledText></Box>
-            <TextareaAutosize ref={register} rowsMin={8} style={{ width: '99%' }} placeholder="참여 안내 사항" name="discription" />
+            <TextareaAutosize ref={register} minRows={8} style={{ width: '99%' }} placeholder="참여 안내 사항" name="discription" />
             {
               errors.discription ? (
                 <div className="error-message">{errors.discription.message}</div>
@@ -439,7 +439,7 @@ function CampaignCreate(props) {
             <CKEditorComponent setValue={setValue} name="provideInfo" control={control} campaignEditor={campaignEditor} setCampaignEditor={setCampaignEditor} />
           </Grid>
           <Grid item xs={12}>
-            <Grid container justify="center" spacing={1}>
+            <Grid container justifyContent="center" spacing={1}>
               <Grid item xs={2}><StyledButton onClick={goBack}>취소</StyledButton></Grid>
               <Grid item xs={2}><StyledButton onClick={handleSubmit(onSubmit)}>저장하기</StyledButton></Grid>
               {/* <Grid item xs={2}><StyledButton onClick={handleSubmit(onSubmit2)}>test</StyledButton></Grid> */}

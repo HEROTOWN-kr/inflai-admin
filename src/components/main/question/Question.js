@@ -2,8 +2,18 @@ import React, {
   Fragment, useContext, useEffect, useState
 } from 'react';
 import {
-  Box, Grid, Paper, Table, TableHead, TableRow, TableContainer, TableBody, makeStyles, useMediaQuery, useTheme
-} from '@material-ui/core';
+  Box,
+  Grid,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableContainer,
+  TableBody,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import axios from 'axios';
 import { useHistory, useParams } from 'react-router-dom';
 import StyledImage from '../../containers/StyledImage';
@@ -84,7 +94,7 @@ const useStyles = makeStyles(theme => ({
     height: '276px',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '60px',
       height: '60px',
     }
@@ -206,7 +216,7 @@ function Question(props) {
                   </Table>
                 </TableContainer>
                 <Box py={4}>
-                  <Grid container justify="center">
+                  <Grid container justifyContent="center">
                     <Grid item>
                       <MyPagination
                         itemCount={count}

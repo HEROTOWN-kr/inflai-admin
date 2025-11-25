@@ -9,14 +9,14 @@ import {
   TableHead,
   TableRow, Tooltip,
   IconButton, InputAdornment, CircularProgress
-} from '@material-ui/core';
+} from '@mui/material';
 import {
   Edit, Delete, Description, Create, FileCopy
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 import axios from 'axios';
-import SearchIcon from '@material-ui/icons/Search';
+import SearchIcon from '@mui/icons-material/Search';
 import { useForm } from 'react-hook-form';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
 import MyPagination from '../../containers/MyPagination';
@@ -230,7 +230,7 @@ function CampaignList(props) {
   return (
     <Box m="0 auto" maxWidth={1276}>
       <Box mb={1}>
-        <Grid container justify="space-between" alignItems="center" spacing={1}>
+        <Grid container justifyContent="space-between" alignItems="center" spacing={1}>
           <Grid item>
             <StyledSelect
               classes={{ root: classes.root }}
@@ -257,7 +257,7 @@ function CampaignList(props) {
                   classes: { root: classes.root, adornedEnd: classes.endAdornment },
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={handleSubmit(searchFunc)}>
+                      <IconButton onClick={handleSubmit(searchFunc)} size="large">
                         <SearchIcon fontSize="small" />
                       </IconButton>
                     </InputAdornment>
@@ -306,10 +306,9 @@ function CampaignList(props) {
           </Grid>
         </Grid>
       </Box>
-
       { loading ? (
         <Box minHeight={500}>
-          <Grid container justify="center" alignItems="center" style={{ minHeight: 'inherit' }}>
+          <Grid container justifyContent="center" alignItems="center" style={{ minHeight: 'inherit' }}>
             <Grid item>
               <CircularProgress />
             </Grid>
@@ -453,17 +452,29 @@ function CampaignList(props) {
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     <Tooltip title="수정" placement="top">
-                      <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={event => campaignDetail(event, row.id)}>
+                      <IconButton
+                        classes={{ root: classes.iconButton }}
+                        disableRipple
+                        onClick={event => campaignDetail(event, row.id)}
+                        size="large">
                         <Edit />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="복사" placement="top">
-                      <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={() => copyCampaign(row.id)}>
+                      <IconButton
+                        classes={{ root: classes.iconButton }}
+                        disableRipple
+                        onClick={() => copyCampaign(row.id)}
+                        size="large">
                         <FileCopy />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="삭제" placement="top">
-                      <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={() => { setSelectedCampaign(row.id); setDialogOpen(true); }}>
+                      <IconButton
+                        classes={{ root: classes.iconButton }}
+                        disableRipple
+                        onClick={() => { setSelectedCampaign(row.id); setDialogOpen(true); }}
+                        size="large">
                         <Delete />
                       </IconButton>
                     </Tooltip>
@@ -474,9 +485,8 @@ function CampaignList(props) {
           </Table>
         </TableContainer>
       ) }
-
       <Box py={4}>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Grid item>
             <MyPagination
               itemCount={count}

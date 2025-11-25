@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import {
-  Box, Button, Dialog, Grid, IconButton, makeStyles, useMediaQuery
-} from '@material-ui/core';
-import { Clear } from '@material-ui/icons';
-import { useTheme } from '@material-ui/core/styles';
+import { Box, Button, Dialog, Grid, IconButton, useMediaQuery } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Clear } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { Colors } from '../../../lib/Сonstants';
@@ -41,7 +40,7 @@ function CopyDialog(props) {
   const classes = useStyles();
   const history = useHistory();
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   function close() {
     setType(null);
@@ -79,7 +78,7 @@ function CopyDialog(props) {
       <Box px={2} py={2} textAlign="center" boxSizing="border-box">
           SNS를 선택해주세요
         <Box m="0 auto" mt={2} width={240}>
-          <Grid container justify="space-between">
+          <Grid container justifyContent="space-between">
             <Grid item>
               <Box
                 p={1}

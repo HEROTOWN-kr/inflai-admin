@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, CircularProgress } from '@material-ui/core';
+import { Box, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { map } from 'async';
 

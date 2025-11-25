@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/sub.scss';
-import { Grid, Button, Box } from '@material-ui/core';
+import { Grid, Button, Box } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -29,7 +29,7 @@ function Login({
   }, [user]);
 
   return (
-    <Grid container className="login" alignItems="center" justify="center">
+    <Grid container className="login" alignItems="center" justifyContent="center">
       <Grid item>
         <Box
           width="320px"

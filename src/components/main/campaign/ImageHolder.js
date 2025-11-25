@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, Grid } from '@material-ui/core';
+import { Divider, Grid } from '@mui/material';
 import axios from 'axios';
 import StyledImage from '../../containers/StyledImage';
 import { Colors } from '../../../lib/Сonstants';

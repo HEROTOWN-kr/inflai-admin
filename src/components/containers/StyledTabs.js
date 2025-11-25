@@ -1,4 +1,6 @@
-import { Tabs, withStyles } from '@material-ui/core';
+import { Tabs } from '@mui/material';
+
+import withStyles from '@mui/styles/withStyles';
 
 const StyledTabs = withStyles({
   indicator: {

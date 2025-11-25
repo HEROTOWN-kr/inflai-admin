@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   AppBar, Box, Button, Grid, useMediaQuery, useTheme
-} from '@material-ui/core';
+} from '@mui/material';
 import NavbarLogo from './NavbarLogo';
 import NavbarLinks from './NavbarLinks';
 import { Colors } from '../../../lib/Сonstants';
@@ -14,7 +14,7 @@ function Navbar(props) {
 
   return (
     <Box px={{ xs: 2, md: 8 }} bgcolor={Colors.darkBlue}>
-      <Grid container justify="space-between" alignItems="center">
+      <Grid container justifyContent="space-between" alignItems="center">
         <Grid item>
           <NavbarLogo />
         </Grid>

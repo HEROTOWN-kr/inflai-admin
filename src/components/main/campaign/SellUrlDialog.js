@@ -1,10 +1,9 @@
 import React from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Box, Dialog, Grid, makeStyles
-} from '@material-ui/core';
-import { Clear } from '@material-ui/icons';
+import { Box, Dialog, Grid } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Clear } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import StyledButton from '../../containers/StyledButton';
@@ -78,14 +77,15 @@ export default function SellUrlDialog(props) {
 
   return (
     <Dialog
+      // fullScreen={fullScreen}
       classes={{ paper: classes.paper }}
-            // fullScreen={fullScreen}
       open={open}
-      onEntered={checkUrl}
       onClose={onDialogClose}
       maxWidth="xs"
       aria-labelledby="responsive-dialog-title"
-    >
+      TransitionProps={{
+        onEntered: checkUrl
+      }}>
       <Box padding="20px" fontSize="18px" fontWeight="400" lineHeight="18px" position="relative" borderBottom={`1px solid ${Colors.grey8}`}>
         판매링크 등록
         <Clear onClick={onDialogClose} classes={{ root: classes.root }} />
@@ -100,7 +100,7 @@ export default function SellUrlDialog(props) {
             placeholder="예시) https://herotownshop.cafe24.com/product/detail.html?product_no=10&cate_no=1&display_group=2"
           />
         </Box>
-        <Grid container spacing={2} justify="center">
+        <Grid container spacing={2} justifyContent="center">
           <Grid item>
             <Box width="100px">
               <StyledButton height={38} padding="0" onClick={onDialogClose}>

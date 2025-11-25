@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box, Button, Dialog, Grid, IconButton, makeStyles
-} from '@material-ui/core';
-import { Clear } from '@material-ui/icons';
+import { Box, Button, Dialog, Grid, IconButton } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Clear } from '@mui/icons-material';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -151,7 +150,7 @@ function QuestionDialog(props) {
         </Box>
 
         <Box mt="30px">
-          <Grid container justify="center" spacing={1}>
+          <Grid container justifyContent="center" spacing={1}>
             <Grid item>
               <Box width="110px">
                 <Button

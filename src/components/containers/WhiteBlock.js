@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import React from 'react';
 import { Colors } from '../../lib/Сonstants';
 
@@ -10,9 +10,9 @@ function WhiteBlock(props) {
 
   return (
     <Box
-      css={{ background: Colors.white }}
+      sx={{ background: Colors.white }}
       border="1px solid #e9ecef"
-      borderRadius={borderRadius || '7px'}
+      borderRadius="undefinedpx"
       height={height || 'auto'}
     >
       {children}

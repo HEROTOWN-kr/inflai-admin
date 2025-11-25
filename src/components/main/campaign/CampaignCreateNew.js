@@ -5,14 +5,15 @@ import React, {
 import axios from 'axios';
 import {
   Box, Grid, Paper, FormControlLabel, RadioGroup, Radio, InputAdornment, Typography, IconButton, Checkbox
-} from '@material-ui/core';
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { ArrowRightAlt, Clear } from '@material-ui/icons';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import { ArrowRightAlt, Clear } from '@mui/icons-material';
 import moment from 'moment';
 import { useSnackbar } from 'notistack';
 import StyledText from '../../containers/StyledText';
@@ -384,8 +385,6 @@ function CampaignCreateNew() {
         ))}
 
       </Grid> */}
-
-
       <Box mt="26px" color="#000" fontSize="40px" fontWeight={700} textAlign="center">
           캠페인 정보
       </Box>
@@ -1057,7 +1056,7 @@ function CampaignCreateNew() {
                   classes: { adornedEnd: classes.endAdornment },
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={addLink}>
+                      <IconButton onClick={addLink} size="large">
                         <ArrowRightAlt fontSize="small" />
                       </IconButton>
                     </InputAdornment>
@@ -1129,7 +1128,7 @@ function CampaignCreateNew() {
         </Grid>
       </Box>
       <Box mb={8}>
-        <Grid container justify="center" spacing={3}>
+        <Grid container justifyContent="center" spacing={3}>
           <Grid item xs={6} sm="auto">
             <Box width={isSM ? '200px' : '100%'}>
               <StyledButton background={Colors.pink3} hoverBackground={Colors.pink} onClick={() => history.push('/')}>취소</StyledButton>

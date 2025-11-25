@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box, colors, Grid, LinearProgress, Typography, useMediaQuery, useTheme
-} from '@material-ui/core';
-import { FiberManualRecord } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import { FiberManualRecord } from '@mui/icons-material';
+import makeStyles from '@mui/styles/makeStyles';
 import axios from 'axios';
 import { PieChart } from 'react-minimal-pie-chart';
 import DoughnutComponent from '../DoughnutComponent';
@@ -130,7 +130,7 @@ function AudiencePart(props) {
                 </Grid>
               </Box>
               <Box mt="30px">
-                <Grid container justify="space-between">
+                <Grid container justifyContent="space-between">
                   <Grid item>
                     <Typography variant="body1" color="textSecondary">충성도있는 팔로워</Typography>
                   </Grid>
@@ -141,7 +141,7 @@ function AudiencePart(props) {
                 <Box my={1}>
                   <LinearProgress variant="determinate" value={followerActivity.flwrsMax} classes={{ barColorPrimary: barClasses.orange }} />
                 </Box>
-                <Grid container justify="space-between">
+                <Grid container justifyContent="space-between">
                   <Grid item>
                     <Typography variant="body1" classes={{ root: classes.bold }}>{`${followerActivity.flwrsMax}명 (${followerActivity.flwrsMaxPer}%)`}</Typography>
                   </Grid>
@@ -252,7 +252,7 @@ function AudiencePart(props) {
                 </Grid>
               </Grid>
             ) : (
-              <Grid container alignItems="center" justify="center" style={{ height: '100%' }}>
+              <Grid container alignItems="center" justifyContent="center" style={{ height: '100%' }}>
                 <Grid item>
                     로딩 중...
                 </Grid>
@@ -296,7 +296,7 @@ function AudiencePart(props) {
             <Box p="20px" bgcolor="#FFF" borderRadius="7px">
               {testData.language.map(item => (
                 <Box key={item.lng}>
-                  <Grid container justify="space-between">
+                  <Grid container justifyContent="space-between">
                     <Grid item>
                       <Typography variant="body1" color="textSecondary">
                         {item.lng}
@@ -320,7 +320,7 @@ function AudiencePart(props) {
             <Box p="20px" bgcolor="#FFF" borderRadius="7px">
               { ageData.map((item, index) => (
                 <Box key={item.age}>
-                  <Grid container justify="space-between">
+                  <Grid container justifyContent="space-between">
                     <Grid item>
                       <Typography variant="body1" color="textSecondary">
                         {item.age}
@@ -347,7 +347,7 @@ function AudiencePart(props) {
                   <Box mx={5} mt="30px">
                     <DoughnutComponent chartData={[femaleSum, maleSum]} chartWidth={140} chartHeight={140} chartColor={['#6E0FFF', 'rgba(0, 0, 0, 0.2)']} />
                     <Box mt="25px">
-                      <Grid container alignItems="center" justify="center">
+                      <Grid container alignItems="center" justifyContent="center">
                         <Grid item>
                           <FiberManualRecord classes={{ fontSizeSmall: classes.colorGrey2 }} fontSize="small" />
                         </Grid>
@@ -355,7 +355,7 @@ function AudiencePart(props) {
                           <Box>{`남성 ${genderData.malePercent}%`}</Box>
                         </Grid>
                       </Grid>
-                      <Grid container alignItems="center" justify="center">
+                      <Grid container alignItems="center" justifyContent="center">
                         <Grid item>
                           <FiberManualRecord classes={{ fontSizeSmall: classes.colorViolet }} fontSize="small" />
                         </Grid>

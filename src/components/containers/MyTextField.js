@@ -1,15 +1,13 @@
 import React from 'react';
-import {
-  TextField, InputAdornment, SvgIcon, IconButton
-} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { TextField, InputAdornment, SvgIcon, IconButton, adaptV4Theme } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import '../../css/sub.scss';
 import { useField } from 'formik';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 
 
 function MyTextField(props) {
-  const theme = createMuiTheme({
+  const theme = createTheme(adaptV4Theme({
     overrides: {
       // Style sheet name ⚛️
       MuiOutlinedInput: {
@@ -20,7 +18,7 @@ function MyTextField(props) {
         },
       },
     },
-  });
+  }));
 
   const {
     name, label, type, onEnter, ph, sA, eA, clickFunc
@@ -32,9 +30,7 @@ function MyTextField(props) {
   if (eA) {
     adornments.endAdornment = typeof (eA) === 'object' ? (
       <InputAdornment position="end">
-        <IconButton
-          onClick={() => clickFunc(meta.value)}
-        >
+        <IconButton onClick={() => clickFunc(meta.value)} size="large">
           <SvgIcon component={eA} />
         </IconButton>
       </InputAdornment>
@@ -48,33 +44,34 @@ function MyTextField(props) {
       <div className="label-holder">
         <label htmlFor={label}>{label}</label>
       </div>
-      <ThemeProvider theme={theme}>
-        <TextField
-          error={meta.touched && meta.error}
-          name={field.name}
-          type={type || 'text'}
-          id={label}
-                // className={classes.textField}
-          placeholder={ph || null}
-          value={meta.value}
-          onChange={field.onChange}
-          onBlur={field.onBlur}
-          fullWidth
-          variant="outlined"
-          InputProps={adornments}
-          helperText={meta.touched && meta.error ? (
-            <span className="error-message">{meta.error}</span>
-          ) : null}
-          onKeyPress={(ev) => {
-            if (onEnter && ev.key === 'Enter') {
-              // Do code here
-              ev.preventDefault();
-              onEnter(meta.value);
-            }
-          }}
-        />
-      </ThemeProvider>
-
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <TextField
+            error={meta.touched && meta.error}
+            name={field.name}
+            type={type || 'text'}
+            id={label}
+                  // className={classes.textField}
+            placeholder={ph || null}
+            value={meta.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            fullWidth
+            variant="outlined"
+            InputProps={adornments}
+            helperText={meta.touched && meta.error ? (
+              <span className="error-message">{meta.error}</span>
+            ) : null}
+            onKeyPress={(ev) => {
+              if (onEnter && ev.key === 'Enter') {
+                // Do code here
+                ev.preventDefault();
+                onEnter(meta.value);
+              }
+            }}
+          />
+        </ThemeProvider>
+      </StyledEngineProvider>
     </React.Fragment>
   );
 }

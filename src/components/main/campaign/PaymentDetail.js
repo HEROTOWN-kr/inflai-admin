@@ -9,8 +9,9 @@ import {
   TableHead,
   TableRow,
   TableFooter,
-  withStyles, Button
-} from '@material-ui/core';
+  Button,
+} from '@mui/material';
+import withStyles from '@mui/styles/withStyles';
 import axios from 'axios';
 import StyledTableCell from '../../containers/StyledTableCell';
 import StyledTableRow from '../../containers/StyledTableRow';
@@ -140,7 +141,7 @@ function PaymentDetail(props) {
   }, []);
 
   return (
-    <Grid container justify="center">
+    <Grid container justifyContent="center">
       <Grid item md={10}>
         <Grid container spacing={3}>
           <Grid item md={12}>
@@ -175,7 +176,7 @@ function PaymentDetail(props) {
             </TableContainer>
           </Grid>
           <Grid item md={12}>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
               <Grid item md={2}>
                 <Button variant="contained" color="secondary" fullWidth onClick={props.goBack}>이전</Button>
               </Grid>

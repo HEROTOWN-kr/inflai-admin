@@ -1,9 +1,8 @@
 import React from 'react';
-import {
-  Box, Dialog, useMediaQuery, IconButton, makeStyles, Typography, Grid
-} from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
-import { Clear } from '@material-ui/icons';
+import { Box, Dialog, useMediaQuery, IconButton, Typography, Grid } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { useTheme } from '@mui/material/styles';
+import { Clear } from '@mui/icons-material';
 import { useHistory } from 'react-router-dom';
 import { Colors } from '../../../lib/Сonstants';
 
@@ -26,7 +25,7 @@ function ParticipantDialog(props) {
   const { open, closeDialog } = props;
   const history = useHistory();
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const classes = useStyles();
 
   function clickCategory(url) {

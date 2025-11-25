@@ -4,12 +4,13 @@ import {
   Paper, Table, TableBody,
   TableContainer, TableHead, TableRow,
   InputAdornment, CircularProgress
-} from '@material-ui/core';
+} from '@mui/material';
 import axios from 'axios';
-import { AssessmentRounded } from '@material-ui/icons/';
-import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
+import { AssessmentRounded } from '@mui/icons-material/';
+import { createTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useForm } from 'react-hook-form';
-import SearchIcon from '@material-ui/icons/Search';
+import SearchIcon from '@mui/icons-material/Search';
 import moment from 'moment';
 import StyledTableCell from '../../../containers/StyledTableCell';
 import MyPagination from '../../../containers/MyPagination';
@@ -76,7 +77,7 @@ const defaultUpdateTime = moment().set({ h: 4, m: 0, s: 0 }).format('YYYY-MM-DD 
 function LoadingComponent() {
   return (
     <Box height={536}>
-      <Grid container justify="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
+      <Grid container justifyContent="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
         <Grid item>
           <CircularProgress />
         </Grid>
@@ -184,7 +185,7 @@ function Youtube(props) {
                     classes: { root: classes.root, adornedEnd: classes.endAdornment },
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton onClick={handleSubmit(searchFunc)}>
+                        <IconButton onClick={handleSubmit(searchFunc)} size="large">
                           <SearchIcon fontSize="small" />
                         </IconButton>
                       </InputAdornment>
@@ -230,7 +231,7 @@ function Youtube(props) {
                       width={item.width}
                     >
                       { item.id ? (
-                        <Grid container justify="center">
+                        <Grid container justifyContent="center">
                           <Grid item>
                             <StyledTableSortLabel
                               id={item.id}
@@ -281,7 +282,7 @@ function Youtube(props) {
             </Table>
           </TableContainer>
           <Box py={4}>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
               <Grid item>
                 <MyPagination
                   itemCount={count}
