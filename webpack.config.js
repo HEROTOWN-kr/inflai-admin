@@ -1,12 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // changed import
 
 const outputDirectory = 'dist-admin';
 
 module.exports = {
-  entry: ['babel-polyfill', './src/client/index.js'],
-  // entry: ['./src/client/index.js'],
+  entry: ['core-js/stable', 'regenerator-runtime/runtime', './src/index.js'], // removed deprecated babel-polyfill
   output: {
     path: path.join(__dirname, outputDirectory),
     publicPath: '/',
@@ -26,7 +25,12 @@ module.exports = {
     },
     {
       test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svg)$/,
-      loader: 'url-loader?limit=100000'
+      type: 'asset', // replaced url-loader with webpack 5 asset modules
+      parser: {
+        dataUrlCondition: {
+          maxSize: 100000
+        }
+      }
     }
     ]
   },
@@ -36,18 +40,10 @@ module.exports = {
   devServer: {
     port: 3001,
     open: true,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8080',
-        pathRewrite: { '^/api': '' },
-        secure: false,
-        changeOrigin: true
-      }
-    },
     historyApiFallback: true
   },
   plugins: [
-    new CleanWebpackPlugin([outputDirectory]),
+    new CleanWebpackPlugin(), // updated usage (no args)
     new HtmlWebpackPlugin({
       template: './public/index.html',
       favicon: './public/favicon.ico',
