@@ -1,23 +1,19 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  Backdrop, Box, CircularProgress, Grid, IconButton, Tooltip, Typography, useMediaQuery, useTheme
-} from '@mui/material';
-import { createTheme } from '@mui/material/styles';
-import {
-  Cancel, HelpOutline, ImageOutlined, NotificationsNone, RemoveRedEyeOutlined, ThumbUpOutlined
-} from '@mui/icons-material';
-import axios from 'axios';
-import { Line } from 'react-chartjs-2';
-import defaultAccountImage from '../../../img/default_account_image.png';
-import CategoryPieChart from '../CategoryPieChart';
-import BarComponent from '../BarComponent';
-import LocationPart from './LocationPart';
-import GenderAgePart from './GenderAgePart';
-import PieChartApex from '../PieChartApex';
-import HelpTooltip from '../HelpTooltip';
+import React, { Fragment, useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import { Backdrop, Box, CircularProgress, Grid, IconButton, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { Cancel, HelpOutline, ImageOutlined, NotificationsNone, RemoveRedEyeOutlined, ThumbUpOutlined } from "@mui/icons-material";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { Line } from "react-chartjs-2";
+import defaultAccountImage from "../../../img/default_account_image.png";
+import CategoryPieChart from "../CategoryPieChart";
+import BarComponent from "../BarComponent";
+import LocationPart from "./LocationPart";
+import GenderAgePart from "./GenderAgePart";
+import PieChartApex from "../PieChartApex";
+import HelpTooltip from "../HelpTooltip";
 
-const PREFIX = 'YoutubeAnalysis';
+const PREFIX = "YoutubeAnalysis";
 
 const classes = {
   box: `${PREFIX}-box`,
@@ -32,85 +28,81 @@ const classes = {
   reportText: `${PREFIX}-reportText`,
   textAndIcon: `${PREFIX}-textAndIcon`,
   tooltipIcon: `${PREFIX}-tooltipIcon`,
-  tooltip: `${PREFIX}-tooltip`
+  tooltip: `${PREFIX}-tooltip`,
 };
 
 // TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
+const Root = styled("div")(({ theme }) => ({
   [`& .${classes.box}`]: {
-    padding: '15px 25px',
-    color: '#fff',
-    borderRadius: '5px',
-    boxSizing: 'border-box',
-    height: '100%',
-    transition: 'all 0.3s ease-in-out',
-    '&:hover': {
-      boxShadow: '0 0 25px -5px #9e9c9e',
+    padding: "15px 25px",
+    color: "#fff",
+    borderRadius: "5px",
+    boxSizing: "border-box",
+    height: "100%",
+    transition: "all 0.3s ease-in-out",
+    "&:hover": {
+      boxShadow: "0 0 25px -5px #9e9c9e",
     },
-    [theme.breakpoints.down('lg')]: {
-      padding: '12px 16px',
-    }
+    [theme.breakpoints.down("lg")]: {
+      padding: "12px 16px",
+    },
   },
 
   [`& .${classes.boxTitle}`]: {
-    fontSize: '20px',
-    fontWeight: '600',
-    marginBottom: '25px'
+    fontSize: "20px",
+    fontWeight: "600",
+    marginBottom: "25px",
     // overflow: 'hidden',
     // whiteSpace: 'nowrap',
     // textOverflow: 'ellipsis',
   },
 
   [`& .${classes.circular}`]: {
-    color: '#fff',
+    color: "#fff",
   },
 
   [`& .${classes.youtubeLink}`]: {
-    cursor: 'pointer'
+    cursor: "pointer",
   },
 
-  [`& .${classes.bgBlue}`]: { background: 'linear-gradient(45deg, #4099ff, #73b4ff)' },
-  [`& .${classes.bgGreen}`]: { background: 'linear-gradient(45deg, #2ed8b6, #59e0c5)' },
-  [`& .${classes.bgOrange}`]: { background: 'linear-gradient(45deg, #FFB64D, #ffcb80)' },
-  [`& .${classes.bgRed}`]: { background: 'linear-gradient(45deg, #FF5370, #ff869a)' },
-  [`& .${classes.avatar}`]: { borderRadius: '50%' },
+  [`& .${classes.bgBlue}`]: { background: "linear-gradient(45deg, #4099ff, #73b4ff)" },
+  [`& .${classes.bgGreen}`]: { background: "linear-gradient(45deg, #2ed8b6, #59e0c5)" },
+  [`& .${classes.bgOrange}`]: { background: "linear-gradient(45deg, #FFB64D, #ffcb80)" },
+  [`& .${classes.bgRed}`]: { background: "linear-gradient(45deg, #FF5370, #ff869a)" },
+  [`& .${classes.avatar}`]: { borderRadius: "50%" },
 
   [`& .${classes.reportText}`]: {
-    color: '#000',
-    fontSize: '16px',
-    fontFamily: 'Noto Sans KR, sans-serif',
+    color: "#000",
+    fontSize: "16px",
+    fontFamily: "Noto Sans KR, sans-serif",
     fontWeight: 500,
-    lineHeight: 1.57
+    lineHeight: 1.57,
   },
 
   [`& .${classes.textAndIcon}`]: {
-    display: 'flex',
+    display: "flex",
     // alignItems: 'center',
-    flexWrap: 'wrap',
-    fontSize: '14px',
-    color: '#000'
+    flexWrap: "wrap",
+    fontSize: "14px",
+    color: "#000",
   },
 
   [`& .${classes.tooltipIcon}`]: {
-    color: '#8C3FFF',
-    marginLeft: '5px',
-    marginTop: '5px'
+    color: "#8C3FFF",
+    marginLeft: "5px",
+    marginTop: "5px",
   },
 
   [`& .${classes.tooltip}`]: {
-    fontSize: 12
-  }
+    fontSize: 12,
+  },
 }));
 
 const tooltipContent = {
-  content_primary: '유튜브 채널 최근 10개의 동영상을 인공지능으로 분석하여 3862개의 카테고리로 분류한 결과',
-  content_second: '유튜브 채널 최근 10개의 동영상을 인공지능으로 분석하여 26개의 카테고리로 분류한 결과',
-  title_prediction: '유튜브 채널 최근 10개의 동영상의 제목을 인공지능으로 분석하여 26개의 카테고리로 분류한 결과',
-  comment_prediction: '유튜브 채널 최근 10개의 동영상의 댓글을 인공지능으로 분석하여 긍정적와 부정적 카테고리로 분류한 결과',
+  content_primary: "유튜브 채널 최근 10개의 동영상을 인공지능으로 분석하여 3862개의 카테고리로 분류한 결과",
+  content_second: "유튜브 채널 최근 10개의 동영상을 인공지능으로 분석하여 26개의 카테고리로 분류한 결과",
+  title_prediction: "유튜브 채널 최근 10개의 동영상의 제목을 인공지능으로 분석하여 26개의 카테고리로 분류한 결과",
+  comment_prediction: "유튜브 채널 최근 10개의 동영상의 댓글을 인공지능으로 분석하여 긍정적와 부정적 카테고리로 분류한 결과",
 };
 
 const defaultValues = {
@@ -130,7 +122,7 @@ const defaultValues = {
   content_second_labels: [],
   content_second_series: [],
   content_second_colors: [],
-  maxTypeCategory: '',
+  maxTypeCategory: "",
   maxTypeCategoryValue: 0,
   videos_info: {
     Channel_id: {},
@@ -146,12 +138,12 @@ const defaultValues = {
     dislikeCounts: [],
     Youtube_average_rating: {},
     Upload_date: {},
-    Upload_datetime: []
+    Upload_datetime: [],
   },
   channel_info: {
-    Name: '',
-    Number_of_subscribe: '0'
-  }
+    Name: "",
+    Number_of_subscribe: "0",
+  },
 };
 
 const defaultAnalyticsValues = {
@@ -159,14 +151,13 @@ const defaultAnalyticsValues = {
     views: 0,
     comments: 0,
     likes: 0,
-    likesToComments: '',
-    abilityType: '',
+    likesToComments: "",
+    abilityType: "",
     dislikes: 0,
     estimatedMinutesWatched: 0,
-    averageViewDuration: 0
+    averageViewDuration: 0,
   },
-  mostWatchedVideos: {
-  },
+  mostWatchedVideos: {},
   timeBasedStats: {
     day: [],
     views: [],
@@ -175,13 +166,13 @@ const defaultAnalyticsValues = {
     estimatedMinutesWatched: [],
     averageViewDuration: [],
     averageViewPercentage: [],
-    subscribersGained: []
+    subscribersGained: [],
   },
   ageDemographic: {
     labels: [],
     count: [],
     maxAgeValue: 0,
-    maxAgeType: ''
+    maxAgeType: "",
   },
   watchTimeByCountry: {
     countryData: [],
@@ -189,35 +180,33 @@ const defaultAnalyticsValues = {
       labels: [],
       data: [],
       backgroundColor: [],
-      borderColor: []
+      borderColor: [],
     },
     maxCountry: {
-      id: '',
-      name: '',
+      id: "",
+      name: "",
       value: 0,
-      color: '#ff5252'
-    }
+      color: "#ff5252",
+    },
   },
   genderDemographic: {
     chart: [],
     maxGenderValue: 0,
-    maxGender: ''
-  }
+    maxGender: "",
+  },
 };
 
-const green = 'rgba(24, 219, 168, 1)';
-const greenBg = 'rgba(231, 251, 246, 0.6)';
-const violet = 'rgba(144, 71, 255, 1)';
-const violetBg = 'rgba(244, 236, 255, 0.6)';
-const testText = 'test';
+const green = "rgba(24, 219, 168, 1)";
+const greenBg = "rgba(231, 251, 246, 0.6)";
+const violet = "rgba(144, 71, 255, 1)";
+const violetBg = "rgba(244, 236, 255, 0.6)";
+const testText = "test";
 
 function createDataSet(props) {
-  const {
-    color, label, data, fill, ...rest
-  } = props;
+  const { color, label, data, fill, ...rest } = props;
 
   return {
-    label: label || 'label',
+    label: label || "label",
     data: data || [12, 19, 22, 20, 15, 18],
     borderColor: color || green,
     pointBackgroundColor: color || green,
@@ -225,18 +214,18 @@ function createDataSet(props) {
     pointHoverBorderColor: color || green,
     fill: fill || false,
     lineTension: 0,
-    borderCapStyle: 'butt',
+    borderCapStyle: "butt",
     borderDash: [],
     borderDashOffset: 0.0,
     borderWidth: 5,
-    borderJoinStyle: 'miter',
-    pointBorderColor: 'white',
+    borderJoinStyle: "miter",
+    pointBorderColor: "white",
     pointBorderWidth: 1,
     pointHoverRadius: 10,
     pointHoverBorderWidth: 2,
     pointRadius: 7,
     pointHitRadius: 10,
-    ...rest
+    ...rest,
   };
 }
 
@@ -247,25 +236,24 @@ const barOptions = {
   scales: {
     xAxes: [
       {
-        gridLines: { display: false }
-      }
+        gridLines: { display: false },
+      },
     ],
     yAxes: [
       {
         gridLines: {
           drawBorder: false,
-          drawTicks: false
+          drawTicks: false,
         },
-      }
-    ]
-  }
+      },
+    ],
+  },
 };
 
 function LoadingPage() {
-
   return (
     <Box bgcolor="#3CBFFC" height="calc(100vh - 32px)">
-      <Grid container justifyContent="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
+      <Grid container justifyContent="center" alignItems="center" style={{ height: "100%", maxWidth: "inherit" }}>
         <Grid item>
           <CircularProgress classes={{ colorPrimary: classes.circular }} />
         </Grid>
@@ -281,82 +269,90 @@ function YoutubeAnalysis(props) {
   const [youtubeAnalytics, setYoutubeAnalytics] = useState(defaultAnalyticsValues);
 
   const theme = useTheme();
-  const isMD = useMediaQuery(theme.breakpoints.up('md'));
+  const isMD = useMediaQuery(theme.breakpoints.up("md"));
 
-  const viewLine = createDataSet({ color: green, label: '조회수', data: youtubeInfo.videos_info.View_count });
-  const commentLine = createDataSet({ color: violet, label: '댓글수', data: youtubeInfo.videos_info.Comment_count });
+  const viewLine = createDataSet({ color: green, label: "조회수", data: youtubeInfo.videos_info.View_count });
+  const commentLine = createDataSet({ color: violet, label: "댓글수", data: youtubeInfo.videos_info.Comment_count });
   const views = createDataSet({
     color: violet,
-    label: '구독자수',
+    label: "구독자수",
     data: youtubeAnalytics.timeBasedStats.views,
     fill: true,
     backgroundColor: violetBg,
     lineTension: 0.5,
-    borderCapStyle: 'butt',
+    borderCapStyle: "butt",
     pointRadius: 1,
     borderWidth: 4,
   });
 
-
   const lineData = {
     labels: youtubeInfo.videos_info.Upload_datetime,
-    datasets: [viewLine, commentLine]
+    datasets: [viewLine, commentLine],
   };
 
   const likeDislikeData = {
     labels: youtubeInfo.videos_info.Upload_datetime,
-    datasets: [{
-      label: '좋아요수',
-      data: youtubeInfo.videos_info.likeCounts,
-      backgroundColor: green,
-    },
-    {
-      label: '싫어요수',
-      data: youtubeInfo.videos_info.dislikeCounts,
-      backgroundColor: violet,
-    }]
+    datasets: [
+      {
+        label: "좋아요수",
+        data: youtubeInfo.videos_info.likeCounts,
+        backgroundColor: green,
+      },
+      {
+        label: "싫어요수",
+        data: youtubeInfo.videos_info.dislikeCounts,
+        backgroundColor: violet,
+      },
+    ],
   };
 
   const subscribersGainedData = {
     labels: youtubeAnalytics.timeBasedStats.day,
-    datasets: [{
-      label: '새 구독자',
-      data: youtubeAnalytics.timeBasedStats.subscribersGained,
-      backgroundColor: green,
-    }]
+    datasets: [
+      {
+        label: "새 구독자",
+        data: youtubeAnalytics.timeBasedStats.subscribersGained,
+        backgroundColor: green,
+      },
+    ],
   };
 
   const viewsData = {
     labels: youtubeAnalytics.timeBasedStats.day,
-    datasets: [views]
+    datasets: [views],
   };
-
 
   function getYoutubeInfo() {
     setProcess(true);
-    axios.get('/api/TB_YOUTUBE/getYoutubeFile', {
-      params: { id }
-    }).then((res) => {
-      const { data } = res.data;
-      setYoutubeInfo(data);
-      // setProcess(false);
-    }).catch((err) => {
-      setProcess(false);
-      // alert(err.response.data.message);
-    });
+    axios
+      .get("/TB_YOUTUBE/getYoutubeFile", {
+        params: { id },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        setYoutubeInfo(data);
+        // setProcess(false);
+      })
+      .catch((err) => {
+        setProcess(false);
+        // alert(err.response.data.message);
+      });
   }
 
   function getYoutubeAnalytics() {
-    axios.get('/api/TB_YOUTUBE/getYoutubeAnalytics', {
-      params: { id }
-    }).then((res) => {
-      const { data } = res;
-      setYoutubeAnalytics(data);
-      setProcess(false);
-    }).catch((err) => {
-      setProcess(false);
-      // alert(err.response.data.message);
-    });
+    axios
+      .get("/TB_YOUTUBE/getYoutubeAnalytics", {
+        params: { id },
+      })
+      .then((res) => {
+        const { data } = res;
+        setYoutubeAnalytics(data);
+        setProcess(false);
+      })
+      .catch((err) => {
+        setProcess(false);
+        // alert(err.response.data.message);
+      });
   }
 
   useEffect(() => {
@@ -366,15 +362,12 @@ function YoutubeAnalysis(props) {
 
   return (
     <Root>
-      { process ? (
+      {process ? (
         <LoadingPage />
       ) : (
         <Box bgcolor="#f6f7fb" p={2} position="relative">
           <Box position="absolute" top="0" right="0">
-            <IconButton
-              style={{ position: 'fixed', color: '#fff' }}
-              onClick={closeDialog}
-              size="large">
+            <IconButton style={{ position: "fixed", color: "#fff" }} onClick={closeDialog} size="large">
               <Cancel />
             </IconButton>
           </Box>
@@ -383,19 +376,20 @@ function YoutubeAnalysis(props) {
               <Grid item xs={12} md={3}>
                 <Box
                   className={`${classes.box} ${classes.bgBlue} ${classes.youtubeLink}`}
-                  onClick={() => window.open(`https://www.youtube.com/channel/${youtubeInfo.channel_info.Channel_id}`, '_blank')}
+                  onClick={() => window.open(`https://www.youtube.com/channel/${youtubeInfo.channel_info.Channel_id}`, "_blank")}
                 >
-                  <Grid container alignItems="center" style={{ height: '100%' }}>
+                  <Grid container alignItems="center" style={{ height: "100%" }}>
                     <Grid item>
-                      <img width={70} height={70} className={classes.avatar} src={youtubeInfo.channel_info.Avatar_url || defaultAccountImage} alt="noImage" />
+                      <img
+                        width={70}
+                        height={70}
+                        className={classes.avatar}
+                        src={youtubeInfo.channel_info.Avatar_url || defaultAccountImage}
+                        alt="noImage"
+                      />
                     </Grid>
                     <Grid item xs>
-                      <Box
-                        maxWidth="300px"
-                        ml={2}
-                        fontSize={25}
-                        fontWeight="bold"
-                      >
+                      <Box maxWidth="300px" ml={2} fontSize={25} fontWeight="bold">
                         {youtubeInfo.channel_info.Name}
                       </Box>
                     </Grid>
@@ -404,9 +398,7 @@ function YoutubeAnalysis(props) {
               </Grid>
               <Grid item xs={6} md={3}>
                 <Box className={`${classes.box} ${classes.bgGreen}`}>
-                  <Box mb={{ xs: '2px', md: 1 }}>
-                        구독자수
-                  </Box>
+                  <Box mb={{ xs: "2px", md: 1 }}>구독자수</Box>
                   <Grid container justifyContent="space-between" alignItems="center">
                     {isMD ? (
                       <Grid item>
@@ -423,9 +415,7 @@ function YoutubeAnalysis(props) {
               </Grid>
               <Grid item xs={6} md={3}>
                 <Box className={`${classes.box} ${classes.bgOrange}`}>
-                  <Box mb={{ xs: '2px', md: 1 }}>
-                        최근 조회수(누적)
-                  </Box>
+                  <Box mb={{ xs: "2px", md: 1 }}>최근 조회수(누적)</Box>
                   <Grid container justifyContent="space-between" alignItems="center">
                     {isMD ? (
                       <Grid item>
@@ -442,9 +432,7 @@ function YoutubeAnalysis(props) {
               </Grid>
               <Grid item xs={6} md={3}>
                 <Box className={`${classes.box} ${classes.bgRed}`}>
-                  <Box mb={{ xs: '2px', md: 1 }}>
-                        최근 좋아요 수(누적)
-                  </Box>
+                  <Box mb={{ xs: "2px", md: 1 }}>최근 좋아요 수(누적)</Box>
                   <Grid container justifyContent="space-between" alignItems="center">
                     {isMD ? (
                       <Grid item>
@@ -462,14 +450,14 @@ function YoutubeAnalysis(props) {
             </Grid>
             <Box mt={3} p={3} bgcolor="#F2F2F2">
               <Box className={classes.reportText}>
-                { `${youtubeInfo.channel_info.Name}는 ${youtubeInfo.channel_info.Number_of_subscribe}명의 구독자를 보유하고 있으며 이는 ${youtubeInfo.channel_info.influencerType} 입니다.
+                {`${youtubeInfo.channel_info.Name}는 ${youtubeInfo.channel_info.Number_of_subscribe}명의 구독자를 보유하고 있으며 이는 ${youtubeInfo.channel_info.influencerType} 입니다.
                 인플루언서 영향력을 나타내는 인플라이지수는 105점이며 최근 30일간 채널 영상 최대 조회수는 ${youtubeAnalytics.timeBasedStats.viewsMax}이고 신규 구독자 수는 ${youtubeAnalytics.timeBasedStats.subscribersGainedSum}입니다.
                 ${youtubeAnalytics.basicStats.likes}건의 좋아요수와 ${youtubeAnalytics.basicStats.comments}건의 댓글을 받아 공감능력은 ${youtubeAnalytics.basicStats.likesToComments}%(${youtubeAnalytics.basicStats.abilityType}) 상태입니다.
                 보유팔로워의 ${youtubeAnalytics.watchTimeByCountry.maxCountry.value}명은 ${youtubeAnalytics.watchTimeByCountry.maxCountry.name}인으로 구성되어있으며
                 ${youtubeAnalytics.ageDemographic.maxAgeType}대(${youtubeAnalytics.ageDemographic.maxAgeValue}%) ${youtubeAnalytics.genderDemographic.maxGender}(${youtubeAnalytics.genderDemographic.maxGenderValue}%)걸쳐서 가장 큰 영향력을 발휘하게 됩니다.
                 게시물 인공지능분석 결과 가장 높은 비율인 ${youtubeInfo.maxTypeCategoryValue}%를 ${youtubeInfo.maxTypeCategory}가 차지하고 있어서
                 ${youtubeInfo.maxTypeCategory} 쪽에 영향력 지수가 크다고 보여집니다.
-                (제일 높은 이미지의 %가 30% 이하이면 ... 특별한 카테고리에 영향력이 없다고 보여집니다.)` }
+                (제일 높은 이미지의 %가 30% 이하이면 ... 특별한 카테고리에 영향력이 없다고 보여집니다.)`}
               </Box>
             </Box>
             <Box my={3}>
@@ -482,21 +470,34 @@ function YoutubeAnalysis(props) {
                         <HelpOutline fontSize="small" classes={{ root: classes.tooltipIcon }} />
                       </Tooltip>
                     </Box>
-                     {/*<CategoryPieChart detectData={youtubeInfo.content_second_prediction} process={process} />*/}
-                    <PieChartApex series={youtubeInfo.content_second_series} colors={youtubeInfo.content_second_colors} labels={youtubeInfo.content_second_labels} />
+                    {/*<CategoryPieChart detectData={youtubeInfo.content_second_prediction} process={process} />*/}
+                    <PieChartApex
+                      series={youtubeInfo.content_second_series}
+                      colors={youtubeInfo.content_second_colors}
+                      labels={youtubeInfo.content_second_labels}
+                    />
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Box p={3} bgcolor="#FFF">
                     <Box className={classes.textAndIcon}>
                       <span className={classes.boxTitle}>하위 카테고리 분석 결과</span>
-                      <Tooltip title={tooltipContent.content_primary} placement="top-start" classes={{ tooltip: classes.tooltip }} enterTouchDelay={0}>
+                      <Tooltip
+                        title={tooltipContent.content_primary}
+                        placement="top-start"
+                        classes={{ tooltip: classes.tooltip }}
+                        enterTouchDelay={0}
+                      >
                         <HelpOutline fontSize="small" classes={{ root: classes.tooltipIcon }} />
                       </Tooltip>
                     </Box>
                     {/* <Box className={classes.boxTitle}>하위 카테고리 분석 결과</Box> */}
                     {/* <CategoryPieChart detectData={youtubeInfo.content_primary_prediction} process={process} />*/}
-                    <PieChartApex series={youtubeInfo.content_primary_series} colors={youtubeInfo.content_primary_colors} labels={youtubeInfo.content_primary_labels} />
+                    <PieChartApex
+                      series={youtubeInfo.content_primary_series}
+                      colors={youtubeInfo.content_primary_colors}
+                      labels={youtubeInfo.content_primary_labels}
+                    />
                   </Box>
                 </Grid>
               </Grid>
@@ -511,19 +512,32 @@ function YoutubeAnalysis(props) {
                     </Tooltip>
                   </Box>
                   {/* <CategoryPieChart detectData={youtubeInfo.title_prediction} process={process} /> */}
-                  <PieChartApex series={youtubeInfo.title_prediction_series} colors={youtubeInfo.title_prediction_colors} labels={youtubeInfo.title_prediction_labels} />
+                  <PieChartApex
+                    series={youtubeInfo.title_prediction_series}
+                    colors={youtubeInfo.title_prediction_colors}
+                    labels={youtubeInfo.title_prediction_labels}
+                  />
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Box p={3} bgcolor="#FFF">
                   <Box className={classes.textAndIcon}>
                     <span className={classes.boxTitle}>비디오 댓글 평가</span>
-                    <Tooltip title={tooltipContent.comment_prediction} placement="top-start" classes={{ tooltip: classes.tooltip }} enterTouchDelay={0}>
+                    <Tooltip
+                      title={tooltipContent.comment_prediction}
+                      placement="top-start"
+                      classes={{ tooltip: classes.tooltip }}
+                      enterTouchDelay={0}
+                    >
                       <HelpOutline fontSize="small" classes={{ root: classes.tooltipIcon }} />
                     </Tooltip>
                   </Box>
                   {/* <CategoryPieChart detectData={youtubeInfo.comment_prediction} process={process} /> */}
-                  <PieChartApex series={youtubeInfo.comment_prediction_series} colors={youtubeInfo.comment_prediction_colors} labels={youtubeInfo.comment_prediction_labels} />
+                  <PieChartApex
+                    series={youtubeInfo.comment_prediction_series}
+                    colors={youtubeInfo.comment_prediction_colors}
+                    labels={youtubeInfo.comment_prediction_labels}
+                  />
                 </Box>
               </Grid>
             </Grid>
@@ -560,9 +574,7 @@ function YoutubeAnalysis(props) {
                   <BarComponent height={isMD ? 150 : 250} data={subscribersGainedData} options={barOptions} />
                 </Box>
                 <Box p={2} bgcolor="#F2F2F2">
-                  <Box className={classes.reportText}>
-                    최근 30일 동안 유튜브 채널의 신규 구독자수를 날짜 별로 보실 수 있습니다.
-                  </Box>
+                  <Box className={classes.reportText}>최근 30일 동안 유튜브 채널의 신규 구독자수를 날짜 별로 보실 수 있습니다.</Box>
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -571,16 +583,20 @@ function YoutubeAnalysis(props) {
                   <Line height={isMD ? 150 : 250} data={viewsData} />
                 </Box>
                 <Box p={2} bgcolor="#F2F2F2">
-                  <Box className={classes.reportText}>
-                    최근 30일 동안 유튜브 채널의 모두 영상의 조회수를 날짜 별로 보실 수 있습니다.
-                  </Box>
+                  <Box className={classes.reportText}>최근 30일 동안 유튜브 채널의 모두 영상의 조회수를 날짜 별로 보실 수 있습니다.</Box>
                 </Box>
               </Grid>
             </Grid>
             <Box my={3}>
               <LocationPart classes={classes} data={youtubeAnalytics.watchTimeByCountry} process={process} isMD={isMD} />
             </Box>
-            <GenderAgePart classes={classes} genderDemographic={youtubeAnalytics.genderDemographic.chart} ageDemographic={youtubeAnalytics.ageDemographic} process={process} isMD={isMD} />
+            <GenderAgePart
+              classes={classes}
+              genderDemographic={youtubeAnalytics.genderDemographic.chart}
+              ageDemographic={youtubeAnalytics.ageDemographic}
+              process={process}
+              isMD={isMD}
+            />
           </Box>
         </Box>
       )}

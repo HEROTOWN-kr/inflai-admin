@@ -1,91 +1,84 @@
-import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import { Box, Button, Dialog, Grid, IconButton } from '@mui/material';
-import { Clear } from '@mui/icons-material';
-import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import { Colors } from '../../../lib/Сonstants';
-import ReactFormText from '../../containers/ReactFormText';
-import StyledText from '../../containers/StyledText';
+import React, { useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import { Box, Button, Dialog, Grid, IconButton } from "@mui/material";
+import { Clear } from "@mui/icons-material";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { Colors } from "../../../lib/Сonstants";
+import ReactFormText from "../../containers/ReactFormText";
+import StyledText from "../../containers/StyledText";
 
-const PREFIX = 'QuestionDialog';
+const PREFIX = "QuestionDialog";
 
 const classes = {
   root: `${PREFIX}-root`,
   paper: `${PREFIX}-paper`,
   button: `${PREFIX}-button`,
   header: `${PREFIX}-header`,
-  hr: `${PREFIX}-hr`
+  hr: `${PREFIX}-hr`,
 };
 
 const StyledDialog = styled(Dialog)({
   [`& .${classes.root}`]: {
-    position: 'absolute',
-    top: '0',
-    right: '0',
-    color: '#b9b9b9de'
+    position: "absolute",
+    top: "0",
+    right: "0",
+    color: "#b9b9b9de",
   },
   [`& .${classes.paper}`]: {
-    margin: '12px',
-    width: '100%',
-    borderRadius: '2px'
+    margin: "12px",
+    width: "100%",
+    borderRadius: "2px",
   },
   [`& .${classes.button}`]: {
     padding: 0,
-    minWidth: 0
+    minWidth: 0,
   },
   [`& .${classes.header}`]: {
-    padding: '15px',
-    fontSize: '16px',
-    fontWeight: '400',
-    lineHeight: '18px',
-    textAlign: 'center',
-    position: 'relative',
+    padding: "15px",
+    fontSize: "16px",
+    fontWeight: "400",
+    lineHeight: "18px",
+    textAlign: "center",
+    position: "relative",
     borderBottom: `1px solid ${Colors.grey8}`,
   },
   [`& .${classes.hr}`]: {
-    boxSizing: 'content-box',
+    boxSizing: "content-box",
     height: 0,
-    overflow: 'visible',
-    textAlign: 'inherit',
-    margin: '0 0 20px 0',
+    overflow: "visible",
+    textAlign: "inherit",
+    margin: "0 0 20px 0",
     border: 0,
-    borderTop: '1px solid #e5e5e5',
-    marginTop: '20px',
-  }
+    borderTop: "1px solid #e5e5e5",
+    marginTop: "20px",
+  },
 });
 
 const defaultQuestionData = {
-  QUE_TITLE: '',
-  QUE_CONTENT: '',
+  QUE_TITLE: "",
+  QUE_CONTENT: "",
 };
 
 const defaultValues = {
-  answer: ''
+  answer: "",
 };
 
 const schema = Yup.object().shape({
-  answer: Yup.string().required('문의 답변을 입력해주세요').max(300, '300 글자까지 입력 가능합니다'),
+  answer: Yup.string().required("문의 답변을 입력해주세요").max(300, "300 글자까지 입력 가능합니다"),
 });
 
 function QuestionDialog(props) {
-  const {
-    open, closeDialog, questionId, getQuestions
-  } = props;
+  const { open, closeDialog, questionId, getQuestions } = props;
   const [questionData, setQuestionData] = useState(defaultQuestionData);
 
-
-
-  const {
-    register, handleSubmit, errors, reset
-  } = useForm({
-    mode: 'onBlur',
+  const { register, handleSubmit, errors, reset } = useForm({
+    mode: "onBlur",
     resolver: yupResolver(schema),
-    defaultValues
+    defaultValues,
   });
-
 
   function onDialogClose() {
     setQuestionData(defaultQuestionData);
@@ -95,59 +88,68 @@ function QuestionDialog(props) {
   }
 
   function getQuestion() {
-    axios.get('/api/TB_QUESTION/detail', {
-      params: { questionId }
-    }).then((res) => {
-      const { data } = res.data;
-      setQuestionData(data);
-      if (data.QUE_ANSWER) reset({ answer: data.QUE_ANSWER });
-    }).catch((err) => {
-      alert(err.response.message);
-    });
+    axios
+      .get("/TB_QUESTION/detail", {
+        params: { questionId },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        setQuestionData(data);
+        if (data.QUE_ANSWER) reset({ answer: data.QUE_ANSWER });
+      })
+      .catch((err) => {
+        alert(err.response.message);
+      });
   }
 
   function onSubmit(values) {
-    axios.post('/api/TB_QUESTION/saveAnswer', {
-      ...values, questionId
-    }).then((res) => {
-      onDialogClose();
-    }).catch((err) => {
-      alert(err.response.message);
-    });
+    axios
+      .post("/TB_QUESTION/saveAnswer", {
+        ...values,
+        questionId,
+      })
+      .then((res) => {
+        onDialogClose();
+      })
+      .catch((err) => {
+        alert(err.response.message);
+      });
   }
 
   return (
     <StyledDialog
       classes={{ paper: classes.paper }}
-            // fullScreen={fullScreen}
+      // fullScreen={fullScreen}
       open={open}
       onClose={onDialogClose}
       maxWidth="xs"
       TransitionProps={{
         onEntered: getQuestion,
-        unmountOnExit: true
+        unmountOnExit: true,
       }}
       aria-labelledby="responsive-dialog-title"
     >
       <Box className={classes.header}>
-                문의
+        문의
         <IconButton size="medium" classes={{ root: classes.root }} onClick={onDialogClose}>
           <Clear />
         </IconButton>
       </Box>
       <Box p={2} boxSizing="border-box">
         <Box>
-          <Box mb={1}><StyledText color="#3f51b5">제목</StyledText></Box>
-          <Box>
-            {questionData.QUE_TITLE}
+          <Box mb={1}>
+            <StyledText color="#3f51b5">제목</StyledText>
           </Box>
+          <Box>{questionData.QUE_TITLE}</Box>
           <hr className={classes.hr} />
-          <Box my={1}><StyledText color="#3f51b5">내용</StyledText></Box>
-          <Box>
-            {questionData.QUE_CONTENT}
+          <Box my={1}>
+            <StyledText color="#3f51b5">내용</StyledText>
           </Box>
+          <Box>{questionData.QUE_CONTENT}</Box>
           <hr className={classes.hr} />
-          <Box my={1}><StyledText color="#3f51b5">문의 답변</StyledText></Box>
+          <Box my={1}>
+            <StyledText color="#3f51b5">문의 답변</StyledText>
+          </Box>
           <ReactFormText
             register={register}
             errors={errors}
@@ -163,30 +165,19 @@ function QuestionDialog(props) {
           <Grid container justifyContent="center" spacing={1}>
             <Grid item>
               <Box width="110px">
-                <Button
-                  fullWidth
-                  color="secondary"
-                  variant="contained"
-                  onClick={onDialogClose}
-                >
+                <Button fullWidth color="secondary" variant="contained" onClick={onDialogClose}>
                   닫기
                 </Button>
               </Box>
             </Grid>
             <Grid item>
               <Box width="110px">
-                <Button
-                  fullWidth
-                  color="primary"
-                  variant="contained"
-                  onClick={handleSubmit(onSubmit)}
-                >
+                <Button fullWidth color="primary" variant="contained" onClick={handleSubmit(onSubmit)}>
                   저장
                 </Button>
               </Box>
             </Grid>
           </Grid>
-
         </Box>
       </Box>
     </StyledDialog>

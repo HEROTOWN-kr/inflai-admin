@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@mui/material';
-import axios from 'axios';
-import StyledTableCell from '../../containers/StyledTableCell';
-import StyledTableRow from '../../containers/StyledTableRow';
+import React, { useEffect, useState } from "react";
+import { Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import StyledTableCell from "../../containers/StyledTableCell";
+import StyledTableRow from "../../containers/StyledTableRow";
 
 function DashInfluencers(props) {
   const { history } = props;
@@ -15,7 +13,7 @@ function DashInfluencers(props) {
   function createInfluencers(data) {
     const array = [];
 
-    data.map(item => (
+    data.map((item) =>
       array.push({
         id: item.INF_ID,
         rownum: item.rownum,
@@ -23,22 +21,26 @@ function DashInfluencers(props) {
         email: item.INF_EMAIL,
         phoneNumber: item.INF_TEL,
         registerDate: item.INF_DT,
-        social: item.INF_BLOG_TYPE
+        social: item.INF_BLOG_TYPE,
       })
-    ));
+    );
 
     setInfluencers(array);
   }
 
   function getInfluencers() {
-    axios.get('/api/TB_INFLUENCER/getInfluencers', {
-      params: {
-        page, limit
-      }
-    }).then((res) => {
-      const { data } = res.data;
-      createInfluencers(data);
-    }).catch(err => alert(err.response.data.message));
+    axios
+      .get("/TB_INFLUENCER/getInfluencers", {
+        params: {
+          page,
+          limit,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        createInfluencers(data);
+      })
+      .catch((err) => alert(err.response.data.message));
   }
 
   useEffect(() => {
@@ -51,9 +53,7 @@ function DashInfluencers(props) {
         <Grid container justifyContent="space-between">
           <Grid item>신규가입인플루언서</Grid>
           <Grid item>
-            <button onClick={() => navigate('/Influencer')}>
-              전체보기
-            </button>
+            <button onClick={() => navigate("/Influencer")}>전체보기</button>
           </Grid>
         </Grid>
       </Box>
@@ -61,7 +61,9 @@ function DashInfluencers(props) {
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center" width="60px">번호</StyledTableCell>
+              <StyledTableCell align="center" width="60px">
+                번호
+              </StyledTableCell>
               <StyledTableCell>이름</StyledTableCell>
               <StyledTableCell align="right">이메일</StyledTableCell>
               <StyledTableCell align="right">전화번호</StyledTableCell>
@@ -70,7 +72,7 @@ function DashInfluencers(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {influencers.map(row => (
+            {influencers.map((row) => (
               <StyledTableRow hover key={row.id}>
                 <StyledTableCell align="center">{row.rownum}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">

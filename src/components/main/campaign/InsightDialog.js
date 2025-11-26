@@ -1,45 +1,41 @@
-import React, { useState } from 'react';
-import { styled } from '@mui/material/styles';
-import axios from 'axios';
-import { Box, Dialog, useMediaQuery, IconButton, Typography, Grid, useTheme } from '@mui/material';
-import {
-  CalendarToday, ChangeHistory,
-  ChatBubble, Clear, Details, Favorite, Image, ImportExportOutlined, Room
-} from '@mui/icons-material';
-import { Colors } from '../../../lib/Сonstants';
-import WhiteBlock from '../../containers/WhiteBlock';
-import StyledImage from '../../containers/StyledImage';
-import defaultAccountImage from '../../../img/default_account_image.png';
-import StyledText from '../../containers/StyledText';
-import StyledSvg from '../../containers/StyledSvg';
-import GoogleVisionGraph from './Graphs/GoogleVisionGraph';
-import LikeCommentBarGraph from './Graphs/LikeCommentBarGraph';
-import AgeGraph from './Graphs/AgeGraph';
-import GenderGraph from './Graphs/GenderGraph';
-import MapGraph2 from './Graphs/MapGraph2';
+import React, { useState } from "react";
+import { styled } from "@mui/material/styles";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { Box, Dialog, useMediaQuery, IconButton, Typography, Grid, useTheme } from "@mui/material";
+import { CalendarToday, ChangeHistory, ChatBubble, Clear, Details, Favorite, Image, ImportExportOutlined, Room } from "@mui/icons-material";
+import { Colors } from "../../../lib/Сonstants";
+import WhiteBlock from "../../containers/WhiteBlock";
+import StyledImage from "../../containers/StyledImage";
+import defaultAccountImage from "../../../img/default_account_image.png";
+import StyledText from "../../containers/StyledText";
+import StyledSvg from "../../containers/StyledSvg";
+import GoogleVisionGraph from "./Graphs/GoogleVisionGraph";
+import LikeCommentBarGraph from "./Graphs/LikeCommentBarGraph";
+import AgeGraph from "./Graphs/AgeGraph";
+import GenderGraph from "./Graphs/GenderGraph";
+import MapGraph2 from "./Graphs/MapGraph2";
 
-
-const PREFIX = 'InsightDialog';
+const PREFIX = "InsightDialog";
 
 const classes = {
   root: `${PREFIX}-root`,
-  paper: `${PREFIX}-paper`
+  paper: `${PREFIX}-paper`,
 };
 
 const StyledDialog = styled(Dialog)({
   [`& .${classes.root}`]: {
-    position: 'absolute',
-    top: '15px',
-    right: '14px',
-    fontSize: '28px',
-    color: '#b9b9b9de',
-    cursor: 'pointer'
+    position: "absolute",
+    top: "15px",
+    right: "14px",
+    fontSize: "28px",
+    color: "#b9b9b9de",
+    cursor: "pointer",
   },
   [`& .${classes.paper}`]: {
-    margin: '12px',
-    width: '100%',
-    borderRadius: '2px'
-  }
+    margin: "12px",
+    width: "100%",
+    borderRadius: "2px",
+  },
 });
 
 function InsightDialog(props) {
@@ -50,15 +46,14 @@ function InsightDialog(props) {
   const [maxStatVal, setMaxStatVal] = useState(null);
   const [maxGenderVal, setMaxGenderVal] = useState(null);
 
-
   const theme = useTheme();
-  const isMD = useMediaQuery(theme.breakpoints.up('md'));
-  const isSM = useMediaQuery(theme.breakpoints.up('sm'));
+  const isMD = useMediaQuery(theme.breakpoints.up("md"));
+  const isSM = useMediaQuery(theme.breakpoints.up("sm"));
 
   async function getInstaInfo() {
     try {
-      const InstaData = await axios.get('/api/TB_INSTA/rankingInfo', {
-        params: { instaId: selectedId }
+      const InstaData = await axios.get("/TB_INSTA/rankingInfo", {
+        params: { instaId: selectedId },
       });
       const { data } = InstaData.data;
       if (data) setInstaData(data);
@@ -88,10 +83,19 @@ function InsightDialog(props) {
       aria-labelledby="simple-dialog-title"
       open={open}
       TransitionProps={{
-        onEntered: onDialogEntered
-      }}>
-      <Box padding="20px" fontSize="18px" fontWeight="400" lineHeight="18px" textAlign="center" position="relative" borderBottom={`1px solid ${Colors.grey8}`}>
-                SNS 정보
+        onEntered: onDialogEntered,
+      }}
+    >
+      <Box
+        padding="20px"
+        fontSize="18px"
+        fontWeight="400"
+        lineHeight="18px"
+        textAlign="center"
+        position="relative"
+        borderBottom={`1px solid ${Colors.grey8}`}
+      >
+        SNS 정보
         <Clear onClick={onDialogClose} classes={{ root: classes.root }} />
       </Box>
       <Box px={2} py={2}>
@@ -99,22 +103,31 @@ function InsightDialog(props) {
           <Grid item xs={12} lg={6}>
             <Grid container spacing={isMD ? 3 : 0}>
               <Grid item xs={12}>
-                <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
+                <WhiteBlock borderRadius={isMD ? "25px" : "0"}>
                   <Box p={{ xs: 2, md: 3 }}>
                     <Grid container alignItems="center" spacing={3}>
                       <Grid item xs={12} sm="auto">
-                        <StyledImage width={isSM ? '125px' : '100px'} height={isSM ? '125px' : '100px'} borderRadius="100%" src={instaData.INS_PROFILE_IMG || defaultAccountImage} />
+                        <StyledImage
+                          width={isSM ? "125px" : "100px"}
+                          height={isSM ? "125px" : "100px"}
+                          borderRadius="100%"
+                          src={instaData.INS_PROFILE_IMG || defaultAccountImage}
+                        />
                       </Grid>
                       <Grid item xs>
                         <Grid container direction="column" spacing={2}>
                           <Grid item>
-                            <StyledText textAlign={isSM ? 'inherit' : 'center'} fontSize="20px" fontWeight="bold">{instaData.INS_NAME || instaData.INS_USERNAME}</StyledText>
+                            <StyledText textAlign={isSM ? "inherit" : "center"} fontSize="20px" fontWeight="bold">
+                              {instaData.INS_NAME || instaData.INS_USERNAME}
+                            </StyledText>
                           </Grid>
                           <Grid item>
                             <Grid container justifyContent="space-between">
                               <Grid item>
                                 <Grid container direction="column" alignItems="center" spacing={1}>
-                                  <Grid item><StyledText fontWeight="bold">{instaData.INS_MEDIA_CNT}</StyledText></Grid>
+                                  <Grid item>
+                                    <StyledText fontWeight="bold">{instaData.INS_MEDIA_CNT}</StyledText>
+                                  </Grid>
                                   <Grid item>
                                     <StyledText fontSize="14px">개시물 수</StyledText>
                                   </Grid>
@@ -122,7 +135,9 @@ function InsightDialog(props) {
                               </Grid>
                               <Grid item>
                                 <Grid container direction="column" alignItems="center" spacing={1}>
-                                  <Grid item><StyledText fontWeight="bold">{instaData.INS_FLWR}</StyledText></Grid>
+                                  <Grid item>
+                                    <StyledText fontWeight="bold">{instaData.INS_FLWR}</StyledText>
+                                  </Grid>
                                   <Grid item>
                                     <StyledText fontSize="14px">팔로워 수</StyledText>
                                   </Grid>
@@ -130,7 +145,9 @@ function InsightDialog(props) {
                               </Grid>
                               <Grid item>
                                 <Grid container direction="column" alignItems="center" spacing={1}>
-                                  <Grid item><StyledText fontWeight="bold">{instaData.INS_FLW}</StyledText></Grid>
+                                  <Grid item>
+                                    <StyledText fontWeight="bold">{instaData.INS_FLW}</StyledText>
+                                  </Grid>
                                   <Grid item>
                                     <StyledText fontSize="14px">팔로잉 수</StyledText>
                                   </Grid>
@@ -139,13 +156,17 @@ function InsightDialog(props) {
                             </Grid>
                           </Grid>
                           <Grid item>
-                            <StyledText fontSize="14px" fontWeight="bold">{instaData.INS_USERNAME}</StyledText>
+                            <StyledText fontSize="14px" fontWeight="bold">
+                              {instaData.INS_USERNAME}
+                            </StyledText>
                           </Grid>
                           <Grid item>
                             <StyledText fontSize="14px">{instaData.biography}</StyledText>
                           </Grid>
                           <Grid item>
-                            <StyledText fontSize="14px" color="#409CFF" fontWeight="bold">{instaData.website}</StyledText>
+                            <StyledText fontSize="14px" color="#409CFF" fontWeight="bold">
+                              {instaData.website}
+                            </StyledText>
                           </Grid>
                         </Grid>
                       </Grid>
@@ -154,11 +175,13 @@ function InsightDialog(props) {
                 </WhiteBlock>
               </Grid>
               <Grid item xs={6}>
-                <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
+                <WhiteBlock borderRadius={isMD ? "25px" : "0"}>
                   <Box px={2} pt={2} pb={{ xs: 3, md: 5 }}>
                     <Grid container direction="column" spacing={2} alignItems="center">
                       <Grid item container justifyContent="space-between" alignItems="center">
-                        <Grid item><StyledText fontSize="14px">좋아요 수</StyledText></Grid>
+                        <Grid item>
+                          <StyledText fontSize="14px">좋아요 수</StyledText>
+                        </Grid>
                         <StyledSvg
                           component={Favorite}
                           color={Colors.orange}
@@ -168,17 +191,23 @@ function InsightDialog(props) {
                           borderRadius="100%"
                         />
                       </Grid>
-                      <Grid item><StyledText fontSize={isMD ? '30px' : '24px'} fontWeight="900">{instaData.INS_LIKES || 0}</StyledText></Grid>
+                      <Grid item>
+                        <StyledText fontSize={isMD ? "30px" : "24px"} fontWeight="900">
+                          {instaData.INS_LIKES || 0}
+                        </StyledText>
+                      </Grid>
                     </Grid>
                   </Box>
                 </WhiteBlock>
               </Grid>
               <Grid item xs={6}>
-                <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
+                <WhiteBlock borderRadius={isMD ? "25px" : "0"}>
                   <Box px={2} pt={2} pb={{ xs: 3, md: 5 }}>
                     <Grid container direction="column" spacing={2} alignItems="center">
                       <Grid item container justifyContent="space-between" alignItems="center">
-                        <Grid item><StyledText fontSize="14px">댓글 수</StyledText></Grid>
+                        <Grid item>
+                          <StyledText fontSize="14px">댓글 수</StyledText>
+                        </Grid>
                         <StyledSvg
                           component={ChatBubble}
                           color={Colors.blue2}
@@ -188,7 +217,11 @@ function InsightDialog(props) {
                           borderRadius="100%"
                         />
                       </Grid>
-                      <Grid item><StyledText fontSize={isMD ? '30px' : '24px'} fontWeight="900">{instaData.INS_CMNT || instaData.INS_CMNT2}</StyledText></Grid>
+                      <Grid item>
+                        <StyledText fontSize={isMD ? "30px" : "24px"} fontWeight="900">
+                          {instaData.INS_CMNT || instaData.INS_CMNT2}
+                        </StyledText>
+                      </Grid>
                     </Grid>
                   </Box>
                 </WhiteBlock>
@@ -196,11 +229,13 @@ function InsightDialog(props) {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <WhiteBlock borderRadius={isMD ? '25px' : '0'} height="100%">
+            <WhiteBlock borderRadius={isMD ? "25px" : "0"} height="100%">
               <Box px={2} py={2}>
                 <Grid container justifyContent="space-between" spacing={4}>
                   <Grid item xs={12} container justifyContent="space-between" alignItems="center">
-                    <Grid item><StyledText fontSize="14px">콘텐츠 카테고리</StyledText></Grid>
+                    <Grid item>
+                      <StyledText fontSize="14px">콘텐츠 카테고리</StyledText>
+                    </Grid>
                     <StyledSvg
                       component={Image}
                       color={Colors.orange}
@@ -210,7 +245,7 @@ function InsightDialog(props) {
                       borderRadius="100%"
                     />
                   </Grid>
-                  <Grid item xs={12} style={{ width: '100%' }}>
+                  <Grid item xs={12} style={{ width: "100%" }}>
                     <GoogleVisionGraph INS_ID={instaData.INS_ID} setMaxStatVal={setMaxStatVal} />
                   </Grid>
                 </Grid>
@@ -218,12 +253,14 @@ function InsightDialog(props) {
             </WhiteBlock>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
+            <WhiteBlock borderRadius={isMD ? "25px" : "0"}>
               <Box p={2}>
                 <Grid container spacing={2} justifyContent="center">
                   <Grid item xs={12}>
                     <Grid container>
-                      <Grid item xs><StyledText fontSize="14px">인플루언서 계정의 각 게시물마다 (좋아요, 댓글) 수 비교</StyledText></Grid>
+                      <Grid item xs>
+                        <StyledText fontSize="14px">인플루언서 계정의 각 게시물마다 (좋아요, 댓글) 수 비교</StyledText>
+                      </Grid>
                       <Grid item>
                         <StyledSvg
                           component={ImportExportOutlined}
@@ -244,12 +281,14 @@ function InsightDialog(props) {
             </WhiteBlock>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <WhiteBlock borderRadius={isMD ? '25px' : '0'} height="100%">
+            <WhiteBlock borderRadius={isMD ? "25px" : "0"} height="100%">
               <Box p={2}>
                 <Grid container spacing={2} justifyContent="center">
                   <Grid item xs={12}>
                     <Grid container>
-                      <Grid item xs><StyledText fontSize="14px">팔로워의 나이</StyledText></Grid>
+                      <Grid item xs>
+                        <StyledText fontSize="14px">팔로워의 나이</StyledText>
+                      </Grid>
                       <Grid item>
                         <StyledSvg
                           component={CalendarToday}
@@ -270,7 +309,7 @@ function InsightDialog(props) {
             </WhiteBlock>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
+            <WhiteBlock borderRadius={isMD ? "25px" : "0"}>
               <Box px={2} py={2}>
                 <Grid container spacing={4}>
                   <Grid item xs={12} container justifyContent="space-between" alignItems="center">
@@ -282,7 +321,9 @@ function InsightDialog(props) {
                       background={Colors.orangeBack}
                       borderRadius="100%"
                     />
-                    <Grid item><StyledText fontSize="14px">성비</StyledText></Grid>
+                    <Grid item>
+                      <StyledText fontSize="14px">성비</StyledText>
+                    </Grid>
                     <StyledSvg
                       component={ChangeHistory}
                       color={Colors.blue2}
@@ -299,25 +340,29 @@ function InsightDialog(props) {
               </Box>
             </WhiteBlock>
             <Box fontSize="14px" m="16px auto 0" p="10px" maxWidth="570px" width="100%" border="1px solid red">
-              <Box mb={1} textAlign="center" fontSize="18px" fontWeight="bold">인플라이의 Ai분석결과</Box>
+              <Box mb={1} textAlign="center" fontSize="18px" fontWeight="bold">
+                인플라이의 Ai분석결과
+              </Box>
               <Box>{`팔로워 : ${instaData.INS_FLWR || 0}`}</Box>
               <Box>{`평균 좋아요 : ${instaData.INS_LIKES ? Math.round(instaData.INS_LIKES / 25) : 0}개`}</Box>
               <Box>{`평균 댓글 : ${instaData.INS_CMNT ? Math.round(instaData.INS_CMNT / 25) : 0}개`}</Box>
               <Box mt={1}>
                 {`이 인플루언서는 
-                ${maxAgeVal ? `${maxAgeVal}세, ` : ''}
-                ${maxLocVal ? `${maxLocVal} 국적을 가진 ` : ''}
-                ${maxGenderVal ? `${maxGenderVal} ` : ''}팔로워가 많으며, 
-                ${maxStatVal ? `${maxStatVal} 카테고리 ` : ''}마케팅에 적합합니다.`}
+                ${maxAgeVal ? `${maxAgeVal}세, ` : ""}
+                ${maxLocVal ? `${maxLocVal} 국적을 가진 ` : ""}
+                ${maxGenderVal ? `${maxGenderVal} ` : ""}팔로워가 많으며, 
+                ${maxStatVal ? `${maxStatVal} 카테고리 ` : ""}마케팅에 적합합니다.`}
               </Box>
             </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <WhiteBlock borderRadius={isMD ? '25px' : '0'}>
+            <WhiteBlock borderRadius={isMD ? "25px" : "0"}>
               <Box px={2} py={2}>
                 <Grid container spacing={4}>
                   <Grid item xs={12} container justifyContent="space-between" alignItems="center">
-                    <Grid item><StyledText fontSize="14px">팔로워의 지도</StyledText></Grid>
+                    <Grid item>
+                      <StyledText fontSize="14px">팔로워의 지도</StyledText>
+                    </Grid>
                     <StyledSvg
                       component={Room}
                       color={Colors.orange}

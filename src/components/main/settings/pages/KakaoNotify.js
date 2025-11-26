@@ -1,7 +1,5 @@
-import React, {
-  Fragment, useContext, useEffect, useState
-} from 'react';
-import { styled } from '@mui/material/styles';
+import React, { Fragment, useContext, useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
 import {
   Box,
   Grid,
@@ -17,23 +15,23 @@ import {
   FormControlLabel,
   Radio,
   Divider,
-} from '@mui/material';
-import axios from 'axios';
-import { all } from 'async';
-import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Clear, Notifications } from '@mui/icons-material';
-import { useSnackbar } from 'notistack';
-import StyledText from '../../../containers/StyledText';
-import MyPagination from '../../../containers/MyPagination';
-import StyledTableCell from '../../../containers/StyledTableCell';
-import StyledTableRow from '../../../containers/StyledTableRow';
-import { Colors } from '../../../../lib/Сonstants';
-import StyledButton from '../../../containers/StyledButton';
-import StyledBackDrop from '../../../containers/StyledBackDrop';
-import AuthContext from '../../../../context/AuthContext';
+} from "@mui/material";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { all } from "async";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Clear, Notifications } from "@mui/icons-material";
+import { useSnackbar } from "notistack";
+import StyledText from "../../../containers/StyledText";
+import MyPagination from "../../../containers/MyPagination";
+import StyledTableCell from "../../../containers/StyledTableCell";
+import StyledTableRow from "../../../containers/StyledTableRow";
+import { Colors } from "../../../../lib/Сonstants";
+import StyledButton from "../../../containers/StyledButton";
+import StyledBackDrop from "../../../containers/StyledBackDrop";
+import AuthContext from "../../../../context/AuthContext";
 
-const PREFIX = 'KakaoNotify';
+const PREFIX = "KakaoNotify";
 
 const classes = {
   title: `${PREFIX}-title`,
@@ -42,103 +40,99 @@ const classes = {
   checkbox: `${PREFIX}-checkbox`,
   lastItem: `${PREFIX}-lastItem`,
   linkText: `${PREFIX}-linkText`,
-  clearRoot: `${PREFIX}-clearRoot`
+  clearRoot: `${PREFIX}-clearRoot`,
 };
 
-const StyledBox = styled(Box)((
-  {
-    theme
-  }
-) => ({
+const StyledBox = styled(Box)(({ theme }) => ({
   [`& .${classes.title}`]: {
-    fontFamily: 'Noto Sans KR, sans-serif',
+    fontFamily: "Noto Sans KR, sans-serif",
     fontWeight: 700,
-    marginTop: '96px',
-    marginBottom: '48px',
-    [theme.breakpoints.down('sm')]: {
-      textAlign: 'center',
-      marginTop: '30px',
-      marginBottom: '30px',
+    marginTop: "96px",
+    marginBottom: "48px",
+    [theme.breakpoints.down("sm")]: {
+      textAlign: "center",
+      marginTop: "30px",
+      marginBottom: "30px",
     },
   },
 
   [`& .${classes.tabs}`]: {
     root: {},
-    indicator: {}
+    indicator: {},
   },
 
   [`& .${classes.startIcon}`]: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       margin: 0,
     },
   },
 
   [`& .${classes.checkbox}`]: {
-    padding: '3px'
+    padding: "3px",
   },
 
   [`& .${classes.lastItem}`]: {
-    marginRight: '0'
+    marginRight: "0",
   },
 
   [`& .${classes.linkText}`]: {
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
   },
 
   [`& .${classes.clearRoot}`]: {
-    height: 'auto',
-    marginLeft: '8px',
-    opacity: '30%',
-    cursor: 'pointer',
-    '&:hover': {
-      opacity: '1'
-    }
-  }
+    height: "auto",
+    marginLeft: "8px",
+    opacity: "30%",
+    cursor: "pointer",
+    "&:hover": {
+      opacity: "1",
+    },
+  },
 }));
 
 const tableHeader = [
   {
-    text: '체크',
-    align: 'center',
-    width: '40px'
+    text: "체크",
+    align: "center",
+    width: "40px",
   },
   {
-    text: '번호',
-    align: 'center',
-    width: '80px'
+    text: "번호",
+    align: "center",
+    width: "80px",
   },
   {
-    text: '캠페인이름',
-    align: 'center'
+    text: "캠페인이름",
+    align: "center",
   },
   {
-    text: '시잘일',
-    align: 'center',
-    width: '100px'
+    text: "시잘일",
+    align: "center",
+    width: "100px",
   },
   {
-    text: '마감일',
-    align: 'center',
-    width: '100px'
-  }
+    text: "마감일",
+    align: "center",
+    width: "100px",
+  },
 ];
 
 const notificationTypes = [
-  { value: '1', text: '알림톡' },
-  { value: '2', text: '친구톡' },
-  { value: '3', text: '푸시메세지' }
+  { value: "1", text: "알림톡" },
+  { value: "2", text: "친구톡" },
+  { value: "3", text: "푸시메세지" },
 ];
 
 const receiverTypes = [
-  { value: '0', text: '전체' },
-  { value: '1', text: '테스터' },
+  { value: "0", text: "전체" },
+  { value: "1", text: "테스터" },
 ];
 
 const defaultValues = {
-  type: '1',
-  receiver: '0',
+  type: "1",
+  receiver: "0",
 };
 
 function KakaoNotify() {
@@ -152,26 +146,22 @@ function KakaoNotify() {
   const { enqueueSnackbar } = useSnackbar();
   const { setLoading } = useContext(AuthContext);
 
-
   const { control, getValues, watch } = useForm({
-    mode: 'onBlur',
-    defaultValues
+    mode: "onBlur",
+    defaultValues,
   });
 
-
   function getCampaigns() {
-    axios.get('/api/TB_AD/getAll', { params: { page, limit } }).then((res) => {
+    axios.get("/TB_AD/getAll", { params: { page, limit } }).then((res) => {
       const { campaignsRes, countRes } = res.data.data;
       const campaignsArray = campaignsRes.map((item) => {
-        const {
-          AD_ID, AD_NAME, AD_SRCH_START, AD_SRCH_END, rownum
-        } = item;
+        const { AD_ID, AD_NAME, AD_SRCH_START, AD_SRCH_END, rownum } = item;
         return {
           id: AD_ID,
           campaignName: AD_NAME,
           startDate: AD_SRCH_START,
           endDate: AD_SRCH_END,
-          rownum
+          rownum,
         };
       });
       setCampaigns(campaignsArray);
@@ -188,15 +178,15 @@ function KakaoNotify() {
   };
 
   const showButton = () => {
-    const type = getValues('type');
-    if (type === '1') {
+    const type = getValues("type");
+    if (type === "1") {
       return selectedItems.length === 3;
     }
     return selectedItems.length === 1;
   };
 
   const isCampaignExist = (id) => {
-    const filtered = selectedItems.filter(item => item.id === id);
+    const filtered = selectedItems.filter((item) => item.id === id);
     return filtered.length > 0;
   };
 
@@ -204,7 +194,7 @@ function KakaoNotify() {
     const isExist = isCampaignExist(id);
 
     if (isExist) {
-      const newItems = selectedItems.filter(item => item.id !== id);
+      const newItems = selectedItems.filter((item) => item.id !== id);
       setSelectedItems(newItems);
     } else {
       setSelectedItems([...selectedItems, { id, name }]);
@@ -213,35 +203,41 @@ function KakaoNotify() {
 
   function sendKakaoNotification() {
     setLoading(true);
-    const ids = selectedItems.map(item => item.id);
+    const ids = selectedItems.map((item) => item.id);
 
-    const params = { ids: JSON.stringify(ids), all: '1', test: getValues('receiver') };
+    const params = { ids: JSON.stringify(ids), all: "1", test: getValues("receiver") };
 
-    axios.get('/api/TB_NOTIFICATION/sendKakaoToNotFriend', {
-      params
-    }).then((res) => {
-      setLoading(false);
-      enqueueSnackbar('알림 발송되었습니다', { variant: 'success' });
-    }).catch((error) => {
-      alert(error.response.data.message);
-      setLoading(false);
-    });
+    axios
+      .get("/TB_NOTIFICATION/sendKakaoToNotFriend", {
+        params,
+      })
+      .then((res) => {
+        setLoading(false);
+        enqueueSnackbar("알림 발송되었습니다", { variant: "success" });
+      })
+      .catch((error) => {
+        alert(error.response.data.message);
+        setLoading(false);
+      });
   }
 
   function sendKakaoImageNotification() {
     setLoading(true);
 
-    const params = { AD_ID: selectedItems[0].id, test: getValues('receiver') };
+    const params = { AD_ID: selectedItems[0].id, test: getValues("receiver") };
 
-    axios.get('/api/TB_NOTIFICATION/kakaoImageMessage', {
-      params
-    }).then((res) => {
-      setLoading(false);
-      enqueueSnackbar('알림 발송되었습니다', { variant: 'success' });
-    }).catch((error) => {
-      alert(error.response.data.message);
-      setLoading(false);
-    });
+    axios
+      .get("/TB_NOTIFICATION/kakaoImageMessage", {
+        params,
+      })
+      .then((res) => {
+        setLoading(false);
+        enqueueSnackbar("알림 발송되었습니다", { variant: "success" });
+      })
+      .catch((error) => {
+        alert(error.response.data.message);
+        setLoading(false);
+      });
   }
 
   function sendPushNotification() {
@@ -249,27 +245,30 @@ function KakaoNotify() {
 
     const params = { id: selectedItems[0].id };
 
-    axios.get('/api/TB_NOTIFICATION/sendFcmTopic', {
-      params
-    }).then((res) => {
-      setLoading(false);
-      enqueueSnackbar('알림 발송되었습니다', { variant: 'success' });
-    }).catch((error) => {
-      alert(error.response.data.message);
-      setLoading(false);
-    });
+    axios
+      .get("/TB_NOTIFICATION/sendFcmTopic", {
+        params,
+      })
+      .then((res) => {
+        setLoading(false);
+        enqueueSnackbar("알림 발송되었습니다", { variant: "success" });
+      })
+      .catch((error) => {
+        alert(error.response.data.message);
+        setLoading(false);
+      });
   }
 
   function clickSend() {
-    const notificationType = getValues('type');
+    const notificationType = getValues("type");
     switch (notificationType) {
-      case '1':
+      case "1":
         sendKakaoNotification();
         break;
-      case '2':
+      case "2":
         sendKakaoImageNotification();
         break;
-      case '3':
+      case "3":
         sendPushNotification();
         break;
       default:
@@ -277,7 +276,7 @@ function KakaoNotify() {
     }
   }
 
-  const watchObj = watch(['type']);
+  const watchObj = watch(["type"]);
 
   useEffect(() => {
     const visible = showButton();
@@ -297,7 +296,9 @@ function KakaoNotify() {
     <Fragment>
       <StyledBox borderBottom="1px solid #e4dfdf">
         <Box maxWidth={1276} m="0 auto">
-          <Typography variant="h4" classes={{ root: classes.title }}>알림 관리</Typography>
+          <Typography variant="h4" classes={{ root: classes.title }}>
+            알림 관리
+          </Typography>
         </Box>
       </StyledBox>
       <Box pb={4} bgcolor="#f4f4f4" minHeight={800}>
@@ -305,9 +306,11 @@ function KakaoNotify() {
           <Box p={2} mb={2} bgcolor="#fff" borderRadius="4px">
             <Grid container spacing={4}>
               <Grid item>
-                <Box mb="2px"><StyledText color="#3f51b5">알림 종류</StyledText></Box>
+                <Box mb="2px">
+                  <StyledText color="#3f51b5">알림 종류</StyledText>
+                </Box>
                 <Controller
-                  as={(
+                  as={
                     <RadioGroup row aria-label="gender">
                       {notificationTypes.map((item, index) => (
                         <FormControlLabel
@@ -319,7 +322,7 @@ function KakaoNotify() {
                         />
                       ))}
                     </RadioGroup>
-                    )}
+                  }
                   name="type"
                   control={control}
                 />
@@ -328,9 +331,11 @@ function KakaoNotify() {
                 <Divider orientation="vertical" />
               </Grid>
               <Grid item>
-                <Box mb="2px"><StyledText color="#3f51b5">수신자 종류</StyledText></Box>
+                <Box mb="2px">
+                  <StyledText color="#3f51b5">수신자 종류</StyledText>
+                </Box>
                 <Controller
-                  as={(
+                  as={
                     <RadioGroup row aria-label="gender">
                       {receiverTypes.map((item, index) => (
                         <FormControlLabel
@@ -342,7 +347,7 @@ function KakaoNotify() {
                         />
                       ))}
                     </RadioGroup>
-                    )}
+                  }
                   name="receiver"
                   control={control}
                 />
@@ -354,21 +359,12 @@ function KakaoNotify() {
             <Grid container justifyContent="space-between" alignItems="center">
               <Grid item>
                 <Grid container spacing={1}>
-                  { selectedItems.map(item => (
+                  {selectedItems.map((item) => (
                     <Grid item key={item.id}>
-                      <Box
-                        p={1}
-                        bgcolor="#fff"
-                        borderRadius="5px"
-                        maxWidth={300}
-                      >
-                        <Grid style={{ display: 'flex' }}>
+                      <Box p={1} bgcolor="#fff" borderRadius="5px" maxWidth={300}>
+                        <Grid style={{ display: "flex" }}>
                           <Typography classes={{ root: classes.linkText }}>{item.name}</Typography>
-                          <Clear
-                            fontSize="small"
-                            classes={{ root: classes.clearRoot }}
-                            onClick={() => selectCampaign(item)}
-                          />
+                          <Clear fontSize="small" classes={{ root: classes.clearRoot }} onClick={() => selectCampaign(item)} />
                         </Grid>
                       </Box>
                     </Grid>
@@ -395,8 +391,10 @@ function KakaoNotify() {
             <Table>
               <TableHead>
                 <TableRow>
-                  {tableHeader.map(item => (
-                    <StyledTableCell key={item.text} align={item.align} width={item.width || null}>{item.text}</StyledTableCell>
+                  {tableHeader.map((item) => (
+                    <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
+                      {item.text}
+                    </StyledTableCell>
                   ))}
                 </TableRow>
               </TableHead>
@@ -408,14 +406,10 @@ function KakaoNotify() {
                     <StyledTableRow
                       hover
                       key={row.id}
-                      onClick={event => (disabled ? null : selectCampaign({ id: row.id, name: row.campaignName }))}
+                      onClick={(event) => (disabled ? null : selectCampaign({ id: row.id, name: row.campaignName }))}
                     >
                       <StyledTableCell>
-                        <Checkbox
-                          checked={isExist}
-                          disabled={disabled}
-                          classes={{ root: classes.checkbox }}
-                        />
+                        <Checkbox checked={isExist} disabled={disabled} classes={{ root: classes.checkbox }} />
                       </StyledTableCell>
                       <StyledTableCell align="center">
                         <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
@@ -423,9 +417,7 @@ function KakaoNotify() {
                         </StyledText>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <StyledText color={disabled ? Colors.disabled : null}>
-                          {row.campaignName}
-                        </StyledText>
+                        <StyledText color={disabled ? Colors.disabled : null}>{row.campaignName}</StyledText>
                       </StyledTableCell>
                       <StyledTableCell align="center">
                         <StyledText textAlign="center" color={disabled ? Colors.disabled : null}>
@@ -446,12 +438,7 @@ function KakaoNotify() {
         </Box>
         <Grid container justifyContent="center">
           <Grid item>
-            <MyPagination
-              itemCount={count}
-              page={page}
-              changePage={changePage}
-              perPage={limit}
-            />
+            <MyPagination itemCount={count} page={page} changePage={changePage} perPage={limit} />
           </Grid>
         </Grid>
       </Box>

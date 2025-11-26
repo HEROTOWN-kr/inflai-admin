@@ -1,45 +1,32 @@
+import React from 'react';
 import { TableSortLabel } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React from 'react';
 
-const PREFIX = 'StyledTableSortLabel';
-
-const classes = {
-  root: `${PREFIX}-root`,
-  icon: `${PREFIX}-icon`,
-  active: `${PREFIX}-active`
-};
-
-const StyledTableSortLabel = styled(TableSortLabel)({
-  [`& .${classes.root}`]: ({ color }) => ({
+const StyledTableSortLabelRoot = styled(TableSortLabel, {
+  shouldForwardProp: (prop) => !['color'].includes(prop),
+})(({ ownerState }) => {
+  const { color } = ownerState || {};
+  const resolvedColor = color || 'white';
+  return {
     '&.MuiTableSortLabel-active': {
-      color: color || 'white',
+      color: resolvedColor,
     },
     '&:hover': {
-      color: color || 'white',
-    }
-  }),
-  [`& .${classes.icon}`]: ({ color }) => ({
-    '& path': {
-      fill: color || 'white',
+      color: resolvedColor,
     },
-  }),
-  [`& .${classes.active}`]: ({ color }) => ({
-    color: color || 'white',
-  }),
+    '& svg path': {
+      fill: resolvedColor,
+    },
+  };
 });
 
-function StyledTableSortLabel(props) {
-  const {
-    color, children, ...rest
-  } = props;
-
+export default function StyledTableSortLabel(props) {
+  const { color, children, ...rest } = props;
+  const ownerState = { color };
 
   return (
-    <StyledTableSortLabel classes={classes} {...rest}>
+    <StyledTableSortLabelRoot ownerState={ownerState} {...rest}>
       {children}
-    </StyledTableSortLabel>
+    </StyledTableSortLabelRoot>
   );
 }
-
-export default StyledTableSortLabel;

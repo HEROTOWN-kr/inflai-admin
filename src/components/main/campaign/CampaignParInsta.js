@@ -1,105 +1,103 @@
-import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  Box, Checkbox, FormControlLabel, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import StyledTableCell from '../../containers/StyledTableCell';
-import StyledTableRow from '../../containers/StyledTableRow';
-import StyledText from '../../containers/StyledText';
-import MyPagination from '../../containers/MyPagination';
-import StyledLink from '../../containers/StyledLink';
-import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
-import StyledButton from '../../containers/StyledButton';
-import { Colors } from '../../../lib/Сonstants';
-import InsightDialog from './InsightDialog';
-import ConfirmDialog from '../../containers/ConfirmDialog';
-import InstaInsightDialog from './InstaInsightDialog';
-import HistoryDialog from './HistoryDialog';
+import React, { useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import { Box, Checkbox, FormControlLabel, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import StyledTableCell from "../../containers/StyledTableCell";
+import StyledTableRow from "../../containers/StyledTableRow";
+import StyledText from "../../containers/StyledText";
+import MyPagination from "../../containers/MyPagination";
+import StyledLink from "../../containers/StyledLink";
+import StyledTableSortLabel from "../../containers/StyledTableSortLabel";
+import StyledButton from "../../containers/StyledButton";
+import { Colors } from "../../../lib/Сonstants";
+import InsightDialog from "./InsightDialog";
+import ConfirmDialog from "../../containers/ConfirmDialog";
+import InstaInsightDialog from "./InstaInsightDialog";
+import HistoryDialog from "./HistoryDialog";
 
-const PREFIX = 'CampaignParInsta';
+const PREFIX = "CampaignParInsta";
 
 const classes = {
-  checkboxLabel: `${PREFIX}-checkboxLabel`
+  checkboxLabel: `${PREFIX}-checkboxLabel`,
 };
 
 const StyledBox = styled(Box)({
   [`& .${classes.checkboxLabel}`]: {
-    marginRight: 0
-  }
+    marginRight: 0,
+  },
 });
 
 const tableHeader = [
   {
-    text: '번호',
-    align: 'center',
-    width: '60px'
+    text: "번호",
+    align: "center",
+    width: "60px",
   },
   {
-    text: '이름',
-    align: 'center'
+    text: "이름",
+    align: "center",
   },
   {
-    text: '인스타계정',
-    align: 'center'
+    text: "인스타계정",
+    align: "center",
   },
   {
-    text: '팔로워',
-    align: 'center',
-    colName: 'INS_FLWR'
+    text: "팔로워",
+    align: "center",
+    colName: "INS_FLWR",
   },
   {
-    text: '평균좋아요',
-    align: 'center',
-    colName: 'INS_LIKES',
+    text: "평균좋아요",
+    align: "center",
+    colName: "INS_LIKES",
   },
   {
-    text: '평균댓글',
-    align: 'center',
-    colName: 'INS_CMNT',
+    text: "평균댓글",
+    align: "center",
+    colName: "INS_CMNT",
   },
   {
-    text: 'AI 종합점수',
-    align: 'center',
-    colName: 'INS_SCORE',
+    text: "AI 종합점수",
+    align: "center",
+    colName: "INS_SCORE",
   },
   {
-    text: '순위',
-    align: 'center',
-    width: '100px',
-    colName: 'INS_RANK',
+    text: "순위",
+    align: "center",
+    width: "100px",
+    colName: "INS_RANK",
   },
   {
-    text: '소통',
-    align: 'center',
-    width: '50px',
-    colName: 'INS_COMMUNICATE',
+    text: "소통",
+    align: "center",
+    width: "50px",
+    colName: "INS_COMMUNICATE",
   },
   {
-    text: '히스토리',
-    align: 'center',
-    width: '50px',
+    text: "히스토리",
+    align: "center",
+    width: "50px",
   },
   {
-    text: '요약',
-    align: 'center',
-    width: '50px',
+    text: "요약",
+    align: "center",
+    width: "50px",
   },
   {
-    text: '분석',
-    align: 'center',
-    width: '50px',
+    text: "분석",
+    align: "center",
+    width: "50px",
   },
   {
-    text: '선정',
-    align: 'center',
-    width: '60px',
+    text: "선정",
+    align: "center",
+    width: "60px",
   },
   {
-    text: '리뷰',
-    align: 'center',
-    width: '60px',
+    text: "리뷰",
+    align: "center",
+    width: "60px",
   },
   /* {
     text: '상태',
@@ -123,7 +121,7 @@ function CampaignParInsta() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(0);
   const [page, setPage] = useState(1);
-  const [order, setOrder] = useState({ orderBy: 'INS_FLWR', direction: 'desc' });
+  const [order, setOrder] = useState({ orderBy: "INS_FLWR", direction: "desc" });
 
   const params = useParams();
   const adId = params.id;
@@ -147,16 +145,21 @@ function CampaignParInsta() {
 
   function getParticipants() {
     const resParams = {
-      ...order, adId, limit, page
+      ...order,
+      adId,
+      limit,
+      page,
     };
-    if (selected) resParams.selected = '1';
+    if (selected) resParams.selected = "1";
 
-    axios.get('/api/TB_PARTICIPANT/getListInsta', {
-      params: resParams
-    }).then((res) => {
-      setParticipants(res.data.data);
-      setCount(res.data.count);
-    });
+    axios
+      .get("/TB_PARTICIPANT/getListInsta", {
+        params: resParams,
+      })
+      .then((res) => {
+        setParticipants(res.data.data);
+        setCount(res.data.count);
+      });
   }
 
   useEffect(() => {
@@ -168,22 +171,25 @@ function CampaignParInsta() {
   };
 
   function sortTable(id) {
-    let isDesc = order.orderBy === id && order.direction === 'desc';
-    if (order.orderBy !== 'INS_RANK' && id === 'INS_RANK') isDesc = true;
+    let isDesc = order.orderBy === id && order.direction === "desc";
+    if (order.orderBy !== "INS_RANK" && id === "INS_RANK") isDesc = true;
     setOrder({
       orderBy: id,
-      direction: isDesc ? 'asc' : 'desc'
+      direction: isDesc ? "asc" : "desc",
     });
   }
 
   function selectParticipant() {
-    axios.post('/api/TB_PARTICIPANT/change', { adId, participantId: selectedId }).then((res) => {
-      if (res.status === 201) {
-        alert(res.data.message);
-      } else {
-        getParticipants();
-      }
-    }).catch(err => alert(err.response.data.message));
+    axios
+      .post("/TB_PARTICIPANT/change", { adId, participantId: selectedId })
+      .then((res) => {
+        if (res.status === 201) {
+          alert(res.data.message);
+        } else {
+          getParticipants();
+        }
+      })
+      .catch((err) => alert(err.response.data.message));
   }
 
   function clickInfo(id) {
@@ -207,19 +213,12 @@ function CampaignParInsta() {
   }
 
   return (
-    <StyledBox mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
+    <StyledBox mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: "0 auto" }}>
       <Box mb={1}>
         <Grid container justifyContent="flex-end">
           <Grid item>
             <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={selected}
-                  onChange={() => setSelected(!selected)}
-                  name="checkedB"
-                  color="secondary"
-                />
-                )}
+              control={<Checkbox checked={selected} onChange={() => setSelected(!selected)} name="checkedB" color="secondary" />}
               label="선정자"
               classes={{ root: classes.checkboxLabel }}
             />
@@ -230,41 +229,36 @@ function CampaignParInsta() {
         <Table>
           <TableHead>
             <TableRow>
-              {tableHeader.map(item => (
+              {tableHeader.map((item) => (
                 <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
                   {item.colName ? (
                     <StyledTableSortLabel
                       color="#66f8ff"
                       active={order.orderBy === item.colName}
-                      direction={order.orderBy === item.colName ? order.direction : 'desc'}
+                      direction={order.orderBy === item.colName ? order.direction : "desc"}
                       onClick={() => sortTable(item.colName)}
                     >
                       {item.text}
                     </StyledTableSortLabel>
-                  ) : item.text}
+                  ) : (
+                    item.text
+                  )}
                 </StyledTableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {participants.map(row => (
+            {participants.map((row) => (
               <StyledTableRow hover key={row.id}>
                 <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.rownum}
-                  </StyledText>
+                  <StyledText textAlign="center">{row.rownum}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.PAR_NAME || '-'}
-                  </StyledText>
+                  <StyledText textAlign="center">{row.PAR_NAME || "-"}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   {row.INS_USERNAME ? (
-                    <StyledLink
-                      href={`https://www.instagram.com/${row.INS_USERNAME}/`}
-                      target="_blank"
-                    >
+                    <StyledLink href={`https://www.instagram.com/${row.INS_USERNAME}/`} target="_blank">
                       {`@${row.INS_USERNAME}`}
                     </StyledLink>
                   ) : (
@@ -272,65 +266,43 @@ function CampaignParInsta() {
                   )}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.INS_FLWR || '-'}
-                  </StyledText>
+                  <StyledText textAlign="center">{row.INS_FLWR || "-"}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.INS_LIKES || '-'}
-                  </StyledText>
+                  <StyledText textAlign="center">{row.INS_LIKES || "-"}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.INS_CMNT || '-'}
-                  </StyledText>
+                  <StyledText textAlign="center">{row.INS_CMNT || "-"}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.INS_SCORE || '-'}
-                  </StyledText>
+                  <StyledText textAlign="center">{row.INS_SCORE || "-"}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledText textAlign="center">
-                    {row.INS_RANK || '-'}
-                  </StyledText>
+                  <StyledText textAlign="center">{row.INS_RANK || "-"}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   <StyledText textAlign="center">
                     {/* {RoundLikeComment(row.INS_LIKES, row.INS_CMNT)} */}
-                    {row.INS_COMMUNICATE ? `${row.INS_COMMUNICATE}%` : '-'}
+                    {row.INS_COMMUNICATE ? `${row.INS_COMMUNICATE}%` : "-"}
                   </StyledText>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledButton
-                    height="25px"
-                    padding="0px 5px"
-                    onClick={() => clickHistory(row.INF_ID)}
-                  >
+                  <StyledButton height="25px" padding="0px 5px" onClick={() => clickHistory(row.INF_ID)}>
                     체크
                   </StyledButton>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledButton
-                    height="25px"
-                    padding="0px 5px"
-                    onClick={() => clickInfo(row.INF_ID)}
-                  >
-                     요약
+                  <StyledButton height="25px" padding="0px 5px" onClick={() => clickInfo(row.INF_ID)}>
+                    요약
                   </StyledButton>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <StyledButton
-                    height="25px"
-                    padding="0px 5px"
-                    onClick={() => clickInstaInfo(row.INF_ID)}
-                  >
+                  <StyledButton height="25px" padding="0px 5px" onClick={() => clickInstaInfo(row.INF_ID)}>
                     분석
                   </StyledButton>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {row.PAR_STATUS === '1' ? (
+                  {row.PAR_STATUS === "1" ? (
                     <StyledButton
                       background={Colors.green}
                       hoverBackground={Colors.greenHover}
@@ -338,7 +310,7 @@ function CampaignParInsta() {
                       padding="0px 5px"
                       onClick={() => clickSelect(row.PAR_ID)}
                     >
-                         선정
+                      선정
                     </StyledButton>
                   ) : (
                     <StyledText color={Colors.green}>선정됨</StyledText>
@@ -351,9 +323,9 @@ function CampaignParInsta() {
                       hoverBackground={Colors.greenHover}
                       height="25px"
                       padding="0px 5px"
-                      onClick={() => window.open(row.PAR_REVIEW, '_blank')}
+                      onClick={() => window.open(row.PAR_REVIEW, "_blank")}
                     >
-                         링크
+                      링크
                     </StyledButton>
                   ) : null}
                 </StyledTableCell>
@@ -366,24 +338,14 @@ function CampaignParInsta() {
       <Box py={4}>
         <Grid container justifyContent="center">
           <Grid item>
-            <MyPagination
-              itemCount={count}
-              page={page}
-              changePage={changePage}
-              perPage={limit}
-            />
+            <MyPagination itemCount={count} page={page} changePage={changePage} perPage={limit} />
           </Grid>
         </Grid>
       </Box>
       <InsightDialog open={dialogOpen} closeDialog={toggleDialog} selectedId={selectedId} />
       <InstaInsightDialog open={instaDialogOpen} handleClose={toggleInstaDialog} INS_ID={selectedId} />
       <HistoryDialog open={historyDialogOpen} closeDialog={toggleHistoryDialog} INF_ID={selectedId} />
-      <ConfirmDialog
-        open={confirmDialogOpen}
-        closeDialog={toggleConfirmDialog}
-        dialogText="선정하시겠습니까?"
-        onConfirm={selectParticipant}
-      />
+      <ConfirmDialog open={confirmDialogOpen} closeDialog={toggleConfirmDialog} dialogText="선정하시겠습니까?" onConfirm={selectParticipant} />
     </StyledBox>
   );
 }

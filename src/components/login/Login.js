@@ -1,51 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import '../../css/sub.scss';
-import { Grid, Button, Box } from '@mui/material';
-import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
-import MyTextField from '../containers/MyTextField';
+import React, { useEffect, useState } from "react";
+import "../../css/sub.scss";
+import { Grid, Button, Box } from "@mui/material";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import MyTextField from "../containers/MyTextField";
 
-function Login({
-  changeUser,
-  user,
-  history
-}) {
-  const [error, setError] = useState('');
+function Login({ changeUser, user, history }) {
+  const [error, setError] = useState("");
 
   const SignupSchema = Yup.object().shape({
-    email: Yup.string()
-      .required('이메일을 입력해주세요'),
-    password: Yup.string()
-      .required('비밀번호를 입력해주세요'),
+    email: Yup.string().required("이메일을 입력해주세요"),
+    password: Yup.string().required("비밀번호를 입력해주세요"),
   });
 
   useEffect(() => {
     if (!user.token) {
-      navigate('/Login');
+      navigate("/Login");
     } else {
-      navigate('/Dashboard');
+      navigate("/Dashboard");
     }
   }, [user]);
 
   return (
     <Grid container className="login" alignItems="center" justifyContent="center">
       <Grid item>
-        <Box
-          width="320px"
-          boxSizing="border-box"
-          p={6}
-          border="2px solid #f50057"
-          borderRadius="3%"
-        >
+        <Box width="320px" boxSizing="border-box" p={6} border="2px solid #f50057" borderRadius="3%">
           <Formik
             initialValues={{
-              email: '',
-              password: ''
+              email: "",
+              password: "",
             }}
             validationSchema={SignupSchema}
             onSubmit={(values) => {
-              axios.post('/api/TB_ADMIN/login', values)
+              axios
+                .post("/TB_ADMIN/login", values)
                 .then((res) => {
                   if (res.data.code === 200) {
                     changeUser({ token: res.data.token });
@@ -55,15 +44,13 @@ function Login({
                     console.log(res);
                   }
                 })
-                .catch(error => (error));
+                .catch((error) => error);
             }}
           >
-            {({
-              submitForm
-            }) => (
+            {({ submitForm }) => (
               <Grid container spacing={4}>
                 <Grid item xs={12} className="login-text">
-                                로그인
+                  로그인
                 </Grid>
                 <Grid item xs={12}>
                   <Form>
@@ -75,25 +62,14 @@ function Login({
                         <MyTextField name="email" label="아이디" />
                       </Grid>
                       <Grid item xs={12}>
-                        <MyTextField
-                          name="password"
-                          type="password"
-                          label="비밀번호"
-                          onEnter={submitForm}
-                        />
+                        <MyTextField name="password" type="password" label="비밀번호" onEnter={submitForm} />
                       </Grid>
                     </Grid>
                   </Form>
                 </Grid>
                 <Grid item xs={12}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="secondary"
-                    className="login-button"
-                    onClick={submitForm}
-                  >
-                                    로그인
+                  <Button fullWidth variant="contained" color="secondary" className="login-button" onClick={submitForm}>
+                    로그인
                   </Button>
                 </Grid>
               </Grid>

@@ -1,124 +1,122 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  Box, CircularProgress, Grid, IconButton, InputAdornment, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@mui/material';
-import { PieChart } from 'react-minimal-pie-chart';
-import axios from 'axios';
-import { Form, Formik } from 'formik';
-import SearchIcon from '@mui/icons-material/Search';
-import { useForm } from 'react-hook-form';
-import StyledButton from '../../../containers/StyledButton';
-import StyledTableCell from '../../../containers/StyledTableCell';
-import StyledText from '../../../containers/StyledText';
-import StyledTableRow from '../../../containers/StyledTableRow';
-import MyTextField from '../../../containers/MyTextField';
-import StyledTableSortLabel from '../../../containers/StyledTableSortLabel';
-import defaultAccountImage from '../../../../img/default_account_image.png';
-import StyledLink from '../../../containers/StyledLink';
-import MyPagination from '../../../containers/MyPagination';
-import StyledTitle from '../../../containers/StyledTitle';
-import ReactFormText from '../../../containers/ReactFormText';
+import React, { Fragment, useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import { Box, CircularProgress, Grid, IconButton, InputAdornment, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
+import { PieChart } from "react-minimal-pie-chart";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { Form, Formik } from "formik";
+import SearchIcon from "@mui/icons-material/Search";
+import { useForm } from "react-hook-form";
+import StyledButton from "../../../containers/StyledButton";
+import StyledTableCell from "../../../containers/StyledTableCell";
+import StyledText from "../../../containers/StyledText";
+import StyledTableRow from "../../../containers/StyledTableRow";
+import MyTextField from "../../../containers/MyTextField";
+import StyledTableSortLabel from "../../../containers/StyledTableSortLabel";
+import defaultAccountImage from "../../../../img/default_account_image.png";
+import StyledLink from "../../../containers/StyledLink";
+import MyPagination from "../../../containers/MyPagination";
+import StyledTitle from "../../../containers/StyledTitle";
+import ReactFormText from "../../../containers/ReactFormText";
 
-const PREFIX = 'InstagramList';
+const PREFIX = "InstagramList";
 
 const classes = {
   root: `${PREFIX}-root`,
   endAdornment: `${PREFIX}-endAdornment`,
-  tableRowRoot: `${PREFIX}-tableRowRoot`
+  tableRowRoot: `${PREFIX}-tableRowRoot`,
 };
 
 const StyledBox = styled(Box)({
   [`& .${classes.root}`]: {
-    background: '#ffffff'
+    background: "#ffffff",
   },
   [`& .${classes.endAdornment}`]: {
-    padding: '0'
+    padding: "0",
   },
   [`& .${classes.tableRowRoot}`]: {
-    '&:hover': {
-      cursor: 'pointer',
-      backgroundColor: '#9199b6'
-    }
-  }
+    "&:hover": {
+      cursor: "pointer",
+      backgroundColor: "#9199b6",
+    },
+  },
 });
 
 const tableRows = {
   title: [
     {
-      id: '',
-      text: '#',
-      align: 'center',
-      width: '60px'
+      id: "",
+      text: "#",
+      align: "center",
+      width: "60px",
     },
     {
-      id: '',
-      text: '인스타그램 정보',
-      align: 'left',
+      id: "",
+      text: "인스타그램 정보",
+      align: "left",
       // width: '200px'
     },
     {
-      id: 'INS_FLWR',
-      text: '팔로워 수',
-      align: 'left'
+      id: "INS_FLWR",
+      text: "팔로워 수",
+      align: "left",
     },
     {
-      id: 'INS_FLW',
-      text: '팔로잉 수',
-      align: 'left'
+      id: "INS_FLW",
+      text: "팔로잉 수",
+      align: "left",
     },
     {
-      id: 'INS_MEDIA_CNT',
-      text: '게시물 수',
-      align: 'left'
+      id: "INS_MEDIA_CNT",
+      text: "게시물 수",
+      align: "left",
     },
     {
-      id: 'INS_LIKES',
-      text: '좋아요 수',
-      align: 'left'
+      id: "INS_LIKES",
+      text: "좋아요 수",
+      align: "left",
     },
     {
-      id: 'INS_CMNT',
-      text: '댓글 수',
-      align: 'left'
+      id: "INS_CMNT",
+      text: "댓글 수",
+      align: "left",
     },
     {
-      id: '',
-      text: 'is Fake?',
-      align: 'left'
+      id: "",
+      text: "is Fake?",
+      align: "left",
     },
   ],
   titleDetectInfo: [
     {
-      text: '',
-      align: 'center',
-      width: '40px'
+      text: "",
+      align: "center",
+      width: "40px",
     },
     {
-      text: '타입',
-      align: 'left',
+      text: "타입",
+      align: "left",
       // width: '200px'
     },
     {
-      text: '좋아요 수',
-      align: 'left'
+      text: "좋아요 수",
+      align: "left",
     },
     {
-      text: '댓글 수',
-      align: 'left'
+      text: "댓글 수",
+      align: "left",
     },
     {
-      text: '콘텐츠 수',
-      align: 'left'
+      text: "콘텐츠 수",
+      align: "left",
     },
   ],
-  body: ['rownum', 'INF_NAME', 'INS_FLWR']
+  body: ["rownum", "INF_NAME", "INS_FLWR"],
 };
 
 function LoadingComponent() {
   return (
     <StyledBox height={536}>
-      <Grid container justifyContent="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
+      <Grid container justifyContent="center" alignItems="center" style={{ height: "100%", maxWidth: "inherit" }}>
         <Grid item>
           <CircularProgress />
         </Grid>
@@ -128,25 +126,24 @@ function LoadingComponent() {
 }
 
 function InstagramList(props) {
-  const [searchWord, setSearchWord] = useState('');
-  const [updateTime, setUpdateTime] = useState('');
+  const [searchWord, setSearchWord] = useState("");
+  const [updateTime, setUpdateTime] = useState("");
   const [loading, setLoading] = useState(false);
   const [influencers, setInfluencers] = useState([]);
   const [detectData, setDetectData] = useState([]);
-  const [selectedRow, setSelectedRow] = useState('');
+  const [selectedRow, setSelectedRow] = useState("");
   const [process, setProcess] = useState(false);
-  const [order, setOrder] = useState({ orderBy: 'INS_FLWR', direction: 'desc' });
+  const [order, setOrder] = useState({ orderBy: "INS_FLWR", direction: "desc" });
 
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
 
   const { register, handleSubmit, errors } = useForm({
-    mode: 'onBlur',
-    defaultValues: { searchValue: '' }
+    mode: "onBlur",
+    defaultValues: { searchValue: "" },
   });
 
   const limit = 10;
-
 
   function searchFunc(data) {
     setPage(1);
@@ -158,10 +155,13 @@ function InstagramList(props) {
   };
 
   async function getInfluencers() {
-    const InstaData = await axios.get('/api/TB_INSTA/', {
+    const InstaData = await axios.get("/TB_INSTA/", {
       params: {
-        ...order, searchWord, limit, page
-      }
+        ...order,
+        searchWord,
+        limit,
+        page,
+      },
     });
     const { list, cnt } = InstaData.data.data;
     setInfluencers(list);
@@ -169,19 +169,19 @@ function InstagramList(props) {
   }
 
   async function getUpdateData() {
-    const InstaData = await axios.get('/api/TB_ADMIN/getUpdateDate');
+    const InstaData = await axios.get("/TB_ADMIN/getUpdateDate");
     const { ADM_UPDATE_DT } = InstaData.data.data;
     const updateDate = new Date(ADM_UPDATE_DT);
 
     const Year = updateDate.getFullYear();
-    const Month = (`0${updateDate.getMonth() + 1}`).slice(-2);
-    const Day = (`0${updateDate.getDate()}`).slice(-2);
-    const Hours = (`0${updateDate.getHours()}`).slice(-2);
-    const Minutes = (`0${updateDate.getMinutes()}`).slice(-2);
-    const Seconds = (`0${updateDate.getSeconds()}`).slice(-2);
+    const Month = `0${updateDate.getMonth() + 1}`.slice(-2);
+    const Day = `0${updateDate.getDate()}`.slice(-2);
+    const Hours = `0${updateDate.getHours()}`.slice(-2);
+    const Minutes = `0${updateDate.getMinutes()}`.slice(-2);
+    const Seconds = `0${updateDate.getSeconds()}`.slice(-2);
 
-    const myDate = [Year, Month, Day].join('-');
-    const Time = [Hours, Minutes, Seconds].join(':');
+    const myDate = [Year, Month, Day].join("-");
+    const Time = [Hours, Minutes, Seconds].join(":");
     const fullDate = `${myDate} ${Time}`;
 
     setUpdateTime(fullDate);
@@ -193,10 +193,10 @@ function InstagramList(props) {
     // const isLocal = window.location.host !== 'admin.inflai.com';
     const { host } = window.location;
 
-    const apiUrl = type === 1 ? 'getGoogleData' : 'getGoogleDataObject';
+    const apiUrl = type === 1 ? "getGoogleData" : "getGoogleDataObject";
 
     const googleData = await axios.get(`/api/TB_INSTA/${apiUrl}`, {
-      params: { INS_ID, host }
+      params: { INS_ID, host },
     });
     setDetectData(googleData.data.statistics);
     setProcess(false);
@@ -218,10 +218,10 @@ function InstagramList(props) {
   }, []);
 
   function sortTable(id) {
-    const isDesc = order.orderBy === id && order.direction === 'desc';
+    const isDesc = order.orderBy === id && order.direction === "desc";
     setOrder({
       orderBy: id,
-      direction: isDesc ? 'asc' : 'desc'
+      direction: isDesc ? "asc" : "desc",
     });
   }
 
@@ -245,10 +245,10 @@ function InstagramList(props) {
                           <SearchIcon fontSize="small" />
                         </IconButton>
                       </InputAdornment>
-                    )
+                    ),
                   }}
                   onKeyPress={(ev) => {
-                    if (ev.key === 'Enter') {
+                    if (ev.key === "Enter") {
                       ev.preventDefault();
                       handleSubmit(searchFunc)();
                     }
@@ -256,14 +256,13 @@ function InstagramList(props) {
                 />
               </Box>
             </Grid>
-            { searchWord ? (
+            {searchWord ? (
               <Grid item>
                 <Box ml={2} fontSize={24} color="green">
                   {`(${searchWord}) 검색 결과`}
                 </Box>
               </Grid>
-            ) : null }
-
+            ) : null}
           </Grid>
           <Grid item>
             <StyledText color="#b9b9b9" fontSize="14px">
@@ -280,16 +279,16 @@ function InstagramList(props) {
             <Table aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  { tableRows.title.map(item => (
+                  {tableRows.title.map((item) => (
                     <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
-                      { item.id ? (
+                      {item.id ? (
                         <Grid container justifyContent="center">
                           <Grid item>
                             <StyledTableSortLabel
                               id={item.id}
                               color="#66f8ff"
                               active={order.orderBy === item.id}
-                              direction={order.orderBy === item.id ? order.direction : 'desc'}
+                              direction={order.orderBy === item.id ? order.direction : "desc"}
                               onClick={() => sortTable(item.id)}
                             >
                               {item.text}
@@ -302,11 +301,11 @@ function InstagramList(props) {
                         </StyledText>
                       )}
                     </StyledTableCell>
-                  )) }
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {influencers.map(row => (
+                {influencers.map((row) => (
                   <StyledTableRow
                     key={row.INS_ID}
                     selected={row.INS_ID === selectedRow}
@@ -325,7 +324,10 @@ function InstagramList(props) {
                             height="37px"
                             borderRadius="100%"
                             alt="noFoto"
-                            onError={(e) => { e.target.onerror = null; e.target.src = `${defaultAccountImage}`; }}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = `${defaultAccountImage}`;
+                            }}
                             src={row.INS_PROFILE_IMG || defaultAccountImage}
                             component="img"
                           />
@@ -335,11 +337,8 @@ function InstagramList(props) {
                             {row.INS_NAME ? `${row.INS_NAME} / ${row.TB_INFLUENCER.INF_NAME}` : row.TB_INFLUENCER.INF_NAME}
                           </StyledText>
                           <Box paddingTop="3px" fontSize="12px" color="#555">
-                            <StyledLink
-                              href={`https://www.instagram.com/${row.INS_USERNAME || 'instagram'}/`}
-                              target="_blank"
-                            >
-                              {`@${row.INS_USERNAME || 'instagram'}`}
+                            <StyledLink href={`https://www.instagram.com/${row.INS_USERNAME || "instagram"}/`} target="_blank">
+                              {`@${row.INS_USERNAME || "instagram"}`}
                             </StyledLink>
                           </Box>
                         </Grid>
@@ -372,7 +371,7 @@ function InstagramList(props) {
                     </StyledTableCell>
                     <StyledTableCell align="left">
                       <StyledText fontWeight="500" fontSize="16px" textAlign="center">
-                        {`${(row.INS_CMNT * 100 / row.INS_LIKES).toFixed(2)}%`}
+                        {`${((row.INS_CMNT * 100) / row.INS_LIKES).toFixed(2)}%`}
                       </StyledText>
                     </StyledTableCell>
                   </StyledTableRow>
@@ -383,12 +382,7 @@ function InstagramList(props) {
           <Box py={4}>
             <Grid container justifyContent="center">
               <Grid item>
-                <MyPagination
-                  itemCount={count}
-                  page={page}
-                  changePage={changePage}
-                  perPage={10}
-                />
+                <MyPagination itemCount={count} page={page} changePage={changePage} perPage={10} />
               </Grid>
             </Grid>
           </Box>

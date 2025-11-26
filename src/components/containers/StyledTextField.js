@@ -3,8 +3,7 @@ import { withStyles } from 'tss-react/mui';
 import '../../css/sub.scss';
 
 
-const StyledTextField = withStyles({
-    TextField,
+const StyledTextField = withStyles(TextField,{
   root: {
     '& .MuiOutlinedInput-input': {
       padding: '10.5px 14px',

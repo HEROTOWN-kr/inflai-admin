@@ -1,74 +1,72 @@
-import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import {
-  Box, Grid, Paper, Table, TableContainer, TableBody, TableHead, TableRow, FormControlLabel, Checkbox
-} from '@mui/material';
-import StyledTableCell from '../../containers/StyledTableCell';
-import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
-import StyledTableRow from '../../containers/StyledTableRow';
-import StyledText from '../../containers/StyledText';
-import StyledLink from '../../containers/StyledLink';
-import MyPagination from '../../containers/MyPagination';
-import { Colors } from '../../../lib/Сonstants';
-import StyledButton from '../../containers/StyledButton';
-import ConfirmDialog from '../../containers/ConfirmDialog';
+import React, { useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import { useNavigate, useParams } from "react-router-dom";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { Box, Grid, Paper, Table, TableContainer, TableBody, TableHead, TableRow, FormControlLabel, Checkbox } from "@mui/material";
+import StyledTableCell from "../../containers/StyledTableCell";
+import StyledTableSortLabel from "../../containers/StyledTableSortLabel";
+import StyledTableRow from "../../containers/StyledTableRow";
+import StyledText from "../../containers/StyledText";
+import StyledLink from "../../containers/StyledLink";
+import MyPagination from "../../containers/MyPagination";
+import { Colors } from "../../../lib/Сonstants";
+import StyledButton from "../../containers/StyledButton";
+import ConfirmDialog from "../../containers/ConfirmDialog";
 
-const PREFIX = 'CampaignParBlog';
+const PREFIX = "CampaignParBlog";
 
 const classes = {
-  checkboxLabel: `${PREFIX}-checkboxLabel`
+  checkboxLabel: `${PREFIX}-checkboxLabel`,
 };
 
 const StyledBox = styled(Box)({
   [`& .${classes.checkboxLabel}`]: {
-    marginRight: 0
-  }
+    marginRight: 0,
+  },
 });
 
 const tableHeader = [
   {
-    text: '번호',
-    align: 'center',
-    width: '60px'
+    text: "번호",
+    align: "center",
+    width: "60px",
   },
   {
-    text: '이름',
+    text: "이름",
   },
   {
-    text: '방문자(평균)',
-    align: 'center',
-    width: '130px',
-    colName: 'NAV_GUEST_AVG'
+    text: "방문자(평균)",
+    align: "center",
+    width: "130px",
+    colName: "NAV_GUEST_AVG",
   },
   {
-    text: '이웃',
-    align: 'center',
-    width: '100px',
-    colName: 'NAV_FLWR'
+    text: "이웃",
+    align: "center",
+    width: "100px",
+    colName: "NAV_FLWR",
   },
   {
-    text: '게시물',
-    align: 'center',
-    width: '100px',
-    colName: 'NAV_CONT'
+    text: "게시물",
+    align: "center",
+    width: "100px",
+    colName: "NAV_CONT",
   },
   {
-    text: '블로그',
-    align: 'center',
-    width: '60px',
+    text: "블로그",
+    align: "center",
+    width: "60px",
   },
   {
-    text: '선정',
-    align: 'center',
-    width: '60px',
+    text: "선정",
+    align: "center",
+    width: "60px",
   },
   {
-    text: '리뷰',
-    align: 'center',
-    width: '60px',
-  }
+    text: "리뷰",
+    align: "center",
+    width: "60px",
+  },
 ];
 
 function CampaignParBlog() {
@@ -78,7 +76,7 @@ function CampaignParBlog() {
   const [page, setPage] = useState(1);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(0);
-  const [order, setOrder] = useState({ orderBy: 'NAV_FLWR', direction: 'desc' });
+  const [order, setOrder] = useState({ orderBy: "NAV_FLWR", direction: "desc" });
 
   const params = useParams();
   const adId = params.id;
@@ -90,26 +88,34 @@ function CampaignParBlog() {
 
   function getParticipants() {
     const resParams = {
-      ...order, adId, limit, page
+      ...order,
+      adId,
+      limit,
+      page,
     };
-    if (selected) resParams.selected = '1';
+    if (selected) resParams.selected = "1";
 
-    axios.get('/api/TB_PARTICIPANT/getListBlog', {
-      params: resParams
-    }).then((res) => {
-      setParticipants(res.data.data);
-      setCount(res.data.count);
-    });
+    axios
+      .get("/TB_PARTICIPANT/getListBlog", {
+        params: resParams,
+      })
+      .then((res) => {
+        setParticipants(res.data.data);
+        setCount(res.data.count);
+      });
   }
 
   function selectParticipant() {
-    axios.post('/api/TB_PARTICIPANT/change', { adId, participantId: selectedId }).then((res) => {
-      if (res.status === 201) {
-        alert(res.data.message);
-      } else {
-        getParticipants();
-      }
-    }).catch(err => alert(err.response.data.message));
+    axios
+      .post("/TB_PARTICIPANT/change", { adId, participantId: selectedId })
+      .then((res) => {
+        if (res.status === 201) {
+          alert(res.data.message);
+        } else {
+          getParticipants();
+        }
+      })
+      .catch((err) => alert(err.response.data.message));
   }
 
   useEffect(() => {
@@ -121,11 +127,11 @@ function CampaignParBlog() {
   };
 
   function sortTable(id) {
-    const isDesc = order.orderBy === id && order.direction === 'desc';
+    const isDesc = order.orderBy === id && order.direction === "desc";
     setPage(1);
     setOrder({
       orderBy: id,
-      direction: isDesc ? 'asc' : 'desc'
+      direction: isDesc ? "asc" : "desc",
     });
   }
 
@@ -135,19 +141,12 @@ function CampaignParBlog() {
   }
 
   return (
-    <StyledBox mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
+    <StyledBox mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: "0 auto" }}>
       <Box mb={1}>
         <Grid container justifyContent="flex-end">
           <Grid item>
             <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={selected}
-                  onChange={() => setSelected(!selected)}
-                  name="checkedB"
-                  color="secondary"
-                />
-                )}
+              control={<Checkbox checked={selected} onChange={() => setSelected(!selected)} name="checkedB" color="secondary" />}
               label="선정자"
               classes={{ root: classes.checkboxLabel }}
             />
@@ -160,53 +159,41 @@ function CampaignParBlog() {
             <Table>
               <TableHead>
                 <TableRow>
-                  {tableHeader.map(item => (
+                  {tableHeader.map((item) => (
                     <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
                       {item.colName ? (
                         <StyledTableSortLabel
                           color="#66f8ff"
                           active={order.orderBy === item.colName}
-                          direction={order.orderBy === item.colName ? order.direction : 'desc'}
+                          direction={order.orderBy === item.colName ? order.direction : "desc"}
                           onClick={() => sortTable(item.colName)}
                         >
                           {item.text}
                         </StyledTableSortLabel>
-                      ) : item.text}
+                      ) : (
+                        item.text
+                      )}
                     </StyledTableCell>
                   ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {participants.map(row => (
-                  <StyledTableRow
-                    hover
-                    key={row.PAR_ID}
-                    onClick={(event) => {}}
-                  >
+                {participants.map((row) => (
+                  <StyledTableRow hover key={row.PAR_ID} onClick={(event) => {}}>
                     <StyledTableCell align="center">
-                      <StyledText textAlign="center">
-                        {row.rownum}
-                      </StyledText>
+                      <StyledText textAlign="center">{row.rownum}</StyledText>
                     </StyledTableCell>
                     <StyledTableCell>
-                      <StyledText>
-                        {row.PAR_NAME || '-'}
-                      </StyledText>
+                      <StyledText>{row.PAR_NAME || "-"}</StyledText>
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <StyledText textAlign="center">
-                        {row.NAV_GUEST_AVG || '-'}
-                      </StyledText>
+                      <StyledText textAlign="center">{row.NAV_GUEST_AVG || "-"}</StyledText>
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <StyledText textAlign="center">
-                        {row.NAV_FLWR || '-'}
-                      </StyledText>
+                      <StyledText textAlign="center">{row.NAV_FLWR || "-"}</StyledText>
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <StyledText textAlign="center">
-                        {row.NAV_CONT || '-'}
-                      </StyledText>
+                      <StyledText textAlign="center">{row.NAV_CONT || "-"}</StyledText>
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {row.NAV_BLOG_ID ? (
@@ -215,16 +202,16 @@ function CampaignParBlog() {
                           hoverBackground={Colors.greenHover}
                           height="25px"
                           padding="0px 5px"
-                          onClick={() => window.open(`https://blog.naver.com/${row.NAV_BLOG_ID}`, '_blank')}
+                          onClick={() => window.open(`https://blog.naver.com/${row.NAV_BLOG_ID}`, "_blank")}
                         >
-                              링크
+                          링크
                         </StyledButton>
                       ) : (
                         <StyledText textAlign="center">-</StyledText>
                       )}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {row.PAR_STATUS === '1' ? (
+                      {row.PAR_STATUS === "1" ? (
                         <StyledButton
                           background={Colors.green}
                           hoverBackground={Colors.greenHover}
@@ -232,7 +219,7 @@ function CampaignParBlog() {
                           padding="0px 5px"
                           onClick={() => clickSelect(row.PAR_ID)}
                         >
-                              선정
+                          선정
                         </StyledButton>
                       ) : (
                         <StyledText color={Colors.green}>선정됨</StyledText>
@@ -245,9 +232,9 @@ function CampaignParBlog() {
                           hoverBackground={Colors.greenHover}
                           height="25px"
                           padding="0px 5px"
-                          onClick={() => window.open(row.PAR_REVIEW, '_blank')}
+                          onClick={() => window.open(row.PAR_REVIEW, "_blank")}
                         >
-                              링크
+                          링크
                         </StyledButton>
                       ) : null}
                     </StyledTableCell>
@@ -259,12 +246,7 @@ function CampaignParBlog() {
           <Box py={4}>
             <Grid container justifyContent="center">
               <Grid item>
-                <MyPagination
-                  itemCount={count}
-                  page={page}
-                  changePage={changePage}
-                  perPage={limit}
-                />
+                <MyPagination itemCount={count} page={page} changePage={changePage} perPage={limit} />
               </Grid>
             </Grid>
           </Box>
@@ -272,12 +254,7 @@ function CampaignParBlog() {
       ) : (
         <StyledText textAlign="center">신청한 인플루언서가 없습니다</StyledText>
       )}
-      <ConfirmDialog
-        open={confirmDialogOpen}
-        closeDialog={toggleConfirmDialog}
-        dialogText="선정하시겠습니까?"
-        onConfirm={selectParticipant}
-      />
+      <ConfirmDialog open={confirmDialogOpen} closeDialog={toggleConfirmDialog} dialogText="선정하시겠습니까?" onConfirm={selectParticipant} />
     </StyledBox>
   );
 }

@@ -1,15 +1,12 @@
-import { TableCell, TableRow } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import React from 'react';
+import { TableRow } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-const PREFIX = 'StyledTableRow';
-
-const classes = {
-  root: `${PREFIX}-root`
-};
-
-const StyledTableRow = styled(TableRow)({
-  [`& .${classes.root}`]: ({ backgroundColor, color }) => ({
+const StyledTableRowRoot = styled(TableRow, {
+  shouldForwardProp: (prop) => !['backgroundColor', 'color'].includes(prop),
+})(({ ownerState }) => {
+  const { backgroundColor, color } = ownerState || {};
+  return {
     backgroundColor: backgroundColor || 'transparent',
     '&.Mui-selected': {
       backgroundColor: '#39ca66',
@@ -18,23 +15,16 @@ const StyledTableRow = styled(TableRow)({
         backgroundColor: '#39ca66',
       }
     }
-  }),
+  };
 });
 
-function StyledTableRow(props) {
-  const {
-    children, ...rest
-  } = props;
-
+export default function StyledTableRow(props) {
+  const { children, backgroundColor, color, ...rest } = props;
+  const ownerState = { backgroundColor, color };
 
   return (
-    <StyledTableRow
-      classes={classes}
-      {...rest}
-    >
+    <StyledTableRowRoot ownerState={ownerState} {...rest}>
       {children}
-    </StyledTableRow>
+    </StyledTableRowRoot>
   );
 }
-
-export default StyledTableRow;

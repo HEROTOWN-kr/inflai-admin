@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Button, Grid, Divider, CircularProgress, Box, Paper
-} from '@mui/material';
-import axios from 'axios';
-import nameArray from '../../../lib/nameArray';
+import React, { useEffect, useState } from "react";
+import { Button, Grid, Divider, CircularProgress, Box, Paper } from "@mui/material";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import nameArray from "../../../lib/nameArray";
 
 function RequestDetail(props) {
   const { history, match } = props;
@@ -13,15 +11,17 @@ function RequestDetail(props) {
   const consultArray = nameArray.consult();
 
   function getStatistic() {
-    axios.get('/api/TB_REQ_AD/detail', {
-      params: {
-        id: match.params.id
-      }
-    }).then((res) => {
-      const { data } = res.data;
-      setRequestData(data);
-      setProcess(false);
-    });
+    axios
+      .get("/TB_REQ_AD/detail", {
+        params: {
+          id: match.params.id,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        setRequestData(data);
+        setProcess(false);
+      });
   }
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function RequestDetail(props) {
   }, []);
 
   function getText(array, value) {
-    let text = '';
+    let text = "";
     array.map((item) => {
       if (item.value === value) {
         text = item.text;
@@ -39,7 +39,7 @@ function RequestDetail(props) {
   }
 
   return (
-    <Box mt={4} p={4} component={Paper} width={780} sx={{ margin: '0 auto', boxSizing: 'border-box' }}>
+    <Box mt={4} p={4} component={Paper} width={780} sx={{ margin: "0 auto", boxSizing: "border-box" }}>
       <div className="request-detail data-form">
         {process ? (
           <Grid container justifyContent="center">
@@ -53,33 +53,25 @@ function RequestDetail(props) {
                   <div className="label-holder">
                     <label htmlFor="companyName">업체명</label>
                   </div>
-                  <div className="text-holder">
-                    {requestData.REQ_COMP_NAME}
-                  </div>
+                  <div className="text-holder">{requestData.REQ_COMP_NAME}</div>
                 </Grid>
                 <Grid item md={6}>
                   <div className="label-holder">
                     <label htmlFor="companyName">담당자명</label>
                   </div>
-                  <div className="text-holder">
-                    {requestData.REQ_NAME}
-                  </div>
+                  <div className="text-holder">{requestData.REQ_NAME}</div>
                 </Grid>
                 <Grid item md={6}>
                   <div className="label-holder">
                     <label htmlFor="companyName">이메일</label>
                   </div>
-                  <div className="text-holder">
-                    {requestData.REQ_EMAIL}
-                  </div>
+                  <div className="text-holder">{requestData.REQ_EMAIL}</div>
                 </Grid>
                 <Grid item md={6}>
                   <div className="label-holder">
                     <label htmlFor="companyName">연락처</label>
                   </div>
-                  <div className="text-holder">
-                    {requestData.REQ_TEL}
-                  </div>
+                  <div className="text-holder">{requestData.REQ_TEL}</div>
                 </Grid>
               </Grid>
             </Grid>
@@ -90,17 +82,13 @@ function RequestDetail(props) {
               <div className="label-holder">
                 <label htmlFor="companyName">업종</label>
               </div>
-              <div className="text-holder">
-                {requestData.REQ_INDUSTRY}
-              </div>
+              <div className="text-holder">{requestData.REQ_INDUSTRY}</div>
             </Grid>
             <Grid item xs={12} md={6}>
               <div className="label-holder">
                 <label htmlFor="companyName">방문경로</label>
               </div>
-              <div className="text-holder">
-                {requestData.REQ_VISIT}
-              </div>
+              <div className="text-holder">{requestData.REQ_VISIT}</div>
             </Grid>
             <Grid item md={12}>
               <Divider />
@@ -111,7 +99,7 @@ function RequestDetail(props) {
               </div>
               <div className="text-holder">
                 <ul>
-                  {requestData.REQ_AIM.map(item => (
+                  {requestData.REQ_AIM.map((item) => (
                     <li key={item}>{getText(aimArray, item)}</li>
                   ))}
                 </ul>
@@ -138,7 +126,7 @@ function RequestDetail(props) {
               </div>
               <div className="text-holder">
                 <ul>
-                  {requestData.REQ_CONSULT.map(item => (
+                  {requestData.REQ_CONSULT.map((item) => (
                     <li key={item}>{getText(consultArray, item)}</li>
                   ))}
                 </ul>
@@ -151,9 +139,7 @@ function RequestDetail(props) {
               <div className="label-holder">
                 <label htmlFor="companyName">기타사항</label>
               </div>
-              <div className="text-holder">
-                {requestData.REQ_OTHER}
-              </div>
+              <div className="text-holder">{requestData.REQ_OTHER}</div>
             </Grid>
             {/* <Grid container justify="center" item md={12}>
               <Grid item md={3}>

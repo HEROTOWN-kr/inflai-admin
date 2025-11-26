@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Grid } from '@mui/material';
-import { PieChart } from 'react-minimal-pie-chart';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { Box, CircularProgress, Grid } from "@mui/material";
+import { PieChart } from "react-minimal-pie-chart";
+import { axiosInstance as axios } from "@lib/axiosInstance";
 
 function GoogleVisionGraph(props) {
   const [detectData, setDetectData] = useState([]);
@@ -12,8 +12,8 @@ function GoogleVisionGraph(props) {
     setProcess(true);
     const { host } = window.location;
 
-    const googleData = await axios.get('/api/TB_INSTA/getGoogleData', {
-      params: { INS_ID, host }
+    const googleData = await axios.get("/TB_INSTA/getGoogleData", {
+      params: { INS_ID, host },
     });
     const { statistics } = googleData.data;
     setDetectData(statistics);
@@ -27,10 +27,11 @@ function GoogleVisionGraph(props) {
     }
   }, [INS_ID]);
 
-
   return (
     <React.Fragment>
-      {process ? <CircularProgress /> : (
+      {process ? (
+        <CircularProgress />
+      ) : (
         <div>
           {detectData && detectData.length ? (
             <Box height="200px">
@@ -39,10 +40,10 @@ function GoogleVisionGraph(props) {
                 animate="true"
                 animationDuration="800"
                 label={({ dataEntry }) => `${dataEntry.description} : ${dataEntry.value}%`}
-                labelStyle={index => ({
+                labelStyle={(index) => ({
                   fill: detectData[index].color,
-                  fontSize: '10px',
-                  fontFamily: 'sans-serif',
+                  fontSize: "10px",
+                  fontFamily: "sans-serif",
                 })}
                 radius={35}
                 labelPosition={120}
@@ -50,9 +51,7 @@ function GoogleVisionGraph(props) {
             </Box>
           ) : (
             <Grid container justifyContent="center">
-              <Grid item>
-                Google Vision Data
-              </Grid>
+              <Grid item>Google Vision Data</Grid>
             </Grid>
           )}
         </div>

@@ -4,7 +4,9 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "dev": "webpack serve --mode development --config webpack.config.js --open --hot",
+    "dev:local": "API_ENV=local webpack serve --mode development --config webpack.config.js --open --hot",
+    "dev:dev": "API_ENV=dev webpack serve --mode development --config webpack.config.js --open --hot",
+    "dev:prod": "API_ENV=prod webpack serve --mode development --config webpack.config.js --open --hot",
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
     "build": "webpack --mode production"
   },
@@ -66,8 +68,10 @@
     "clean-webpack-plugin": "^4.0.0",
     "concurrently": "^9.2.1",
     "css-loader": "^7.1.2",
+    "dotenv-webpack": "^8.1.1",
     "html-webpack-plugin": "^5.6.5",
     "nodemon": "^3.1.11",
+    "prettier": "^3.6.2",
     "sass-loader": "^16.0.6",
     "style-loader": "^4.0.0",
     "url-loader": "^4.1.1",

@@ -1,118 +1,101 @@
-import React, {
-  Fragment, useContext, useEffect, useState
-} from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  Box,
-  Grid,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableContainer,
-  TableBody,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
-import StyledImage from '../../containers/StyledImage';
-import StyledText from '../../containers/StyledText';
-import StyledTableCell from '../../containers/StyledTableCell';
-import noImage from '../../../img/noImage.png';
-import { Colors } from '../../../lib/Сonstants';
-import QuestionDialog from './QuestionDialog';
-import MyPagination from '../../containers/MyPagination';
+import React, { Fragment, useContext, useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import { Box, Grid, Paper, Table, TableHead, TableRow, TableContainer, TableBody, useMediaQuery, useTheme } from "@mui/material";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { useNavigate, useParams } from "react-router-dom";
+import StyledImage from "../../containers/StyledImage";
+import StyledText from "../../containers/StyledText";
+import StyledTableCell from "../../containers/StyledTableCell";
+import noImage from "../../../img/noImage.png";
+import { Colors } from "../../../lib/Сonstants";
+import QuestionDialog from "./QuestionDialog";
+import MyPagination from "../../containers/MyPagination";
 
-const PREFIX = 'Question';
+const PREFIX = "Question";
 
 const classes = {
   campaignCard: `${PREFIX}-campaignCard`,
   tooltipIcon: `${PREFIX}-tooltipIcon`,
-  image: `${PREFIX}-image`
+  image: `${PREFIX}-image`,
 };
 
-const StyledBox = styled(Box)((
-  {
-    theme
-  }
-) => ({
+const StyledBox = styled(Box)(({ theme }) => ({
   [`& .${classes.campaignCard}`]: {
-    padding: '12px'
+    padding: "12px",
   },
 
   [`& .${classes.tooltipIcon}`]: {
-    color: '#8C3FFF',
-    marginLeft: '5px',
+    color: "#8C3FFF",
+    marginLeft: "5px",
   },
 
   [`& .${classes.image}`]: {
-    width: '100%',
-    height: '276px',
-    objectFit: 'cover',
-    objectPosition: '50% 50%',
-    [theme.breakpoints.down('md')]: {
-      width: '60px',
-      height: '60px',
-    }
-  }
+    width: "100%",
+    height: "276px",
+    objectFit: "cover",
+    objectPosition: "50% 50%",
+    [theme.breakpoints.down("md")]: {
+      width: "60px",
+      height: "60px",
+    },
+  },
 }));
 
 const tableHeader = [
   {
-    text: '번호',
-    width: '60px',
-    align: 'center'
+    text: "번호",
+    width: "60px",
+    align: "center",
   },
   {
-    text: '제목',
-    align: 'center'
+    text: "제목",
+    align: "center",
   },
   {
-    text: '이름',
-    width: '100px',
-    align: 'center'
+    text: "이름",
+    width: "100px",
+    align: "center",
   },
   {
-    text: '상태',
-    width: '100px',
-    align: 'center'
+    text: "상태",
+    width: "100px",
+    align: "center",
   },
   {
-    text: '작성기간',
-    width: '100px',
-    align: 'center'
-  }
+    text: "작성기간",
+    width: "100px",
+    align: "center",
+  },
 ];
 
 const adTypes = {
   1: {
-    text: '인스타',
+    text: "인스타",
     color: Colors.pink,
   },
   2: {
-    text: '유튜브',
+    text: "유튜브",
     color: Colors.red,
   },
   3: {
-    text: '블로그',
-    color: '#2ba406',
+    text: "블로그",
+    color: "#2ba406",
   },
   4: {
-    text: '기자단',
-    color: '#0027ff'
+    text: "기자단",
+    color: "#0027ff",
   },
   5: {
-    text: '리뷰어',
-    color: Colors.aqua
-  }
+    text: "리뷰어",
+    color: Colors.aqua,
+  },
 };
 
 const defaultCampaignInfo = {
-  AD_PHOTO: '',
-  AD_NAME: '캠페인 이름',
-  AD_SHRT_DISC: '캠페인 이름',
-  AD_TYPE: '1',
+  AD_PHOTO: "",
+  AD_NAME: "캠페인 이름",
+  AD_SHRT_DISC: "캠페인 이름",
+  AD_TYPE: "1",
 };
 
 function Question(props) {
@@ -125,25 +108,27 @@ function Question(props) {
 
   const params = useParams();
   const theme = useTheme();
-  const isMD = useMediaQuery(theme.breakpoints.up('md'));
+  const isMD = useMediaQuery(theme.breakpoints.up("md"));
   const adId = params.id;
-
 
   function toggleDetailDialog() {
     setDetailDialog(!detailDialog);
   }
 
   function getQuestions() {
-    axios.get('/api/TB_QUESTION/listAdmin', {
-      params: { adId, page }
-    }).then((res) => {
-      const { data, adData, countData } = res.data;
-      setCampaignInfo(adData);
-      setQuestions(data);
-      setCount(countData);
-    }).catch((err) => {
-      alert(err.response.message);
-    });
+    axios
+      .get("/TB_QUESTION/listAdmin", {
+        params: { adId, page },
+      })
+      .then((res) => {
+        const { data, adData, countData } = res.data;
+        setCampaignInfo(adData);
+        setQuestions(data);
+        setCount(countData);
+      })
+      .catch((err) => {
+        alert(err.response.message);
+      });
   }
 
   const changePage = (event, value) => {
@@ -164,26 +149,32 @@ function Question(props) {
       <Box px={2} maxWidth={1276} m="0 auto">
         <Grid container spacing={2}>
           <Grid item xs={12} md="auto">
-            <Box width={{ xs: '100%', md: '300px' }}>
+            <Box width={{ xs: "100%", md: "300px" }}>
               <Paper className={classes.campaignCard}>
                 <Grid container spacing={2}>
                   <Grid item>
                     <StyledImage className={classes.image} src={campaignInfo.AD_PHOTO || noImage} />
                   </Grid>
                   <Grid item xs zeroMinWidth>
-                    <Box mb={{ xs: '4px', md: '11px' }}>
-                      <StyledText overflowHidden fontSize={isMD ? '22px' : '15px'} fontWeight="bold" lineHeight="1.1em">
+                    <Box mb={{ xs: "4px", md: "11px" }}>
+                      <StyledText overflowHidden fontSize={isMD ? "22px" : "15px"} fontWeight="bold" lineHeight="1.1em">
                         {campaignInfo.AD_NAME}
                       </StyledText>
                     </Box>
-                    <StyledText overflowHidden fontSize={isMD ? '15px' : '13px'}>{campaignInfo.AD_SHRT_DISC}</StyledText>
-                    <Box pt={{ xs: '6px', md: 2 }}>
+                    <StyledText overflowHidden fontSize={isMD ? "15px" : "13px"}>
+                      {campaignInfo.AD_SHRT_DISC}
+                    </StyledText>
+                    <Box pt={{ xs: "6px", md: 2 }}>
                       {isMD ? (
                         <Box width="30%" p={1} border={`1px solid ${adTypes[campaignInfo.AD_TYPE].color}`}>
-                          <StyledText textAlign="center" fontSize="13px" color={adTypes[campaignInfo.AD_TYPE].color} fontWeight="bold">{adTypes[campaignInfo.AD_TYPE].text}</StyledText>
+                          <StyledText textAlign="center" fontSize="13px" color={adTypes[campaignInfo.AD_TYPE].color} fontWeight="bold">
+                            {adTypes[campaignInfo.AD_TYPE].text}
+                          </StyledText>
                         </Box>
                       ) : (
-                        <StyledText fontSize="13px" color={adTypes[campaignInfo.AD_TYPE].color} fontWeight="bold">{adTypes[campaignInfo.AD_TYPE].text}</StyledText>
+                        <StyledText fontSize="13px" color={adTypes[campaignInfo.AD_TYPE].color} fontWeight="bold">
+                          {adTypes[campaignInfo.AD_TYPE].text}
+                        </StyledText>
                       )}
                     </Box>
                   </Grid>
@@ -192,14 +183,16 @@ function Question(props) {
             </Box>
           </Grid>
           <Grid item xs={12} md>
-            <Box fontSize={22} fontWeight={600} mb="25px">1대1문의하기(Q&A)</Box>
+            <Box fontSize={22} fontWeight={600} mb="25px">
+              1대1문의하기(Q&A)
+            </Box>
             {questions.length > 0 ? (
               <Fragment>
                 <TableContainer component={Paper}>
                   <Table aria-label="customized table">
                     <TableHead>
                       <TableRow>
-                        {tableHeader.map(item => (
+                        {tableHeader.map((item) => (
                           <StyledTableCell key={item.text} align={item.align} width={item.width}>
                             {item.text}
                           </StyledTableCell>
@@ -207,23 +200,15 @@ function Question(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {questions.map(item => (
+                      {questions.map((item) => (
                         <TableRow key={item.QUE_ID} hover onClick={() => getDetail(item.QUE_ID)}>
+                          <StyledTableCell align="center">{item.rownum}</StyledTableCell>
+                          <StyledTableCell>{item.QUE_TITLE}</StyledTableCell>
+                          <StyledTableCell align="center">{item.INF_NAME}</StyledTableCell>
                           <StyledTableCell align="center">
-                            {item.rownum}
+                            <Box color={item.QUE_STATE === "1" ? Colors.green : Colors.red}>{item.QUE_STATE === "1" ? "답변완료" : "대기중"}</Box>
                           </StyledTableCell>
-                          <StyledTableCell>
-                            {item.QUE_TITLE}
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            {item.INF_NAME}
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <Box color={item.QUE_STATE === '1' ? Colors.green : Colors.red}>{item.QUE_STATE === '1' ? '답변완료' : '대기중'}</Box>
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            {item.QUE_DT}
-                          </StyledTableCell>
+                          <StyledTableCell align="center">{item.QUE_DT}</StyledTableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -232,12 +217,7 @@ function Question(props) {
                 <Box py={4}>
                   <Grid container justifyContent="center">
                     <Grid item>
-                      <MyPagination
-                        itemCount={count}
-                        page={page}
-                        changePage={changePage}
-                        perPage={10}
-                      />
+                      <MyPagination itemCount={count} page={page} changePage={changePage} perPage={10} />
                     </Grid>
                   </Grid>
                 </Box>

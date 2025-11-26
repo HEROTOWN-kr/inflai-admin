@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Grid } from '@mui/material';
-import axios from 'axios';
-import { Colors } from '../../../../lib/Сonstants';
-import StyledText from '../../../containers/StyledText';
+import React, { useEffect, useState } from "react";
+import { Box, CircularProgress, Grid } from "@mui/material";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { Colors } from "../../../../lib/Сonstants";
+import StyledText from "../../../containers/StyledText";
 
 function GenderGraph(props) {
   const [statistics, setStatistics] = useState(0);
@@ -11,8 +11,8 @@ function GenderGraph(props) {
 
   async function getStatistics() {
     setProcess(true);
-    const InstaData = await axios.get('/api/TB_INSTA/statsGender', {
-      params: { INS_ID }
+    const InstaData = await axios.get("/TB_INSTA/statsGender", {
+      params: { INS_ID },
     });
     const { data, maxGender } = InstaData.data;
     if (maxGender) setMaxGenderVal(maxGender);
@@ -26,12 +26,13 @@ function GenderGraph(props) {
     }
   }, [INS_ID]);
 
-
   return (
     <React.Fragment>
-      { process ? <CircularProgress /> : (
+      {process ? (
+        <CircularProgress />
+      ) : (
         <React.Fragment>
-          { statistics ? (
+          {statistics ? (
             <Grid container spacing={1}>
               <Grid item xs={12} container justifyContent="space-between">
                 <Grid item>
@@ -42,14 +43,12 @@ function GenderGraph(props) {
                         height="10px"
                         sx={{
                           backgroundColor: Colors.orange,
-                          borderRadius: '100%'
+                          borderRadius: "100%",
                         }}
                       />
                     </Grid>
                     <Grid item>
-                      <StyledText>
-                        {`남성 ${statistics}%`}
-                      </StyledText>
+                      <StyledText>{`남성 ${statistics}%`}</StyledText>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -61,14 +60,12 @@ function GenderGraph(props) {
                         height="10px"
                         sx={{
                           backgroundColor: Colors.blue2,
-                          borderRadius: '100%'
+                          borderRadius: "100%",
                         }}
                       />
                     </Grid>
                     <Grid item>
-                      <StyledText>
-                        {`여성 ${100 - statistics}%`}
-                      </StyledText>
+                      <StyledText>{`여성 ${100 - statistics}%`}</StyledText>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -77,9 +74,9 @@ function GenderGraph(props) {
                 <Box
                   height="24px"
                   sx={{
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    backgroundColor: Colors.blue2
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    backgroundColor: Colors.blue2,
                   }}
                 >
                   <Box
@@ -87,7 +84,7 @@ function GenderGraph(props) {
                     width={`${statistics}%`}
                     sx={{
                       backgroundColor: Colors.orange,
-                      overflow: 'hidden'
+                      overflow: "hidden",
                     }}
                   />
                 </Box>

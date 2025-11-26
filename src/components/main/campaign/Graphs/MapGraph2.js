@@ -1,21 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, CircularProgress } from '@mui/material';
-import axios from 'axios';
-import { map } from 'async';
+import React, { useEffect, useRef, useState } from "react";
+import { Box, CircularProgress } from "@mui/material";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { map } from "async";
 
 function MapGraph2(props) {
   const { INS_ID, setMaxLocVal } = props;
   const [mapData, setMapData] = useState([]);
   const [process, setProcess] = useState(false);
   const selectEl = useRef(null);
-  const {
-    am4core, am4themes_material, am4themes_animated, am4maps, am4geodata_worldLow
-  } = window;
+  const { am4core, am4themes_material, am4themes_animated, am4maps, am4geodata_worldLow } = window;
 
   async function getStatistics() {
     setProcess(true);
-    const InstaAgeInsights = await axios.get('/api/TB_INSTA/statsMap', {
-      params: { INS_ID }
+    const InstaAgeInsights = await axios.get("/TB_INSTA/statsMap", {
+      params: { INS_ID },
     });
     const { data2, maxLoc } = InstaAgeInsights.data;
     if (maxLoc) setMaxLocVal(maxLoc);
@@ -39,7 +37,7 @@ function MapGraph2(props) {
         // Themes end
 
         // Create map instance
-        const chart = am4core.create('chartdiv', am4maps.MapChart);
+        const chart = am4core.create("chartdiv", am4maps.MapChart);
 
         /* const title = chart.titles.create();
         title.text = '[bold font-size: 20]Population of the World in 2011[/]\nsource: Gapminder';
@@ -57,7 +55,7 @@ function MapGraph2(props) {
 
         // Create map polygon series
         const polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-        polygonSeries.exclude = ['AQ'];
+        polygonSeries.exclude = ["AQ"];
         polygonSeries.useGeodata = true;
         polygonSeries.nonScalingStroke = true;
         polygonSeries.strokeWidth = 0.5;
@@ -65,26 +63,25 @@ function MapGraph2(props) {
 
         const imageSeries = chart.series.push(new am4maps.MapImageSeries());
         imageSeries.data = mapData;
-        imageSeries.dataFields.value = 'value';
+        imageSeries.dataFields.value = "value";
 
         const imageTemplate = imageSeries.mapImages.template;
         imageTemplate.nonScaling = true;
 
         const circle = imageTemplate.createChild(am4core.Circle);
         circle.fillOpacity = 0.7;
-        circle.propertyFields.fill = 'color';
-        circle.tooltipText = '{name}: [bold]{value}[/]';
-
+        circle.propertyFields.fill = "color";
+        circle.tooltipText = "{name}: [bold]{value}[/]";
 
         imageSeries.heatRules.push({
           target: circle,
-          property: 'radius',
+          property: "radius",
           min: 4,
           max: 30,
-          dataField: 'value'
+          dataField: "value",
         });
 
-        imageTemplate.adapter.add('latitude', (latitude, target) => {
+        imageTemplate.adapter.add("latitude", (latitude, target) => {
           const polygon = polygonSeries.getPolygonById(target.dataItem.dataContext.id);
           if (polygon) {
             return polygon.visualLatitude;
@@ -92,7 +89,7 @@ function MapGraph2(props) {
           return latitude;
         });
 
-        imageTemplate.adapter.add('longitude', (longitude, target) => {
+        imageTemplate.adapter.add("longitude", (longitude, target) => {
           const polygon = polygonSeries.getPolygonById(target.dataItem.dataContext.id);
           if (polygon) {
             return polygon.visualLongitude;
@@ -103,9 +100,7 @@ function MapGraph2(props) {
     }
   }, [selectEl, mapData]);
 
-  return (
-    <Box ref={selectEl} id="chartdiv" width="100%" height="265px" />
-  );
+  return <Box ref={selectEl} id="chartdiv" width="100%" height="265px" />;
 }
 
 export default MapGraph2;

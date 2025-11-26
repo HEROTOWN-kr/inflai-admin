@@ -1,49 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@mui/material';
-import axios from 'axios';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import * as PropTypes from 'prop-types';
-import { Description, GetApp, Publish } from '@mui/icons-material';
-import { useSnackbar } from 'notistack';
-import StyledTableCell from '../../containers/StyledTableCell';
-import StyledText from '../../containers/StyledText';
-import StyledTableRow from '../../containers/StyledTableRow';
-import { Colors } from '../../../lib/Сonstants';
-import StyledButton from '../../containers/StyledButton';
-import SellUrlDialog from './SellUrlDialog';
-import MyPagination from '../../containers/MyPagination';
+import React, { useEffect, useState } from "react";
+import { Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import * as PropTypes from "prop-types";
+import { Description, GetApp, Publish } from "@mui/icons-material";
+import { useSnackbar } from "notistack";
+import StyledTableCell from "../../containers/StyledTableCell";
+import StyledText from "../../containers/StyledText";
+import StyledTableRow from "../../containers/StyledTableRow";
+import { Colors } from "../../../lib/Сonstants";
+import StyledButton from "../../containers/StyledButton";
+import SellUrlDialog from "./SellUrlDialog";
+import MyPagination from "../../containers/MyPagination";
 
 const tableHeader = [
   {
-    text: '번호',
-    align: 'center',
-    width: '60px'
+    text: "번호",
+    align: "center",
+    width: "60px",
   },
   {
-    text: 'id',
-    align: 'center',
-    width: '100px'
+    text: "id",
+    align: "center",
+    width: "100px",
   },
   {
-    text: '이름',
-    align: 'center',
-    width: '150px'
+    text: "이름",
+    align: "center",
+    width: "150px",
   },
   {
-    text: '메세지',
-    align: 'center',
+    text: "메세지",
+    align: "center",
   },
   {
-    text: '판매코드',
-    align: 'center',
-    width: '150px'
+    text: "판매코드",
+    align: "center",
+    width: "150px",
   },
   {
-    text: '판매링크',
-    align: 'center',
-    width: '100px'
+    text: "판매링크",
+    align: "center",
+    width: "100px",
   },
 ];
 
@@ -51,7 +49,7 @@ function CampaignSeller(props) {
   const [participants, setParticipants] = useState([]);
   const [selected, setSelected] = useState({
     id: 0,
-    sellUrl: ''
+    sellUrl: "",
   });
   const [dialogOpen, setDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -71,46 +69,55 @@ function CampaignSeller(props) {
 
   function getParticipants() {
     if (!type) {
-      navigate('/Campaign/List');
+      navigate("/Campaign/List");
       return;
     }
-    axios.get('/api/TB_PARTICIPANT/getListSeller', {
-      params: { adId, limit, page }
-    }).then((res) => {
-      const { data } = res.data;
-      setParticipants(data);
-      setCount(res.data.count);
-    }).catch(err => alert(err.response.data.message));
+    axios
+      .get("/TB_PARTICIPANT/getListSeller", {
+        params: { adId, limit, page },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        setParticipants(data);
+        setCount(res.data.count);
+      })
+      .catch((err) => alert(err.response.data.message));
   }
 
   function downloadExcel(item) {
-    axios.get('/api/TB_PARTICIPANT/downloadExcel', {
-      params: { adId }
-    }).then((res) => {
-      console.log(res);
-      const { url } = res.data;
-      window.open(window.location.origin + url, '_blank');
-    }).catch(err => alert(err.response.data.message));
+    axios
+      .get("/TB_PARTICIPANT/downloadExcel", {
+        params: { adId },
+      })
+      .then((res) => {
+        console.log(res);
+        const { url } = res.data;
+        window.open(window.location.origin + url, "_blank");
+      })
+      .catch((err) => alert(err.response.data.message));
   }
 
   function uploadExcel(e) {
     const { files } = e.target || {};
     const formData = new FormData();
-    formData.append('file', files[0]);
+    formData.append("file", files[0]);
     e.target.value = null;
 
-    axios.post('/api/TB_PARTICIPANT/uploadExcel', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    }).then((response) => {
-      if (response.status === 201) {
-        enqueueSnackbar(response.data.message, { variant: 'warning' });
-      } else {
-        getParticipants();
-        enqueueSnackbar('업로드되었습니다', { variant: 'success' });
-      }
-    }).catch((error) => {
-      enqueueSnackbar('에러가 발생났습니다', { variant: 'error' });
-    });
+    axios
+      .post("/TB_PARTICIPANT/uploadExcel", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          enqueueSnackbar(response.data.message, { variant: "warning" });
+        } else {
+          getParticipants();
+          enqueueSnackbar("업로드되었습니다", { variant: "success" });
+        }
+      })
+      .catch((error) => {
+        enqueueSnackbar("에러가 발생났습니다", { variant: "error" });
+      });
   }
 
   function clickSellUrl(item) {
@@ -128,37 +135,18 @@ function CampaignSeller(props) {
   }, [page]);
 
   return (
-    <Box mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
+    <Box mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: "0 auto" }}>
       <Box mb={1}>
         <Grid container spacing={1} justifyContent="flex-end">
           <Grid item>
-            <StyledButton
-              height={40}
-              padding="0 20px"
-              background="#0fb359"
-              hoverBackground="#107C41"
-              startIcon={<GetApp />}
-              onClick={downloadExcel}
-            >
+            <StyledButton height={40} padding="0 20px" background="#0fb359" hoverBackground="#107C41" startIcon={<GetApp />} onClick={downloadExcel}>
               Download
             </StyledButton>
           </Grid>
           <Grid item>
-            <StyledButton
-              height={40}
-              padding="0 20px"
-              background="#0fb359"
-              hoverBackground="#107C41"
-              startIcon={<Publish />}
-              component="label"
-            >
+            <StyledButton height={40} padding="0 20px" background="#0fb359" hoverBackground="#107C41" startIcon={<Publish />} component="label">
               Upload
-              <input
-                type="file"
-                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                hidden
-                onChange={uploadExcel}
-              />
+              <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden onChange={uploadExcel} />
             </StyledButton>
           </Grid>
         </Grid>
@@ -167,7 +155,7 @@ function CampaignSeller(props) {
         <Table>
           <TableHead>
             <TableRow>
-              {tableHeader.map(item => (
+              {tableHeader.map((item) => (
                 <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
                   {item.text}
                 </StyledTableCell>
@@ -175,32 +163,22 @@ function CampaignSeller(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {participants.map(row => (
+            {participants.map((row) => (
               <StyledTableRow hover key={row.id}>
                 <StyledTableCell>
-                  <StyledText textAlign="center">
-                    {row.rownum}
-                  </StyledText>
+                  <StyledText textAlign="center">{row.rownum}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <StyledText textAlign="center">
-                    {`id${row.INF_ID}`}
-                  </StyledText>
+                  <StyledText textAlign="center">{`id${row.INF_ID}`}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <StyledText textAlign="center">
-                    {row.PAR_NAME}
-                  </StyledText>
+                  <StyledText textAlign="center">{row.PAR_NAME}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <StyledText textAlign="left">
-                    {row.PAR_MESSAGE}
-                  </StyledText>
+                  <StyledText textAlign="left">{row.PAR_MESSAGE}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <StyledText textAlign="center">
-                    {row.TB_INFLUENCER.INF_SELL_CODE || '-'}
-                  </StyledText>
+                  <StyledText textAlign="center">{row.TB_INFLUENCER.INF_SELL_CODE || "-"}</StyledText>
                 </StyledTableCell>
                 <StyledTableCell>
                   <StyledButton
@@ -210,7 +188,7 @@ function CampaignSeller(props) {
                     padding="0px 5px"
                     onClick={() => clickSellUrl(row)}
                   >
-                    { row.PAR_SELL_URL ? '수정' : '등록'}
+                    {row.PAR_SELL_URL ? "수정" : "등록"}
                   </StyledButton>
                 </StyledTableCell>
               </StyledTableRow>
@@ -221,21 +199,11 @@ function CampaignSeller(props) {
       <Box py={4}>
         <Grid container justifyContent="center">
           <Grid item>
-            <MyPagination
-              itemCount={count}
-              page={page}
-              changePage={changePage}
-              perPage={10}
-            />
+            <MyPagination itemCount={count} page={page} changePage={changePage} perPage={10} />
           </Grid>
         </Grid>
       </Box>
-      <SellUrlDialog
-        open={dialogOpen}
-        closeDialog={toggleDialog}
-        selected={selected}
-        getParticipants={getParticipants}
-      />
+      <SellUrlDialog open={dialogOpen} closeDialog={toggleDialog} selected={selected} getParticipants={getParticipants} />
     </Box>
   );
 }

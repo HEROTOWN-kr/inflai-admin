@@ -1,21 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  Paper,
-  Grid,
-  Box
-} from '@mui/material';
-import StyledTableCell from '../../containers/StyledTableCell';
-import StyledTableRow from '../../containers/StyledTableRow';
-import MyPagination from '../../containers/MyPagination';
-import StyledImage from '../../containers/StyledImage';
-import defaultAccountImage from '../../../img/default_account_image.png';
-
+import React, { useEffect, useState } from "react";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { TableContainer, Table, TableHead, TableBody, TableRow, Paper, Grid, Box } from "@mui/material";
+import StyledTableCell from "../../containers/StyledTableCell";
+import StyledTableRow from "../../containers/StyledTableRow";
+import MyPagination from "../../containers/MyPagination";
+import StyledImage from "../../containers/StyledImage";
+import defaultAccountImage from "../../../img/default_account_image.png";
 
 function Advertiser(props) {
   const [advertisers, setAdvertisers] = useState([]);
@@ -27,7 +17,7 @@ function Advertiser(props) {
   function createAdvertisers(data) {
     const array = [];
 
-    data.map(item => (
+    data.map((item) =>
       array.push({
         id: item.ADV_ID,
         rownum: item.rownum,
@@ -39,21 +29,24 @@ function Advertiser(props) {
         companyType: item.ADV_TYPE,
         registerDate: item.ADV_DT,
       })
-    ));
+    );
 
     setAdvertisers(array);
   }
 
   function getAdvertisers() {
-    axios.get('/api/TB_ADVERTISER/getAdvertisers', {
-      params: { page, limit }
-    }).then((res) => {
-      const { data, AdvertiserCount } = res.data;
-      createAdvertisers(data);
-      setCount(AdvertiserCount);
-    }).catch((error) => {
-      console.log(error);
-    });
+    axios
+      .get("/TB_ADVERTISER/getAdvertisers", {
+        params: { page, limit },
+      })
+      .then((res) => {
+        const { data, AdvertiserCount } = res.data;
+        createAdvertisers(data);
+        setCount(AdvertiserCount);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   useEffect(() => {
@@ -67,12 +60,14 @@ function Advertiser(props) {
   };
 
   return (
-    <Box py={6} width={1200} sx={{ margin: '0 auto' }}>
+    <Box py={6} width={1200} sx={{ margin: "0 auto" }}>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center" width="60px">번호</StyledTableCell>
+              <StyledTableCell align="center" width="60px">
+                번호
+              </StyledTableCell>
               <StyledTableCell>정보</StyledTableCell>
               <StyledTableCell align="right">이메일</StyledTableCell>
               <StyledTableCell align="right">전화번호</StyledTableCell>
@@ -82,18 +77,13 @@ function Advertiser(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {advertisers.map(row => (
+            {advertisers.map((row) => (
               <StyledTableRow hover key={row.id}>
                 <StyledTableCell align="center">{row.rownum}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   <Grid container spacing={1} alignItems="center">
                     <Grid item>
-                      <StyledImage
-                        width="40px"
-                        height="40px"
-                        borderRadius="100%"
-                        src={row.photo || defaultAccountImage}
-                      />
+                      <StyledImage width="40px" height="40px" borderRadius="100%" src={row.photo || defaultAccountImage} />
                     </Grid>
                     <Grid item>{row.name}</Grid>
                   </Grid>
@@ -111,12 +101,7 @@ function Advertiser(props) {
       <Box py={4}>
         <Grid container justifyContent="center">
           <Grid item>
-            <MyPagination
-              itemCount={count}
-              page={page}
-              changePage={changePage}
-              perPage={limit}
-            />
+            <MyPagination itemCount={count} page={page} changePage={changePage} perPage={limit} />
           </Grid>
         </Grid>
       </Box>

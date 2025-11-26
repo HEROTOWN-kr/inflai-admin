@@ -1,40 +1,43 @@
+import React from 'react';
 import { TableCell } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React from 'react';
 
-const PREFIX = 'StyledTableCell';
-
-const classes = {
-  root: `${PREFIX}-root`,
-  head: `${PREFIX}-head`,
-  body: `${PREFIX}-body`
-};
-
-const StyledTableCell = styled(TableCell)({
-  [`& .${classes.root}`]: ({ padding }) => ({
+const StyledTableCellRoot = styled(TableCell, {
+  shouldForwardProp: (prop) => !['padding', 'backgroundColor', 'color', 'width', 'fontSize'].includes(prop),
+})(({ ownerState }) => {
+  const {
+    padding, backgroundColor, color, width, fontSize
+  } = ownerState || {};
+  return {
     boxSizing: 'border-box',
-    padding: padding || '10px'
-  }),
-  [`& .${classes.head}`]: ({ backgroundColor, color, width }) => ({
-    backgroundColor: backgroundColor || '#3f4b5c',
-    color: color || 'white',
-    width: width || 'auto'
-  }),
-  [`& .${classes.body}`]: ({ fontSize }) => ({
-    fontSize: fontSize || '14px',
-  }),
+    padding: padding || '10px',
+    // head/body specific styles can be applied by checking the TableCell variant or other props.
+    // Consumers can pass backgroundColor/color/width/fontSize via props to override defaults.
+    backgroundColor: backgroundColor || undefined,
+    color: color || undefined,
+    width: width || undefined,
+    fontSize: fontSize || undefined,
+  };
 });
 
 function StyledTableCell(props) {
   const {
-    className, children, align
+    className, children, align, padding, backgroundColor, color, width, fontSize, ...rest
   } = props;
 
+  const ownerState = {
+    padding, backgroundColor, color, width, fontSize
+  };
 
   return (
-    <StyledTableCell classes={classes} className={className} align={align} alt="noImage">
+    <StyledTableCellRoot
+      className={className}
+      align={align}
+      ownerState={ownerState}
+      {...rest}
+    >
       {children}
-    </StyledTableCell>
+    </StyledTableCellRoot>
   );
 }
 

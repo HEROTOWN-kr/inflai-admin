@@ -2,8 +2,7 @@ import {Tabs} from '@mui/material';
 
 import { withStyles } from 'tss-react/mui';
 
-const AntTabs = withStyles({
-    Tabs,
+const AntTabs = withStyles(Tabs,{
   root: {
     // borderBottom: '1px solid #e8e8e8',
   },

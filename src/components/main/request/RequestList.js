@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import {
-  Box,
-  Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@mui/material';
-import StyledTableCell from '../../containers/StyledTableCell';
-import StyledTableRow from '../../containers/StyledTableRow';
-import MyPagination from '../../containers/MyPagination';
+import React, { useEffect, useState } from "react";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
+import StyledTableCell from "../../containers/StyledTableCell";
+import StyledTableRow from "../../containers/StyledTableRow";
+import MyPagination from "../../containers/MyPagination";
 
 function RequestList(props) {
   const { history, match, setTab } = props;
@@ -18,7 +15,7 @@ function RequestList(props) {
   function createRequests(data) {
     const array = [];
 
-    data.map(item => (
+    data.map((item) =>
       array.push({
         id: item.REQ_ID,
         rownum: item.rownum,
@@ -31,21 +28,23 @@ function RequestList(props) {
         companyName: item.REQ_COMP_NAME,
         // advertiserName: item.TB_ADVERTISER.ADV_NAME
       })
-    ));
+    );
 
     setInfluencers(array);
   }
 
   function getRequests() {
-    axios.get('/api/TB_REQ_AD/', {
-      params: {
-        page
-      }
-    }).then((res) => {
-      const { data, RequestsCount } = res.data;
-      createRequests(data);
-      setCount(RequestsCount);
-    });
+    axios
+      .get("/TB_REQ_AD/", {
+        params: {
+          page,
+        },
+      })
+      .then((res) => {
+        const { data, RequestsCount } = res.data;
+        createRequests(data);
+        setCount(RequestsCount);
+      });
   }
 
   useEffect(() => {
@@ -63,12 +62,14 @@ function RequestList(props) {
   }
 
   return (
-    <Box mt={4} width={1200} sx={{ margin: '0 auto' }}>
+    <Box mt={4} width={1200} sx={{ margin: "0 auto" }}>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center" width="60px">번호</StyledTableCell>
+              <StyledTableCell align="center" width="60px">
+                번호
+              </StyledTableCell>
               <StyledTableCell>업체명</StyledTableCell>
               <StyledTableCell align="right">담당자명</StyledTableCell>
               <StyledTableCell align="right">업종</StyledTableCell>
@@ -79,14 +80,12 @@ function RequestList(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {influencers.map(row => (
-              <StyledTableRow
-                hover
-                key={row.id}
-                onClick={event => requestDetail(event, row.id)}
-              >
+            {influencers.map((row) => (
+              <StyledTableRow hover key={row.id} onClick={(event) => requestDetail(event, row.id)}>
                 <StyledTableCell align="center">{row.rownum}</StyledTableCell>
-                <StyledTableCell component="th" scope="row">{row.companyName}</StyledTableCell>
+                <StyledTableCell component="th" scope="row">
+                  {row.companyName}
+                </StyledTableCell>
                 <StyledTableCell align="right">{row.name}</StyledTableCell>
                 <StyledTableCell align="right">{row.industry}</StyledTableCell>
                 <StyledTableCell align="right">{row.visit}</StyledTableCell>
@@ -101,12 +100,7 @@ function RequestList(props) {
       <Box py={4}>
         <Grid container justifyContent="center">
           <Grid item>
-            <MyPagination
-              itemCount={count}
-              page={page}
-              changePage={changePage}
-              perPage={10}
-            />
+            <MyPagination itemCount={count} page={page} changePage={changePage} perPage={10} />
           </Grid>
         </Grid>
       </Box>

@@ -1,76 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  Box, Checkbox, FormControlLabel, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
-} from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import StyledTableCell from '../../containers/StyledTableCell';
-import StyledTableRow from '../../containers/StyledTableRow';
-import StyledText from '../../containers/StyledText';
-import MyPagination from '../../containers/MyPagination';
-import StyledLink from '../../containers/StyledLink';
-import StyledTableSortLabel from '../../containers/StyledTableSortLabel';
-import StyledButton from '../../containers/StyledButton';
-import { Colors } from '../../../lib/Сonstants';
-import InsightDialog from './InsightDialog';
-import ConfirmDialog from '../../containers/ConfirmDialog';
-import AnalysisDialog from '../ranking/Youtube/AnalysisDialog';
+import React, { useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import { Box, Checkbox, FormControlLabel, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import StyledTableCell from "../../containers/StyledTableCell";
+import StyledTableRow from "../../containers/StyledTableRow";
+import StyledText from "../../containers/StyledText";
+import MyPagination from "../../containers/MyPagination";
+import StyledLink from "../../containers/StyledLink";
+import StyledTableSortLabel from "../../containers/StyledTableSortLabel";
+import StyledButton from "../../containers/StyledButton";
+import { Colors } from "../../../lib/Сonstants";
+import InsightDialog from "./InsightDialog";
+import ConfirmDialog from "../../containers/ConfirmDialog";
+import AnalysisDialog from "../ranking/Youtube/AnalysisDialog";
 
-const PREFIX = 'CampaignParInsta';
+const PREFIX = "CampaignParInsta";
 
 const classes = {
-  checkboxLabel: `${PREFIX}-checkboxLabel`
+  checkboxLabel: `${PREFIX}-checkboxLabel`,
 };
 
 const StyledBox = styled(Box)({
   [`& .${classes.checkboxLabel}`]: {
-    marginRight: 0
-  }
+    marginRight: 0,
+  },
 });
 
 const tableHeader = [
   {
-    text: '번호',
-    align: 'center',
-    width: '60px'
+    text: "번호",
+    align: "center",
+    width: "60px",
   },
   {
-    text: '이름',
-    align: 'left'
+    text: "이름",
+    align: "left",
   },
   {
-    text: '채널 이름',
-    align: 'left',
-    width: '300px'
+    text: "채널 이름",
+    align: "left",
+    width: "300px",
   },
   {
-    id: 'YOU_SUBS',
-    text: '구독수',
-    align: 'center',
-    width: '100px'
+    id: "YOU_SUBS",
+    text: "구독수",
+    align: "center",
+    width: "100px",
   },
   {
-    id: 'YOU_VIEWS',
-    text: '조회수',
-    align: 'center',
-    width: '100px'
+    id: "YOU_VIEWS",
+    text: "조회수",
+    align: "center",
+    width: "100px",
   },
   {
-    text: '분석',
-    align: 'center',
-    width: '60px',
+    text: "분석",
+    align: "center",
+    width: "60px",
   },
   {
-    text: '선정',
-    align: 'center',
-    width: '60px',
+    text: "선정",
+    align: "center",
+    width: "60px",
   },
   {
-    text: '리뷰',
-    align: 'center',
-    width: '60px',
-  }
+    text: "리뷰",
+    align: "center",
+    width: "60px",
+  },
 ];
 
 function CampaignParInsta() {
@@ -81,7 +79,7 @@ function CampaignParInsta() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(0);
   const [page, setPage] = useState(1);
-  const [order, setOrder] = useState({ orderBy: 'YOU_SUBS', direction: 'desc' });
+  const [order, setOrder] = useState({ orderBy: "YOU_SUBS", direction: "desc" });
 
   const params = useParams();
   const adId = params.id;
@@ -97,16 +95,21 @@ function CampaignParInsta() {
 
   function getParticipants() {
     const resParams = {
-      ...order, adId, limit, page
+      ...order,
+      adId,
+      limit,
+      page,
     };
-    if (selected) resParams.selected = '1';
+    if (selected) resParams.selected = "1";
 
-    axios.get('/api/TB_PARTICIPANT/getListYoutube', {
-      params: resParams
-    }).then((res) => {
-      setParticipants(res.data.data);
-      setCount(res.data.count);
-    });
+    axios
+      .get("/TB_PARTICIPANT/getListYoutube", {
+        params: resParams,
+      })
+      .then((res) => {
+        setParticipants(res.data.data);
+        setCount(res.data.count);
+      });
   }
 
   useEffect(() => {
@@ -118,21 +121,24 @@ function CampaignParInsta() {
   };
 
   function sortTable(id) {
-    const isDesc = order.orderBy === id && order.direction === 'desc';
+    const isDesc = order.orderBy === id && order.direction === "desc";
     setOrder({
       orderBy: id,
-      direction: isDesc ? 'asc' : 'desc'
+      direction: isDesc ? "asc" : "desc",
     });
   }
 
   function selectParticipant() {
-    axios.post('/api/TB_PARTICIPANT/change', { adId, participantId: selectedId }).then((res) => {
-      if (res.status === 201) {
-        alert(res.data.message);
-      } else {
-        getParticipants();
-      }
-    }).catch(err => alert(err.response.data.message));
+    axios
+      .post("/TB_PARTICIPANT/change", { adId, participantId: selectedId })
+      .then((res) => {
+        if (res.status === 201) {
+          alert(res.data.message);
+        } else {
+          getParticipants();
+        }
+      })
+      .catch((err) => alert(err.response.data.message));
   }
 
   function getAnalysis(id) {
@@ -146,19 +152,12 @@ function CampaignParInsta() {
   }
 
   return (
-    <StyledBox mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: '0 auto' }}>
+    <StyledBox mb={1} boxSizing="border-box" maxWidth={1276} sx={{ margin: "0 auto" }}>
       <Box mb={1}>
         <Grid container justifyContent="flex-end">
           <Grid item>
             <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={selected}
-                  onChange={() => setSelected(!selected)}
-                  name="checkedB"
-                  color="secondary"
-                />
-                            )}
+              control={<Checkbox checked={selected} onChange={() => setSelected(!selected)} name="checkedB" color="secondary" />}
               label="선정자"
               classes={{ root: classes.checkboxLabel }}
             />
@@ -169,51 +168,39 @@ function CampaignParInsta() {
         <Table>
           <TableHead>
             <TableRow>
-              {tableHeader.map(item => (
+              {tableHeader.map((item) => (
                 <StyledTableCell key={item.text} align={item.align} width={item.width || null}>
                   {item.colName ? (
                     <StyledTableSortLabel
                       color="#66f8ff"
                       active={order.orderBy === item.colName}
-                      direction={order.orderBy === item.colName ? order.direction : 'desc'}
+                      direction={order.orderBy === item.colName ? order.direction : "desc"}
                       onClick={() => sortTable(item.colName)}
                     >
                       {item.text}
                     </StyledTableSortLabel>
-                  ) : item.text}
+                  ) : (
+                    item.text
+                  )}
                 </StyledTableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {participants.map(row => (
+            {participants.map((row) => (
               <StyledTableRow hover key={row.id}>
+                <StyledTableCell align="center">{row.rownum}</StyledTableCell>
+                <StyledTableCell>{row.PAR_NAME || "-"}</StyledTableCell>
+                <StyledTableCell>{row.YOU_NAME}</StyledTableCell>
+                <StyledTableCell align="center">{row.YOU_SUBS}</StyledTableCell>
+                <StyledTableCell align="center">{row.YOU_VIEWS}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {row.rownum}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {row.PAR_NAME || '-'}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {row.YOU_NAME}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.YOU_SUBS}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.YOU_VIEWS}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <StyledButton
-                    height="25px"
-                    padding="0px 5px"
-                    onClick={() => getAnalysis(row.YOU_ID)}
-                  >
+                  <StyledButton height="25px" padding="0px 5px" onClick={() => getAnalysis(row.YOU_ID)}>
                     분석
                   </StyledButton>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {row.PAR_STATUS === '1' ? (
+                  {row.PAR_STATUS === "1" ? (
                     <StyledButton
                       background={Colors.green}
                       hoverBackground={Colors.greenHover}
@@ -221,7 +208,7 @@ function CampaignParInsta() {
                       padding="0px 5px"
                       onClick={() => clickSelect(row.PAR_ID)}
                     >
-                                            선정
+                      선정
                     </StyledButton>
                   ) : (
                     <StyledText color={Colors.green}>선정됨</StyledText>
@@ -234,9 +221,9 @@ function CampaignParInsta() {
                       hoverBackground={Colors.greenHover}
                       height="25px"
                       padding="0px 5px"
-                      onClick={() => window.open(row.PAR_REVIEW, '_blank')}
+                      onClick={() => window.open(row.PAR_REVIEW, "_blank")}
                     >
-                                            링크
+                      링크
                     </StyledButton>
                   ) : null}
                 </StyledTableCell>
@@ -248,22 +235,12 @@ function CampaignParInsta() {
       <Box py={4}>
         <Grid container justifyContent="center">
           <Grid item>
-            <MyPagination
-              itemCount={count}
-              page={page}
-              changePage={changePage}
-              perPage={limit}
-            />
+            <MyPagination itemCount={count} page={page} changePage={changePage} perPage={limit} />
           </Grid>
         </Grid>
       </Box>
       <AnalysisDialog open={dialogOpen} closeDialog={toggleDialog} id={selectedId} />
-      <ConfirmDialog
-        open={confirmDialogOpen}
-        closeDialog={toggleConfirmDialog}
-        dialogText="선정하시겠습니까?"
-        onConfirm={selectParticipant}
-      />
+      <ConfirmDialog open={confirmDialogOpen} closeDialog={toggleConfirmDialog} dialogText="선정하시겠습니까?" onConfirm={selectParticipant} />
     </StyledBox>
   );
 }

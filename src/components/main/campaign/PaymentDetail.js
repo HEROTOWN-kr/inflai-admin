@@ -1,37 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableFooter,
-  Button,
-} from '@mui/material';
-import axios from 'axios';
-import StyledTableCell from '../../containers/StyledTableCell';
-import StyledTableRow from '../../containers/StyledTableRow';
+import React, { useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableFooter, Button } from "@mui/material";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import StyledTableCell from "../../containers/StyledTableCell";
+import StyledTableRow from "../../containers/StyledTableRow";
 
-const PREFIX = 'PaymentDetail';
+const PREFIX = "PaymentDetail";
 
 const classes = {
-  root: `${PREFIX}-root`
+  root: `${PREFIX}-root`,
 };
 
-const StyledGrid = styled(Grid)((
-  {
-    theme
-  }
-) => ({
+const StyledGrid = styled(Grid)(({ theme }) => ({
   [`& .${classes.root}`]: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: '#b8b9f5',
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#b8b9f5",
     },
-  }
+  },
 }));
 
 function PaymentDetail(props) {
@@ -45,37 +30,30 @@ function PaymentDetail(props) {
   });
   const tableHeader = [
     {
-      text: '품목',
-      align: 'left'
+      text: "품목",
+      align: "left",
     },
     {
-      text: '수량',
-      align: 'right'
+      text: "수량",
+      align: "right",
     },
     {
-      text: '단가',
-      align: 'right'
+      text: "단가",
+      align: "right",
     },
     {
-      text: '총금액',
-      align: 'right'
+      text: "총금액",
+      align: "right",
     },
     {
-      text: '진행상황',
-      align: 'right'
+      text: "진행상황",
+      align: "right",
     },
   ];
 
   const StyledTableFooter = TableRow;
 
-  function MyTableRow({
-    title,
-    type,
-    count,
-    paymentOne,
-    paymentAll,
-    foundCount
-  }) {
+  function MyTableRow({ title, type, count, paymentOne, paymentAll, foundCount }) {
     return (
       <StyledTableRow hover>
         <StyledTableCell component="th" scope="row">
@@ -125,28 +103,31 @@ function PaymentDetail(props) {
     };
 
     Object.keys(range).map((itemKey) => {
-      obj[itemKey] = influencersArray.filter(value => parseInt(value.followers_count, 10) >= range[itemKey].a && parseInt(value.followers_count, 10) < range[itemKey].b);
+      obj[itemKey] = influencersArray.filter(
+        (value) => parseInt(value.followers_count, 10) >= range[itemKey].a && parseInt(value.followers_count, 10) < range[itemKey].b
+      );
     });
 
     setInfCount(obj);
   };
 
   function getStatistic() {
-    axios.get('/api/TB_AD/detail', {
-      params: {
-        id: props.match.params.id
-      }
-    }).then((res) => {
-      const { data } = res.data;
-      console.log(data);
+    axios
+      .get("/TB_AD/detail", {
+        params: {
+          id: props.match.params.id,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        console.log(data);
 
-      if (data.TB_INFLUENCER) {
-        filterInfluencers(data.TB_INFLUENCER);
-      }
-      createStatistic(data);
-    });
+        if (data.TB_INFLUENCER) {
+          filterInfluencers(data.TB_INFLUENCER);
+        }
+        createStatistic(data);
+      });
   }
-
 
   useEffect(() => {
     getStatistic();
@@ -161,8 +142,10 @@ function PaymentDetail(props) {
               <Table aria-label="customized table">
                 <TableHead>
                   <TableRow>
-                    {tableHeader.map(item => (
-                      <StyledTableCell key={item.text} align={item.align}>{item.text}</StyledTableCell>
+                    {tableHeader.map((item) => (
+                      <StyledTableCell key={item.text} align={item.align}>
+                        {item.text}
+                      </StyledTableCell>
                     ))}
                   </TableRow>
                 </TableHead>
@@ -176,14 +159,15 @@ function PaymentDetail(props) {
                 <TableFooter>
                   <StyledTableFooter
                     classes={{
-                      root: classes.root
-                    }}>
-                    <StyledTableCell component="th" scope="row">TOTAL</StyledTableCell>
-                    <StyledTableCell align="right" />
-                    <StyledTableCell align="right" />
-                    <StyledTableCell align="right">
-                      {`${statistic.influenceSum}원`}
+                      root: classes.root,
+                    }}
+                  >
+                    <StyledTableCell component="th" scope="row">
+                      TOTAL
                     </StyledTableCell>
+                    <StyledTableCell align="right" />
+                    <StyledTableCell align="right" />
+                    <StyledTableCell align="right">{`${statistic.influenceSum}원`}</StyledTableCell>
                     <StyledTableCell align="right" />
                   </StyledTableFooter>
                 </TableFooter>
@@ -193,7 +177,9 @@ function PaymentDetail(props) {
           <Grid item md={12}>
             <Grid container justifyContent="center">
               <Grid item md={2}>
-                <Button variant="contained" color="secondary" fullWidth onClick={props.goBack}>이전</Button>
+                <Button variant="contained" color="secondary" fullWidth onClick={props.goBack}>
+                  이전
+                </Button>
               </Grid>
             </Grid>
           </Grid>

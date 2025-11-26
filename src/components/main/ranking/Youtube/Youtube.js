@@ -1,90 +1,85 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import {
-  Box, Grid, IconButton,
-  Paper, Table, TableBody,
-  TableContainer, TableHead, TableRow,
-  InputAdornment, CircularProgress
-} from '@mui/material';
-import axios from 'axios';
-import { AssessmentRounded } from '@mui/icons-material';
-import { useForm } from 'react-hook-form';
-import SearchIcon from '@mui/icons-material/Search';
-import moment from 'moment';
-import StyledTableCell from '../../../containers/StyledTableCell';
-import MyPagination from '../../../containers/MyPagination';
-import AnalysisDialog from './AnalysisDialog';
-import StyledIconButton from '../../../containers/StyledIconButton';
-import StyledTableSortLabel from '../../../containers/StyledTableSortLabel';
-import ReactFormText from '../../../containers/ReactFormText';
-import StyledText from '../../../containers/StyledText';
+import React, { Fragment, useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import { Box, Grid, IconButton, Paper, Table, TableBody, TableContainer, TableHead, TableRow, InputAdornment, CircularProgress } from "@mui/material";
+import { axiosInstance as axios } from "@lib/axiosInstance";
+import { AssessmentRounded } from "@mui/icons-material";
+import { useForm } from "react-hook-form";
+import SearchIcon from "@mui/icons-material/Search";
+import moment from "moment";
+import StyledTableCell from "../../../containers/StyledTableCell";
+import MyPagination from "../../../containers/MyPagination";
+import AnalysisDialog from "./AnalysisDialog";
+import StyledIconButton from "../../../containers/StyledIconButton";
+import StyledTableSortLabel from "../../../containers/StyledTableSortLabel";
+import ReactFormText from "../../../containers/ReactFormText";
+import StyledText from "../../../containers/StyledText";
 
-const PREFIX = 'Youtube';
+const PREFIX = "Youtube";
 
 const classes = {
   root: `${PREFIX}-root`,
   endAdornment: `${PREFIX}-endAdornment`,
-  tableRowRoot: `${PREFIX}-tableRowRoot`
+  tableRowRoot: `${PREFIX}-tableRowRoot`,
 };
 
 const StyledBox = styled(Box)({
   [`& .${classes.root}`]: {
-    background: '#ffffff'
+    background: "#ffffff",
   },
   [`& .${classes.endAdornment}`]: {
-    padding: '0'
+    padding: "0",
   },
   [`& .${classes.tableRowRoot}`]: {
-    '&:hover': {
-      cursor: 'pointer',
-      backgroundColor: '#9199b6'
-    }
-  }
+    "&:hover": {
+      cursor: "pointer",
+      backgroundColor: "#9199b6",
+    },
+  },
 });
 
 const tableRows = {
   title: [
     {
-      text: '#',
-      align: 'center',
-      width: '60px'
+      text: "#",
+      align: "center",
+      width: "60px",
     },
     {
-      text: '이름',
-      align: 'left'
+      text: "이름",
+      align: "left",
     },
     {
-      text: '채널 이름',
-      align: 'left',
-      width: '250px'
+      text: "채널 이름",
+      align: "left",
+      width: "250px",
     },
     {
-      id: 'YOU_SUBS',
-      text: '구독수',
-      align: 'center',
-      width: '100px'
+      id: "YOU_SUBS",
+      text: "구독수",
+      align: "center",
+      width: "100px",
     },
     {
-      id: 'YOU_VIEWS',
-      text: '조회수',
-      align: 'center',
-      width: '100px'
+      id: "YOU_VIEWS",
+      text: "조회수",
+      align: "center",
+      width: "100px",
     },
     {
-      text: '분석결과',
-      align: 'center',
-      width: '100px'
-    }
+      text: "분석결과",
+      align: "center",
+      width: "100px",
+    },
   ],
-  body: ['rownum', 'INF_NAME', 'YOU_SUBS', 'YOU_VIEWS']
+  body: ["rownum", "INF_NAME", "YOU_SUBS", "YOU_VIEWS"],
 };
 
-const defaultUpdateTime = moment().set({ h: 4, m: 0, s: 0 }).format('YYYY-MM-DD h:mm:ss');
+const defaultUpdateTime = moment().set({ h: 4, m: 0, s: 0 }).format("YYYY-MM-DD h:mm:ss");
 
 function LoadingComponent() {
   return (
     <StyledBox height={536}>
-      <Grid container justifyContent="center" alignItems="center" style={{ height: '100%', maxWidth: 'inherit' }}>
+      <Grid container justifyContent="center" alignItems="center" style={{ height: "100%", maxWidth: "inherit" }}>
         <Grid item>
           <CircularProgress />
         </Grid>
@@ -97,18 +92,17 @@ function Youtube(props) {
   const { setTab } = props;
   const [youtubeId, setYoutubeId] = useState(null);
   const [influencers, setInfluencers] = useState([]);
-  const [updateTime, setUpdateTime] = useState('');
+  const [updateTime, setUpdateTime] = useState("");
   const [loading, setLoading] = useState(false);
-  const [searchWord, setSearchWord] = useState('');
-  const [order, setOrder] = useState({ orderBy: 'YOU_SUBS', direction: 'desc' });
+  const [searchWord, setSearchWord] = useState("");
+  const [order, setOrder] = useState({ orderBy: "YOU_SUBS", direction: "desc" });
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-
   const { register, handleSubmit, errors } = useForm({
-    mode: 'onBlur',
-    defaultValues: { searchValue: '' }
+    mode: "onBlur",
+    defaultValues: { searchValue: "" },
   });
 
   const changePage = (event, value) => {
@@ -130,41 +124,45 @@ function Youtube(props) {
     setSearchWord(searchValue);
   }
 
-
   function getInfluencers() {
     setLoading(true);
-    axios.get('/api/TB_YOUTUBE/', {
-      params: { ...order, searchWord, page }
-    }).then((res) => {
-      const { list, dbCount } = res.data.data;
-      setInfluencers(list);
-      setCount(dbCount);
-      setLoading(false);
-    }).catch((e) => {
-      alert(e.response.data.message);
-      setLoading(false);
-    });
+    axios
+      .get("/TB_YOUTUBE/", {
+        params: { ...order, searchWord, page },
+      })
+      .then((res) => {
+        const { list, dbCount } = res.data.data;
+        setInfluencers(list);
+        setCount(dbCount);
+        setLoading(false);
+      })
+      .catch((e) => {
+        alert(e.response.data.message);
+        setLoading(false);
+      });
   }
 
   function getUpdateTime() {
-    axios.get('/api/TB_YOUTUBE/getUpdateTime', {
-      params: { ...order, searchWord, page }
-    }).then((res) => {
-      const { updateTime } = res.data;
-      setUpdateTime(updateTime);
-    }).catch((e) => {
-      alert(e.response.data.message);
-    });
+    axios
+      .get("/TB_YOUTUBE/getUpdateTime", {
+        params: { ...order, searchWord, page },
+      })
+      .then((res) => {
+        const { updateTime } = res.data;
+        setUpdateTime(updateTime);
+      })
+      .catch((e) => {
+        alert(e.response.data.message);
+      });
   }
 
   function sortTable(id) {
-    const isDesc = order.orderBy === id && order.direction === 'desc';
+    const isDesc = order.orderBy === id && order.direction === "desc";
     setOrder({
       orderBy: id,
-      direction: isDesc ? 'asc' : 'desc'
+      direction: isDesc ? "asc" : "desc",
     });
   }
-
 
   useEffect(() => {
     // getUpdateTime();
@@ -174,7 +172,6 @@ function Youtube(props) {
   useEffect(() => {
     getInfluencers();
   }, [order, searchWord, page]);
-
 
   return (
     <Box maxWidth={1276} m="0 auto">
@@ -196,10 +193,10 @@ function Youtube(props) {
                           <SearchIcon fontSize="small" />
                         </IconButton>
                       </InputAdornment>
-                    )
+                    ),
                   }}
                   onKeyPress={(ev) => {
-                    if (ev.key === 'Enter') {
+                    if (ev.key === "Enter") {
                       ev.preventDefault();
                       handleSubmit(searchFunc)();
                     }
@@ -207,14 +204,13 @@ function Youtube(props) {
                 />
               </Box>
             </Grid>
-            { searchWord ? (
+            {searchWord ? (
               <Grid item>
                 <Box ml={2} fontSize={24} color="green">
                   {`(${searchWord}) 검색 결과`}
                 </Box>
               </Grid>
-            ) : null }
-
+            ) : null}
           </Grid>
           <Grid item>
             <StyledText color="#b9b9b9" fontSize="14px">
@@ -231,53 +227,37 @@ function Youtube(props) {
             <Table aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  { tableRows.title.map(item => (
-                    <StyledTableCell
-                      key={item.text}
-                      align={item.align}
-                      width={item.width}
-                    >
-                      { item.id ? (
+                  {tableRows.title.map((item) => (
+                    <StyledTableCell key={item.text} align={item.align} width={item.width}>
+                      {item.id ? (
                         <Grid container justifyContent="center">
                           <Grid item>
                             <StyledTableSortLabel
                               id={item.id}
                               color="#66f8ff"
                               active={order.orderBy === item.id}
-                              direction={order.orderBy === item.id ? order.direction : 'desc'}
+                              direction={order.orderBy === item.id ? order.direction : "desc"}
                               onClick={() => sortTable(item.id)}
                             >
                               {item.text}
                             </StyledTableSortLabel>
                           </Grid>
                         </Grid>
-                      ) : item.text }
+                      ) : (
+                        item.text
+                      )}
                     </StyledTableCell>
-                  )) }
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {influencers.map(row => (
-                  <TableRow
-                    classes={{ root: classes.tableRowRoot }}
-                    key={row.YOU_ID}
-                    onClick={() => getAnalysis(row.YOU_ID)}
-                  >
-                    <StyledTableCell align="center">
-                      {row.rownum}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {row.INF_NAME}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {row.YOU_NAME}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.YOU_SUBS}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.YOU_VIEWS}
-                    </StyledTableCell>
+                {influencers.map((row) => (
+                  <TableRow classes={{ root: classes.tableRowRoot }} key={row.YOU_ID} onClick={() => getAnalysis(row.YOU_ID)}>
+                    <StyledTableCell align="center">{row.rownum}</StyledTableCell>
+                    <StyledTableCell>{row.INF_NAME}</StyledTableCell>
+                    <StyledTableCell>{row.YOU_NAME}</StyledTableCell>
+                    <StyledTableCell align="center">{row.YOU_SUBS}</StyledTableCell>
+                    <StyledTableCell align="center">{row.YOU_VIEWS}</StyledTableCell>
                     <StyledTableCell padding="2px" align="center">
                       <StyledIconButton onClick={() => getAnalysis(row.YOU_ID)}>
                         <AssessmentRounded />
@@ -291,22 +271,13 @@ function Youtube(props) {
           <Box py={4}>
             <Grid container justifyContent="center">
               <Grid item>
-                <MyPagination
-                  itemCount={count}
-                  page={page}
-                  changePage={changePage}
-                  perPage={10}
-                />
+                <MyPagination itemCount={count} page={page} changePage={changePage} perPage={10} />
               </Grid>
             </Grid>
           </Box>
         </Fragment>
       )}
-      <AnalysisDialog
-        open={dialogOpen}
-        closeDialog={toggleDialog}
-        id={youtubeId}
-      />
+      <AnalysisDialog open={dialogOpen} closeDialog={toggleDialog} id={youtubeId} />
     </Box>
   );
 }
