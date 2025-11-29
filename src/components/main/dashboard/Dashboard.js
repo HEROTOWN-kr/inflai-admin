@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { axiosInstance as axios } from "@lib/axiosInstance";
-import { Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button, Box } from "@mui/material";
-import StyledTableCell from "../../containers/StyledTableCell";
-import StyledTableRow from "../../containers/StyledTableRow";
+import React, { useEffect } from "react";
+import { Box, Grid } from "@mui/material";
 import DashInfluencers from "./DashInfluencers";
 import DashAdvertisers from "./DashAdvertisers";
 import DashCampaigns from "./DashCampaigns";
+import { useOutletContext } from "react-router-dom";
 
 function Dashboard(props) {
-  const { setMenuIndicator } = props;
+  const { setMenuIndicator } = useOutletContext();
   useEffect(() => setMenuIndicator(0), []);
 
   return (

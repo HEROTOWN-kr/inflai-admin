@@ -125,7 +125,7 @@ function LoadingComponent() {
   );
 }
 
-function InstagramList(props) {
+function InstagramList() {
   const [searchWord, setSearchWord] = useState("");
   const [updateTime, setUpdateTime] = useState("");
   const [loading, setLoading] = useState(false);

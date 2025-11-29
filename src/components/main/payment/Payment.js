@@ -6,6 +6,7 @@ import StyledTableCell from "../../containers/StyledTableCell";
 import StyledText from "../../containers/StyledText";
 import StyledTableRow from "../../containers/StyledTableRow";
 import MyPagination from "../../containers/MyPagination";
+import { useOutletContext } from "react-router-dom";
 
 const tableRows = [
   {
@@ -42,7 +43,7 @@ const tableRows = [
 ];
 
 function Payment(props) {
-  const { setMenuIndicator } = props;
+  const { setMenuIndicator } = useOutletContext();
   const [payments, setPayments] = useState([]);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);

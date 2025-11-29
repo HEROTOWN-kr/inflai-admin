@@ -13,6 +13,7 @@ import StyledIconButton from "../../../containers/StyledIconButton";
 import StyledTableSortLabel from "../../../containers/StyledTableSortLabel";
 import ReactFormText from "../../../containers/ReactFormText";
 import StyledText from "../../../containers/StyledText";
+import { useOutletContext } from "react-router-dom";
 
 const PREFIX = "Youtube";
 
@@ -88,8 +89,8 @@ function LoadingComponent() {
   );
 }
 
-function Youtube(props) {
-  const { setTab } = props;
+function Youtube() {
+  const { setTab, ...props } = useOutletContext();
   const [youtubeId, setYoutubeId] = useState(null);
   const [influencers, setInfluencers] = useState([]);
   const [updateTime, setUpdateTime] = useState("");

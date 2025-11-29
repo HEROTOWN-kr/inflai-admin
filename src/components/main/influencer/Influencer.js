@@ -13,6 +13,7 @@ import StyledImage from "../../containers/StyledImage";
 import defaultAccountImage from "../../../img/default_account_image.png";
 import StyledButton from "../../containers/StyledButton";
 import AuthContext from "../../../context/AuthContext";
+import { useOutletContext } from "react-router-dom";
 
 const PREFIX = "Influencer";
 
@@ -80,7 +81,7 @@ function Influencer(props) {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState({ instagram: "0", youtube: "0", blog: "0" });
-  const { setMenuIndicator } = props;
+  const { setMenuIndicator } = useOutletContext();
   const limit = 10;
 
   const { setLoading } = useContext(AuthContext);

@@ -33,7 +33,9 @@ import ParticipantDialog from "./ParticipantDialog";
 import StyledImage from "../../containers/StyledImage";
 import ReactFormText from "../../containers/ReactFormText";
 import StyledSelect from "../../containers/StyledSelect";
+import Select from "@mui/material/Select";
 import CopyDialog from "./CopyDialog";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const PREFIX = "CampaignList";
 
@@ -111,7 +113,7 @@ const snsTypes = {
 };
 
 function CampaignList(props) {
-  const { history, match, setTab } = props;
+  const { history, match, setTab } = useOutletContext();
   const [type, setType] = useState("0");
   const [limit, setLimit] = useState(5);
   const [searchWord, setSearchWord] = useState("");
@@ -122,6 +124,7 @@ function CampaignList(props) {
   const [campaigns, setCampaigns] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
 
   // const limit = 5;
 
@@ -255,16 +258,17 @@ function CampaignList(props) {
       <Box mb={1}>
         <Grid container justifyContent="space-between" alignItems="center" spacing={1}>
           <Grid item>
-            <StyledSelect classes={{ root: classes.root }} native variant="outlined" fullWidth value={type} onChange={changeType}>
+            <Select size={"small"} sx={{ background: "white" }} native variant="outlined" fullWidth value={type} onChange={changeType}>
               <option value="0">전체</option>
               <option value="1">인스타</option>
               <option value="2">유튜브</option>
               <option value="3">블로그</option>
-            </StyledSelect>
+            </Select>
           </Grid>
           <Grid item>
             <Box width={300}>
               <ReactFormText
+                size="small"
                 register={register}
                 errors={errors}
                 name="searchValue"
@@ -292,12 +296,12 @@ function CampaignList(props) {
           <Grid item>
             <Grid container spacing={1}>
               <Grid item>
-                <StyledSelect classes={{ root: classes.root }} native variant="outlined" fullWidth value={limit} onChange={changeLimit}>
+                <Select native variant="outlined" size={"small"} sx={{ background: "white" }} fullWidth value={limit} onChange={changeLimit}>
                   <option value={5}>5</option>
                   <option value={10}>10</option>
                   <option value={30}>30</option>
                   <option value={100}>100</option>
-                </StyledSelect>
+                </Select>
               </Grid>
               <Grid item>
                 <StyledButton

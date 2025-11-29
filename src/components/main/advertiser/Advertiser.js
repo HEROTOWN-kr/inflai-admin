@@ -6,12 +6,13 @@ import StyledTableRow from "../../containers/StyledTableRow";
 import MyPagination from "../../containers/MyPagination";
 import StyledImage from "../../containers/StyledImage";
 import defaultAccountImage from "../../../img/default_account_image.png";
+import { useOutletContext } from "react-router-dom";
 
 function Advertiser(props) {
   const [advertisers, setAdvertisers] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const { setMenuIndicator } = props;
+  const { setMenuIndicator } = useOutletContext();
   const limit = 10;
 
   function createAdvertisers(data) {

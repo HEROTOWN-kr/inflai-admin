@@ -4,9 +4,10 @@ import { Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 import StyledTableCell from "../../containers/StyledTableCell";
 import StyledTableRow from "../../containers/StyledTableRow";
 import MyPagination from "../../containers/MyPagination";
+import { useOutletContext } from "react-router-dom";
 
 function RequestList(props) {
-  const { history, match, setTab } = props;
+  const { history, match, setTab } = useOutletContext();
 
   const [influencers, setInfluencers] = useState([]);
   const [count, setCount] = useState(0);

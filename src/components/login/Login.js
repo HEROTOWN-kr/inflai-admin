@@ -5,9 +5,11 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { axiosInstance as axios } from "@lib/axiosInstance";
 import MyTextField from "../containers/MyTextField";
+import { useNavigate } from "react-router-dom";
 
 function Login({ changeUser, user, history }) {
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const SignupSchema = Yup.object().shape({
     email: Yup.string().required("이메일을 입력해주세요"),

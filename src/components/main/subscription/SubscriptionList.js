@@ -60,8 +60,7 @@ const tableRows = [
   },
 ];
 
-function SubscriptionList(props) {
-  const { history } = props;
+function SubscriptionList() {
   const [subscribeData, setSubscribeData] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);

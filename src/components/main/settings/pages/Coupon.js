@@ -35,7 +35,7 @@ const tableRows = [
   },
 ];
 
-function Coupon(props) {
+function Coupon() {
   const [coupons, setCoupons] = useState([]);
   const [couponsCount, setCouponsCount] = useState(0);
   const [page, setPage] = useState(1);

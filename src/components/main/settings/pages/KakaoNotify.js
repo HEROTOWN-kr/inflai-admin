@@ -309,7 +309,7 @@ function KakaoNotify() {
                 <Box mb="2px">
                   <StyledText color="#3f51b5">알림 종류</StyledText>
                 </Box>
-                <Controller
+                {/*<Controller
                   as={
                     <RadioGroup row aria-label="gender">
                       {notificationTypes.map((item, index) => (
@@ -325,7 +325,7 @@ function KakaoNotify() {
                   }
                   name="type"
                   control={control}
-                />
+                />*/}
               </Grid>
               <Grid item>
                 <Divider orientation="vertical" />
@@ -334,7 +334,7 @@ function KakaoNotify() {
                 <Box mb="2px">
                   <StyledText color="#3f51b5">수신자 종류</StyledText>
                 </Box>
-                <Controller
+                {/*<Controller
                   as={
                     <RadioGroup row aria-label="gender">
                       {receiverTypes.map((item, index) => (
@@ -350,7 +350,7 @@ function KakaoNotify() {
                   }
                   name="receiver"
                   control={control}
-                />
+                />*/}
               </Grid>
             </Grid>
           </Box>
