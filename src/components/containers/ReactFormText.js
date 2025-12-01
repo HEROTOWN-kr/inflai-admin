@@ -1,74 +1,24 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
-import StyledTextField from "./StyledTextField";
-import TextField from "@mui/material/TextField";
+import { Controller } from "react-hook-form";
+import { TextField } from "@mui/material";
 
-const PREFIX = "ReactFormText";
-
-const classes = {
-  FormHelperContained: `${PREFIX}-FormHelperContained`,
-};
-
-const Root = styled("span")({
-  [`& .${classes.FormHelperContained}`]: {
-    marginLeft: "0",
-  },
-});
-
-function ReactFormText(props) {
-  const { errors, register, name, ...rest } = props;
-
+function ReactFormText({ control, name, errors, ...rest }) {
   return (
-    <TextField
-      variant="outlined"
-      fullWidth
-      {...register(name)}
-      error={!!errors?.[name]}
-      helperText={errors?.[name]?.message ? <Root className="error-message">{errors[name].message}</Root> : null}
-      css={{ transition: "all 1s ease-out" }}
-      {...rest}
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <TextField
+          {...field}
+          variant="outlined"
+          fullWidth
+          error={!!errors?.[name]}
+          helperText={errors?.[name]?.message ? <span className="error-message">{errors[name].message}</span> : null}
+          {...rest}
+        />
+      )}
     />
   );
 }
 
 export default ReactFormText;
-
-{
-  /*    <StyledTextField*/
-}
-{
-  /*  variant="outlined"*/
-}
-{
-  /*  fullWidth*/
-}
-{
-  /*  name={name}*/
-}
-{
-  /*  inputRef={register}*/
-}
-{
-  /*  // error={!!errors[name]}*/
-}
-{
-  /*  FormHelperTextProps={{*/
-}
-{
-  /*    classes: { contained: classes.FormHelperContained },*/
-}
-{
-  /*  }}*/
-}
-{
-  /*  // helperText={errors[name] ? <Root className="error-message">{errors[name]?.message}</Root> : null}*/
-}
-{
-  /*  css={{ transition: "all 1s ease-out" }}*/
-}
-{
-  /*  {...rest}*/
-}
-{
-  /*/>*/
-}

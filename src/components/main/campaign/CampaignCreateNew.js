@@ -1,14 +1,12 @@
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { axiosInstance as axios } from "@lib/axiosInstance";
-import { Box, FormControlLabel, Grid, InputAdornment, Radio, RadioGroup, IconButton } from "@mui/material";
+import { FormControlLabel, InputAdornment, Radio, RadioGroup, IconButton } from "@mui/material";
 import { ArrowRightAlt } from "@mui/icons-material";
 import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import StyledText from "../../containers/StyledText";
@@ -100,9 +98,6 @@ function CampaignCreateNew() {
 
   const deliveryRef = useRef();
   const snsRef = useRef();
-
-  const theme = useTheme();
-  const isSM = useMediaQuery(theme.breakpoints.up("sm"));
 
   // setDates
 
@@ -400,49 +395,38 @@ function CampaignCreateNew() {
   }
 
   // view
-
   return (
     <Root>
-      <Box mt="26px" color="#000" fontSize="40px" fontWeight={700} textAlign="center">
-        캠페인 정보
-      </Box>
-      <Box
-        my={{ xs: 0, sm: 4 }}
-        mx="auto"
-        py={{ xs: 2, sm: 6 }}
-        px={{ xs: 2, sm: 4 }}
-        maxWidth={1024}
-        bgcolor="#fff"
-        border="1px solid #ddd"
-        borderRadius="20px"
-      >
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Box mb={1}>
+      <div className="mt-[26px] text-black text-[40px] font-bold text-center">캠페인 정보</div>
+      <div className="my-0 sm:my-4 mx-auto py-2 sm:py-6 px-2 sm:px-4 max-w-[1024px] bg-white border border-[#ddd] rounded-[20px]">
+        <div className="space-y-6">
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">캠페인명 (제공물품(서비스) + 시가 등 한 줄로 적어주세요)</StyledText>
-            </Box>
-            <ReactFormText register={register} errors={errors} name="campaignName" placeholder="Ex) 5만원 반려동물 구강케어 1박스 (30매)" />
-          </Grid>
-          <Grid item xs={12}>
-            <Box mb={1}>
+            </div>
+            <ReactFormText errors={errors} control={control} name="campaignName" placeholder="Ex) 5만원 반려동물 구강케어 1박스 (30매)" />
+          </div>
+
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">제공하는 제품(서비스) 짧은설명</StyledText>
-            </Box>
+            </div>
             <ReactFormText
-              register={register}
               errors={errors}
+              control={control}
               multiline
               rows={5}
               name="shortDisc"
               placeholder="서비스나 제공물품에 대해서 자세히 적어주세요"
             />
-          </Grid>
+          </div>
 
-          <Grid item xs={12}>
-            <Box mb={1}>
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">캠페인 종류</StyledText>
-            </Box>
-            <Grid container>
-              <Grid item>
+            </div>
+            <div>
+              <div>
                 <Controller
                   name="campaignType"
                   control={control}
@@ -459,13 +443,13 @@ function CampaignCreateNew() {
                     </RadioGroup>
                   )}
                 />
-              </Grid>
-            </Grid>
-          </Grid>
+              </div>
+            </div>
+          </div>
 
           {watchObj.campaignType === "3" ? (
-            <Grid item xs={12}>
-              <Box mb={2} fontSize={14} color={Colors.orange}>
+            <div>
+              <div className="mb-2 text-[14px]" style={{ color: Colors.orange }}>
                 기자단은 물건등을 제공하거나 방문하지 않고 사장님이 주신 사진 및 자료(스토리보드) 만으로 만드는 인스타그램이나 블로그에 업로드 하는 것
                 입니다
                 <br />
@@ -478,17 +462,17 @@ function CampaignCreateNew() {
                 자료를 추가하여 수정요청은 안됩니다 (추가 비용을 요구함) 따라서 처음에 자료를 잘 작성해 주세요
                 <br />
                 자료대로 안 올라갔을 경우 수정은 1회 가능하며 직접 요청하시면 됩니다
-              </Box>
-            </Grid>
+              </div>
+            </div>
           ) : null}
 
-          <Grid item xs={12}>
-            <Box mb={1}>
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">모집SNS</StyledText>
-            </Box>
+            </div>
 
-            <Grid container>
-              <Grid item>
+            <div>
+              <div>
                 <Controller
                   name="sns"
                   control={control}
@@ -505,13 +489,13 @@ function CampaignCreateNew() {
                     </RadioGroup>
                   )}
                 />
-              </Grid>
-            </Grid>
+              </div>
+            </div>
 
             {errors.sns ? <div className="error-message">{errors.sns.message}</div> : null}
 
             {watchObj.sns === "2" ? (
-              <Box color={Colors.orange}>
+              <div style={{ color: Colors.orange }}>
                 유튜버 경우 제공되는 제품(서비스)외에 편집비용이 최소 20만원부터 가능합니다.
                 <br />
                 제공되는 물품(서비스)가 인기가 적거나 편집이 어려운 경우 비용을 올리시는게 빠르게 모집하기 편합니다
@@ -521,19 +505,19 @@ function CampaignCreateNew() {
                 영상 업로드 후 비용을 제작자에게 직접 전달하는 방식입니다
                 <br />
                 인플라이는 인공지능분석을 통해 보다 좋은 유튜버를 추천해 드리며 유튜브 영상제작과정에는 참여하지 않습니다
-              </Box>
+              </div>
             ) : null}
-          </Grid>
+          </div>
 
           {watchObj.campaignType === "1" ? (
-            <Grid item xs={12}>
-              <Box mb={1}>
+            <div>
+              <div className="mb-1">
                 <StyledText color="#3f51b5">제공하는 제품(서비스) 판매가</StyledText>
-              </Box>
-              <Box width={{ xs: "100%", md: "200px" }}>
+              </div>
+              <div className="w-full md:w-[200px]">
                 <ReactFormText
-                  register={register}
                   errors={errors}
+                  control={control}
                   name="priceSum"
                   placeholder=""
                   InputProps={{
@@ -545,64 +529,60 @@ function CampaignCreateNew() {
                     classes: { input: classes.input },
                   }}
                 />
-              </Box>
-            </Grid>
+              </div>
+            </div>
           ) : null}
 
-          <Grid item xs={12}>
-            <Box mb={1}>
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">제공내역 (필수)</StyledText>
-            </Box>
+            </div>
             <ReactFormText
-              register={register}
               errors={errors}
+              control={control}
               multiline
               rows={5}
               name="provideInfo"
               placeholder="예시) 시가 12만원 상당 스틱형벌꿀 1박스"
             />
-          </Grid>
+          </div>
 
-          <Grid item xs={12}>
-            <Box mb={1}>
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">추가 제공금액 (선택)</StyledText>
-            </Box>
-            <Grid container spacing={1} alignItems="center">
-              <Grid item xs={12} md="auto">
-                <Box width={{ xs: "100%", md: "200px" }}>
-                  <ReactFormText
-                    register={register}
-                    errors={errors}
-                    name="provideMoney"
-                    placeholder=""
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>
-                          원
-                        </InputAdornment>
-                      ),
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12} md>
-                <Box fontSize="14px">
-                  제공하는 물품(서비스)의 시가가 낮은 경우 인플루언서 모집이 원활하지 않을 수 있습니다. 이럴 때 추가적인 금액을 제공해 주시면 더 좋은
-                  인플루언서가 신청할 가능성이 커집니다.
-                </Box>
-              </Grid>
-            </Grid>
-          </Grid>
+            </div>
+            <div className="flex flex-wrap items-center gap-1">
+              <div className="w-full md:w-[200px]">
+                <ReactFormText
+                  errors={errors}
+                  control={control}
+                  name="provideMoney"
+                  placeholder=""
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>
+                        원
+                      </InputAdornment>
+                    ),
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
+              <div className="w-full md:flex-1 text-[14px]">
+                제공하는 물품(서비스)의 시가가 낮은 경우 인플루언서 모집이 원활하지 않을 수 있습니다. 이럴 때 추가적인 금액을 제공해 주시면 더 좋은
+                인플루언서가 신청할 가능성이 커집니다.
+              </div>
+            </div>
+          </div>
 
           {watchObj.sns === "2" ? (
             <Fragment>
-              <Grid item xs={12}>
-                <Box mb={1}>
+              <div>
+                <div className="mb-1">
                   <StyledText color="#3f51b5">편집비용</StyledText>
-                </Box>
-                <Grid container>
-                  <Grid item>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div>
                     <Controller
                       name="editPrice"
                       control={control}
@@ -619,8 +599,8 @@ function CampaignCreateNew() {
                         </RadioGroup>
                       )}
                     />
-                  </Grid>
-                  <Grid item>
+                  </div>
+                  <div className="w-full md:w-auto">
                     <StyledTextField
                       fullWidth
                       disabled={watchObj.editPrice !== "4"}
@@ -641,16 +621,17 @@ function CampaignCreateNew() {
                         classes: { input: classes.textAlignRight },
                       }}
                     />
-                  </Grid>
-                </Grid>
+                  </div>
+                </div>
                 {errors.editPrice ? <div className="error-message">{errors.editPrice.message}</div> : null}
-              </Grid>
-              <Grid item xs={12}>
-                <Box mb={1}>
+              </div>
+
+              <div>
+                <div className="mb-1">
                   <StyledText color="#3f51b5">원하시는 유튜브영상 길이</StyledText>
-                </Box>
-                <Grid container>
-                  <Grid item>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div>
                     <Controller
                       name="videoLength"
                       control={control}
@@ -667,8 +648,8 @@ function CampaignCreateNew() {
                         </RadioGroup>
                       )}
                     />
-                  </Grid>
-                  <Grid item>
+                  </div>
+                  <div className="w-full md:w-auto">
                     <StyledTextField
                       fullWidth
                       disabled={watchObj.videoLength !== "5"}
@@ -689,89 +670,73 @@ function CampaignCreateNew() {
                         classes: { input: classes.textAlignRight },
                       }}
                     />
-                  </Grid>
-                </Grid>
+                  </div>
+                </div>
                 {errors.videoLength ? <div className="error-message">{errors.videoLength.message}</div> : null}
-              </Grid>
+              </div>
             </Fragment>
           ) : null}
 
-          <Grid item xs={12}>
-            <Box mb={1}>
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">모집인원</StyledText>
-            </Box>
-            <ReactFormText register={register} errors={errors} name="influencerCount" />
-          </Grid>
-          <Grid item xs={12}>
-            <Box mb={1}>
+            </div>
+            <ReactFormText errors={errors} control={control} name="influencerCount" />
+          </div>
+
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">리뷰어 모집기간 (최대 모집기간은 1주일입니다)</StyledText>
-            </Box>
-            <Grid container spacing={isSM ? 3 : 1} alignItems="center">
-              <Grid item xs sm="auto">
-                <Box width={isSM ? "250px" : "100%"}>
-                  <ReactFormDatePicker name="searchStart" control={control} onAccept={onSearchStartChange} />
-                </Box>
-              </Grid>
-              <Grid item xs={1} sm="auto">
-                <Box textAlign="center">~</Box>
-              </Grid>
-              <Grid item xs sm="auto">
-                <Box width={isSM ? "250px" : "100%"}>
-                  <ReactFormDatePicker name="searchFinish" control={control} minDate={pickerDates.min} />
-                </Box>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Box mb={1}>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="w-full sm:w-[250px]">
+                <ReactFormDatePicker name="searchStart" control={control} onAccept={onSearchStartChange} />
+              </div>
+              <div className="w-auto text-center">~</div>
+              <div className="w-full sm:w-[250px]">
+                <ReactFormDatePicker name="searchFinish" control={control} minDate={pickerDates.min} />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">인플루언서 발표기간</StyledText>
-            </Box>
-            <Grid container spacing={isSM ? 3 : 1} alignItems="center">
-              <Grid item xs sm="auto">
-                <Box width={isSM ? "250px" : "100%"}>
-                  <ReactFormDatePicker name="selectStart" disabled control={control} />
-                </Box>
-              </Grid>
-              <Grid item xs={1} sm="auto">
-                <Box textAlign="center">~</Box>
-              </Grid>
-              <Grid item xs sm="auto">
-                <Box width={isSM ? "250px" : "100%"}>
-                  <ReactFormDatePicker name="selectFinish" disabled control={control} />
-                </Box>
-              </Grid>
-            </Grid>
-          </Grid>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="w-full sm:w-[250px]">
+                <ReactFormDatePicker name="selectStart" disabled control={control} />
+              </div>
+              <div className="w-auto text-center">~</div>
+              <div className="w-full sm:w-[250px]">
+                <ReactFormDatePicker name="selectFinish" disabled control={control} />
+              </div>
+            </div>
+          </div>
 
           {watchObj.campaignType === "2" ? (
             <Fragment>
-              <Grid item xs={12}>
-                <Box mb={1}>
+              <div>
+                <div className="mb-1">
                   <StyledText color="#3f51b5">공동 구매기간</StyledText>
-                </Box>
-                <Grid container spacing={isSM ? 3 : 1} alignItems="center">
-                  <Grid item xs sm="auto">
-                    <Box width={isSM ? "250px" : "100%"}>
-                      <ReactFormDatePicker name="productSellStart" control={control} onAccept={onSearchStartChange} />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={1} sm="auto">
-                    <Box textAlign="center">~</Box>
-                  </Grid>
-                  <Grid item xs sm="auto">
-                    <Box width={isSM ? "250px" : "100%"}>
-                      <ReactFormDatePicker name="productSellFinish" control={control} minDate={pickerDates.min} />
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Grid>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="w-full sm:w-[250px]">
+                    <ReactFormDatePicker name="productSellStart" control={control} onAccept={onSearchStartChange} />
+                  </div>
+                  <div className="w-auto text-center">~</div>
+                  <div className="w-full sm:w-[250px]">
+                    <ReactFormDatePicker name="productSellFinish" control={control} minDate={pickerDates.min} />
+                  </div>
+                </div>
+              </div>
 
-              <Grid item xs={12}>
-                <Box mb={1}>
+              <div>
+                <div className="mb-1">
                   <StyledText color="#3f51b5">판매 방식</StyledText>
-                </Box>
-                <Grid container>
-                  <Grid item>
+                </div>
+                <div>
+                  <div>
                     <Controller
                       name="productSellType"
                       control={control}
@@ -788,92 +753,88 @@ function CampaignCreateNew() {
                         </RadioGroup>
                       )}
                     />
-                  </Grid>
-                </Grid>
+                  </div>
+                </div>
                 {errors.productSellType ? <div className="error-message">{errors.productSellType.message}</div> : null}
-              </Grid>
+              </div>
 
-              <Grid item xs={12}>
-                <Box mb={1}>
+              <div>
+                <div className="mb-1">
                   <StyledText color="#3f51b5">제품 가격</StyledText>
-                </Box>
-                <Grid container spacing={1} alignItems="center">
-                  <Grid item xs={12} md="auto">
-                    <Box width={{ xs: "100%", md: "200px" }}>
-                      <ReactFormText
-                        register={register}
-                        errors={errors}
-                        name="productSellPrice"
-                        placeholder=""
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>
-                              원
-                            </InputAdornment>
-                          ),
-                          classes: { input: classes.input },
-                        }}
-                      />
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Grid>
+                </div>
+                <div className="flex flex-wrap items-center gap-1">
+                  <div className="w-full md:w-[200px]">
+                    <ReactFormText
+                      errors={errors}
+                      control={control}
+                      name="productSellPrice"
+                      placeholder=""
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>
+                            원
+                          </InputAdornment>
+                        ),
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
 
-              <Grid item xs={12}>
-                <Box mb={1}>
+              <div>
+                <div className="mb-1">
                   <StyledText color="#3f51b5">판매 수익</StyledText>
-                </Box>
-                <Grid container spacing={1} alignItems="center">
-                  <Grid item xs={12} md="auto">
-                    <Box width={{ xs: "100%", md: "200px" }}>
-                      <ReactFormText
-                        register={register}
-                        errors={errors}
-                        name="productSellDiscount"
-                        placeholder=""
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>
-                              원
-                            </InputAdornment>
-                          ),
-                          classes: { input: classes.input },
-                        }}
-                      />
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Grid>
+                </div>
+                <div className="flex flex-wrap items-center gap-1">
+                  <div className="w-full md:w-[200px]">
+                    <ReactFormText
+                      errors={errors}
+                      control={control}
+                      name="productSellDiscount"
+                      placeholder=""
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment disablePointerEvents position="end" classes={{ positionEnd: classes.positionEnd }}>
+                            원
+                          </InputAdornment>
+                        ),
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
 
-              <Grid item xs={12}>
-                <Box mb={1}>
+              <div>
+                <div className="mb-1">
                   <StyledText color="#3f51b5">판매 정보</StyledText>
-                </Box>
+                </div>
                 <ReactFormText
-                  register={register}
                   errors={errors}
+                  control={control}
                   multiline
                   rows={5}
                   name="productSellInfo"
                   placeholder="공동 구매 판매 정보를 자세히 적어주세요"
                 />
-              </Grid>
+              </div>
 
               {watchObj.productSellType === "1" ? (
-                <Grid item xs={12}>
-                  <Box mb={1}>
+                <div>
+                  <div className="mb-1">
                     <StyledText color="#3f51b5">판매 사이트 URL</StyledText>
-                  </Box>
-                  <ReactFormText register={register} errors={errors} rows={5} name="productSellUrl" placeholder="https://farmforyou.co.kr/" />
-                </Grid>
+                  </div>
+                  <ReactFormText errors={errors} control={control} rows={5} name="productSellUrl" placeholder="https://farmforyou.co.kr/" />
+                </div>
               ) : null}
             </Fragment>
           ) : null}
 
-          <Grid item xs={12}>
-            <Box mb={1}>
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">캠페인 출력상태</StyledText>
-            </Box>
+            </div>
             <Controller
               name="visible"
               control={control}
@@ -885,12 +846,12 @@ function CampaignCreateNew() {
                 </RadioGroup>
               )}
             />
-          </Grid>
+          </div>
 
-          <Grid item xs={12}>
-            <Box mb={1}>
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">선정자 출력 여뷰</StyledText>
-            </Box>
+            </div>
             <Controller
               name="selView"
               control={control}
@@ -902,12 +863,12 @@ function CampaignCreateNew() {
                 </RadioGroup>
               )}
             />
-          </Grid>
+          </div>
 
-          <Grid item xs={12}>
-            <Box mb={1}>
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">제공상품 배송여부</StyledText>
-            </Box>
+            </div>
             <Controller
               name="delivery"
               control={control}
@@ -925,14 +886,15 @@ function CampaignCreateNew() {
               )}
             />
             {errors.delivery ? <div className="error-message">{errors.delivery.message}</div> : null}
-          </Grid>
-          <Grid item xs={12}>
-            <Box mb={1}>
+          </div>
+
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">카테고리</StyledText>
-            </Box>
-            <Grid container spacing={2}>
-              <Grid item xs={6} sm="auto">
-                <Box width={isSM ? "200px" : "100%"}>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <div className="w-1/2 sm:w-auto">
+                <div className="w-full sm:w-[200px]">
                   <Controller
                     render={(controllerProps) => (
                       <StyledSelect native {...controllerProps} variant="outlined" fullWidth>
@@ -946,11 +908,11 @@ function CampaignCreateNew() {
                     name="type"
                     control={control}
                   />
-                </Box>
-              </Grid>
+                </div>
+              </div>
               {AdvertiseTypes.subType[watchObj.type] ? (
-                <Grid item xs={6} sm="auto">
-                  <Box width={isSM ? "200px" : "100%"}>
+                <div className="w-1/2 sm:w-auto">
+                  <div className="w-full sm:w-[200px]">
                     <Controller
                       render={(controllerProps) => (
                         <StyledSelect native {...controllerProps} variant="outlined" fullWidth>
@@ -964,62 +926,67 @@ function CampaignCreateNew() {
                       name="subtype"
                       control={control}
                     />
-                  </Box>
-                </Grid>
+                  </div>
+                </div>
               ) : null}
-            </Grid>
-          </Grid>
+            </div>
+          </div>
+
           {parseInt(watchObj.type, 10) === 0 ? (
-            <Grid item xs={12}>
-              <Box mb={1}>
+            <div>
+              <div className="mb-1">
                 <StyledText color="#3f51b5">주소</StyledText>
-              </Box>
+              </div>
               <DaumPostCode setValue={setValue} register={register} errors={errors} />
-            </Grid>
+            </div>
           ) : null}
-          <Grid item xs={12}>
-            <Box mb={1}>
+
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">연락처</StyledText>
-            </Box>
-            <ReactFormText register={register} errors={errors} name="phone" />
-          </Grid>
-          <Grid item xs={12}>
-            <Box mb={1}>
+            </div>
+            <ReactFormText errors={errors} control={control} name="phone" />
+          </div>
+
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">이메일</StyledText>
-            </Box>
-            <ReactFormText register={register} errors={errors} name="email" />
-          </Grid>
-          <Grid item xs={12}>
-            <Box mb={1}>
+            </div>
+            <ReactFormText errors={errors} control={control} name="email" />
+          </div>
+
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">필수키워드</StyledText>
-            </Box>
-            <ReactFormText register={register} errors={errors} name="searchKeyword" />
-          </Grid>
+            </div>
+            <ReactFormText errors={errors} control={control} name="searchKeyword" />
+          </div>
 
           {links.length > 0 ? (
-            <Grid item xs={12}>
-              <Grid container spacing={1}>
+            <div>
+              <div className="flex flex-wrap gap-1">
                 {links.map((item) => (
-                  <Grid item key={item}>
-                    <Box p="2px 5px 2px 10px" bgcolor="#0000000d" borderRadius="5px" maxWidth={300}>
-                      <Grid style={{ display: "flex" }}>
+                  <div key={item}>
+                    <div className="px-[10px] py-[2px] bg-black/5 rounded-[5px] max-w-[300px]">
+                      <div className="flex">
                         <Typography classes={{ root: classes.linkText }}>{item}</Typography>
                         <Clear fontSize="small" classes={{ root: classes.clearRoot }} onClick={() => deleteLink(item)} />
-                      </Grid>
-                    </Box>
-                  </Grid>
+                      </div>
+                    </div>
+                  </div>
                 ))}
-              </Grid>
-            </Grid>
+              </div>
+            </div>
           ) : null}
-          <Grid item xs={12}>
-            <Box mb={1}>
+
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">참조할 링크 (링크는 최대 3개까지 입력가능합니다. 주소 쓰시고 꼭 화살표 버튼 눌러주세요)</StyledText>
-            </Box>
-            <Box maxWidth={400}>
+            </div>
+            <div className="max-w-[400px]">
               <ReactFormText
-                register={register}
                 errors={errors}
+                control={control}
                 name="linkItem"
                 placeholder="예시) https://www.inflai.com"
                 InputProps={{
@@ -1039,25 +1006,25 @@ function CampaignCreateNew() {
                   }
                 }}
               />
-            </Box>
-          </Grid>
+            </div>
+          </div>
 
-          <Grid item xs={12}>
-            <Box mb={1}>
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">포스팅가이드</StyledText>
-            </Box>
+            </div>
             <ReactFormText
-              register={register}
               errors={errors}
+              control={control}
               multiline
               rows={5}
               name="discription"
               placeholder="※ 선정된 분들에게 광고주분이 직접 카톡(메일, 유선 등)으로 전달 드립니다"
             />
-          </Grid>
+          </div>
 
-          <Grid item xs={12}>
-            <Box mb={1}>
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">이미지 업로드 (5장 까지 업로드 가능합니다, 최소 한 장 이상필수)</StyledText>
               <input
                 type="text"
@@ -1071,43 +1038,45 @@ function CampaignCreateNew() {
                   height: "0",
                 }}
               />
-            </Box>
-            <Box border="1px solid #0000003b" p={3}>
+            </div>
+            <div className="border border-[#0000003b] p-3">
               <ImageHolder setValue={setValue} images={images} setImages={setImages} dbImages={dbImages} />
-            </Box>
+            </div>
             {errors.picArray ? <div className="error-message">{errors.picArray.message}</div> : null}
-          </Grid>
-          <Grid item xs={12}>
-            <Box mb={1}>
+          </div>
+
+          <div>
+            <div className="mb-1">
               <StyledText color="#3f51b5">상세정보</StyledText>
-            </Box>
+            </div>
             {/*<CKEditorComponent control={control} name="detailInfo" errors={errors} />*/}
 
-            <Box mt="10px" fontSize="14px" color="#4c4747" bgcolor="#fdf7e2" border="1px solid #e6cf79" padding="10px 15px" borderRadius="8px">
+            <div className="mt-[10px] text-[14px] text-[#4c4747] bg-[#fdf7e2] border border-[#e6cf79] px-[15px] py-[10px] rounded-[8px]">
               입력 하시느라 고생하셨습니다. 모집기간 중에도 인플루언서 선정이 가능합니다. 신청하신 인플루언서들 계정의 인공지능 분석 자료를 실시간
               보실 수 있습니다. 광고주님의 제품에 맞는 인플루언서들을 선정하시면 곧바로 인플루언서들에게 선정소식과 함께 광고주님의 전화번호가 전송이
               됩니다. 궁금하신 내용등은 직접 상담하시면 됩니다. 인플루언서들이 리뷰를 올리면 선정된 인플루언서 탭에서 링크를 확인하실 수 있습니다.
               링크 내용이 마음에 드시면 별점 5개를 주어서 인플루언서를 평가해 주세요.
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
-      <Box mb={8}>
-        <Grid container justifyContent="center" spacing={3}>
-          <Grid item xs={6} sm="auto">
-            <Box width={isSM ? "200px" : "100%"}>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-8">
+        <div className="flex flex-wrap justify-center gap-3">
+          <div className="w-1/2 sm:w-auto">
+            <div className="w-full sm:w-[200px]">
               <StyledButton background={Colors.pink3} hoverBackground={Colors.pink} onClick={() => navigate("/")}>
                 취소
               </StyledButton>
-            </Box>
-          </Grid>
-          <Grid item xs={6} sm="auto">
-            <Box width={isSM ? "200px" : "100%"}>
+            </div>
+          </div>
+          <div className="w-1/2 sm:w-auto">
+            <div className="w-full sm:w-[200px]">
               <StyledButton onClick={handleSubmit(onSubmit)}>저장하기</StyledButton>
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
+            </div>
+          </div>
+        </div>
+      </div>
     </Root>
   );
 }

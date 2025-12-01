@@ -1,39 +1,28 @@
-import React from 'react';
-import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
-import { Colors } from '../../lib/Сonstants';
+import React from "react";
+import { styled } from "@mui/material/styles";
+import { Box } from "@mui/material";
+import { Colors } from "../../lib/Сonstants";
 
-const PREFIX = 'StyledText';
+const PREFIX = "StyledText";
 
 const classes = {
-  common: `${PREFIX}-common`
+  common: `${PREFIX}-common`,
 };
 
 const StyledBox = styled(Box)({
-  [`& .${classes.common}`]: ({
-    fontSize, lineHeight, color, fontWeight, textAlign, overflowHidden, cursor
-  }) => ({
-    fontSize: fontSize || '14px',
-    overflow: overflowHidden ? 'hidden' : 'visible',
-    whiteSpace: overflowHidden ? 'nowrap' : 'normal',
-    textOverflow: overflowHidden ? 'ellipsis' : 'clip',
+  [`& .${classes.common}`]: ({ fontSize, overflowHidden }) => ({
+    fontSize: fontSize || "14px",
+    overflow: overflowHidden ? "hidden" : "visible",
+    whiteSpace: overflowHidden ? "nowrap" : "normal",
+    textOverflow: overflowHidden ? "ellipsis" : "clip",
   }),
 });
 
 function StyledText(props) {
-  const {
-    className, fontFamily, fontSize, children, ...rest
-  } = props;
-
+  const { className, fontFamily, fontSize, children, ...rest } = props;
 
   return (
-    <StyledBox
-      classes={{ root: classes.common }}
-      fontFamily={fontFamily || 'Noto Sans KR, sans-serif'}
-      letterSpacing="0"
-      component="div"
-      {...rest}
-    >
+    <StyledBox classes={{ root: classes.common }} fontFamily={fontFamily || "Noto Sans KR, sans-serif"} letterSpacing="0" component="div" {...rest}>
       {children}
     </StyledBox>
   );

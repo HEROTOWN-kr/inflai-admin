@@ -21,8 +21,17 @@ module.exports = {
           loader: "babel-loader",
         },
       },
+      // CSS (Tailwind)
       {
-        test: /\.(css|s[ac]ss)$/i,
+        test: /\.css$/i,
+        use: [
+          "style-loader",
+          { loader: "css-loader", options: { importLoaders: 1 } },
+          "postcss-loader", // PostCSS для Tailwind
+        ],
+      },
+      {
+        test: /\.scss$/i,
         use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
