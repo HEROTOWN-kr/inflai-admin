@@ -101,7 +101,11 @@ function Youtube() {
   const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const { register, handleSubmit, errors } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     mode: "onBlur",
     defaultValues: { searchValue: "" },
   });

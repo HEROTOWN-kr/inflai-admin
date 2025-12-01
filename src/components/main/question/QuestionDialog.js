@@ -74,7 +74,12 @@ function QuestionDialog(props) {
   const { open, closeDialog, questionId, getQuestions } = props;
   const [questionData, setQuestionData] = useState(defaultQuestionData);
 
-  const { register, handleSubmit, errors, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
     defaultValues,

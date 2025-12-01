@@ -25,7 +25,7 @@ function SubscriptionDialog(props) {
   const [dialogData, setDialogData] = useState({});
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const { reset, handleSubmit, handleBlur, watch, setValue, control, getValues } = useForm({ defaultValues });
+  const { reset, handleSubmit, watch, setValue, control, getValues } = useForm({ defaultValues });
   const { enqueueSnackbar } = useSnackbar();
 
   const watchStart = watch("startDate");
@@ -124,14 +124,14 @@ function SubscriptionDialog(props) {
             <Grid container>
               <Grid item xs={6}>
                 <Controller
-                  render={(controllerProps) => (
-                    <StyledSelect native {...controllerProps} variant="outlined" fullWidth>
+                  name="status"
+                  control={control}
+                  render={({ field }) => (
+                    <StyledSelect native {...field} variant="outlined" fullWidth>
                       <option value="2">승인</option>
                       <option value="1">대기</option>
                     </StyledSelect>
                   )}
-                  name="status"
-                  control={control}
                 />
               </Grid>
             </Grid>

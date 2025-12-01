@@ -128,7 +128,11 @@ function CampaignList(props) {
 
   // const limit = 5;
 
-  const { register, handleSubmit, errors } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     mode: "onBlur",
     defaultValues: { searchValue: "" },
   });

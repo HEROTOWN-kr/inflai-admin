@@ -12,7 +12,8 @@ function CKEditorComponent(props) {
       <div id={`${name}_toolbar-container`} />
       <Controller
         name={name}
-        render={({ onChange, value }) => (
+        control={control}
+        render={({ field }) => (
           <CKEditor
             editor={DecoupledEditor}
             config={{
@@ -24,16 +25,13 @@ function CKEditorComponent(props) {
             onInit={(editor) => {
               const toolbarContainer = document.querySelector(`#${name}_toolbar-container`);
               toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-              // setCampaignEditor({ ...campaignEditor, [name]: editor });
-              // window[name] = editor;
             }}
             onChange={(event, editor) => {
-              onChange(editor.getData());
+              field.onChange(editor.getData());
             }}
-            data={value}
+            data={field.value}
           />
         )}
-        control={control}
       />
       {errors[name] ? <div className="error-message">{errors[name].message}</div> : null}
     </div>

@@ -224,7 +224,17 @@ function CampaignEdit() {
     }) */
   });
 
-  const { register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues, reset, setError } = useForm({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    control,
+    getValues,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
     defaultValues,
@@ -518,8 +528,15 @@ function CampaignEdit() {
             <Grid container>
               <Grid item>
                 <Controller
-                  as={
-                    <RadioGroup row aria-label="gender">
+                  name="campaignType"
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup
+                      row
+                      aria-label="gender"
+                      {...field}
+                      onFocus={() => snsRef.current.focus()}
+                    >
                       {campaignTypes.map((item, index) => (
                         <FormControlLabel
                           key={item.value}
@@ -529,10 +546,7 @@ function CampaignEdit() {
                         />
                       ))}
                     </RadioGroup>
-                  }
-                  onFocus={() => snsRef.current.focus()}
-                  name="campaignType"
-                  control={control}
+                  )}
                 />
               </Grid>
             </Grid>
@@ -562,8 +576,15 @@ function CampaignEdit() {
               <StyledText color="#3f51b5">모집SNS</StyledText>
             </Box>
             <Controller
-              as={
-                <RadioGroup row aria-label="gender">
+              name="sns"
+              control={control}
+              render={({ field }) => (
+                <RadioGroup
+                  row
+                  aria-label="gender"
+                  {...field}
+                  onFocus={() => snsRef.current.focus()}
+                >
                   {snsTypes.map((item, index) => (
                     <FormControlLabel
                       key={item.value}
@@ -573,10 +594,7 @@ function CampaignEdit() {
                     />
                   ))}
                 </RadioGroup>
-              }
-              onFocus={() => snsRef.current.focus()}
-              name="sns"
-              control={control}
+              )}
             />
 
             {errors.sns ? <div className="error-message">{errors.sns.message}</div> : null}
@@ -667,8 +685,15 @@ function CampaignEdit() {
                 <Grid container>
                   <Grid item>
                     <Controller
-                      as={
-                        <RadioGroup row aria-label="gender">
+                      name="editPrice"
+                      control={control}
+                      render={({ field }) => (
+                        <RadioGroup
+                          row
+                          aria-label="gender"
+                          {...field}
+                          onFocus={() => snsRef.current.focus()}
+                        >
                           {editPriceTypes.map((item, index) => (
                             <FormControlLabel
                               key={item.value}
@@ -678,10 +703,7 @@ function CampaignEdit() {
                             />
                           ))}
                         </RadioGroup>
-                      }
-                      onFocus={() => snsRef.current.focus()}
-                      name="editPrice"
-                      control={control}
+                      )}
                     />
                   </Grid>
                   <Grid item>
@@ -716,8 +738,15 @@ function CampaignEdit() {
                 <Grid container>
                   <Grid item>
                     <Controller
-                      as={
-                        <RadioGroup row aria-label="gender">
+                      name="videoLength"
+                      control={control}
+                      render={({ field }) => (
+                        <RadioGroup
+                          row
+                          aria-label="gender"
+                          {...field}
+                          onFocus={() => snsRef.current.focus()}
+                        >
                           {videoLengthTypes.map((item, index) => (
                             <FormControlLabel
                               key={item.value}
@@ -727,10 +756,7 @@ function CampaignEdit() {
                             />
                           ))}
                         </RadioGroup>
-                      }
-                      onFocus={() => snsRef.current.focus()}
-                      name="videoLength"
-                      control={control}
+                      )}
                     />
                   </Grid>
                   <Grid item>
@@ -838,8 +864,15 @@ function CampaignEdit() {
                 <Grid container>
                   <Grid item>
                     <Controller
-                      as={
-                        <RadioGroup row aria-label="gender">
+                      name="productSellType"
+                      control={control}
+                      render={({ field }) => (
+                        <RadioGroup
+                          row
+                          aria-label="gender"
+                          {...field}
+                          onFocus={() => snsRef.current.focus()}
+                        >
                           {productSellTypes.map((item, index) => (
                             <FormControlLabel
                               key={item.value}
@@ -849,10 +882,7 @@ function CampaignEdit() {
                             />
                           ))}
                         </RadioGroup>
-                      }
-                      onFocus={() => snsRef.current.focus()}
-                      name="productSellType"
-                      control={control}
+                      )}
                     />
                   </Grid>
                 </Grid>
@@ -941,15 +971,15 @@ function CampaignEdit() {
               <StyledText color="#3f51b5">캠페인 출력상태</StyledText>
             </Box>
             <Controller
-              as={
-                <RadioGroup row aria-label="gender">
-                  {visibleTypes.map((item, index) => (
+              name="visible"
+              control={control}
+              render={({ field }) => (
+                <RadioGroup row aria-label="gender" {...field}>
+                  {visibleTypes.map((item) => (
                     <FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.text} />
                   ))}
                 </RadioGroup>
-              }
-              name="visible"
-              control={control}
+              )}
             />
           </Grid>
 
@@ -958,15 +988,15 @@ function CampaignEdit() {
               <StyledText color="#3f51b5">선정자 출력 여뷰</StyledText>
             </Box>
             <Controller
-              as={
-                <RadioGroup row aria-label="gender">
-                  {selectedViewTypes.map((item, index) => (
+              name="selView"
+              control={control}
+              render={({ field }) => (
+                <RadioGroup row aria-label="gender" {...field}>
+                  {selectedViewTypes.map((item) => (
                     <FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.text} />
                   ))}
                 </RadioGroup>
-              }
-              name="selView"
-              control={control}
+              )}
             />
           </Grid>
 
@@ -975,8 +1005,15 @@ function CampaignEdit() {
               <StyledText color="#3f51b5">제공상품 배송여부</StyledText>
             </Box>
             <Controller
-              as={
-                <RadioGroup row aria-label="gender">
+              name="delivery"
+              control={control}
+              render={({ field }) => (
+                <RadioGroup
+                  row
+                  aria-label="gender"
+                  {...field}
+                  onFocus={() => deliveryRef.current.focus()}
+                >
                   {deliveryTypes.map((item, index) => (
                     <FormControlLabel
                       key={item.value}
@@ -986,10 +1023,7 @@ function CampaignEdit() {
                     />
                   ))}
                 </RadioGroup>
-              }
-              name="delivery"
-              onFocus={() => deliveryRef.current.focus()}
-              control={control}
+              )}
             />
             {errors.delivery ? <div className="error-message">{errors.delivery.message}</div> : null}
           </Grid>

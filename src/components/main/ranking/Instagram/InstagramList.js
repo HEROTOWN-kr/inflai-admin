@@ -138,7 +138,11 @@ function InstagramList() {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
 
-  const { register, handleSubmit, errors } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     mode: "onBlur",
     defaultValues: { searchValue: "" },
   });

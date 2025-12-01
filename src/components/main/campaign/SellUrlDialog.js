@@ -47,7 +47,12 @@ const schema = Yup.object().shape({
 export default function SellUrlDialog(props) {
   const { open, closeDialog, selected, getParticipants } = props;
 
-  const { register, handleSubmit, errors, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
     defaultValues,

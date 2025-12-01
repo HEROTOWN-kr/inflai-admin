@@ -34,7 +34,15 @@ function SubscriptionDetail(props) {
   const [subData, setSubData] = useState({});
   const [endDate, setEndDate] = useState("정보 없습니다");
 
-  const { register, handleSubmit, handleBlur, watch, errors, setValue, control, getValues } = useForm({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    control,
+    getValues,
+    formState: { errors },
+  } = useForm({
     mode: "onBlur",
     // resolver: yupResolver(schema2),
     // defaultValues: { RadioGroup: '0', visible: '0' }
@@ -106,7 +114,7 @@ function SubscriptionDetail(props) {
           <Box mb={1}>
             <StyledText color="#3f51b5">시작 날짜</StyledText>
           </Box>
-          <ReactFormDatePicker name="startDate" control={control} setValue={setValue} handleBlur={handleBlur} getValues={getValues} />
+          <ReactFormDatePicker name="startDate" control={control} setValue={setValue} getValues={getValues} />
         </Grid>
         <Grid item xs={12}>
           <Box mb={1}>
@@ -119,19 +127,19 @@ function SubscriptionDetail(props) {
             <StyledText color="#3f51b5">상태</StyledText>
           </Box>
           <Grid container>
-            <Grid item xs={2}>
-              <Controller
-                render={(controllerProps) => (
-                  <StyledSelect native {...controllerProps} variant="outlined" fullWidth>
-                    <option value="2">승인</option>
-                    <option value="1">대기</option>
-                  </StyledSelect>
-                )}
-                defaultValue="1"
-                name="status"
-                control={control}
-              />
-            </Grid>
+              <Grid item xs={2}>
+                <Controller
+                  name="status"
+                  control={control}
+                  defaultValue="1"
+                  render={({ field }) => (
+                    <StyledSelect native {...field} variant="outlined" fullWidth>
+                      <option value="2">승인</option>
+                      <option value="1">대기</option>
+                    </StyledSelect>
+                  )}
+                />
+              </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12}>
