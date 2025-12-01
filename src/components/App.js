@@ -116,12 +116,12 @@ function App() {
             {/* Protected routes: everything under "/" that requires auth */}
             <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
               <Route path="/" element={<Main changeUser={changeUser} />}>
-                <Route index element={<Navigate to="/Dashboard" replace />} />
+                <Route index element={<Navigate to="Dashboard" replace />} />
                 <Route path="Dashboard" index element={<Dashboard />} />
                 <Route path="Advertiser" element={<Advertiser />} />
                 <Route path="Influencer" element={<Influencer />} />
                 <Route path="Campaign" element={<Campaign />}>
-                  <Route index element={<CampaignList />} /> {/* <-- дефолтный */}
+                  <Route index element={<Navigate to="List" replace />} />
                   <Route path="List" index element={<CampaignList />} />
                   <Route path="ParInsta/:id" element={<CampaignParInsta />} />
                   <Route path="ParYoutube/:id" element={<CampaignParYoutube />} />

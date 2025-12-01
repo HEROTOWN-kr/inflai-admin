@@ -314,7 +314,7 @@ function CampaignList(props) {
                   background="#0fb359"
                   hoverBackground="#107C41"
                   startIcon={<Create />}
-                  onClick={() => navigate(`${match.path}/create`)}
+                  onClick={() => navigate(`../create`)}
                 >
                   캠페인 등록
                 </StyledButton>

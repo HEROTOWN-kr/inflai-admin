@@ -1,38 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import RequestDetail from './RequestDetail';
-import RequestList from './RequestList';
-import CreateCampaign from './CreateCampaign';
-import CampaignList from '../campaign/CampaignList';
+import React from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import RequestDetail from "./RequestDetail";
+import RequestList from "./RequestList";
+import CreateCampaign from "./CreateCampaign";
 
-function Request(props) {
-  const { setMenuIndicator, history, match } = props;
-
+/**
+ * Request routes (react-router v6/v7 style).
+ * Currently не используется в основном роутинге, но приведён к актуальному API,
+ * чтобы не было зависимостей от устаревшего Switch / render.
+ *
+ * Если когда‑нибудь понадобится, монтировать так:
+ *   <Route path="Request/*" element={<Request />} />
+ */
+function Request() {
+  const navigate = useNavigate();
 
   function goBack() {
-    navigate(match.path);
+    navigate("/Request");
   }
 
   function goToCreate(id) {
-    navigate(`${match.path}/create/${id}`);
+    navigate(`/Request/create/${id}`);
   }
 
   return (
     <div className="request">
-      <Switch>
+      <Routes>
         <Route
-          path={`${match.path}/create/:id`}
-          render={renderProps => <CreateCampaign {...renderProps} goBack={goBack} />}
+          path="create/:id"
+          element={<CreateCampaign goBack={goBack} />}
         />
         <Route
-          path={`${match.path}/:id`}
-          render={renderProps => <RequestDetail {...renderProps} goBack={goBack} goToCreate={goToCreate} />}
+          path=":id"
+          element={<RequestDetail goBack={goBack} goToCreate={goToCreate} />}
         />
-        <Route
-          path={`${match.path}/`}
-          render={renderProps => <RequestList {...renderProps} />}
-        />
-      </Switch>
+        <Route index element={<RequestList />} />
+      </Routes>
     </div>
   );
 }

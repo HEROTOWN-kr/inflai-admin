@@ -1,7 +1,8 @@
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { axiosInstance as axios } from "@lib/axiosInstance";
-import { Box, FormControlLabel, Grid, InputAdornment, Radio, RadioGroup } from "@mui/material";
+import { Box, FormControlLabel, Grid, InputAdornment, Radio, RadioGroup, IconButton } from "@mui/material";
+import { ArrowRightAlt } from "@mui/icons-material";
 import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,8 +15,10 @@ import StyledText from "../../containers/StyledText";
 import ReactFormDatePicker from "../../containers/ReactFormDatePicker";
 import ReactFormText from "../../containers/ReactFormText";
 import {
+  AdvertiseTypes,
   campaignTypes,
   Colors,
+  deliveryTypes,
   editPriceTypes,
   productSellTypes,
   reportTypes,
@@ -27,6 +30,9 @@ import {
 import StyledTextField from "../../containers/StyledTextField";
 import AuthContext from "../../../context/AuthContext";
 import { fileChangedHandler } from "../../../lib/common";
+import StyledSelect from "../../containers/StyledSelect";
+import ImageHolder from "./ImageHolder";
+import StyledButton from "../../containers/StyledButton";
 
 const PREFIX = "CampaignCreateNew";
 
@@ -397,21 +403,6 @@ function CampaignCreateNew() {
 
   return (
     <Root>
-      {/* <input
-        type="file"
-        onChange={e => changeImage(e)}
-        multiple
-        accept="image/*"
-      />
-
-      <Grid container>
-        {img.map(i => (
-          <Grid item>
-            <img src={i} alt="" />
-          </Grid>
-        ))}
-
-      </Grid> */}
       <Box mt="26px" color="#000" fontSize="40px" fontWeight={700} textAlign="center">
         캠페인 정보
       </Box>
@@ -456,12 +447,7 @@ function CampaignCreateNew() {
                   name="campaignType"
                   control={control}
                   render={({ field }) => (
-                    <RadioGroup
-                      row
-                      aria-label="gender"
-                      {...field}
-                      onFocus={() => snsRef.current.focus()}
-                    >
+                    <RadioGroup row aria-label="gender" {...field} onFocus={() => snsRef.current.focus()}>
                       {campaignTypes.map((item, index) => (
                         <FormControlLabel
                           key={item.value}
@@ -507,12 +493,7 @@ function CampaignCreateNew() {
                   name="sns"
                   control={control}
                   render={({ field }) => (
-                    <RadioGroup
-                      row
-                      aria-label="gender"
-                      {...field}
-                      onFocus={() => snsRef.current.focus()}
-                    >
+                    <RadioGroup row aria-label="gender" {...field} onFocus={() => snsRef.current.focus()}>
                       {snsTypes.map((item, index) => (
                         <FormControlLabel
                           key={item.value}
@@ -626,12 +607,7 @@ function CampaignCreateNew() {
                       name="editPrice"
                       control={control}
                       render={({ field }) => (
-                        <RadioGroup
-                          row
-                          aria-label="gender"
-                          {...field}
-                          onFocus={() => snsRef.current.focus()}
-                        >
+                        <RadioGroup row aria-label="gender" {...field} onFocus={() => snsRef.current.focus()}>
                           {editPriceTypes.map((item, index) => (
                             <FormControlLabel
                               key={item.value}
@@ -679,12 +655,7 @@ function CampaignCreateNew() {
                       name="videoLength"
                       control={control}
                       render={({ field }) => (
-                        <RadioGroup
-                          row
-                          aria-label="gender"
-                          {...field}
-                          onFocus={() => snsRef.current.focus()}
-                        >
+                        <RadioGroup row aria-label="gender" {...field} onFocus={() => snsRef.current.focus()}>
                           {videoLengthTypes.map((item, index) => (
                             <FormControlLabel
                               key={item.value}
@@ -805,12 +776,7 @@ function CampaignCreateNew() {
                       name="productSellType"
                       control={control}
                       render={({ field }) => (
-                        <RadioGroup
-                          row
-                          aria-label="gender"
-                          {...field}
-                          onFocus={() => snsRef.current.focus()}
-                        >
+                        <RadioGroup row aria-label="gender" {...field} onFocus={() => snsRef.current.focus()}>
                           {productSellTypes.map((item, index) => (
                             <FormControlLabel
                               key={item.value}
@@ -946,12 +912,7 @@ function CampaignCreateNew() {
               name="delivery"
               control={control}
               render={({ field }) => (
-                <RadioGroup
-                  row
-                  aria-label="gender"
-                  {...field}
-                  onFocus={() => deliveryRef.current.focus()}
-                >
+                <RadioGroup row aria-label="gender" {...field} onFocus={() => deliveryRef.current.focus()}>
                   {deliveryTypes.map((item, index) => (
                     <FormControlLabel
                       key={item.value}
@@ -1101,8 +1062,7 @@ function CampaignCreateNew() {
               <input
                 type="text"
                 readOnly
-                name="picArray"
-                ref={register}
+                {...register("picArray")}
                 style={{
                   opacity: "0",
                   width: "0",
@@ -1121,7 +1081,7 @@ function CampaignCreateNew() {
             <Box mb={1}>
               <StyledText color="#3f51b5">상세정보</StyledText>
             </Box>
-            <CKEditorComponent control={control} name="detailInfo" errors={errors} />
+            {/*<CKEditorComponent control={control} name="detailInfo" errors={errors} />*/}
 
             <Box mt="10px" fontSize="14px" color="#4c4747" bgcolor="#fdf7e2" border="1px solid #e6cf79" padding="10px 15px" borderRadius="8px">
               입력 하시느라 고생하셨습니다. 모집기간 중에도 인플루언서 선정이 가능합니다. 신청하신 인플루언서들 계정의 인공지능 분석 자료를 실시간

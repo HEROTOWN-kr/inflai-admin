@@ -20,13 +20,14 @@ function ReactFormText(props) {
 
   return (
     <TextField
-      variant={"outlined"}
+      variant="outlined"
       fullWidth
-      name={name}
-      // helperText={errors[name] ? <Root className="error-message">{errors[name]?.message}</Root> : null}
+      {...register(name)}
+      error={!!errors?.[name]}
+      helperText={errors?.[name]?.message ? <Root className="error-message">{errors[name].message}</Root> : null}
       css={{ transition: "all 1s ease-out" }}
       {...rest}
-    ></TextField>
+    />
   );
 }
 
