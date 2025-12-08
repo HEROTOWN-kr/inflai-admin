@@ -3,12 +3,14 @@ import { axiosInstance as axios } from "@lib/axiosInstance";
 import { Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
 import StyledTableCell from "../../containers/StyledTableCell";
 import StyledTableRow from "../../containers/StyledTableRow";
+import { useNavigate } from "react-router-dom";
 
 function DashAdvertisers(props) {
   const { history } = props;
   const [advertisers, setAdvertisers] = useState([]);
   const page = 1;
   const limit = 5;
+  const navigate = useNavigate();
 
   function createAdvertisers(data) {
     const array = [];

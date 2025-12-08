@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance as axios } from "@lib/axiosInstance";
 import { Box, Grid, IconButton, Table, TableBody, TableHead, TableRow } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import StyledTitle from "../../containers/StyledTitle";
 import StyledText from "../../containers/StyledText";
 import StyledTableCell from "../../containers/StyledTableCell";
@@ -9,7 +9,7 @@ import StyledTableRow from "../../containers/StyledTableRow";
 import MyPagination from "../../containers/MyPagination";
 import { Colors } from "../../../lib/Сonstants";
 import SubscriptionDialog from "./SubscriptionDialog";
-import Alert from "../../containers/Alert";
+import { useNavigate } from "react-router-dom";
 
 const tableRows = [
   {
@@ -67,6 +67,7 @@ function SubscriptionList() {
   const [selectedId, setSelectedId] = useState(null);
   const [dialogData, setDialogData] = useState({});
   const [editDialog, setEditDialog] = useState(false);
+  const navigate = useNavigate();
 
   function toggleEditDialog() {
     setEditDialog(!editDialog);

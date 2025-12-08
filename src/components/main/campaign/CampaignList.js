@@ -1,68 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
-import {
-  Box,
-  Grid,
-  Icon,
-  Paper,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tooltip,
-  IconButton,
-  InputAdornment,
-  CircularProgress,
-} from "@mui/material";
-import { Edit, Delete, Description, Create, FileCopy } from "@mui/icons-material";
+import { CircularProgress, IconButton, InputAdornment, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Tooltip } from "@mui/material";
+import { Create, Delete, Edit, FileCopy } from "@mui/icons-material";
 import { axiosInstance as axios } from "@lib/axiosInstance";
 import SearchIcon from "@mui/icons-material/Search";
 import { useForm } from "react-hook-form";
 import StyledTableCell from "../../containers/StyledTableCell";
 import StyledTableRow from "../../containers/StyledTableRow";
 import MyPagination from "../../containers/MyPagination";
-import StyledTitle from "../../containers/StyledTitle";
 import StyledButton from "../../containers/StyledButton";
 import { AdvertiseTypes, Colors } from "../../../lib/Сonstants";
 import StyledText from "../../containers/StyledText";
 import defaultAccountImage from "../../../img/default_account_image.png";
-import StyledLink from "../../containers/StyledLink";
 import ConfirmDialog from "../../containers/ConfirmDialog";
-import ParticipantDialog from "./ParticipantDialog";
 import StyledImage from "../../containers/StyledImage";
 import ReactFormText from "../../containers/ReactFormText";
-import StyledSelect from "../../containers/StyledSelect";
 import Select from "@mui/material/Select";
 import CopyDialog from "./CopyDialog";
 import { useNavigate, useOutletContext } from "react-router-dom";
-
-const PREFIX = "CampaignList";
-
-const classes = {
-  root: `${PREFIX}-root`,
-  endAdornment: `${PREFIX}-endAdornment`,
-  iconButton: `${PREFIX}-iconButton`,
-  tableRowRoot: `${PREFIX}-tableRowRoot`,
-};
-
-const StyledBox = styled(Box)({
-  [`& .${classes.root}`]: {
-    background: "#ffffff",
-  },
-  [`& .${classes.endAdornment}`]: {
-    padding: "0",
-  },
-  [`& .${classes.iconButton}`]: {
-    padding: "8px",
-  },
-  [`& .${classes.tableRowRoot}`]: {
-    "&:hover": {
-      cursor: "pointer",
-      backgroundColor: "#9199b6",
-    },
-  },
-});
 
 const tableHeader = [
   {
@@ -132,6 +86,7 @@ function CampaignList(props) {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm({
     mode: "onBlur",
     defaultValues: { searchValue: "" },
@@ -258,30 +213,31 @@ function CampaignList(props) {
   };
 
   return (
-    <StyledBox m="0 auto" maxWidth={1276}>
-      <Box mb={1}>
-        <Grid container justifyContent="space-between" alignItems="center" spacing={1}>
-          <Grid item>
+    <div className="mx-auto max-w-[1276px]">
+      <div className="mb-1">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
             <Select size={"small"} sx={{ background: "white" }} native variant="outlined" fullWidth value={type} onChange={changeType}>
               <option value="0">전체</option>
               <option value="1">인스타</option>
               <option value="2">유튜브</option>
               <option value="3">블로그</option>
             </Select>
-          </Grid>
-          <Grid item>
-            <Box width={300}>
+          </div>
+          <div>
+            <div className="w-[300px]">
               <ReactFormText
                 size="small"
                 register={register}
+                control={control}
                 errors={errors}
                 name="searchValue"
                 placeholder="검색"
                 InputProps={{
-                  classes: { root: classes.root, adornedEnd: classes.endAdornment },
+                  className: "bg-white",
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={handleSubmit(searchFunc)} size="large">
+                      <IconButton onClick={handleSubmit(searchFunc)} size="large" className="p-2">
                         <SearchIcon fontSize="small" />
                       </IconButton>
                     </InputAdornment>
@@ -294,43 +250,35 @@ function CampaignList(props) {
                   }
                 }}
               />
-            </Box>
-          </Grid>
+            </div>
+          </div>
 
-          <Grid item>
-            <Grid container spacing={1}>
-              <Grid item>
-                <Select native variant="outlined" size={"small"} sx={{ background: "white" }} fullWidth value={limit} onChange={changeLimit}>
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={30}>30</option>
-                  <option value={100}>100</option>
-                </Select>
-              </Grid>
-              <Grid item>
-                <StyledButton
-                  height={40}
-                  padding="0 20px"
-                  background="#0fb359"
-                  hoverBackground="#107C41"
-                  startIcon={<Create />}
-                  onClick={() => navigate(`../create`)}
-                >
-                  캠페인 등록
-                </StyledButton>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Box>
+          <div className="flex flex-wrap items-center gap-2">
+            <Select native variant="outlined" size={"small"} sx={{ background: "white" }} fullWidth value={limit} onChange={changeLimit}>
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={30}>30</option>
+              <option value={100}>100</option>
+            </Select>
+            <StyledButton
+              height={40}
+              padding="0 20px"
+              background="#0fb359"
+              hoverBackground="#107C41"
+              startIcon={<Create />}
+              onClick={() => navigate(`../create`)}
+            >
+              캠페인 등록
+            </StyledButton>
+          </div>
+        </div>
+      </div>
       {loading ? (
-        <Box minHeight={500}>
-          <Grid container justifyContent="center" alignItems="center" style={{ minHeight: "inherit" }}>
-            <Grid item>
-              <CircularProgress />
-            </Grid>
-          </Grid>
-        </Box>
+        <div className="min-h-[500px]">
+          <div className="flex min-h-[inherit] items-center justify-center">
+            <CircularProgress />
+          </div>
+        </div>
       ) : (
         <TableContainer component={Paper}>
           <Table aria-label="customized table">
@@ -353,8 +301,8 @@ function CampaignList(props) {
                     <StyledText textAlign="center">{row.id}</StyledText>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <Grid container>
-                      <Grid item xs="auto">
+                    <div className="flex gap-3">
+                      <div className="flex-none">
                         <StyledImage
                           width="80px"
                           height="80px"
@@ -364,91 +312,65 @@ function CampaignList(props) {
                             e.target.src = `${defaultAccountImage}`;
                           }}
                         />
-                      </Grid>
-                      <Grid item xs>
-                        <Box ml="14px" height="100%">
-                          <Grid container alignContent="space-between" style={{ height: "100%" }}>
-                            <Grid item xs={12}>
-                              <StyledText fontSize="14px" color="#222">
-                                {row.campaignName}
-                              </StyledText>
-                              <StyledText fontSize="14px" color="#222">
-                                <Grid container spacing={1}>
-                                  {row.report || row.campaignType === "3" ? (
-                                    <Grid item>
-                                      <Box color="#0027ff" fontWeight={600}>
-                                        (기자단)
-                                      </Box>
-                                    </Grid>
-                                  ) : null}
-                                  {row.campaignType === "2" ? (
-                                    <Grid item>
-                                      <Box color="#00b605" fontWeight={600}>
-                                        [공동구매]
-                                      </Box>
-                                    </Grid>
-                                  ) : null}
-                                  <Grid item>
-                                    <Box style={{ color: snsTypes[row.type].color, fontWeight: "600" }}>{snsTypes[row.type].text}</Box>
-                                  </Grid>
-                                  <Grid item>
-                                    <Box>
-                                      {` ${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}
-                                    </Box>
-                                  </Grid>
-                                </Grid>
-                              </StyledText>
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Grid container spacing={1}>
-                                <Grid item>
-                                  <Box width="70px">
-                                    <StyledButton onClick={() => campaignParticipant(row.id, row.type)} padding="0" height="26px" fontSize="0.790rem">
-                                      신청자
-                                    </StyledButton>
-                                  </Box>
-                                </Grid>
-                                <Grid item>
-                                  <Box width="70px">
-                                    <StyledButton
-                                      onClick={() => navigate(`${match.path}/Question/${row.id}`)}
-                                      background="#0fb359"
-                                      hoverBackground="#107C41"
-                                      padding="0"
-                                      height="26px"
-                                      fontSize="0.790rem"
-                                    >
-                                      문의
-                                    </StyledButton>
-                                  </Box>
-                                </Grid>
-                                {row.campaignType === "2" ? (
-                                  <Grid item>
-                                    <Box width="70px">
-                                      <StyledButton
-                                        onClick={() =>
-                                          navigate({
-                                            pathname: `${match.path}/Seller/${row.id}`,
-                                            state: { type: row.type },
-                                          })
-                                        }
-                                        background="#0fb359"
-                                        hoverBackground="#107C41"
-                                        padding="0"
-                                        height="26px"
-                                        fontSize="0.790rem"
-                                      >
-                                        판매링크
-                                      </StyledButton>
-                                    </Box>
-                                  </Grid>
-                                ) : null}
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </Box>
-                      </Grid>
-                    </Grid>
+                      </div>
+                      <div className="flex w-full flex-col justify-between">
+                        <div>
+                          <StyledText fontSize="14px" color="#222">
+                            {row.campaignName}
+                          </StyledText>
+                          <StyledText fontSize="14px" color="#222">
+                            <div className="flex flex-wrap items-center gap-2">
+                              {(row.report || row.campaignType === "3") && (
+                                <div className="font-semibold text-[#0027ff]">(기자단)</div>
+                              )}
+                              {row.campaignType === "2" && <div className="font-semibold text-[#00b605]">[공동구매]</div>}
+                              <div className="font-semibold" style={{ color: snsTypes[row.type].color }}>
+                                {snsTypes[row.type].text}
+                              </div>
+                              <div>{` ${AdvertiseTypes.mainType[row.category]} > ${AdvertiseTypes.subType[row.category][row.subcategory]}`}</div>
+                            </div>
+                          </StyledText>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <div className="w-[70px]">
+                            <StyledButton onClick={() => campaignParticipant(row.id, row.type)} padding="0" height="26px" fontSize="0.790rem">
+                              신청자
+                            </StyledButton>
+                          </div>
+                          <div className="w-[70px]">
+                            <StyledButton
+                              onClick={() => navigate(`${match.path}/Question/${row.id}`)}
+                              background="#0fb359"
+                              hoverBackground="#107C41"
+                              padding="0"
+                              height="26px"
+                              fontSize="0.790rem"
+                            >
+                              문의
+                            </StyledButton>
+                          </div>
+                          {row.campaignType === "2" ? (
+                            <div className="w-[70px]">
+                              <StyledButton
+                                onClick={() =>
+                                  navigate({
+                                    pathname: `${match.path}/Seller/${row.id}`,
+                                    state: { type: row.type },
+                                  })
+                                }
+                                background="#0fb359"
+                                hoverBackground="#107C41"
+                                padding="0"
+                                height="26px"
+                                fontSize="0.790rem"
+                              >
+                                판매링크
+                              </StyledButton>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
                   </StyledTableCell>
                   <StyledTableCell>
                     <StyledText fontSize="14px" color="#222">
@@ -468,23 +390,18 @@ function CampaignList(props) {
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     <Tooltip title="수정" placement="top">
-                      <IconButton
-                        classes={{ root: classes.iconButton }}
-                        disableRipple
-                        onClick={(event) => campaignDetail(event, row.id)}
-                        size="large"
-                      >
+                      <IconButton className="p-2" disableRipple onClick={(event) => campaignDetail(event, row.id)} size="large">
                         <Edit />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="복사" placement="top">
-                      <IconButton classes={{ root: classes.iconButton }} disableRipple onClick={() => copyCampaign(row.id)} size="large">
+                      <IconButton className="p-2" disableRipple onClick={() => copyCampaign(row.id)} size="large">
                         <FileCopy />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="삭제" placement="top">
                       <IconButton
-                        classes={{ root: classes.iconButton }}
+                        className="p-2"
                         disableRipple
                         onClick={() => {
                           setSelectedCampaign(row.id);
@@ -502,16 +419,14 @@ function CampaignList(props) {
           </Table>
         </TableContainer>
       )}
-      <Box py={4}>
-        <Grid container justifyContent="center">
-          <Grid item>
-            <MyPagination itemCount={count} page={page} changePage={changePage} perPage={limit} />
-          </Grid>
-        </Grid>
-      </Box>
+      <div className="py-10">
+        <div className="flex justify-center">
+          <MyPagination itemCount={count} page={page} changePage={changePage} perPage={limit} />
+        </div>
+      </div>
       <CopyDialog open={copyDialog} campaignId={selectedCampaign} closeDialog={toggleCopyDialog} getCampaigns={getCampaigns} />
       <ConfirmDialog open={dialogOpen} closeDialog={toggleDialog} onConfirm={deleteDbPicture} dialogText="삭제하시겠습니까?" />
-    </StyledBox>
+    </div>
   );
 }
 

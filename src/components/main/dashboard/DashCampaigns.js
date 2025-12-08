@@ -4,12 +4,13 @@ import { Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 import StyledTableCell from "../../containers/StyledTableCell";
 import StyledTableRow from "../../containers/StyledTableRow";
 import { AdvertiseTypes } from "../../../lib/Сonstants";
+import { useNavigate } from "react-router-dom";
 
 function DashCampaigns(props) {
-  const { history } = props;
   const [campaigns, setCampaigns] = useState([]);
   const limit = 5;
   const page = 1;
+  const navigate = useNavigate();
 
   async function getCampaigns() {
     try {

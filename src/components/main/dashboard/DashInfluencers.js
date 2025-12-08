@@ -3,12 +3,14 @@ import { Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow
 import { axiosInstance as axios } from "@lib/axiosInstance";
 import StyledTableCell from "../../containers/StyledTableCell";
 import StyledTableRow from "../../containers/StyledTableRow";
+import { useNavigate } from "react-router-dom";
 
 function DashInfluencers(props) {
   const { history } = props;
   const [influencers, setInfluencers] = useState([]);
   const limit = 5;
   const page = 1;
+  const navigate = useNavigate();
 
   function createInfluencers(data) {
     const array = [];
