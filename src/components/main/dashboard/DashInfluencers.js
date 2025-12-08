@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Box, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
 import { axiosInstance as axios } from "@lib/axiosInstance";
 import StyledTableCell from "../../containers/StyledTableCell";
 import StyledTableRow from "../../containers/StyledTableRow";
@@ -51,14 +51,14 @@ function DashInfluencers(props) {
 
   return (
     <React.Fragment>
-      <Box className="category-label">
-        <Grid container justifyContent="space-between">
-          <Grid item>신규가입인플루언서</Grid>
-          <Grid item>
+      <div className="category-label">
+        <div className="flex justify-between">
+          <div>신규가입인플루언서</div>
+          <div>
             <button onClick={() => navigate("/Influencer")}>전체보기</button>
-          </Grid>
-        </Grid>
-      </Box>
+          </div>
+        </div>
+      </div>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>

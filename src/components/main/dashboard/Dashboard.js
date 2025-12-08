@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import DashInfluencers from "./DashInfluencers";
 import DashAdvertisers from "./DashAdvertisers";
 import DashCampaigns from "./DashCampaigns";
@@ -10,19 +10,19 @@ function Dashboard(props) {
   useEffect(() => setMenuIndicator(0), []);
 
   return (
-    <Box py={6} width={1200} sx={{ margin: "0 auto" }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+    <div className="py-24 w-[1200px] mx-auto">
+      <div className="grid gap-2">
+        <div className="w-full">
           <DashInfluencers {...props} />
-        </Grid>
-        <Grid item xs={12}>
+        </div>
+        <div className="w-full">
           <DashAdvertisers {...props} />
-        </Grid>
-        <Grid item xs={12}>
+        </div>
+        <div className="w-full">
           <DashCampaigns {...props} />
-        </Grid>
-      </Grid>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 }
 

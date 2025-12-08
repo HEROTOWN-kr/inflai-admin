@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance as axios } from "@lib/axiosInstance";
-import { Box, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Box, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
 import StyledTableCell from "../../containers/StyledTableCell";
 import StyledTableRow from "../../containers/StyledTableRow";
 import { AdvertiseTypes } from "../../../lib/Сonstants";
@@ -40,14 +40,14 @@ function DashCampaigns(props) {
 
   return (
     <React.Fragment>
-      <Box className="category-label">
-        <Grid container justifyContent="space-between">
-          <Grid item>최근캠페인</Grid>
-          <Grid item>
+      <div className="category-label">
+        <div className="flex justify-between">
+          <div>최근캠페인</div>
+          <div>
             <button onClick={() => navigate("/Campaign")}>전체보기</button>
-          </Grid>
-        </Grid>
-      </Box>
+          </div>
+        </div>
+      </div>
       <TableContainer component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
