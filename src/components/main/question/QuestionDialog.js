@@ -79,6 +79,7 @@ function QuestionDialog(props) {
     handleSubmit,
     reset,
     formState: { errors },
+    control,
   } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
@@ -156,7 +157,7 @@ function QuestionDialog(props) {
             <StyledText color="#3f51b5">문의 답변</StyledText>
           </Box>
           <ReactFormText
-            register={register}
+            control={control}
             errors={errors}
             multiline
             rows={5}

@@ -105,6 +105,7 @@ function Youtube() {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm({
     mode: "onBlur",
     defaultValues: { searchValue: "" },
@@ -186,7 +187,7 @@ function Youtube() {
             <Grid item>
               <Box width={280}>
                 <ReactFormText
-                  register={register}
+                  control={control}
                   errors={errors}
                   name="searchValue"
                   placeholder="검색"

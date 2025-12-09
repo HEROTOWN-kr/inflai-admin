@@ -604,8 +604,7 @@ function CampaignCreateNew() {
                     <StyledTextField
                       fullWidth
                       disabled={watchObj.editPrice !== "4"}
-                      name="editPriceEtc"
-                      inputRef={register}
+                      {...register("editPriceEtc")}
                       error={!!errors.editPriceEtc}
                       FormHelperTextProps={{
                         classes: { contained: classes.FormHelperContained },
@@ -653,8 +652,7 @@ function CampaignCreateNew() {
                     <StyledTextField
                       fullWidth
                       disabled={watchObj.videoLength !== "5"}
-                      name="videoLengthEtc"
-                      inputRef={register}
+                      {...register("videoLengthEtc")}
                       error={!!errors.videoLengthEtc}
                       FormHelperTextProps={{
                         classes: { contained: classes.FormHelperContained },

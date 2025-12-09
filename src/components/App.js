@@ -135,23 +135,23 @@ function App() {
                   <Route path="Question/:id" element={<Question />} />
                 </Route>
                 <Route path="Ranking" element={<Ranking />}>
-                  <Route index element={<Youtube />} />
-                  <Route path="Youtube/*" element={<Youtube />} />
-                  <Route path="Instagram/*" element={<Instagram />}>
+                  <Route index element={<Navigate to="Youtube" replace />} />
+                  <Route path="Youtube" element={<Youtube />} />
+                  <Route path="Instagram" element={<Instagram />}>
                     <Route index element={<InstagramList />} />
-                    <Route path="List/*" element={<InstagramList />} />
+                    <Route path="List" element={<InstagramList />} />
                     <Route path="Detail/:id" element={<RankingDetail />} />
                   </Route>
                 </Route>
                 <Route path="Subscription" element={<Subscription />}>
-                  <Route index element={<SubscriptionList />} />
+                  <Route index element={<Navigate to="List" replace />} />
                   <Route path="List" element={<SubscriptionList />} />
                   <Route path=":id" element={<SubscriptionDetail />} />
                 </Route>
 
                 <Route path="Payment" element={<Payment />} />
                 <Route path="Settings" element={<Settings />}>
-                  <Route index element={<KakaoNotify />} />
+                  <Route index element={<Navigate to="KakaoNotify" replace />} />
                   <Route path="KakaoNotify" element={<KakaoNotify />} />
                   <Route path="Coupon" element={<Coupon />} />
                 </Route>

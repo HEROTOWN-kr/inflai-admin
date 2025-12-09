@@ -52,6 +52,7 @@ export default function SellUrlDialog(props) {
     handleSubmit,
     reset,
     formState: { errors },
+    control,
   } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
@@ -104,7 +105,7 @@ export default function SellUrlDialog(props) {
             <StyledText color="#3f51b5">판매링크 URL</StyledText>
           </Box>
           <ReactFormText
-            register={register}
+            control={control}
             errors={errors}
             name="url"
             placeholder="예시) https://herotownshop.cafe24.com/product/detail.html?product_no=10&cate_no=1&display_group=2"

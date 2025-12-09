@@ -504,14 +504,14 @@ function CampaignEdit() {
             <Box mb={1}>
               <StyledText color="#3f51b5">캠페인명 (제공물품(서비스) + 시가 등 한 줄로 적어주세요)</StyledText>
             </Box>
-            <ReactFormText register={register} errors={errors} name="campaignName" placeholder="Ex) 5만원 반려동물 구강케어 1박스 (30매)" />
+            <ReactFormText control={control} errors={errors} name="campaignName" placeholder="Ex) 5만원 반려동물 구강케어 1박스 (30매)" />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}>
               <StyledText color="#3f51b5">제공하는 제품(서비스) 짧은설명</StyledText>
             </Box>
             <ReactFormText
-              register={register}
+              control={control}
               errors={errors}
               multiline
               rows={5}
@@ -531,12 +531,7 @@ function CampaignEdit() {
                   name="campaignType"
                   control={control}
                   render={({ field }) => (
-                    <RadioGroup
-                      row
-                      aria-label="gender"
-                      {...field}
-                      onFocus={() => snsRef.current.focus()}
-                    >
+                    <RadioGroup row aria-label="gender" {...field} onFocus={() => snsRef.current.focus()}>
                       {campaignTypes.map((item, index) => (
                         <FormControlLabel
                           key={item.value}
@@ -579,12 +574,7 @@ function CampaignEdit() {
               name="sns"
               control={control}
               render={({ field }) => (
-                <RadioGroup
-                  row
-                  aria-label="gender"
-                  {...field}
-                  onFocus={() => snsRef.current.focus()}
-                >
+                <RadioGroup row aria-label="gender" {...field} onFocus={() => snsRef.current.focus()}>
                   {snsTypes.map((item, index) => (
                     <FormControlLabel
                       key={item.value}
@@ -621,7 +611,7 @@ function CampaignEdit() {
               </Box>
               <Box width={{ xs: "100%", md: "200px" }}>
                 <ReactFormText
-                  register={register}
+                  control={control}
                   errors={errors}
                   name="priceSum"
                   placeholder=""
@@ -642,7 +632,7 @@ function CampaignEdit() {
             <Box mb={1}>
               <StyledText color="#3f51b5">제공내역 (필수)</StyledText>
             </Box>
-            <ReactFormText register={register} errors={errors} multiline rows={5} name="provideInfo" />
+            <ReactFormText control={control} errors={errors} multiline rows={5} name="provideInfo" />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}>
@@ -652,7 +642,7 @@ function CampaignEdit() {
               <Grid item xs={12} md="auto">
                 <Box width={{ xs: "100%", md: "200px" }}>
                   <ReactFormText
-                    register={register}
+                    control={control}
                     errors={errors}
                     name="provideMoney"
                     placeholder=""
@@ -688,12 +678,7 @@ function CampaignEdit() {
                       name="editPrice"
                       control={control}
                       render={({ field }) => (
-                        <RadioGroup
-                          row
-                          aria-label="gender"
-                          {...field}
-                          onFocus={() => snsRef.current.focus()}
-                        >
+                        <RadioGroup row aria-label="gender" {...field} onFocus={() => snsRef.current.focus()}>
                           {editPriceTypes.map((item, index) => (
                             <FormControlLabel
                               key={item.value}
@@ -710,8 +695,7 @@ function CampaignEdit() {
                     <StyledTextField
                       fullWidth
                       disabled={watchObj.editPrice !== "4"}
-                      name="editPriceEtc"
-                      inputRef={register}
+                      {...register("editPriceEtc")}
                       error={!!errors.editPriceEtc}
                       FormHelperTextProps={{
                         classes: { contained: classes.FormHelperContained },
@@ -741,12 +725,7 @@ function CampaignEdit() {
                       name="videoLength"
                       control={control}
                       render={({ field }) => (
-                        <RadioGroup
-                          row
-                          aria-label="gender"
-                          {...field}
-                          onFocus={() => snsRef.current.focus()}
-                        >
+                        <RadioGroup row aria-label="gender" {...field} onFocus={() => snsRef.current.focus()}>
                           {videoLengthTypes.map((item, index) => (
                             <FormControlLabel
                               key={item.value}
@@ -763,8 +742,7 @@ function CampaignEdit() {
                     <StyledTextField
                       fullWidth
                       disabled={watchObj.videoLength !== "5"}
-                      name="videoLengthEtc"
-                      inputRef={register}
+                      {...register("videoLengthEtc")}
                       error={!!errors.videoLengthEtc}
                       FormHelperTextProps={{
                         classes: { contained: classes.FormHelperContained },
@@ -791,7 +769,7 @@ function CampaignEdit() {
             <Box mb={1}>
               <StyledText color="#3f51b5">모집인원</StyledText>
             </Box>
-            <ReactFormText register={register} errors={errors} name="influencerCount" />
+            <ReactFormText control={control} errors={errors} name="influencerCount" />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}>
@@ -867,12 +845,7 @@ function CampaignEdit() {
                       name="productSellType"
                       control={control}
                       render={({ field }) => (
-                        <RadioGroup
-                          row
-                          aria-label="gender"
-                          {...field}
-                          onFocus={() => snsRef.current.focus()}
-                        >
+                        <RadioGroup row aria-label="gender" {...field} onFocus={() => snsRef.current.focus()}>
                           {productSellTypes.map((item, index) => (
                             <FormControlLabel
                               key={item.value}
@@ -897,7 +870,7 @@ function CampaignEdit() {
                   <Grid item xs={12} md="auto">
                     <Box width={{ xs: "100%", md: "200px" }}>
                       <ReactFormText
-                        register={register}
+                        control={control}
                         errors={errors}
                         name="productSellPrice"
                         placeholder=""
@@ -923,7 +896,7 @@ function CampaignEdit() {
                   <Grid item xs={12} md="auto">
                     <Box width={{ xs: "100%", md: "200px" }}>
                       <ReactFormText
-                        register={register}
+                        control={control}
                         errors={errors}
                         name="productSellDiscount"
                         placeholder=""
@@ -946,7 +919,7 @@ function CampaignEdit() {
                   <StyledText color="#3f51b5">판매 정보</StyledText>
                 </Box>
                 <ReactFormText
-                  register={register}
+                  control={control}
                   errors={errors}
                   multiline
                   rows={5}
@@ -960,7 +933,7 @@ function CampaignEdit() {
                   <Box mb={1}>
                     <StyledText color="#3f51b5">판매 사이트 URL</StyledText>
                   </Box>
-                  <ReactFormText register={register} errors={errors} rows={5} name="productSellUrl" placeholder="https://farmforyou.co.kr/" />
+                  <ReactFormText control={control} errors={errors} rows={5} name="productSellUrl" placeholder="https://farmforyou.co.kr/" />
                 </Grid>
               ) : null}
             </Fragment>
@@ -1008,12 +981,7 @@ function CampaignEdit() {
               name="delivery"
               control={control}
               render={({ field }) => (
-                <RadioGroup
-                  row
-                  aria-label="gender"
-                  {...field}
-                  onFocus={() => deliveryRef.current.focus()}
-                >
+                <RadioGroup row aria-label="gender" {...field} onFocus={() => deliveryRef.current.focus()}>
                   {deliveryTypes.map((item, index) => (
                     <FormControlLabel
                       key={item.value}
@@ -1075,26 +1043,26 @@ function CampaignEdit() {
               <Box mb={1}>
                 <StyledText color="#3f51b5">주소</StyledText>
               </Box>
-              <DaumPostCode setValue={setValue} register={register} errors={errors} />
+              <DaumPostCode setValue={setValue} errors={errors} control={control} />
             </Grid>
           ) : null}
           <Grid item xs={12}>
             <Box mb={1}>
               <StyledText color="#3f51b5">연락처</StyledText>
             </Box>
-            <ReactFormText register={register} errors={errors} name="phone" />
+            <ReactFormText control={control} errors={errors} name="phone" />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}>
               <StyledText color="#3f51b5">이메일</StyledText>
             </Box>
-            <ReactFormText register={register} errors={errors} name="email" />
+            <ReactFormText control={control} errors={errors} name="email" />
           </Grid>
           <Grid item xs={12}>
             <Box mb={1}>
               <StyledText color="#3f51b5">필수키워드</StyledText>
             </Box>
-            <ReactFormText register={register} errors={errors} name="searchKeyword" />
+            <ReactFormText control={control} errors={errors} name="searchKeyword" />
           </Grid>
 
           {links.length > 0 ? (
@@ -1120,7 +1088,7 @@ function CampaignEdit() {
             </Box>
             <Box maxWidth={400}>
               <ReactFormText
-                register={register}
+                control={control}
                 errors={errors}
                 name="linkItem"
                 placeholder="예시) https://www.inflai.com"
@@ -1149,8 +1117,8 @@ function CampaignEdit() {
               <StyledText color="#3f51b5">포스팅가이드</StyledText>
             </Box>
             <ReactFormText
-              register={register}
               errors={errors}
+              control={control}
               multiline
               rows={5}
               name="discription"

@@ -179,7 +179,7 @@ function CampaignList(props) {
   }
 
   function campaignDetail(event, id) {
-    navigate(`${props.match.path}/${id}`);
+    navigate(`${match.path}/${id}`);
   }
 
   function campaignParticipant(id, type) {
@@ -228,7 +228,6 @@ function CampaignList(props) {
             <div className="w-[300px]">
               <ReactFormText
                 size="small"
-                register={register}
                 control={control}
                 errors={errors}
                 name="searchValue"
@@ -320,9 +319,7 @@ function CampaignList(props) {
                           </StyledText>
                           <StyledText fontSize="14px" color="#222">
                             <div className="flex flex-wrap items-center gap-2">
-                              {(row.report || row.campaignType === "3") && (
-                                <div className="font-semibold text-[#0027ff]">(기자단)</div>
-                              )}
+                              {(row.report || row.campaignType === "3") && <div className="font-semibold text-[#0027ff]">(기자단)</div>}
                               {row.campaignType === "2" && <div className="font-semibold text-[#00b605]">[공동구매]</div>}
                               <div className="font-semibold" style={{ color: snsTypes[row.type].color }}>
                                 {snsTypes[row.type].text}

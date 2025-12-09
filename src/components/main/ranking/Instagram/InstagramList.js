@@ -1,21 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { Box, CircularProgress, Grid, IconButton, InputAdornment, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
-import { PieChart } from "react-minimal-pie-chart";
 import { axiosInstance as axios } from "@lib/axiosInstance";
-import { Form, Formik } from "formik";
 import SearchIcon from "@mui/icons-material/Search";
 import { useForm } from "react-hook-form";
-import StyledButton from "../../../containers/StyledButton";
 import StyledTableCell from "../../../containers/StyledTableCell";
 import StyledText from "../../../containers/StyledText";
 import StyledTableRow from "../../../containers/StyledTableRow";
-import MyTextField from "../../../containers/MyTextField";
 import StyledTableSortLabel from "../../../containers/StyledTableSortLabel";
 import defaultAccountImage from "../../../../img/default_account_image.png";
 import StyledLink from "../../../containers/StyledLink";
 import MyPagination from "../../../containers/MyPagination";
-import StyledTitle from "../../../containers/StyledTitle";
 import ReactFormText from "../../../containers/ReactFormText";
 
 const PREFIX = "InstagramList";
@@ -142,6 +137,7 @@ function InstagramList() {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm({
     mode: "onBlur",
     defaultValues: { searchValue: "" },
@@ -237,7 +233,7 @@ function InstagramList() {
             <Grid item>
               <Box width={280}>
                 <ReactFormText
-                  register={register}
+                  control={control}
                   errors={errors}
                   name="searchValue"
                   placeholder="검색"
